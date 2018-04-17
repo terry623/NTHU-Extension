@@ -2,7 +2,8 @@
   "name": "nthu-extension",
   "version": "1.0.0",
   "dependencies": {
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "semantic-ui": "^2.3.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

@@ -81,20 +81,25 @@
 	var acix = (0, _help.getUrlParameter)("ACIXSTORE");
 	console.log("ACIXSTORE is " + acix);
 	setInterval(function () {
+	  removeOriginCss();
 	  removeBackground();
 	  change();
-	  loadCSS();
 	}, 5000);
 	
-	function loadCSS() {
+	function removeOriginCss() {
 	  var link = document.createElement("link");
 	  link.rel = "stylesheet";
-	  link.href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css";
-	  link.integrity = "sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4";
-	  link.crossOrigin = "anonymous";
-	
+	  link.type = "text/css";
+	  link.href = chrome.extension.getURL("semantic/dist/semantic.min.css");
 	  var head = window.frames[2]["document"]["head"];
 	  $("link", head).replaceWith(link);
+	
+	  var script = document.createElement("script");
+	  script.src = chrome.extension.getURL("semantic/dist/semantic.min.js");
+	  $("link", head).after(script);
+	
+	  // var origin_css = window.frames[2]["document"]["head"];
+	  // $("link", origin_css).remove();
 	}
 	
 	function removeBackground() {
@@ -144,10 +149,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var test_button = "<button type=\"button\" class=\"btn btn-default\">Test</button>";
-	
-	var center = "<body>\n<button type=\"button\" class=\"btn btn-info\">Info</button>\n</body>";
-	exports.test_button = test_button;
+	var center = "<body>\n<button class=\"ui button\">Follow</button>\n</body>";
 	exports.center = center;
 
 /***/ }),

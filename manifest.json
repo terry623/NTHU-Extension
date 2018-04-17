@@ -11,8 +11,12 @@
   "content_scripts": [
     {
       "matches": ["*://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/select_entry.php?*"],
-      "js": ["./dist/bundle.js"],
-      "run_at": "document_start"
+      "js": ["./dist/bundle.js", "./semantic/dist/semantic.min.js"],
+      "css": ["./semantic/dist/semantic.min.css"]
     }
+  ],
+  "web_accessible_resources": [
+    "semantic/dist/semantic.min.js",
+    "semantic/dist/semantic.min.css"
   ]
 }

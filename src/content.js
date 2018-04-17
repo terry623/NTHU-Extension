@@ -1,27 +1,30 @@
 import { getUrlParameter } from "./help";
-import { test_button, center } from "./data";
+import { center } from "./data";
 import jQuery from "jquery";
 window.$ = window.jQuery = jQuery;
 
 var acix = getUrlParameter("ACIXSTORE");
 console.log("ACIXSTORE is " + acix);
 setInterval(function() {
+  removeOriginCss();
   removeBackground();
   change();
-  loadCSS();
 }, 5000);
 
-function loadCSS() {
+function removeOriginCss() {
   var link = document.createElement("link");
   link.rel = "stylesheet";
-  link.href =
-    "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css";
-  link.integrity =
-    "sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4";
-  link.crossOrigin = "anonymous";
-
+  link.type = "text/css";
+  link.href = chrome.extension.getURL("semantic/dist/semantic.min.css");
   var head = window.frames[2]["document"]["head"];
   $("link", head).replaceWith(link);
+
+  var script = document.createElement("script");
+  script.src = chrome.extension.getURL("semantic/dist/semantic.min.js");
+  $("link", head).after(script);
+
+  // var origin_css = window.frames[2]["document"]["head"];
+  // $("link", origin_css).remove();
 }
 
 function removeBackground() {
