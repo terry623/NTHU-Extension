@@ -58,9 +58,13 @@
 	
 	var content = _interopRequireWildcard(_content);
 	
-	var _test = __webpack_require__(3);
+	var _data = __webpack_require__(4);
 	
-	var test = _interopRequireWildcard(_test);
+	var data = _interopRequireWildcard(_data);
+	
+	var _help = __webpack_require__(3);
+	
+	var help = _interopRequireWildcard(_help);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -70,9 +74,11 @@
 
 	"use strict";
 	
-	var _test = __webpack_require__(3);
+	var _help = __webpack_require__(3);
 	
-	var _jquery = __webpack_require__(4);
+	var _data = __webpack_require__(4);
+	
+	var _jquery = __webpack_require__(5);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
@@ -80,6 +86,27 @@
 	
 	window.$ = window.jQuery = _jquery2.default;
 	
+	var acix = (0, _help.getUrlParameter)("ACIXSTORE");
+	console.log("ACIXSTORE is " + acix);
+	setInterval(function () {
+	  change();
+	}, 1000);
+	
+	function change() {
+	  console.log("Change...");
+	  var target = window.frames[2]["document"]["body"];
+	  $("div > p:first()", target).append(_data.test_button);
+	}
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	var getUrlParameter = function getUrlParameter(sParam) {
 	  var sPageURL = decodeURIComponent(window.location.search.substring(1)),
 	      sURLVariables = sPageURL.split("&"),
@@ -95,23 +122,10 @@
 	  }
 	};
 	
-	var acix = getUrlParameter("ACIXSTORE");
-	console.log("ACIXSTORE is " + acix);
-	setInterval(function () {
-	  change();
-	}, 1000);
-	
-	function change() {
-	  console.log("Change...");
-	  var target = window.frames[2]["document"]["body"];
-	  var val = (0, _test.hello)();
-	  console.log("Import Value:" + val);
-	
-	  $("div > p:first()", target).append("<button type=\"button\" class=\"btn btn-default\">Test</button>");
-	}
+	exports.getUrlParameter = getUrlParameter;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -119,14 +133,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var hello = function hello() {
-	  return "Hello";
-	};
+	var test_button = "<button type=\"button\" class=\"btn btn-default\">Test</button>";
 	
-	exports.hello = hello;
+	exports.test_button = test_button;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {"use strict";
@@ -10050,10 +10062,10 @@
 	
 		return jQuery;
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 	"use strict";
