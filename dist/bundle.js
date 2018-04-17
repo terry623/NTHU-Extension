@@ -44,41 +44,33 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(1);
-	module.exports = __webpack_require__(1);
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
 	'use strict';
 	
-	var _content = __webpack_require__(2);
+	var _content = __webpack_require__(1);
 	
 	var content = _interopRequireWildcard(_content);
 	
-	var _data = __webpack_require__(4);
+	var _data = __webpack_require__(3);
 	
 	var data = _interopRequireWildcard(_data);
 	
-	var _help = __webpack_require__(3);
+	var _help = __webpack_require__(2);
 	
 	var help = _interopRequireWildcard(_help);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _help = __webpack_require__(3);
+	var _help = __webpack_require__(2);
 	
-	var _data = __webpack_require__(4);
+	var _data = __webpack_require__(3);
 	
-	var _jquery = __webpack_require__(5);
+	var _jquery = __webpack_require__(4);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
@@ -93,13 +85,13 @@
 	}, 1000);
 	
 	function change() {
-	  console.log("Change...");
+	  console.log("FUCKYOU...");
 	  var target = window.frames[2]["document"]["body"];
 	  $("div > p:first()", target).append(_data.test_button);
 	}
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -125,7 +117,7 @@
 	exports.getUrlParameter = getUrlParameter;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -133,12 +125,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var test_button = "<button type=\"button\" class=\"btn btn-default\">Test</button>";
+	var test_button = "<button type=\"button\" class=\"btn btn-default\">Testt</button>";
 	
 	exports.test_button = test_button;
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {"use strict";
@@ -10062,10 +10054,10 @@
 	
 		return jQuery;
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 	"use strict";

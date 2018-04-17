@@ -10,7 +10,7 @@ setInterval(function() {
 }, 1000);
 
 function change() {
-  console.log("Change Something...");
+  console.log("FUCKYOU...");
   var target = window.frames[2]["document"]["body"];
   $("div > p:first()", target).append(test_button);
 }
