@@ -5,14 +5,13 @@
   "version": "2.0",
   "browser_action": {
     "default_title": "我要選到課!",
-    "default_icon": "./static/icon.png"
+    "default_icon": "static/icon.png"
   },
   "permissions": ["activeTab"],
   "content_scripts": [
     {
       "matches": ["*://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/select_entry.php?*"],
-      "js": ["./dist/bundle.js", "./semantic/dist/semantic.min.js"],
-      "css": ["./semantic/dist/semantic.min.css"]
+      "js": ["dist/bundle.js"]
     }
   ],
   "web_accessible_resources": [

@@ -97,9 +97,6 @@
 	  var script = document.createElement("script");
 	  script.src = chrome.extension.getURL("semantic/dist/semantic.min.js");
 	  $("link", head).after(script);
-	
-	  // var origin_css = window.frames[2]["document"]["head"];
-	  // $("link", origin_css).remove();
 	}
 	
 	function removeBackground() {
