@@ -1,3 +1,6 @@
-const test_button = `<button type="button" class="btn btn-default">Testt</button>`;
+const test_button = `<button type="button" class="btn btn-default">Test</button>`;
 
-export { test_button };
+const center = `<body>
+<button type="button" class="btn btn-info">Info</button>
+</body>`;
+export { test_button, center };

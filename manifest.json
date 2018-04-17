@@ -10,8 +10,10 @@
   "permissions": ["activeTab"],
   "content_scripts": [
     {
-      "matches": ["*://*/*"],
-      "js": ["./dist/bundle.js"]
+      "matches": ["*://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/select_entry.php?*"],
+      "js": ["./dist/bundle.js"],
+      "css": ["./lib/bootstrap/css/bootstrap.css"],
+      "run_at": "document_start"
     }
   ]
 }

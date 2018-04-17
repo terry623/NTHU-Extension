@@ -44,41 +44,33 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(1);
-	module.exports = __webpack_require__(1);
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
 	'use strict';
 	
-	var _content = __webpack_require__(2);
+	var _content = __webpack_require__(1);
 	
 	var content = _interopRequireWildcard(_content);
 	
-	var _data = __webpack_require__(4);
+	var _data = __webpack_require__(3);
 	
 	var data = _interopRequireWildcard(_data);
 	
-	var _help = __webpack_require__(3);
+	var _help = __webpack_require__(2);
 	
 	var help = _interopRequireWildcard(_help);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _help = __webpack_require__(3);
+	var _help = __webpack_require__(2);
 	
-	var _data = __webpack_require__(4);
+	var _data = __webpack_require__(3);
 	
-	var _jquery = __webpack_require__(5);
+	var _jquery = __webpack_require__(4);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
@@ -89,17 +81,36 @@
 	var acix = (0, _help.getUrlParameter)("ACIXSTORE");
 	console.log("ACIXSTORE is " + acix);
 	setInterval(function () {
+	  removeBackground();
 	  change();
-	}, 1000);
+	  loadCSS();
+	}, 5000);
+	
+	function loadCSS() {
+	  var link = document.createElement("link");
+	  link.rel = "stylesheet";
+	  link.href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css";
+	  link.integrity = "sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4";
+	  link.crossOrigin = "anonymous";
+	
+	  var head = window.frames[2]["document"]["head"];
+	  $("link", head).replaceWith(link);
+	}
+	
+	function removeBackground() {
+	  var doc = window.frames[2]["document"];
+	  $("body", doc).removeAttr("background");
+	}
 	
 	function change() {
 	  console.log("Change...");
-	  var target = window.frames[2]["document"]["body"];
-	  $("div > p:first()", target).append(_data.test_button);
+	  var body = window.frames[2]["document"]["body"];
+	
+	  $("div", body).replaceWith(_data.center);
 	}
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -125,7 +136,7 @@
 	exports.getUrlParameter = getUrlParameter;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -135,10 +146,12 @@
 	});
 	var test_button = "<button type=\"button\" class=\"btn btn-default\">Test</button>";
 	
+	var center = "<body>\n<button type=\"button\" class=\"btn btn-info\">Info</button>\n</body>";
 	exports.test_button = test_button;
+	exports.center = center;
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {"use strict";
@@ -10062,10 +10075,10 @@
 	
 		return jQuery;
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 	"use strict";
