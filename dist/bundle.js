@@ -44,7 +44,7 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	var _content = __webpack_require__(1);
 	
@@ -80,35 +80,48 @@
 	
 	var acix = (0, _help.getUrlParameter)("ACIXSTORE");
 	console.log("ACIXSTORE is " + acix);
-	setInterval(function () {
-	  removeOriginCss();
-	  removeBackground();
-	  change();
-	}, 5000);
 	
-	function removeOriginCss() {
+	setTimeout(function () {
+	  addCss();
+	  change();
+	}, 15000);
+	
+	setTimeout(function () {
+	  console.log("Show Modal...");
+	  var body = window.frames[2]["document"]["body"];
+	  $(".ui.modal", body).modal("show");
+	}, 20000);
+	
+	function addCss() {
+	  console.log("Add Css...");
+	  var head = window.frames[2]["document"]["head"];
+	
+	  var script = document.createElement("script");
+	  script.src = chrome.extension.getURL("semantic/dist/semantic.min.js");
+	  $("link:first", head).before(script);
+	
+	  // var jq = document.createElement("script");
+	  // jq.src = "https://code.jquery.com/jquery-3.1.1.min.js";
+	  // jq.integrity = "sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=";
+	  // jq.crossorigin = "anonymous";
+	  // $("link:first", head).before(jq);
+	
 	  var link = document.createElement("link");
 	  link.rel = "stylesheet";
 	  link.type = "text/css";
 	  link.href = chrome.extension.getURL("semantic/dist/semantic.min.css");
-	  var head = window.frames[2]["document"]["head"];
-	  $("link", head).replaceWith(link);
-	
-	  var script = document.createElement("script");
-	  script.src = chrome.extension.getURL("semantic/dist/semantic.min.js");
-	  $("link", head).after(script);
+	  $("script:first", head).before(link);
 	}
 	
-	function removeBackground() {
-	  var doc = window.frames[2]["document"];
-	  $("body", doc).removeAttr("background");
-	}
+	// function removeBackground() {
+	//   var doc = window.frames[2]["document"];
+	//   $("body", doc).removeAttr("background");
+	// }
 	
 	function change() {
 	  console.log("Change...");
-	  var body = window.frames[2]["document"]["body"];
-	
-	  $("div", body).replaceWith(_data.center);
+	  var document = window.frames[2]["document"];
+	  $("body", document).append(_data.main);
 	}
 
 /***/ }),
@@ -144,10 +157,10 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	var center = "<body>\n<button class=\"ui button\">Follow</button>\n</body>";
-	exports.center = center;
+	var main = "<div class=\"ui modal\">\n    <div class=\"header\">Header</div>\n    <div class=\"content\">\n        <p></p>\n    </div>\n    <div class=\"actions\">\n        <div class=\"ui approve button\">Approve</div>\n        <div class=\"ui button\">Neutral</div>\n        <div class=\"ui cancel button\">Cancel</div>\n    </div>\n</div>";
+	exports.main = main;
 
 /***/ }),
 /* 4 */
