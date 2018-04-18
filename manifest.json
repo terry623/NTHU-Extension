@@ -6,7 +6,7 @@
   "page_action": {
     "default_title": "開始選課",
     "default_icon": "static/icon.png",
-    "default_popup": "popup.html"
+    "default_popup": "popup/popup.html"
   },
   "permissions": ["activeTab", "tabs"],
   "content_scripts": [
@@ -16,7 +16,7 @@
     }
   ],
   "background": {
-    "scripts": ["event.js"],
+    "scripts": ["event/event.js"],
     "persistent": false
   }
 }
