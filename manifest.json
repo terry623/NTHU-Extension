@@ -3,19 +3,20 @@
   "name": "NTHU Course",
   "description": "幫助你的選課",
   "version": "2.0",
-  "browser_action": {
-    "default_title": "我要選到課!",
-    "default_icon": "static/icon.png"
+  "page_action": {
+    "default_title": "開始選課",
+    "default_icon": "static/icon.png",
+    "default_popup": "popup.html"
   },
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "tabs"],
   "content_scripts": [
     {
       "matches": ["*://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/select_entry.php?*"],
       "js": ["dist/bundle.js"]
     }
   ],
-  "web_accessible_resources": [
-    "semantic/dist/semantic.min.js",
-    "semantic/dist/semantic.min.css"
-  ]
+  "background": {
+    "scripts": ["event.js"],
+    "persistent": false
+  }
 }
