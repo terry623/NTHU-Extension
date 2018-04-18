@@ -1,4 +1,11 @@
-  
-  body {
-  	width: 500px;
-  }
+body {
+  width: 800px;
+}
+
+body::-webkit-scrollbar {
+  width: 0px;
+}
+
+.main {
+  margin: 50px;
+}

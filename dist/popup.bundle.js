@@ -66,7 +66,7 @@
 	
 	$("#clickme").click(function () {
 	  console.log("Click Button");
-	  $("#menu").modal("show");
+	  $("#testModal").modal("show");
 	});
 
 /***/ })

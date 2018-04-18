@@ -1,6 +1,6 @@
 //指定比對的url：不允許片段表達式
 //例如： *://*.google.com.tw/* 作為查詢字串不被接受因為host是一個片段表達式
-var urlPattern = "*://www.google.com.tw/*";
+var urlPattern = "*://*/*";
 
 //利用 tabs.query api 查找畫面上的所有tab
 function queryTabsAndShowPageActions(queryObject) {
