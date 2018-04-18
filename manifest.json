@@ -12,11 +12,11 @@
   "content_scripts": [
     {
       "matches": ["*://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/select_entry.php?*"],
-      "js": ["dist/bundle.js"]
+      "js": ["dist/content.bundle.js"]
     }
   ],
   "background": {
-    "scripts": ["event/event.js"],
+    "scripts": ["dist/event.bundle.js"],
     "persistent": false
   }
 }

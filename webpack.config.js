@@ -1,8 +1,12 @@
 module.exports = {
-  entry: "./src/app.js",
+  entry: {
+    content: "./content/app.js",
+    popup: "./popup/app.js",
+    event: "./event/app.js"
+  },
   output: {
-    path: __dirname,
-    filename: "./dist/bundle.js"
+    path: "./dist",
+    filename: "[name].bundle.js"
   },
   module: {
     loaders: [

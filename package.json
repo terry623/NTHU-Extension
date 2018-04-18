@@ -15,6 +15,6 @@
     "webpack-dev-server": "^1.16.2"
   },
   "scripts": {
-    "start": "node_modules/.bin/webpack src/app.js -o bundle.js && webpack -w"
+    "start": "node_modules/.bin/webpack -w"
   }
 }
