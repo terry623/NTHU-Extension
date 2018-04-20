@@ -1,8 +1,4 @@
-import { getUrlParameter } from "./help";
 import { main } from "./data";
-
-var acix = getUrlParameter("ACIXSTORE");
-console.log("ACIXSTORE is " + acix);
 
 // setTimeout(function() {
 //   change();

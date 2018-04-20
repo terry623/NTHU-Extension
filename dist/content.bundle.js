@@ -50,13 +50,9 @@
 	
 	var content = _interopRequireWildcard(_content);
 	
-	var _data = __webpack_require__(3);
+	var _data = __webpack_require__(2);
 	
 	var data = _interopRequireWildcard(_data);
-	
-	var _help = __webpack_require__(2);
-	
-	var help = _interopRequireWildcard(_help);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -66,51 +62,10 @@
 
 	"use strict";
 	
-	var _help = __webpack_require__(2);
-	
-	var _data = __webpack_require__(3);
-	
-	var acix = (0, _help.getUrlParameter)("ACIXSTORE");
-	console.log("ACIXSTORE is " + acix);
-	
-	// setTimeout(function() {
-	//   change();
-	// }, 10000);
-	
-	// function change() {
-	//   console.log("Change...");
-	//   var document = window.frames[2]["document"];
-	//   $("body", document).append(main);
-	// }
+	var _data = __webpack_require__(2);
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var getUrlParameter = function getUrlParameter(sParam) {
-	  var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-	      sURLVariables = sPageURL.split("&"),
-	      sParameterName,
-	      i;
-	
-	  for (i = 0; i < sURLVariables.length; i++) {
-	    sParameterName = sURLVariables[i].split("=");
-	
-	    if (sParameterName[0] === sParam) {
-	      return sParameterName[1] === undefined ? true : sParameterName[1];
-	    }
-	  }
-	};
-	
-	exports.getUrlParameter = getUrlParameter;
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports) {
 
 	"use strict";

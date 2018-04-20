@@ -46,7 +46,7 @@
 
 	"use strict";
 	
-	var _event = __webpack_require__(4);
+	var _event = __webpack_require__(3);
 	
 	var event = _interopRequireWildcard(_event);
 	
@@ -55,15 +55,14 @@
 /***/ }),
 /* 1 */,
 /* 2 */,
-/* 3 */,
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 	"use strict";
 	
 	//指定比對的url：不允許片段表達式
 	//例如： *://*.google.com.tw/* 作為查詢字串不被接受因為host是一個片段表達式
-	var urlPattern = "*://*/*";
+	var urlPattern = "*://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/select_entry.php?*";
 	
 	//利用 tabs.query api 查找畫面上的所有tab
 	function queryTabsAndShowPageActions(queryObject) {
@@ -85,6 +84,7 @@
 	    url: urlPattern
 	  });
 	});
+	
 	//每次tab有變動，檢查現在這個current tab是否在指定的 url pattern底下
 	chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 	  queryTabsAndShowPageActions({
