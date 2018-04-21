@@ -59,5 +59,13 @@ $(".ui.menu").on("click", ".item", function() {
       .addClass("active")
       .siblings(".item")
       .removeClass("active");
+
+    var t = $(".content_item");
+    t.show();
+
+    if ($(this).hasClass("homePage")) t.not(".homePage").hide();
+    else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();
+    else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();
+    else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();
   }
 });

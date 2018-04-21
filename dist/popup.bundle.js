@@ -50,7 +50,7 @@
 	
 	var popup = _interopRequireWildcard(_popup);
 	
-	var _helper = __webpack_require__(6);
+	var _helper = __webpack_require__(5);
 	
 	var helper = _interopRequireWildcard(_helper);
 	
@@ -65,7 +65,7 @@
 
 	"use strict";
 	
-	var _helper = __webpack_require__(6);
+	var _helper = __webpack_require__(5);
 	
 	$.fn.api.settings.api = {
 	  "get user": "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/4/4.19/JH4j002.php?ACIXSTORE={ACIXSTORE}"
@@ -117,12 +117,16 @@
 	$(".ui.menu").on("click", ".item", function () {
 	  if (!$(this).hasClass("dropdown")) {
 	    $(this).addClass("active").siblings(".item").removeClass("active");
+	
+	    var t = $(".content_item");
+	    t.show();
+	
+	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();
 	  }
 	});
 
 /***/ }),
-/* 5 */,
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 	"use strict";
