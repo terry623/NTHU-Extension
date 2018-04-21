@@ -2,8 +2,10 @@
   "name": "nthu-extension",
   "version": "1.0.0",
   "dependencies": {
+    "axios": "^0.18.0",
+    "iconv-lite": "^0.4.21",
     "jquery": "^3.3.1",
-    "npm": "^5.8.0",
+    "request": "^2.85.0",
     "semantic-ui": "^2.3.1"
   },
   "devDependencies": {

@@ -1,4 +1,5 @@
 import { getUrlVars } from "./helper";
+// var iconv = require("iconv-lite");
 
 $.fn.api.settings.api = {
   "get user":
@@ -13,6 +14,10 @@ $.fn.api.settings.successTest = function(response) {
 };
 
 $(document).ready(function() {
+  $(".content_item")
+    .not(".homePage")
+    .hide();
+
   var username;
   var acix;
   chrome.tabs.query(
@@ -30,6 +35,7 @@ $(document).ready(function() {
           },
           onResponse: function(response) {
             // make some adjustments to response
+            console.log(response);
             return response;
           },
           successTest: function(response) {
@@ -39,6 +45,10 @@ $(document).ready(function() {
           onComplete: function(response) {
             // make some adjustments to response
             console.log(response);
+            console.log("---------------------");
+            // var str = iconv.decode(new Buffer(response), "big5");
+            // var str = decodeURIComponent(response);
+            console.log(str);
           }
         })
         .text("NOTYET");
