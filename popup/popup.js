@@ -1,5 +1,7 @@
+window._crypto = null;
 import { getUrlVars } from "./helper";
-// var iconv = require("iconv-lite");
+var iconv = require("iconv-lite");
+var request = require("request");
 
 $.fn.api.settings.api = {
   "get user":
@@ -26,32 +28,54 @@ $(document).ready(function() {
       acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
       console.log("ACIXSTORE is " + acix);
 
-      $("#user")
-        .api({
-          action: "get user",
-          on: "now",
-          urlData: {
-            ACIXSTORE: acix
-          },
-          onResponse: function(response) {
-            // make some adjustments to response
-            console.log(response);
-            return response;
-          },
-          successTest: function(response) {
-            // test whether a JSON response is valid
-            return response.success || false;
-          },
-          onComplete: function(response) {
-            // make some adjustments to response
-            console.log(response);
-            console.log("---------------------");
-            // var str = iconv.decode(new Buffer(response), "big5");
-            // var str = decodeURIComponent(response);
+      request(
+        {
+          url:
+            "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/4/4.19/JH4j002.php?ACIXSTORE=" +
+            acix,
+          encoding: null
+        },
+        function(err, response, body) {
+          if (!err && response.statusCode == 200) {
+            var str = iconv.decode(new Buffer(body), "big5");
             console.log(str);
+
+            // var elements = $(str);
+            // var found = $("div", elements);
+            // console.log("Found div: " + found);
           }
-        })
-        .text("NOTYET");
+        }
+      );
+
+      // $("#user")
+      //   .api({
+      //     action: "get user",
+      //     on: "now",
+      //     urlData: {
+      //       ACIXSTORE: acix
+      //     },
+      //     onResponse: function(response) {
+      //       // make some adjustments to response
+      //       console.log(response);
+      //       return response;
+      //     },
+      //     successTest: function(response) {
+      //       // test whether a JSON response is valid
+      //       return response.success || false;
+      //     },
+      //     onComplete: function(response) {
+      //       // make some adjustments to response
+      //       console.log(response);
+      //       console.log("---------------------");
+      //       // var buf = iconv.encode(response, "Big5");
+      //       var str = decodeURIComponent(response);
+      //       var buf = iconv.decode(new Buffer(str), "Big5");
+      //       // var str = iconv.decode(new Buffer(response), "big5");
+      //       // var str = decodeURIComponent(response);
+      //       console.log(buf);
+      //     }
+      //   })
+      //   .text("NOTYET");
     }
   );
 });

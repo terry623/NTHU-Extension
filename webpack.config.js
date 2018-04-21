@@ -13,8 +13,17 @@ module.exports = {
       {
         test: /\.js$/,
         loader: "babel-loader"
+      },
+      {
+        test: /\.json$/,
+        loader: "json-loader"
       }
     ]
+  },
+  node: {
+    fs: "empty",
+    net: "empty",
+    tls: "empty"
   },
   devtool: "source-map"
 };
