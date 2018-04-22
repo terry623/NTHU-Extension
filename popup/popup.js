@@ -1,7 +1,7 @@
 window._crypto = null;
-import { getUrlVars } from "./helper";
 var iconv = require("iconv-lite");
 var request = require("request");
+import { getUrlVars } from "./helper";
 
 $.fn.api.settings.api = {
   "get user":
@@ -16,9 +16,7 @@ $.fn.api.settings.successTest = function(response) {
 };
 
 $(document).ready(function() {
-  $(".content_item")
-    .not(".homePage")
-    .hide();
+  $(".content_item").hide();
 
   var username;
   var acix;
@@ -38,11 +36,17 @@ $(document).ready(function() {
         function(err, response, body) {
           if (!err && response.statusCode == 200) {
             var str = iconv.decode(new Buffer(body), "big5");
-            console.log(str);
+            var temp = document.createElement("div");
+            temp.innerHTML = str;
+            var htmlObject = temp.firstChild;
+            var found = $(
+              "div > form > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(4)",
+              temp
+            );
 
-            // var elements = $(str);
-            // var found = $("div", elements);
-            // console.log("Found div: " + found);
+            var welcome = "<div>Hi~ " + found.text() + " !</div>";
+            $("#user").prepend(welcome);
+            $(".content_item.homePage").show();
           }
         }
       );
