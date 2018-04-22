@@ -13,3 +13,7 @@ body::-webkit-scrollbar {
 #clickme {
   margin-bottom: 20px;
 }
+
+#no {
+  margin-bottom: 10px;
+}
