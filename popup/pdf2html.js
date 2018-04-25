@@ -14,8 +14,8 @@ var pdfDoc = null,
   pageRendering = false,
   pageNumPending = null,
   scale = 0.8,
-  canvas = document.getElementById("the-canvas"),
-  ctx = canvas.getContext("2d");
+  canvas,
+  ctx;
 
 /**
  * Get page info from document, resize canvas accordingly, and render page.
@@ -73,7 +73,6 @@ function onPrevPage() {
   pageNum--;
   queueRenderPage(pageNum);
 }
-document.getElementById("prev").addEventListener("click", onPrevPage);
 
 /**
  * Displays next page.
@@ -85,12 +84,17 @@ function onNextPage() {
   pageNum++;
   queueRenderPage(pageNum);
 }
-document.getElementById("next").addEventListener("click", onNextPage);
 
 function transform(url) {
   /**
    * Asynchronously downloads PDF.
    */
+  canvas = document.getElementById("the-canvas");
+  ctx = canvas.getContext("2d");
+
+  document.getElementById("prev").addEventListener("click", onPrevPage);
+  document.getElementById("next").addEventListener("click", onNextPage);
+
   pdfjsLib.getDocument(url).then(function(pdfDoc_) {
     pdfDoc = pdfDoc_;
     document.getElementById("page_count").textContent = pdfDoc.numPages;
