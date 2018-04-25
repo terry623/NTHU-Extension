@@ -138,13 +138,28 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         temp.innerHTML = str;
 
         var table = $("form > table:nth-child(7) > tbody", temp);
+        $("tr > td:nth-child(7)", table).remove();
         $("tr", table).removeClass("word");
         $(table)
           .find("td")
           .removeAttr("width");
+
+        $("tr > td > div", table).each(function() {
+          $(this).html(function(index, text) {
+            if ($(this).find("b").length > 0) {
+              return $(this).replaceWith(
+                $(this)
+                  .find("b:nth-child(2)")
+                  .text()
+              );
+            }
+          });
+        });
         $(table)
           .find("div")
           .removeAttr("align");
+
+        $("tr:nth-child(15) > td:nth-child(1)", table).text("無上課時間");
         $("tr.class1", table).remove();
         $("#table").append(table.html());
       }
