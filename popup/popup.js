@@ -67,14 +67,46 @@ function getCourseInfo(acix, course_no) {
           "div > table:nth-child(1) > tbody > tr:nth-child(3) > td.class3",
           temp
         );
-
         var name_en = $(
           "div > table:nth-child(1) > tbody > tr:nth-child(4) > td.class3",
           temp
         );
-
+        var teacher = $(
+          "div > table:nth-child(1) > tbody > tr:nth-child(5) > td.class3",
+          temp
+        );
+        var time = $(
+          "div > table:nth-child(1) > tbody > tr:nth-child(6) > td:nth-child(2)",
+          temp
+        );
+        var classroom = $(
+          "div > table:nth-child(1) > tbody > tr:nth-child(6) > td:nth-child(4)",
+          temp
+        );
+        var description = $(
+          "div > table:nth-child(4) > tbody > tr:nth-child(2) > td",
+          temp
+        );
+        var syllabus = $(
+          "div > table:nth-child(5) > tbody > tr:nth-child(2) > td",
+          temp
+        );
+        var find_file = $(
+          "div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a",
+          temp
+        );
         $("#no").text(no.text());
         $("#course_name_zh").text(name_zh.text() + " " + name_en.text());
+        $("#teacher").text(teacher.text());
+        $("#time").text(time.text());
+        $("#classroom").text(classroom.text());
+        $("#description").append(description.html());
+
+        if (find_file.length > 0) {
+          $("#syllabus").text("偵測到檔案");
+        } else {
+          $("#syllabus").append(syllabus.html());
+        }
       }
     }
   );
@@ -90,14 +122,17 @@ $(document).ready(function() {
       console.log("ACIXSTORE is " + acix);
       getUserName(acix);
 
-      const course_no = "10620CS  135500";
-      getCourseInfo(acix, course_no);
+      const course_no_file = "10620CS  342300";
+      const course_have_file = "10620CS  340400";
+      getCourseInfo(acix, course_have_file);
     }
   );
 });
 
+// Initial
 $(".ui.dropdown").dropdown();
 $(".shape").shape();
+$(".ui.accordion").accordion();
 
 $("#clicktoflip").click(function() {
   $(".shape").shape("flip right");
