@@ -100,9 +100,25 @@
 	    console.log("ACIXSTORE is " + acix);
 	    (0, _api.getUserName)(acix);
 	
+	    var stu_no = (0, _helper.getUrlVars)(tabs[0].url)["hint"];
+	
 	    var course_no_file = "10620CS  342300";
 	    var course_have_file = "10620CS  340400";
 	    (0, _api.getCourseInfo)(acix, course_have_file);
+	
+	    //  選課紀錄
+	    //  100  第 1 次選課 log 記錄
+	    //  100P 第 1 次選課亂數結果
+	    //  101P 第 2 次選課 log 記錄
+	    //  101P 第 2 次選課結束(已亂數處理)
+	    //  200  第 3 次選課 log 記錄
+	    //  200P 第 3 次選課結束(已亂數處理)
+	    //  200S 加退選開始前(含擋修、衝堂)
+	    //  300  加退選 log 記錄
+	    //  300P 加退選結束(已處理)
+	    //  400  停修 log 記錄
+	    var phaseNo = "100";
+	    (0, _api.getResultCourse)(acix, stu_no, phaseNo, "106", "20");
 	  });
 	});
 	
@@ -51980,7 +51996,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getCourseInfo = exports.getUserName = undefined;
+	exports.getResultCourse = exports.getCourseInfo = exports.getUserName = undefined;
 	
 	var _pdf2html = __webpack_require__(10);
 	
@@ -52016,7 +52032,6 @@
 	      var str = iconv.decode(new Buffer(body), "big5");
 	      var temp = document.createElement("div");
 	      temp.innerHTML = str;
-	      var htmlObject = temp.firstChild;
 	
 	      var no = $("div > table:nth-child(1) > tbody > tr:nth-child(2) > td:nth-child(2)", temp);
 	      var name_zh = $("div > table:nth-child(1) > tbody > tr:nth-child(3) > td.class3", temp);
@@ -52045,8 +52060,36 @@
 	  });
 	}
 	
+	function getResultCourse(acix, stu_no, phaseNo, year, term) {
+	  request.post({
+	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.9/JH729002.php",
+	    form: {
+	      ACIXSTORE: acix,
+	      stu_no: stu_no,
+	      phaseNo: phaseNo,
+	      year: year,
+	      term: term
+	    },
+	    encoding: null
+	  }, function (err, response, body) {
+	    if (!err && response.statusCode == 200) {
+	      var str = iconv.decode(new Buffer(body), "big5");
+	      var temp = document.createElement("div");
+	      temp.innerHTML = str;
+	
+	      var table = $("form > table:nth-child(7) > tbody", temp);
+	      $("tr", table).removeClass("word");
+	      $(table).find("td").removeAttr("width");
+	      $(table).find("div").removeAttr("align");
+	      $("tr.class1", table).remove();
+	      $("#table").append(table.html());
+	    }
+	  });
+	}
+	
 	exports.getUserName = getUserName;
 	exports.getCourseInfo = getCourseInfo;
+	exports.getResultCourse = getResultCourse;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5).Buffer))
 
 /***/ })

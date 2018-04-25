@@ -44,7 +44,6 @@ function getCourseInfo(acix, course_no) {
         var str = iconv.decode(new Buffer(body), "big5");
         var temp = document.createElement("div");
         temp.innerHTML = str;
-        var htmlObject = temp.firstChild;
 
         var no = $(
           "div > table:nth-child(1) > tbody > tr:nth-child(2) > td:nth-child(2)",
@@ -118,4 +117,39 @@ function getCourseInfo(acix, course_no) {
   );
 }
 
-export { getUserName, getCourseInfo };
+function getResultCourse(acix, stu_no, phaseNo, year, term) {
+  request.post(
+    {
+      url:
+        "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.9/JH729002.php",
+      form: {
+        ACIXSTORE: acix,
+        stu_no: stu_no,
+        phaseNo: phaseNo,
+        year: year,
+        term: term
+      },
+      encoding: null
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var str = iconv.decode(new Buffer(body), "big5");
+        var temp = document.createElement("div");
+        temp.innerHTML = str;
+
+        var table = $("form > table:nth-child(7) > tbody", temp);
+        $("tr", table).removeClass("word");
+        $(table)
+          .find("td")
+          .removeAttr("width");
+        $(table)
+          .find("div")
+          .removeAttr("align");
+        $("tr.class1", table).remove();
+        $("#table").append(table.html());
+      }
+    }
+  );
+}
+
+export { getUserName, getCourseInfo, getResultCourse };
