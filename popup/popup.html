@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="popup.css">
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../semantic/dist/semantic.min.js"></script>
+    <script src="../node_modules/pdfjs-dist/build/pdf.js"></script>
 </head>
 
 <body>
@@ -235,6 +236,20 @@
                             </div>
                             <div class="content">
                                 <p id="syllabus" class="transition hidden" style="display: block !important;"></p>
+                                <div align="right">
+                                    <button id="prev" class="tiny ui basic button">
+                                        <i class="angle left icon"></i>
+                                    </button>
+                                    <button id="next" class="tiny ui basic button">
+                                        <i class="angle right icon"></i>
+                                    </button>
+                                    &nbsp; &nbsp;
+                                    <span>Page:
+                                        <span id="page_num"></span> /
+                                        <span id="page_count"></span>
+                                    </span>
+                                </div>
+                                <canvas id="the-canvas" />
                             </div>
                         </div>
                     </div>

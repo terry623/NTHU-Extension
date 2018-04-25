@@ -5,6 +5,7 @@
     "axios": "^0.18.0",
     "iconv-lite": "^0.4.21",
     "jquery": "^3.3.1",
+    "pdfjs-dist": "^2.0.489",
     "request": "^2.85.0",
     "semantic-ui": "^2.3.1"
   },

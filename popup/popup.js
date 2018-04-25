@@ -2,6 +2,7 @@ window._crypto = null;
 var iconv = require("iconv-lite");
 var request = require("request");
 import { getUrlVars } from "./helper";
+import { transform } from "./pdf2html";
 
 $.fn.api.settings.api = {
   // "get user":
@@ -103,7 +104,9 @@ function getCourseInfo(acix, course_no) {
         $("#description").append(description.html());
 
         if (find_file.length > 0) {
-          $("#syllabus").text("偵測到檔案");
+          var pdf_path =
+            "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
+          transform(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
         } else {
           $("#syllabus").append(syllabus.html());
         }
@@ -124,7 +127,7 @@ $(document).ready(function() {
 
       const course_no_file = "10620CS  342300";
       const course_have_file = "10620CS  340400";
-      getCourseInfo(acix, course_have_file);
+      getCourseInfo(acix, course_no_file);
     }
   );
 });
