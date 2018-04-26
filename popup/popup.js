@@ -54,8 +54,22 @@ $(".ui.accordion").accordion();
 $("#clicktoflip").click(function() {
   $(".shape").shape("flip right");
 });
-$(".ui.menu").on("click", ".item", function() {
-  if (!$(this).hasClass("dropdown") && !$(this).hasClass("istable")) {
+$(".ui.tabular.menu").on("click", ".item", function() {
+  if (!$(this).hasClass("dropdown")) {
+    $(this)
+      .addClass("active")
+      .siblings(".item")
+      .removeClass("active");
+
+    var t = $(".ui.compact.table");
+    t.show();
+
+    if ($(this).hasClass("tab1")) t.not(".tab1").hide();
+    else if ($(this).hasClass("tab2")) t.not(".tab2").hide();
+  }
+});
+$(".ui.pointing.menu").on("click", ".item", function() {
+  if (!$(this).hasClass("dropdown")) {
     $(this)
       .addClass("active")
       .siblings(".item")

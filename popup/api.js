@@ -143,7 +143,6 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         $(table)
           .find("td")
           .removeAttr("width");
-
         $("tr > td > div", table).each(function() {
           $(this).html(function(index, text) {
             if ($(this).find("b").length > 0) {
@@ -158,9 +157,13 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         $(table)
           .find("div")
           .removeAttr("align");
-
         $("tr:nth-child(15) > td:nth-child(1)", table).text("無上課時間");
         $("tr.class1", table).remove();
+        $("tr > td > div", table).each(function() {
+          var text = $(this).text();
+          text = text.replace("--", "-");
+          $(this).text(text);
+        });
         $("#table").append(table.html());
       }
     }

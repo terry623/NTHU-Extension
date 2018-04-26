@@ -17,7 +17,7 @@
         <h3>NTHU Course</h3>
         <div class="ui grid">
             <div class="three wide column">
-                <div class="ui vertical fluid tabular menu">
+                <div class="ui secondary vertical fluid pointing menu">
                     <a class="item active homePage">
                         首頁
                     </a>
@@ -128,7 +128,7 @@
                         <tfoot>
                             <tr>
                                 <th colspan="3">
-                                    <div class="ui right floated pagination menu istable">
+                                    <div class="ui right floated pagination menu">
                                         <a class="icon item">
                                             <i class="left chevron icon"></i>
                                         </a>
@@ -147,15 +147,35 @@
                 </div>
 
                 <div class="content_item choosePage">
-                    <table id="table" class="ui compact table">
+                    <div class="ui tabular menu">
+                        <a class="item tab1 active">
+                            已選上
+                        </a>
+                        <a class="item tab2">
+                            待亂數
+                        </a>
+                    </div>
+                    <table id="table" class="ui tab1 compact table">
                         <thead>
                             <tr>
-                                <th>時間 / 星期</th>
-                                <th>星期一</th>
-                                <th>星期二</th>
-                                <th>星期三</th>
-                                <th>星期四</th>
-                                <th>星期五</th>
+                                <th class="two wide">時間 / 星期</th>
+                                <th class="two wide">星期一</th>
+                                <th class="two wide">星期二</th>
+                                <th class="two wide">星期三</th>
+                                <th class="two wide">星期四</th>
+                                <th class="two wide">星期五</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class="ui tab2 compact table">
+                        <thead>
+                            <tr>
+                                <th class="two wide">時間 / 星期</th>
+                                <th class="two wide">星期一</th>
+                                <th class="two wide">星期二</th>
+                                <th class="two wide">星期三</th>
+                                <th class="two wide">星期四</th>
+                                <th class="two wide">星期五</th>
                             </tr>
                         </thead>
                     </table>
