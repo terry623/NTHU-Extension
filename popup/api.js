@@ -170,4 +170,41 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
   );
 }
 
-export { getUserName, getCourseInfo, getResultCourse };
+function getStatistics(acix) {
+  console.log("getStatistics......");
+  request.post(
+    {
+      url:
+        "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.7/JH727002.php",
+      form: {
+        ACIXSTORE: acix,
+        select: "CS",
+        act: "1",
+        Submit: "確定 go"
+      },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      encoding: null,
+      method: "POST"
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var str = iconv.decode(new Buffer(body), "big5");
+        var temp = document.createElement("div");
+        temp.innerHTML = str;
+
+        console.log(str);
+
+        var found = $(
+          "div > form > table.sortable > tbody > tr:nth-child(5)",
+          temp
+        );
+
+        console.log(found.text());
+      }
+    }
+  );
+}
+
+export { getUserName, getCourseInfo, getResultCourse, getStatistics };

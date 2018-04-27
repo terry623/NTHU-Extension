@@ -1,6 +1,11 @@
 window._crypto = null;
 import { getUrlVars } from "./helper";
-import { getUserName, getCourseInfo, getResultCourse } from "./api";
+import {
+  getUserName,
+  getCourseInfo,
+  getResultCourse,
+  getStatistics
+} from "./api";
 
 $.fn.api.settings.api = {
   // "get user":
@@ -43,6 +48,8 @@ $(document).ready(function() {
       //  400  停修 log 記錄
       var phaseNo = "100";
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
+
+      getStatistics(acix);
     }
   );
 });

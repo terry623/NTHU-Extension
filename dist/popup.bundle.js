@@ -119,6 +119,8 @@
 	    //  400  停修 log 記錄
 	    var phaseNo = "100";
 	    (0, _api.getResultCourse)(acix, stu_no, phaseNo, "106", "20");
+	
+	    (0, _api.getStatistics)(acix);
 	  });
 	});
 	
@@ -182,7 +184,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getResultCourse = exports.getCourseInfo = exports.getUserName = undefined;
+	exports.getStatistics = exports.getResultCourse = exports.getCourseInfo = exports.getUserName = undefined;
 	
 	var _pdf2html = __webpack_require__(11);
 	
@@ -287,9 +289,40 @@
 	  });
 	}
 	
+	function getStatistics(acix) {
+	  console.log("getStatistics......");
+	  request.post({
+	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.7/JH727002.php",
+	    form: {
+	      ACIXSTORE: acix,
+	      select: "CS",
+	      act: "1",
+	      Submit: "確定 go"
+	    },
+	    headers: {
+	      "Content-Type": "application/x-www-form-urlencoded"
+	    },
+	    encoding: null,
+	    method: "POST"
+	  }, function (err, response, body) {
+	    if (!err && response.statusCode == 200) {
+	      var str = iconv.decode(new Buffer(body), "big5");
+	      var temp = document.createElement("div");
+	      temp.innerHTML = str;
+	
+	      console.log(str);
+	
+	      var found = $("div > form > table.sortable > tbody > tr:nth-child(5)", temp);
+	
+	      console.log(found.text());
+	    }
+	  });
+	}
+	
 	exports.getUserName = getUserName;
 	exports.getCourseInfo = getCourseInfo;
 	exports.getResultCourse = getResultCourse;
+	exports.getStatistics = getStatistics;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7).Buffer))
 
 /***/ }),
