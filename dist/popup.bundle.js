@@ -102,9 +102,11 @@
 	
 	    var stu_no = (0, _helper.getUrlVars)(tabs[0].url)["hint"];
 	
+	    // TODO:有的科目空白數是一格，有的是兩個，要用 OR 的做處理
 	    var course_no_file = "10620CS  342300";
 	    var course_have_file = "10620CS  340400";
-	    (0, _api.getCourseInfo)(acix, course_have_file);
+	    var course_from_ISS = "10620ISS 508400";
+	    (0, _api.getCourseInfo)(acix, course_from_ISS);
 	
 	    //  選課紀錄
 	    //  100  第 1 次選課 log 記錄
@@ -119,8 +121,6 @@
 	    //  400  停修 log 記錄
 	    var phaseNo = "100";
 	    (0, _api.getResultCourse)(acix, stu_no, phaseNo, "106", "20");
-	
-	    (0, _api.getStatistics)(acix);
 	  });
 	});
 	
@@ -141,6 +141,7 @@
 	    if ($(this).hasClass("tab1")) t.not(".tab1").hide();else if ($(this).hasClass("tab2")) t.not(".tab2").hide();
 	  }
 	});
+	
 	$(".ui.pointing.menu").on("click", ".item", function () {
 	  if (!$(this).hasClass("dropdown")) {
 	    $(this).addClass("active").siblings(".item").removeClass("active");
@@ -184,7 +185,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getStatistics = exports.getResultCourse = exports.getCourseInfo = exports.getUserName = undefined;
+	exports.getResultCourse = exports.getCourseInfo = exports.getUserName = undefined;
 	
 	var _pdf2html = __webpack_require__(11);
 	
@@ -211,6 +212,40 @@
 	  });
 	}
 	
+	// TODO:數據抓很久，可以用個 Loader 再一起顯示
+	function getPopulation(acix, course_no) {
+	  var patt = /[A-Za-z]+/;
+	  var target = course_no.match(patt);
+	
+	  request.post({
+	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.7/JH727002.php",
+	    form: {
+	      ACIXSTORE: acix,
+	      select: target[0],
+	      act: "1",
+	      Submit: "確定 go"
+	    },
+	    headers: {
+	      "Content-Type": "application/x-www-form-urlencoded"
+	    },
+	    encoding: null,
+	    method: "POST"
+	  }, function (err, response, body) {
+	    if (!err && response.statusCode == 200) {
+	      var str = iconv.decode(new Buffer(body), "big5");
+	      var temp = document.createElement("div");
+	      temp.innerHTML = str;
+	      // console.log.apply(console, $(temp));
+	
+	      var found = $("div > form > table.sortable > tbody > tr", temp).filter(function (index) {
+	        return $("td:nth-child(1) > div", this).text() == course_no;
+	      });
+	      var word = $("td:nth-child(6) > div", found);
+	      $("#population").text("修課人數: " + word.text());
+	    }
+	  });
+	}
+	
 	function getCourseInfo(acix, course_no) {
 	  request({
 	    url: "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=" + acix + "&c_key=" + course_no,
@@ -230,8 +265,9 @@
 	      var description = $("div > table:nth-child(4) > tbody > tr:nth-child(2) > td", temp);
 	      var syllabus = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td", temp);
 	      var find_file = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a", temp);
+	      getPopulation(acix, course_no);
 	      $("#no").text(no.text());
-	      $("#course_name_zh").text(name_zh.text() + " " + name_en.text());
+	      $("#course_name").prepend(name_zh.text() + " " + name_en.text());
 	      $("#teacher").text(teacher.text());
 	      $("#time").text(time.text());
 	      $("#classroom").text(classroom.text());
@@ -240,6 +276,8 @@
 	      if (find_file.length > 0) {
 	        var pdf_path = "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
 	        $("#pdf_page").append("<div align=\"right\">\n                    <button id=\"prev\" class=\"tiny ui basic button\">\n                        <i class=\"angle left icon\"></i>\n                    </button>\n                    <button id=\"next\" class=\"tiny ui basic button\">\n                        <i class=\"angle right icon\"></i>\n                    </button>\n                    &nbsp; &nbsp;\n                    <span>Page:\n                        <span id=\"page_num\"></span> /\n                        <span id=\"page_count\"></span>\n                    </span>\n                </div>\n                <canvas id=\"the-canvas\" />\n                ");
+	
+	        // TODO:看 PDF 可不可以放大
 	        (0, _pdf2html.transform)(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
 	      } else {
 	        $("#syllabus").append(syllabus.html());
@@ -248,6 +286,7 @@
 	  });
 	}
 	
+	// FIXME:一開始會同時秀出兩個 Tab 的課表
 	function getResultCourse(acix, stu_no, phaseNo, year, term) {
 	  request.post({
 	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.9/JH729002.php",
@@ -289,40 +328,9 @@
 	  });
 	}
 	
-	function getStatistics(acix) {
-	  console.log("getStatistics......");
-	  request.post({
-	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.7/JH727002.php",
-	    form: {
-	      ACIXSTORE: acix,
-	      select: "CS",
-	      act: "1",
-	      Submit: "確定 go"
-	    },
-	    headers: {
-	      "Content-Type": "application/x-www-form-urlencoded"
-	    },
-	    encoding: null,
-	    method: "POST"
-	  }, function (err, response, body) {
-	    if (!err && response.statusCode == 200) {
-	      var str = iconv.decode(new Buffer(body), "big5");
-	      var temp = document.createElement("div");
-	      temp.innerHTML = str;
-	
-	      console.log(str);
-	
-	      var found = $("div > form > table.sortable > tbody > tr:nth-child(5)", temp);
-	
-	      console.log(found.text());
-	    }
-	  });
-	}
-	
 	exports.getUserName = getUserName;
 	exports.getCourseInfo = getCourseInfo;
 	exports.getResultCourse = getResultCourse;
-	exports.getStatistics = getStatistics;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7).Buffer))
 
 /***/ }),

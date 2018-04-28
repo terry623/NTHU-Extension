@@ -29,6 +29,46 @@ function getUserName(acix) {
   );
 }
 
+// TODO:數據抓很久，可以用個 Loader 再一起顯示
+function getPopulation(acix, course_no) {
+  var patt = /[A-Za-z]+/;
+  var target = course_no.match(patt);
+
+  request.post(
+    {
+      url:
+        "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.7/JH727002.php",
+      form: {
+        ACIXSTORE: acix,
+        select: target[0],
+        act: "1",
+        Submit: "確定 go"
+      },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      encoding: null,
+      method: "POST"
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var str = iconv.decode(new Buffer(body), "big5");
+        var temp = document.createElement("div");
+        temp.innerHTML = str;
+        // console.log.apply(console, $(temp));
+
+        var found = $("div > form > table.sortable > tbody > tr", temp).filter(
+          function(index) {
+            return $("td:nth-child(1) > div", this).text() == course_no;
+          }
+        );
+        var word = $("td:nth-child(6) > div", found);
+        $("#population").text("修課人數: " + word.text());
+      }
+    }
+  );
+}
+
 function getCourseInfo(acix, course_no) {
   request(
     {
@@ -81,8 +121,9 @@ function getCourseInfo(acix, course_no) {
           "div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a",
           temp
         );
+        getPopulation(acix, course_no);
         $("#no").text(no.text());
-        $("#course_name_zh").text(name_zh.text() + " " + name_en.text());
+        $("#course_name").prepend(name_zh.text() + " " + name_en.text());
         $("#teacher").text(teacher.text());
         $("#time").text(time.text());
         $("#classroom").text(classroom.text());
@@ -108,6 +149,8 @@ function getCourseInfo(acix, course_no) {
                 <canvas id="the-canvas" />
                 `
           );
+
+          // TODO:看 PDF 可不可以放大
           transform(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
         } else {
           $("#syllabus").append(syllabus.html());
@@ -117,6 +160,7 @@ function getCourseInfo(acix, course_no) {
   );
 }
 
+// FIXME:一開始會同時秀出兩個 Tab 的課表
 function getResultCourse(acix, stu_no, phaseNo, year, term) {
   request.post(
     {
@@ -170,41 +214,4 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
   );
 }
 
-function getStatistics(acix) {
-  console.log("getStatistics......");
-  request.post(
-    {
-      url:
-        "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.7/JH727002.php",
-      form: {
-        ACIXSTORE: acix,
-        select: "CS",
-        act: "1",
-        Submit: "確定 go"
-      },
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      encoding: null,
-      method: "POST"
-    },
-    function(err, response, body) {
-      if (!err && response.statusCode == 200) {
-        var str = iconv.decode(new Buffer(body), "big5");
-        var temp = document.createElement("div");
-        temp.innerHTML = str;
-
-        console.log(str);
-
-        var found = $(
-          "div > form > table.sortable > tbody > tr:nth-child(5)",
-          temp
-        );
-
-        console.log(found.text());
-      }
-    }
-  );
-}
-
-export { getUserName, getCourseInfo, getResultCourse, getStatistics };
+export { getUserName, getCourseInfo, getResultCourse };

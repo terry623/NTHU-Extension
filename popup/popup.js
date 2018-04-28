@@ -31,9 +31,11 @@ $(document).ready(function() {
 
       var stu_no = getUrlVars(tabs[0].url)["hint"];
 
+      // TODO:有的科目空白數是一格，有的是兩個，要用 OR 的做處理
       const course_no_file = "10620CS  342300";
       const course_have_file = "10620CS  340400";
-      getCourseInfo(acix, course_have_file);
+      const course_from_ISS = "10620ISS 508400";
+      getCourseInfo(acix, course_from_ISS);
 
       //  選課紀錄
       //  100  第 1 次選課 log 記錄
@@ -48,8 +50,6 @@ $(document).ready(function() {
       //  400  停修 log 記錄
       var phaseNo = "100";
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
-
-      getStatistics(acix);
     }
   );
 });
@@ -75,6 +75,7 @@ $(".ui.tabular.menu").on("click", ".item", function() {
     else if ($(this).hasClass("tab2")) t.not(".tab2").hide();
   }
 });
+
 $(".ui.pointing.menu").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown")) {
     $(this)
