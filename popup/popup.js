@@ -4,7 +4,8 @@ import {
   getUserName,
   getCourseInfo,
   getResultCourse,
-  getStatistics
+  getGrade,
+  getGradeDistribution
 } from "./api";
 
 $.fn.api.settings.api = {

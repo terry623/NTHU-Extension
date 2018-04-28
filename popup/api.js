@@ -12,10 +12,11 @@ function getUserName(acix) {
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
+
+        // TODO:把 decode 的過程拉出成 function
         var str = iconv.decode(new Buffer(body), "big5");
         var temp = document.createElement("div");
         temp.innerHTML = str;
-        var htmlObject = temp.firstChild;
         var found = $(
           "div > form > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(4)",
           temp
@@ -214,4 +215,49 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
   );
 }
 
-export { getUserName, getCourseInfo, getResultCourse };
+function getGrade(acix) {
+  request(
+    {
+      url:
+        "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/8/R/6.3/JH8R63002.php?ACIXSTORE=" +
+        acix,
+      encoding: null
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var str = iconv.decode(new Buffer(body), "big5");
+        var temp = document.createElement("div");
+        temp.innerHTML = str;
+      }
+    }
+  );
+}
+
+function getGradeDistribution(acix, course_no) {
+  request(
+    {
+      url:
+        "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/8/8.3/8.3.3/JH83302.php?ACIXSTORE=" +
+        acix +
+        "&c_key=" +
+        course_no +
+        "&from=prg8R63",
+      encoding: null
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var str = iconv.decode(new Buffer(body), "big5");
+        var temp = document.createElement("div");
+        temp.innerHTML = str;
+      }
+    }
+  );
+}
+
+https: export {
+  getUserName,
+  getCourseInfo,
+  getResultCourse,
+  getGrade,
+  getGradeDistribution
+};
