@@ -240,16 +240,18 @@ function getGrade(acix) {
         var userGradeMap = new Map();
         $(allGradeOfStudent).each(function(index) {
           // console.log(index + ": " + $(this).text());
-          if (index > 2) {
-            var getCourseNo = $("td:nth-child(3)", this);
-            var getCourseGrade = $("td:nth-child(6)", this);
-            userGradeMap.set(getCourseNo.text(), getCourseGrade.text());
+          if (index > 2 && index < allGradeOfStudent.length - 1) {
+            var getCourseNo = $("td:nth-child(3)", this).text();
+            var getCourseGrade = $("td:nth-child(6)", this).text();
+            if (!getCourseGrade.includes("Grade Not Submitted"))
+              userGradeMap.set(getCourseNo, getCourseGrade);
           }
         });
 
-        // for (var [key, value] of userGradeMap) {
-        //   console.log(key + " : " + value);
-        // }
+        console.log("Get Grade...");
+        for (var [key, value] of userGradeMap) {
+          console.log(key + " : " + value);
+        }
       }
     }
   );
@@ -271,7 +273,7 @@ function getGradeDistribution(acix, course_no) {
         var str = iconv.decode(new Buffer(body), "big5");
         var temp = document.createElement("div");
         temp.innerHTML = str;
-        console.log.apply(console, $(temp));
+        // console.log.apply(console, $(temp));
 
         var gradeDistributionOfCourse = $(
           "form > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td",
@@ -280,22 +282,25 @@ function getGradeDistribution(acix, course_no) {
 
         var gradeDistributionMap = new Map();
         $(gradeDistributionOfCourse).each(function(index) {
-          if (index > 1) {
+          if (index > 0) {
             var grade = $(this).text();
             var words = grade.split("%");
-
-            var percent = words[0];
+            var num = 0;
             var patt = /\d+/;
-            var num = null;
+
             if (words[1] != undefined) num = words[1].match(patt);
-            console.log("Percent: " + percent + ", Num: " + num);
+            gradeDistributionMap.set(index, num);
           }
         });
+
+        console.log("Get Grade Distribution...\n");
+        for (var [key, value] of gradeDistributionMap) {
+          console.log(key + " : " + value);
+        }
       }
     }
   );
 }
-
 export {
   getUserName,
   getCourseInfo,
