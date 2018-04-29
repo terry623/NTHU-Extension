@@ -58,6 +58,10 @@
 	
 	var api = _interopRequireWildcard(_api);
 	
+	var _cart = __webpack_require__(287);
+	
+	var cart = _interopRequireWildcard(_cart);
+	
 	var _pdf2html = __webpack_require__(11);
 	
 	var pdf2html = _interopRequireWildcard(_pdf2html);
@@ -81,6 +85,10 @@
 	
 	var _api = __webpack_require__(6);
 	
+	var _cart = __webpack_require__(287);
+	
+	var _server = __webpack_require__(286);
+	
 	window._crypto = null;
 	
 	
@@ -94,7 +102,7 @@
 	
 	    var stu_no = (0, _helper.getUrlVars)(tabs[0].url)["hint"];
 	
-	    // FIXME:科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一
+	    // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一
 	    var course_no_file = "10620CS  342300";
 	    var course_have_file = "10620CS  340400";
 	    var course_from_ISS = "10620ISS 508400";
@@ -113,6 +121,7 @@
 	    //  400  停修 log 記錄
 	    var phaseNo = "100";
 	    (0, _api.getResultCourse)(acix, stu_no, phaseNo, "106", "20");
+	    (0, _cart.getCart)();
 	    (0, _api.getGrade)(acix, stu_no);
 	  });
 	});
@@ -134,7 +143,6 @@
 	    if ($(this).hasClass("tab1")) t.not(".tab1").hide();else if ($(this).hasClass("tab2")) t.not(".tab2").hide();
 	  }
 	});
-	
 	$(".ui.pointing.menu").on("click", ".item", function () {
 	  if (!$(this).hasClass("dropdown")) {
 	    $(this).addClass("active").siblings(".item").removeClass("active");
@@ -142,9 +150,16 @@
 	    var t = $(".content_item");
 	    t.show();
 	
-	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
+	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();else if ($(this).hasClass("choosePage")) {
+	      t.not(".choosePage").hide();
+	      $(".ui.tab2").hide();
+	    } else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
 	  }
 	});
+	
+	$(".ui.dropdown.search_list_1").dropdown(
+	// TODO: 要從 Server 端取得選項，記得存起來，不要一直 GET
+	"setup menu", (0, _server.collectionOfCourse)());
 
 /***/ }),
 /* 5 */
@@ -259,7 +274,7 @@
 	      var syllabus = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td", temp);
 	      var find_file = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a", temp);
 	
-	      // TODO:數據抓很久，可以用個 Loader 再一起顯示
+	      // TODO: 數據抓很久，可以用個 Loader 再一起顯示
 	      // getPopulation(acix, course_no);
 	
 	      $("#no").text(no.text());
@@ -273,7 +288,7 @@
 	        var pdf_path = "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
 	        $("#pdf_page").append("<div align=\"right\">\n                    <button id=\"prev\" class=\"tiny ui basic button\">\n                        <i class=\"angle left icon\"></i>\n                    </button>\n                    <button id=\"next\" class=\"tiny ui basic button\">\n                        <i class=\"angle right icon\"></i>\n                    </button>\n                    &nbsp; &nbsp;\n                    <span>Page:\n                        <span id=\"page_num\"></span> /\n                        <span id=\"page_count\"></span>\n                    </span>\n                </div>\n                <canvas id=\"the-canvas\" />\n                ");
 	
-	        // TODO:看 PDF 可不可以放大
+	        // TODO: 看 PDF 可不可以放大
 	        (0, _pdf2html.transform)(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
 	      } else {
 	        $("#syllabus").append(syllabus.html());
@@ -282,7 +297,6 @@
 	  });
 	}
 	
-	// FIXME:一開始會同時秀出兩個 Tab 的課表
 	function getResultCourse(acix, stu_no, phaseNo, year, term) {
 	  request.post({
 	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.9/JH729002.php",
@@ -307,7 +321,10 @@
 	      $("tr > td > div", table).each(function () {
 	        $(this).html(function (index, text) {
 	          if ($(this).find("b").length > 0) {
-	            return $(this).replaceWith($(this).find("b:nth-child(2)").text());
+	            var t = $("b:nth-child(2)", this).text();
+	            t = t.replace("全民國防教育軍事訓練--", "");
+	            $("b:nth-child(2)", this).text(t);
+	            return $(this).replaceWith(t);
 	          }
 	        });
 	      });
@@ -52207,7 +52224,39 @@
 	  });
 	}
 	
+	function collectionOfCourse() {
+	  var return_val;
+	  request({
+	    url: "http://127.0.0.1:5000/api/collectionOfCourse"
+	  }, function (err, response, body) {
+	    if (!err && response.statusCode == 200) {
+	      var info = JSON.parse(body);
+	      console.log("Message: " + info.message);
+	      return_val = info.message;
+	    }
+	  });
+	
+	  // FIXME: 要改成等 request 做完才 return 值
+	  return {
+	    values: [{ value: return_val, text: return_val, name: return_val }]
+	  };
+	}
+	
 	exports.calculateUserGrade = calculateUserGrade;
+	exports.collectionOfCourse = collectionOfCourse;
+
+/***/ }),
+/* 287 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	function getCart() {}
+	
+	exports.getCart = getCart;
 
 /***/ })
 /******/ ]);

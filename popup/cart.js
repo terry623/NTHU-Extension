@@ -1,0 +1,3 @@
+function getCart() {}
+
+export { getCart };

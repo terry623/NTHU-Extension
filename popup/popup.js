@@ -1,6 +1,8 @@
 window._crypto = null;
 import { getUrlVars } from "./helper";
 import { getUserName, getCourseInfo, getResultCourse, getGrade } from "./api";
+import { getCart } from "./cart";
+import { collectionOfCourse } from "./server";
 
 $(document).ready(function() {
   $(".content_item").hide();
@@ -14,7 +16,7 @@ $(document).ready(function() {
 
       var stu_no = getUrlVars(tabs[0].url)["hint"];
 
-      // FIXME:科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一
+      // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一
       const course_no_file = "10620CS  342300";
       const course_have_file = "10620CS  340400";
       const course_from_ISS = "10620ISS 508400";
@@ -33,6 +35,7 @@ $(document).ready(function() {
       //  400  停修 log 記錄
       var phaseNo = "100";
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
+      getCart();
       getGrade(acix, stu_no);
     }
   );
@@ -59,7 +62,6 @@ $(".ui.tabular.menu").on("click", ".item", function() {
     else if ($(this).hasClass("tab2")) t.not(".tab2").hide();
   }
 });
-
 $(".ui.pointing.menu").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown")) {
     $(this)
@@ -72,8 +74,17 @@ $(".ui.pointing.menu").on("click", ".item", function() {
 
     if ($(this).hasClass("homePage")) t.not(".homePage").hide();
     else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();
-    else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();
-    else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();
+    else if ($(this).hasClass("choosePage")) {
+      t.not(".choosePage").hide();
+      $(".ui.tab2").hide();
+    } else if ($(this).hasClass("recommendPage"))
+      t.not(".recommendPage").hide();
     else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
   }
 });
+
+$(".ui.dropdown.search_list_1").dropdown(
+  // TODO: 要從 Server 端取得選項，記得存起來，不要一直 GET
+  "setup menu",
+  collectionOfCourse()
+);

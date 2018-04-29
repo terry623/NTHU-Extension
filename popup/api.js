@@ -121,7 +121,7 @@ function getCourseInfo(acix, course_no) {
           temp
         );
 
-        // TODO:數據抓很久，可以用個 Loader 再一起顯示
+        // TODO: 數據抓很久，可以用個 Loader 再一起顯示
         // getPopulation(acix, course_no);
 
         $("#no").text(no.text());
@@ -152,7 +152,7 @@ function getCourseInfo(acix, course_no) {
                 `
           );
 
-          // TODO:看 PDF 可不可以放大
+          // TODO: 看 PDF 可不可以放大
           transform(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
         } else {
           $("#syllabus").append(syllabus.html());
@@ -162,7 +162,6 @@ function getCourseInfo(acix, course_no) {
   );
 }
 
-// FIXME:一開始會同時秀出兩個 Tab 的課表
 function getResultCourse(acix, stu_no, phaseNo, year, term) {
   request.post(
     {
@@ -192,11 +191,10 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         $("tr > td > div", table).each(function() {
           $(this).html(function(index, text) {
             if ($(this).find("b").length > 0) {
-              return $(this).replaceWith(
-                $(this)
-                  .find("b:nth-child(2)")
-                  .text()
-              );
+              var t = $("b:nth-child(2)", this).text();
+              t = t.replace("全民國防教育軍事訓練--", "");
+              $("b:nth-child(2)", this).text(t);
+              return $(this).replaceWith(t);
             }
           });
         });
