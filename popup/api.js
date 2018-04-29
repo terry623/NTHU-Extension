@@ -12,7 +12,6 @@ function getUserName(acix) {
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
-
         // TODO:把 decode 的過程拉出成 function
         var str = iconv.decode(new Buffer(body), "big5");
         var temp = document.createElement("div");
@@ -30,7 +29,6 @@ function getUserName(acix) {
   );
 }
 
-// TODO:數據抓很久，可以用個 Loader 再一起顯示
 function getPopulation(acix, course_no) {
   var patt = /[A-Za-z]+/;
   var target = course_no.match(patt);
@@ -122,7 +120,10 @@ function getCourseInfo(acix, course_no) {
           "div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a",
           temp
         );
-        getPopulation(acix, course_no);
+
+        // TODO:數據抓很久，可以用個 Loader 再一起顯示
+        // getPopulation(acix, course_no);
+
         $("#no").text(no.text());
         $("#course_name").prepend(name_zh.text() + " " + name_en.text());
         $("#teacher").text(teacher.text());
@@ -215,6 +216,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
   );
 }
 
+// TODO:成績已彙整好，但還沒有送去 Server 端
 function getGrade(acix) {
   request(
     {
@@ -228,6 +230,26 @@ function getGrade(acix) {
         var str = iconv.decode(new Buffer(body), "big5");
         var temp = document.createElement("div");
         temp.innerHTML = str;
+        // console.log.apply(console, $(temp));
+
+        var allGradeOfStudent = $(
+          "form > table:nth-child(4) > tbody > tr",
+          temp
+        );
+
+        var userGradeMap = new Map();
+        $(allGradeOfStudent).each(function(index) {
+          // console.log(index + ": " + $(this).text());
+          if (index > 2) {
+            var getCourseNo = $("td:nth-child(3)", this);
+            var getCourseGrade = $("td:nth-child(6)", this);
+            userGradeMap.set(getCourseNo.text(), getCourseGrade.text());
+          }
+        });
+
+        for (var [key, value] of userGradeMap) {
+          console.log(key + " : " + value);
+        }
       }
     }
   );
@@ -254,7 +276,7 @@ function getGradeDistribution(acix, course_no) {
   );
 }
 
-https: export {
+export {
   getUserName,
   getCourseInfo,
   getResultCourse,
