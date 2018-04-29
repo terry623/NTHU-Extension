@@ -1,13 +1,6 @@
 window._crypto = null;
 import { getUrlVars } from "./helper";
-import {
-  getUserName,
-  getCourseInfo,
-  getResultCourse,
-  getGrade,
-  getGradeDistribution
-} from "./api";
-import { calculateUserGrade, collectGradeDistribution } from "./server";
+import { getUserName, getCourseInfo, getResultCourse, getGrade } from "./api";
 
 $(document).ready(function() {
   $(".content_item").hide();
@@ -40,16 +33,7 @@ $(document).ready(function() {
       //  400  停修 log 記錄
       var phaseNo = "100";
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
-      getGrade(acix);
-
-      const course_good_grade = "10610CS  546000";
-      getGradeDistribution(acix, course_good_grade);
-
-      var userGrade = "Test";
-      calculateUserGrade(stu_no, userGrade);
-
-      var distribution = "Test";
-      collectGradeDistribution(course_from_ISS, distribution);
+      getGrade(acix, stu_no);
     }
   );
 });

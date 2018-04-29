@@ -1,6 +1,7 @@
 var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
+import { calculateUserGrade } from "./server";
 
 function getUserName(acix) {
   request(
@@ -215,7 +216,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
   );
 }
 
-function getGrade(acix) {
+function getGrade(acix, stu_no) {
   request(
     {
       url:
@@ -235,74 +236,21 @@ function getGrade(acix) {
           temp
         );
 
-        var userGradeMap = new Map();
+        var userGrade = Object.create(null);
         $(allGradeOfStudent).each(function(index) {
           // console.log(index + ": " + $(this).text());
           if (index > 2 && index < allGradeOfStudent.length - 1) {
             var getCourseNo = $("td:nth-child(3)", this).text();
             var getCourseGrade = $("td:nth-child(6)", this).text();
             if (!getCourseGrade.includes("Grade Not Submitted"))
-              userGradeMap.set(getCourseNo, getCourseGrade);
+              userGrade[getCourseNo.trim()] = getCourseGrade.trim();
           }
         });
 
-        console.log("Get Grade...");
-        for (var [key, value] of userGradeMap) {
-          console.log(key + " : " + value);
-        }
+        calculateUserGrade(stu_no, userGrade);
       }
     }
   );
 }
 
-function getGradeDistribution(acix, course_no) {
-  request(
-    {
-      url:
-        "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/8/8.3/8.3.3/JH83302.php?ACIXSTORE=" +
-        acix +
-        "&c_key=" +
-        course_no +
-        "&from=prg8R63",
-      encoding: null
-    },
-    function(err, response, body) {
-      if (!err && response.statusCode == 200) {
-        var str = iconv.decode(new Buffer(body), "big5");
-        var temp = document.createElement("div");
-        temp.innerHTML = str;
-        // console.log.apply(console, $(temp));
-
-        var gradeDistributionOfCourse = $(
-          "form > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td",
-          temp
-        );
-
-        var gradeDistributionMap = new Map();
-        $(gradeDistributionOfCourse).each(function(index) {
-          if (index > 0) {
-            var grade = $(this).text();
-            var words = grade.split("%");
-            var num = 0;
-            var patt = /\d+/;
-
-            if (words[1] != undefined) num = words[1].match(patt);
-            gradeDistributionMap.set(index, num);
-          }
-        });
-
-        console.log("Get Grade Distribution...\n");
-        for (var [key, value] of gradeDistributionMap) {
-          console.log(key + " : " + value);
-        }
-      }
-    }
-  );
-}
-export {
-  getUserName,
-  getCourseInfo,
-  getResultCourse,
-  getGrade,
-  getGradeDistribution
-};
+export { getUserName, getCourseInfo, getResultCourse, getGrade };
