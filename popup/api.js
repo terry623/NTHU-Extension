@@ -1,7 +1,6 @@
 var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
-import { WSAEPROVIDERFAILEDINIT } from "constants";
 
 function getUserName(acix) {
   request(
@@ -216,7 +215,6 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
   );
 }
 
-// TODO:成績已彙整好，但還沒有送去 Server 端
 function getGrade(acix) {
   request(
     {

@@ -7,18 +7,7 @@ import {
   getGrade,
   getGradeDistribution
 } from "./api";
-
-$.fn.api.settings.api = {
-  // "get user":
-  //   "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/4/4.19/JH4j002.php?ACIXSTORE={ACIXSTORE}"
-};
-
-$.fn.api.settings.successTest = function(response) {
-  if (response && response.success) {
-    return response.success;
-  }
-  return false;
-};
+import { calculateUserGrade, collectGradeDistribution } from "./server";
 
 $(document).ready(function() {
   $(".content_item").hide();
@@ -55,6 +44,12 @@ $(document).ready(function() {
 
       const course_good_grade = "10610CS  546000";
       getGradeDistribution(acix, course_good_grade);
+
+      var userGrade = "Test";
+      calculateUserGrade(stu_no, userGrade);
+
+      var distribution = "Test";
+      collectGradeDistribution(course_from_ISS, distribution);
     }
   );
 });
