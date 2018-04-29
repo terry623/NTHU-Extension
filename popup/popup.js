@@ -32,7 +32,7 @@ $(document).ready(function() {
 
       var stu_no = getUrlVars(tabs[0].url)["hint"];
 
-      // FIXME:科目空白數很不固定，0 ~ 2 個都有
+      // FIXME:科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一
       const course_no_file = "10620CS  342300";
       const course_have_file = "10620CS  340400";
       const course_from_ISS = "10620ISS 508400";
@@ -52,6 +52,9 @@ $(document).ready(function() {
       var phaseNo = "100";
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
       getGrade(acix);
+
+      const course_good_grade = "10610CS  546000";
+      getGradeDistribution(acix, course_good_grade);
     }
   );
 });

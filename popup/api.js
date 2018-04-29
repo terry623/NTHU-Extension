@@ -1,6 +1,7 @@
 var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
+import { WSAEPROVIDERFAILEDINIT } from "constants";
 
 function getUserName(acix) {
   request(
@@ -12,7 +13,6 @@ function getUserName(acix) {
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
-        // TODO:把 decode 的過程拉出成 function
         var str = iconv.decode(new Buffer(body), "big5");
         var temp = document.createElement("div");
         temp.innerHTML = str;
@@ -247,9 +247,9 @@ function getGrade(acix) {
           }
         });
 
-        for (var [key, value] of userGradeMap) {
-          console.log(key + " : " + value);
-        }
+        // for (var [key, value] of userGradeMap) {
+        //   console.log(key + " : " + value);
+        // }
       }
     }
   );
@@ -271,6 +271,26 @@ function getGradeDistribution(acix, course_no) {
         var str = iconv.decode(new Buffer(body), "big5");
         var temp = document.createElement("div");
         temp.innerHTML = str;
+        console.log.apply(console, $(temp));
+
+        var gradeDistributionOfCourse = $(
+          "form > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td",
+          temp
+        );
+
+        var gradeDistributionMap = new Map();
+        $(gradeDistributionOfCourse).each(function(index) {
+          if (index > 1) {
+            var grade = $(this).text();
+            var words = grade.split("%");
+
+            var percent = words[0];
+            var patt = /\d+/;
+            var num = null;
+            if (words[1] != undefined) num = words[1].match(patt);
+            console.log("Percent: " + percent + ", Num: " + num);
+          }
+        });
       }
     }
   );
