@@ -2,7 +2,7 @@ window._crypto = null;
 import { getUrlVars } from "./helper";
 import { getUserName, getCourseInfo, getResultCourse, getGrade } from "./api";
 import { getCart } from "./cart";
-import { collectionOfCourse } from "./server";
+import { collectionOfCourse, searchByKeyword } from "./server";
 
 $(document).ready(function() {
   $(".content_item").hide();
@@ -82,4 +82,7 @@ $(".ui.pointing.menu").on("click", ".item", function() {
       t.not(".recommendPage").hide();
     else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
   }
+});
+$("#clickme").click(function() {
+  searchByKeyword($("#keyword").val());
 });

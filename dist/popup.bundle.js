@@ -157,6 +157,9 @@
 	    } else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
 	  }
 	});
+	$("#clickme").click(function () {
+	  (0, _server.searchByKeyword)($("#keyword").val());
+	});
 
 /***/ }),
 /* 5 */
@@ -2568,7 +2571,6 @@
 	}
 	
 	function collectionOfCourse() {
-	  console.log("Collection Of Course...");
 	  request({
 	    url: "http://127.0.0.1:5000/api/collectionOfCourse"
 	  }, function (err, response, body) {
@@ -2591,8 +2593,19 @@
 	  });
 	}
 	
+	function searchByKeyword(keyword) {
+	  request({
+	    url: "http://127.0.0.1:5000/api/searchByKeyword?keyword=" + keyword
+	  }, function (err, response, body) {
+	    if (!err && response.statusCode == 200) {
+	      console.log(body);
+	    }
+	  });
+	}
+	
 	exports.calculateUserGrade = calculateUserGrade;
 	exports.collectionOfCourse = collectionOfCourse;
+	exports.searchByKeyword = searchByKeyword;
 
 /***/ }),
 /* 13 */

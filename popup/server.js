@@ -18,7 +18,6 @@ function calculateUserGrade(stu_no, userGrade) {
 }
 
 function collectionOfCourse() {
-  console.log("Collection Of Course...");
   request(
     {
       url: "http://127.0.0.1:5000/api/collectionOfCourse"
@@ -44,4 +43,17 @@ function collectionOfCourse() {
   );
 }
 
-export { calculateUserGrade, collectionOfCourse };
+function searchByKeyword(keyword) {
+  request(
+    {
+      url: "http://127.0.0.1:5000/api/searchByKeyword?keyword=" + keyword
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        console.log(body);
+      }
+    }
+  );
+}
+
+export { calculateUserGrade, collectionOfCourse, searchByKeyword };
