@@ -11,14 +11,14 @@ function calculateUserGrade(stu_no, userGrade) {
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
-        console.log(body);
+        // console.log(body);
       }
     }
   );
 }
 
 function collectionOfCourse() {
-  var return_val;
+  console.log("Collection Of Course...");
   request(
     {
       url: "http://127.0.0.1:5000/api/collectionOfCourse"
@@ -26,16 +26,22 @@ function collectionOfCourse() {
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
         var info = JSON.parse(body);
-        console.log("Message: " + info.message);
-        return_val = info.message;
+        var obj = {
+          values: []
+        };
+        for (var v in info.values) {
+          obj.values[v] = {
+            value: info.values[v].value,
+            text: info.values[v].text,
+            name: info.values[v].name
+          };
+        }
+
+        $(".ui.dropdown.search_list_1").dropdown("refresh");
+        $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
       }
     }
   );
-
-  // FIXME: 要改成等 request 做完才 return 值
-  return {
-    values: [{ value: return_val, text: return_val, name: return_val }]
-  };
 }
 
 export { calculateUserGrade, collectionOfCourse };

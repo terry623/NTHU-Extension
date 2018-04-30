@@ -37,12 +37,13 @@ $(document).ready(function() {
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
       getCart();
       getGrade(acix, stu_no);
+
+      collectionOfCourse();
     }
   );
 });
 
 // Initial
-$(".ui.dropdown").dropdown();
 $(".shape").shape();
 $(".ui.accordion").accordion();
 $("#clicktoflip").click(function() {
@@ -82,9 +83,3 @@ $(".ui.pointing.menu").on("click", ".item", function() {
     else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
   }
 });
-
-$(".ui.dropdown.search_list_1").dropdown(
-  // TODO: 要從 Server 端取得選項，記得存起來，不要一直 GET
-  "setup menu",
-  collectionOfCourse()
-);
