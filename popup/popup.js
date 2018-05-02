@@ -22,7 +22,6 @@ $(document).ready(function() {
       const course_from_ISS = "10620ISS 508400";
       getCourseInfo(acix, course_from_ISS);
 
-      // TODO: 要可以切換不同的選課紀錄
       //  選課紀錄
       //  100  第 1 次選課 log 記錄
       //  100P 第 1 次選課亂數結果
@@ -37,6 +36,7 @@ $(document).ready(function() {
       var phaseNo = "100";
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
       getCart();
+
       getGrade(acix, stu_no);
       collectionOfCourse();
 
@@ -70,8 +70,10 @@ $(".ui.tabular.menu").on("click", ".item", function() {
     if ($(this).hasClass("tab1")) {
       t.not(".tab1").hide();
       $("#change_phase").show();
+      $("#cart_submit").hide();
     } else if ($(this).hasClass("tab2")) {
       t.not(".tab2").hide();
+      $("#cart_submit").show();
       $("#change_phase").hide();
     }
   }
@@ -88,15 +90,17 @@ $(".ui.pointing.menu").on("click", ".item", function() {
 
     if ($(this).hasClass("homePage")) t.not(".homePage").hide();
     else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();
-    else if ($(this).hasClass("choosePage")) {
-      t.not(".choosePage").hide();
-      $(".ui.tab2").hide();
-    } else if ($(this).hasClass("recommendPage"))
-      t.not(".recommendPage").hide();
+    else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();
+    else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();
     else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
   }
 });
 $("#clickme").click(function() {
   // TODO: 按送出後跳到搜尋結果頁
   searchByKeyword($("#keyword").val());
+  $("#search_entry").hide();
+  $("#search_result").show();
+});
+$("#cart_submit").click(function() {
+  // TODO: 將存在 Storage API 的課表送去校務資訊系統選課
 });

@@ -41,34 +41,36 @@
                 </div>
 
                 <div class="content_item searchPage">
-                    <div class="ui fluid icon input">
-                        <i class="search icon"></i>
-                        <input id="keyword" placeholder="中文課名 / 英文課名 / 老師名稱" type="text">
-                    </div>
-                    <br/>
-
-                    <div class="ui fluid search selection dropdown search_list_1 ">
-                        <input name="c_name" type="hidden">
-                        <i class="dropdown icon"></i>
-                        <div class="default text">開課代號 / 專長 / 學程</div>
-                        <div class="menu">
+                    <div id="search_entry">
+                        <div class="ui fluid icon input">
+                            <i class="search icon"></i>
+                            <input id="keyword" placeholder="中文課名 / 英文課名 / 老師名稱" type="text">
                         </div>
-                    </div>
-                    <br/>
+                        <br/>
 
-                    <div class="ui fluid search selection dropdown search_list_2">
-                        <input name="c_direction" type="hidden">
-                        <i class="dropdown icon"></i>
-                        <div class="default text">必選修 / 向度</div>
-                        <div class="menu">
+                        <div class="ui fluid search selection dropdown search_list_1 ">
+                            <input name="c_name" type="hidden">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">開課代號 / 專長 / 學程</div>
+                            <div class="menu">
+                            </div>
                         </div>
+                        <br/>
+
+                        <div class="ui fluid search selection dropdown search_list_2">
+                            <input name="c_direction" type="hidden">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">必選修 / 向度</div>
+                            <div class="menu">
+                            </div>
+                        </div>
+                        <br/>
+
+                        <div id="clickme" class="ui right floated teal button">Search</div>
+                        <br/>
                     </div>
-                    <br/>
 
-                    <div id="clickme" class="ui right floated teal button">Search</div>
-                    <br/>
-
-                    <table class="ui celled table">
+                    <table id="search_result" style="display:none;" class="ui celled table">
                         <thead>
                             <tr>
                                 <th>Header</th>
@@ -143,7 +145,7 @@
                             等待送出清單
                         </a>
                     </div>
-                    <table id="table" class="ui tab1 compact table">
+                    <table id="school_table" class="ui tab1 compact table">
                         <div id="change_phase" class="ui dropdown">
                             <div class="text">第 1 次選課 log 記錄</div>
                             <i class="dropdown icon"></i>
@@ -190,8 +192,8 @@
                             </tr>
                         </thead>
                     </table>
-                    <table id="cart" class="ui tab2 compact table">
-                        <button id="cart_submit" class="ui right floated basic tiny button">
+                    <table id="cart" style="display:none;" class="ui tab2 compact table">
+                        <button id="cart_submit" style="display:none;" class="small ui right floated basic button">
                             送出至校務系統
                             <i class="right arrow icon"></i>
                         </button>
@@ -205,141 +207,6 @@
                                 <th class="two wide">星期五</th>
                             </tr>
                         </thead>
-                        <tr class="">
-                            <td>
-                                <div>08:00 - 08:50</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>09:00 - 09:50</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>10:10 - 11:00</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>11:10 - 12:00</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>12:10 - 13:00</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>13:20 - 14:10</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>14:20 - 15:10</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>15:30 - 16:20</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>16:30 - 17:20</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>17:30 - 18:20</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>18:30 - 19:20</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>19:30 - 20:20</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>
-                                <div>20:30 - 21:20</div>
-                            </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                            <td> </td>
-                        </tr>
-                        <tr class="">
-                            <td>無上課時間</td>
-                            <td colspan="6">
-                            </td>
-                        </tr>
                     </table>
                 </div>
 

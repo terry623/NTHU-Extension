@@ -211,10 +211,10 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
           $(this).text(text);
         });
 
-        if ($("#table").has("tbody").length) {
-          $("#table > tbody").remove();
+        if ($("#school_table").has("tbody").length) {
+          $("#school_table > tbody").remove();
         }
-        $("#table").append(table.html());
+        $("#school_table").append(table.html());
       }
     }
   );

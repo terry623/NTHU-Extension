@@ -108,7 +108,6 @@
 	    var course_from_ISS = "10620ISS 508400";
 	    (0, _api.getCourseInfo)(acix, course_from_ISS);
 	
-	    // TODO: 要可以切換不同的選課紀錄
 	    //  選課紀錄
 	    //  100  第 1 次選課 log 記錄
 	    //  100P 第 1 次選課亂數結果
@@ -123,6 +122,7 @@
 	    var phaseNo = "100";
 	    (0, _api.getResultCourse)(acix, stu_no, phaseNo, "106", "20");
 	    (0, _cart.getCart)();
+	
 	    (0, _api.getGrade)(acix, stu_no);
 	    (0, _server.collectionOfCourse)();
 	
@@ -152,8 +152,10 @@
 	    if ($(this).hasClass("tab1")) {
 	      t.not(".tab1").hide();
 	      $("#change_phase").show();
+	      $("#cart_submit").hide();
 	    } else if ($(this).hasClass("tab2")) {
 	      t.not(".tab2").hide();
+	      $("#cart_submit").show();
 	      $("#change_phase").hide();
 	    }
 	  }
@@ -165,15 +167,17 @@
 	    var t = $(".content_item");
 	    t.show();
 	
-	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();else if ($(this).hasClass("choosePage")) {
-	      t.not(".choosePage").hide();
-	      $(".ui.tab2").hide();
-	    } else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
+	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
 	  }
 	});
 	$("#clickme").click(function () {
 	  // TODO: 按送出後跳到搜尋結果頁
 	  (0, _server.searchByKeyword)($("#keyword").val());
+	  $("#search_entry").hide();
+	  $("#search_result").show();
+	});
+	$("#cart_submit").click(function () {
+	  // TODO: 將存在 Storage API 的課表送去校務資訊系統選課
 	});
 
 /***/ }),
@@ -352,10 +356,10 @@
 	        $(this).text(text);
 	      });
 	
-	      if ($("#table").has("tbody").length) {
-	        $("#table > tbody").remove();
+	      if ($("#school_table").has("tbody").length) {
+	        $("#school_table > tbody").remove();
 	      }
-	      $("#table").append(table.html());
+	      $("#school_table").append(table.html());
 	    }
 	  });
 	}
@@ -52320,9 +52324,13 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	function getCart() {}
+	function getCart() {
+	    var table = "<tbody>\n        <tr class=\"\">\n            <td>\n                <div>08:00 - 08:50</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>09:00 - 09:50</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>10:10 - 11:00</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>11:10 - 12:00</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>12:10 - 13:00</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>13:20 - 14:10</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>14:20 - 15:10</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>15:30 - 16:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>16:30 - 17:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>17:30 - 18:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>18:30 - 19:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>19:30 - 20:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>20:30 - 21:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n            <td colspan=\"6\">\n            </td>\n        </tr>\n    </tbody>";
+	
+	    $("#cart").append(table);
+	}
 	
 	exports.getCart = getCart;
 
