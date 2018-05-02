@@ -14,6 +14,15 @@ body::-webkit-scrollbar {
   margin-bottom: 20px;
 }
 
+#cart_submit {
+  margin-bottom: 12px;
+}
+
+#change_phase {
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+
 #no {
   margin-bottom: 10px;
 }

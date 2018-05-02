@@ -144,6 +144,41 @@
                         </a>
                     </div>
                     <table id="table" class="ui tab1 compact table">
+                        <div id="change_phase" class="ui dropdown">
+                            <div class="text">第 1 次選課 log 記錄</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item">
+                                    <i class="dropdown icon"></i>
+                                    第 1 次選課
+                                    <div class="menu">
+                                        <div class="item" data-value="100">第 1 次選課 log 記錄</div>
+                                        <div class="item" data-value="100P">第 1 次選課結束(已亂數處理)</div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <i class="dropdown icon"></i>
+                                    第 2 次選課
+                                    <div class="menu">
+                                        <div class="item" data-value="101">第 2 次選課 log 記錄</div>
+                                        <div class="item" data-value="101P">第 2 次選課結束(已亂數處理)</div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <i class="dropdown icon"></i>
+                                    第 3 次選課
+                                    <div class="menu">
+                                        <div class="item" data-value="200">第 3 次選課 log 記錄</div>
+                                        <div class="item" data-value="200P">第 3 次選課結束(已亂數處理)</div>
+                                    </div>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="item" data-value="200S">加退選開始前(含擋修、衝堂)</div>
+                                <div class="item" data-value="300">加退選 log 記錄</div>
+                                <div class="item" data-value="300P">加退選結束(已處理)</div>
+                                <div class="item" data-value="400">停修 log 記錄</div>
+                            </div>
+                        </div>
                         <thead>
                             <tr>
                                 <th class="two wide">時間 / 星期</th>
@@ -156,6 +191,10 @@
                         </thead>
                     </table>
                     <table id="cart" class="ui tab2 compact table">
+                        <button id="cart_submit" class="ui right floated basic tiny button">
+                            送出至校務系統
+                            <i class="right arrow icon"></i>
+                        </button>
                         <thead>
                             <tr>
                                 <th class="two wide">時間 / 星期</th>

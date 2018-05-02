@@ -22,10 +22,11 @@ $(document).ready(function() {
       const course_from_ISS = "10620ISS 508400";
       getCourseInfo(acix, course_from_ISS);
 
+      // TODO: 要可以切換不同的選課紀錄
       //  選課紀錄
       //  100  第 1 次選課 log 記錄
       //  100P 第 1 次選課亂數結果
-      //  101P 第 2 次選課 log 記錄
+      //  101  第 2 次選課 log 記錄
       //  101P 第 2 次選課結束(已亂數處理)
       //  200  第 3 次選課 log 記錄
       //  200P 第 3 次選課結束(已亂數處理)
@@ -37,13 +38,20 @@ $(document).ready(function() {
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
       getCart();
       getGrade(acix, stu_no);
-
       collectionOfCourse();
+
+      $("#change_phase").dropdown({
+        on: "click",
+        action: function(text, value, element) {
+          getResultCourse(acix, stu_no, value, "106", "20");
+          $("#change_phase").dropdown("set text", text);
+          $("#change_phase").dropdown("hide");
+        }
+      });
     }
   );
 });
 
-// Initial
 $(".shape").shape();
 $(".ui.accordion").accordion();
 $("#clicktoflip").click(function() {
@@ -59,8 +67,13 @@ $(".ui.tabular.menu").on("click", ".item", function() {
     var t = $(".ui.compact.table");
     t.show();
 
-    if ($(this).hasClass("tab1")) t.not(".tab1").hide();
-    else if ($(this).hasClass("tab2")) t.not(".tab2").hide();
+    if ($(this).hasClass("tab1")) {
+      t.not(".tab1").hide();
+      $("#change_phase").show();
+    } else if ($(this).hasClass("tab2")) {
+      t.not(".tab2").hide();
+      $("#change_phase").hide();
+    }
   }
 });
 $(".ui.pointing.menu").on("click", ".item", function() {
@@ -84,5 +97,6 @@ $(".ui.pointing.menu").on("click", ".item", function() {
   }
 });
 $("#clickme").click(function() {
+  // TODO: 按送出後跳到搜尋結果頁
   searchByKeyword($("#keyword").val());
 });

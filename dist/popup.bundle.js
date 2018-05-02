@@ -108,10 +108,11 @@
 	    var course_from_ISS = "10620ISS 508400";
 	    (0, _api.getCourseInfo)(acix, course_from_ISS);
 	
+	    // TODO: 要可以切換不同的選課紀錄
 	    //  選課紀錄
 	    //  100  第 1 次選課 log 記錄
 	    //  100P 第 1 次選課亂數結果
-	    //  101P 第 2 次選課 log 記錄
+	    //  101  第 2 次選課 log 記錄
 	    //  101P 第 2 次選課結束(已亂數處理)
 	    //  200  第 3 次選課 log 記錄
 	    //  200P 第 3 次選課結束(已亂數處理)
@@ -123,12 +124,19 @@
 	    (0, _api.getResultCourse)(acix, stu_no, phaseNo, "106", "20");
 	    (0, _cart.getCart)();
 	    (0, _api.getGrade)(acix, stu_no);
-	
 	    (0, _server.collectionOfCourse)();
+	
+	    $("#change_phase").dropdown({
+	      on: "click",
+	      action: function action(text, value, element) {
+	        (0, _api.getResultCourse)(acix, stu_no, value, "106", "20");
+	        $("#change_phase").dropdown("set text", text);
+	        $("#change_phase").dropdown("hide");
+	      }
+	    });
 	  });
 	});
 	
-	// Initial
 	$(".shape").shape();
 	$(".ui.accordion").accordion();
 	$("#clicktoflip").click(function () {
@@ -141,7 +149,13 @@
 	    var t = $(".ui.compact.table");
 	    t.show();
 	
-	    if ($(this).hasClass("tab1")) t.not(".tab1").hide();else if ($(this).hasClass("tab2")) t.not(".tab2").hide();
+	    if ($(this).hasClass("tab1")) {
+	      t.not(".tab1").hide();
+	      $("#change_phase").show();
+	    } else if ($(this).hasClass("tab2")) {
+	      t.not(".tab2").hide();
+	      $("#change_phase").hide();
+	    }
 	  }
 	});
 	$(".ui.pointing.menu").on("click", ".item", function () {
@@ -158,6 +172,7 @@
 	  }
 	});
 	$("#clickme").click(function () {
+	  // TODO: 按送出後跳到搜尋結果頁
 	  (0, _server.searchByKeyword)($("#keyword").val());
 	});
 
@@ -314,11 +329,11 @@
 	      var temp = document.createElement("div");
 	      temp.innerHTML = str;
 	
-	      var table = $("form > table:nth-child(7) > tbody", temp);
-	      $("tr > td:nth-child(7)", table).remove();
-	      $("tr", table).removeClass("word");
+	      var table = $("form > table:nth-child(7)", temp);
+	      $("tbody > tr > td:nth-child(7)", table).remove();
+	      $("tbody > tr", table).removeClass("word");
 	      $(table).find("td").removeAttr("width");
-	      $("tr > td > div", table).each(function () {
+	      $("tbody > tr > td > div", table).each(function () {
 	        $(this).html(function (index, text) {
 	          if ($(this).find("b").length > 0) {
 	            var t = $("b:nth-child(2)", this).text();
@@ -329,13 +344,17 @@
 	        });
 	      });
 	      $(table).find("div").removeAttr("align");
-	      $("tr:nth-child(15) > td:nth-child(1)", table).text("無上課時間");
-	      $("tr.class1", table).remove();
-	      $("tr > td > div", table).each(function () {
+	      $("tbody > tr:nth-child(15) > td:nth-child(1)", table).text("無上課時間");
+	      $("tbody > tr.class1", table).remove();
+	      $("tbody > tr > td > div", table).each(function () {
 	        var text = $(this).text();
 	        text = text.replace("--", "-");
 	        $(this).text(text);
 	      });
+	
+	      if ($("#table").has("tbody").length) {
+	        $("#table > tbody").remove();
+	      }
 	      $("#table").append(table.html());
 	    }
 	  });
@@ -2571,26 +2590,32 @@
 	}
 	
 	function collectionOfCourse() {
-	  request({
-	    url: "http://127.0.0.1:5000/api/collectionOfCourse"
-	  }, function (err, response, body) {
-	    if (!err && response.statusCode == 200) {
-	      var info = JSON.parse(body);
-	      var obj = {
-	        values: []
-	      };
-	      for (var v in info.values) {
-	        obj.values[v] = {
-	          value: info.values[v].value,
-	          text: info.values[v].text,
-	          name: info.values[v].name
-	        };
-	      }
+	  var obj = {
+	    values: []
+	  };
+	  var local_course = [{
+	    value: "課程編號1",
+	    text: "選項1",
+	    name: "選項詳情1"
+	  }, {
+	    value: "課程編號2",
+	    text: "選項2",
+	    name: "選項詳情2"
+	  }, {
+	    value: "課程編號3",
+	    text: "選項3",
+	    name: "選項詳情3"
+	  }];
+	  for (var v in local_course) {
+	    obj.values[v] = {
+	      value: local_course[v].value,
+	      text: local_course[v].text,
+	      name: local_course[v].name
+	    };
+	  }
 	
-	      $(".ui.dropdown.search_list_1").dropdown("refresh");
-	      $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
-	    }
-	  });
+	  $(".ui.dropdown.search_list_1").dropdown("refresh");
+	  $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
 	}
 	
 	function searchByKeyword(keyword) {
@@ -2606,6 +2631,33 @@
 	exports.calculateUserGrade = calculateUserGrade;
 	exports.collectionOfCourse = collectionOfCourse;
 	exports.searchByKeyword = searchByKeyword;
+	
+	// 連 Server 得到 Data 版
+	// function collectionOfCourse() {
+	//   request(
+	//     {
+	//       url: "http://127.0.0.1:5000/api/collectionOfCourse"
+	//     },
+	//     function(err, response, body) {
+	//       if (!err && response.statusCode == 200) {
+	//         var info = JSON.parse(body);
+	//         var obj = {
+	//           values: []
+	//         };
+	//         for (var v in info.values) {
+	//           obj.values[v] = {
+	//             value: info.values[v].value,
+	//             text: info.values[v].text,
+	//             name: info.values[v].name
+	//           };
+	//         }
+	
+	//         $(".ui.dropdown.search_list_1").dropdown("refresh");
+	//         $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
+	//       }
+	//     }
+	//   );
+	// }
 
 /***/ }),
 /* 13 */

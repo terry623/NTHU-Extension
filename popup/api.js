@@ -182,13 +182,13 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         var temp = document.createElement("div");
         temp.innerHTML = str;
 
-        var table = $("form > table:nth-child(7) > tbody", temp);
-        $("tr > td:nth-child(7)", table).remove();
-        $("tr", table).removeClass("word");
+        var table = $("form > table:nth-child(7)", temp);
+        $("tbody > tr > td:nth-child(7)", table).remove();
+        $("tbody > tr", table).removeClass("word");
         $(table)
           .find("td")
           .removeAttr("width");
-        $("tr > td > div", table).each(function() {
+        $("tbody > tr > td > div", table).each(function() {
           $(this).html(function(index, text) {
             if ($(this).find("b").length > 0) {
               var t = $("b:nth-child(2)", this).text();
@@ -201,13 +201,19 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         $(table)
           .find("div")
           .removeAttr("align");
-        $("tr:nth-child(15) > td:nth-child(1)", table).text("無上課時間");
-        $("tr.class1", table).remove();
-        $("tr > td > div", table).each(function() {
+        $("tbody > tr:nth-child(15) > td:nth-child(1)", table).text(
+          "無上課時間"
+        );
+        $("tbody > tr.class1", table).remove();
+        $("tbody > tr > td > div", table).each(function() {
           var text = $(this).text();
           text = text.replace("--", "-");
           $(this).text(text);
         });
+
+        if ($("#table").has("tbody").length) {
+          $("#table > tbody").remove();
+        }
         $("#table").append(table.html());
       }
     }
