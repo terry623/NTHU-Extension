@@ -102,7 +102,7 @@
 	
 	    var stu_no = (0, _helper.getUrlVars)(tabs[0].url)["hint"];
 	
-	    // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一
+	    // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。可以把 Data 丟進 DB 去檢查。
 	    var course_no_file = "10620CS  342300";
 	    var course_have_file = "10620CS  340400";
 	    var course_from_ISS = "10620ISS 508400";
@@ -171,13 +171,16 @@
 	  }
 	});
 	$("#clickme").click(function () {
-	  // TODO: 按送出後跳到搜尋結果頁
 	  (0, _server.searchByKeyword)($("#keyword").val());
-	  $("#search_entry").hide();
-	  $("#search_result").show();
+	  $(".ui.fullscreen.modal").modal({
+	    inverted: true
+	  }).modal("show");
 	});
 	$("#cart_submit").click(function () {
 	  // TODO: 將存在 Storage API 的課表送去校務資訊系統選課
+	});
+	$("#cancel_search").click(function () {
+	  $(".ui.fullscreen.modal").modal("hide");
 	});
 
 /***/ }),
@@ -240,6 +243,7 @@
 	  });
 	}
 	
+	// TODO: 把人數整理在一個需要滑鼠移上去才會顯示的地方，這樣就看不到 Loading 畫面
 	function getPopulation(acix, course_no) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt);

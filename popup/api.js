@@ -29,6 +29,7 @@ function getUserName(acix) {
   );
 }
 
+// TODO: 把人數整理在一個需要滑鼠移上去才會顯示的地方，這樣就看不到 Loading 畫面
 function getPopulation(acix, course_no) {
   var patt = /[A-Za-z]+/;
   var target = course_no.match(patt);
