@@ -17,10 +17,8 @@ $(document).ready(function() {
       var stu_no = getUrlVars(tabs[0].url)["hint"];
 
       // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。可以把 Data 丟進 DB 去檢查。
-      const course_no_file = "10620CS  342300";
-      const course_have_file = "10620CS  340400";
-      const course_from_ISS = "10620ISS 508400";
-      getCourseInfo(acix, course_from_ISS);
+      // const course_no_file = "10620CS  342300";
+      // const course_have_file = "10620CS  340400";
 
       //  選課紀錄
       //  100  第 1 次選課 log 記錄
@@ -47,6 +45,13 @@ $(document).ready(function() {
           $("#change_phase").dropdown("set text", text);
           $("#change_phase").dropdown("hide");
         }
+      });
+
+      $("#search_result > tbody > tr").click(function() {
+        $(this).css("cursor", "pointer");
+        var course_from_click = $("td:nth-child(1)", this).text();
+        console.log(course_from_click);
+        getCourseInfo(acix, course_from_click);
       });
     }
   );
@@ -92,20 +97,32 @@ $(".ui.pointing.menu").on("click", ".item", function() {
     else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();
     else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();
     else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();
-    else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
   }
 });
 $("#clickme").click(function() {
   searchByKeyword($("#keyword").val());
-  $(".ui.fullscreen.modal")
+  $(".coupled.modal").modal({
+    allowMultiple: false
+  });
+  $(".second.modal")
     .modal({
-      inverted: true
+      inverted: true,
+      onApprove: function() {
+        // window.alert("Second Modal Approve !");
+      }
+    });
+  $(".first.modal")
+    .modal({
+      inverted: true,
+      onApprove: function() {
+        // window.alert("First Modal Approve !");
+      }
     })
     .modal("show");
 });
 $("#cart_submit").click(function() {
   // TODO: 將存在 Storage API 的課表送去校務資訊系統選課
 });
-$("#cancel_search").click(function() {
-  $(".ui.fullscreen.modal").modal("hide");
+$("#search_result > tbody > tr").hover(function() {
+  $(this).css("cursor", "pointer");
 });

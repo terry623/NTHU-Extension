@@ -32,9 +32,6 @@
                     <a class="item recommendPage">
                         推薦課程
                     </a>
-                    <a class="item singlePage">
-                        單一課程
-                    </a>
                 </div>
             </div>
             <div class="column">
@@ -72,201 +69,124 @@
                         <br/>
                     </div>
 
-                    <div class="ui fullscreen modal">
-                        <div class="header">
-                            搜尋結果
-                            <div id="left_pointing" class="ui small horizontal teal left pointing basic label">
-                                點 擊 課 程 可 查 看 詳 細 資 訊
+                    <div class="ui fullscreen coupled modal">
+                        <div class="ui fullscreen first modal">
+                            <div class="header">
+                                搜尋結果
+                                <div id="left_pointing" class="ui small horizontal teal left pointing basic label">
+                                    點 擊 課 程 可 查 看 詳 細 資 訊
+                                </div>
+                            </div>
+                            <div class="scrolling content">
+                                <table id="search_result" class="ui selectable table">
+                                    <thead>
+                                        <tr>
+                                            <th>科號</th>
+                                            <th>科目</th>
+                                            <th>時間</th>
+                                            <th>地點</th>
+                                            <th>教師</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>10620CS 135500</td>
+                                            <td>計算機程式設計一</td>
+                                            <td>T7T8F7F8</td>
+                                            <td>DELTA台達109</td>
+                                            <td>李哲榮</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10620CS 340400</td>
+                                            <td>編譯器設計</td>
+                                            <td>T7T8R7</td>
+                                            <td>DELTA台達108</td>
+                                            <td>李政崑</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10620CS 135500</td>
+                                            <td>計算機程式設計一</td>
+                                            <td>T7T8F7F8</td>
+                                            <td>DELTA台達109</td>
+                                            <td>李哲榮</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10620CS 340400</td>
+                                            <td>編譯器設計</td>
+                                            <td>T7T8R7</td>
+                                            <td>DELTA台達108</td>
+                                            <td>李政崑</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10620CS 135500</td>
+                                            <td>計算機程式設計一</td>
+                                            <td>T7T8F7F8</td>
+                                            <td>DELTA台達109</td>
+                                            <td>李哲榮</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10620CS 340400</td>
+                                            <td>編譯器設計</td>
+                                            <td>T7T8R7</td>
+                                            <td>DELTA台達108</td>
+                                            <td>李政崑</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="actions">
+                                <div class="small ui cancel basic button">Cancel</div>
+                                <div class="small ui approve basic button">Submit</div>
                             </div>
                         </div>
-                        <div class="scrolling content">
-                            <table id="search_result" class="ui table">
-                                <thead>
-                                    <tr>
-                                        <th>科號</th>
-                                        <th>科目</th>
-                                        <th>時間</th>
-                                        <th>地點</th>
-                                        <th>教師</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>10620CS 135500</td>
-                                        <td>計算機程式設計一</td>
-                                        <td>T7T8F7F8</td>
-                                        <td>DELTA台達109</td>
-                                        <td>李哲榮</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 210201</td>
-                                        <td>數位邏輯設計</td>
-                                        <td>M7M8R5R6</td>
-                                        <td>DELTA台達107</td>
-                                        <td>林永隆</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 241002</td>
-                                        <td>軟體設計與實驗</td>
-                                        <td>T7T8R7R8</td>
-                                        <td>EECS資電326/DELTA台達105</td>
-                                        <td>朱宏國</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 135500</td>
-                                        <td>計算機程式設計一</td>
-                                        <td>T7T8F7F8</td>
-                                        <td>DELTA台達109</td>
-                                        <td>李哲榮</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 210201</td>
-                                        <td>數位邏輯設計</td>
-                                        <td>M7M8R5R6</td>
-                                        <td>DELTA台達107</td>
-                                        <td>林永隆</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 241002</td>
-                                        <td>軟體設計與實驗</td>
-                                        <td>T7T8R7R8</td>
-                                        <td>EECS資電326/DELTA台達105</td>
-                                        <td>朱宏國</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 135500</td>
-                                        <td>計算機程式設計一</td>
-                                        <td>T7T8F7F8</td>
-                                        <td>DELTA台達109</td>
-                                        <td>李哲榮</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 210201</td>
-                                        <td>數位邏輯設計</td>
-                                        <td>M7M8R5R6</td>
-                                        <td>DELTA台達107</td>
-                                        <td>林永隆</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 241002</td>
-                                        <td>軟體設計與實驗</td>
-                                        <td>T7T8R7R8</td>
-                                        <td>EECS資電326/DELTA台達105</td>
-                                        <td>朱宏國</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 135500</td>
-                                        <td>計算機程式設計一</td>
-                                        <td>T7T8F7F8</td>
-                                        <td>DELTA台達109</td>
-                                        <td>李哲榮</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 210201</td>
-                                        <td>數位邏輯設計</td>
-                                        <td>M7M8R5R6</td>
-                                        <td>DELTA台達107</td>
-                                        <td>林永隆</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 241002</td>
-                                        <td>軟體設計與實驗</td>
-                                        <td>T7T8R7R8</td>
-                                        <td>EECS資電326/DELTA台達105</td>
-                                        <td>朱宏國</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 135500</td>
-                                        <td>計算機程式設計一</td>
-                                        <td>T7T8F7F8</td>
-                                        <td>DELTA台達109</td>
-                                        <td>李哲榮</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 210201</td>
-                                        <td>數位邏輯設計</td>
-                                        <td>M7M8R5R6</td>
-                                        <td>DELTA台達107</td>
-                                        <td>林永隆</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 241002</td>
-                                        <td>軟體設計與實驗</td>
-                                        <td>T7T8R7R8</td>
-                                        <td>EECS資電326/DELTA台達105</td>
-                                        <td>朱宏國</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 135500</td>
-                                        <td>計算機程式設計一</td>
-                                        <td>T7T8F7F8</td>
-                                        <td>DELTA台達109</td>
-                                        <td>李哲榮</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 210201</td>
-                                        <td>數位邏輯設計</td>
-                                        <td>M7M8R5R6</td>
-                                        <td>DELTA台達107</td>
-                                        <td>林永隆</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 241002</td>
-                                        <td>軟體設計與實驗</td>
-                                        <td>T7T8R7R8</td>
-                                        <td>EECS資電326/DELTA台達105</td>
-                                        <td>朱宏國</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 135500</td>
-                                        <td>計算機程式設計一</td>
-                                        <td>T7T8F7F8</td>
-                                        <td>DELTA台達109</td>
-                                        <td>李哲榮</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 210201</td>
-                                        <td>數位邏輯設計</td>
-                                        <td>M7M8R5R6</td>
-                                        <td>DELTA台達107</td>
-                                        <td>林永隆</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 241002</td>
-                                        <td>軟體設計與實驗</td>
-                                        <td>T7T8R7R8</td>
-                                        <td>EECS資電326/DELTA台達105</td>
-                                        <td>朱宏國</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 135500</td>
-                                        <td>計算機程式設計一</td>
-                                        <td>T7T8F7F8</td>
-                                        <td>DELTA台達109</td>
-                                        <td>李哲榮</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 210201</td>
-                                        <td>數位邏輯設計</td>
-                                        <td>M7M8R5R6</td>
-                                        <td>DELTA台達107</td>
-                                        <td>林永隆</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10620CS 241002</td>
-                                        <td>軟體設計與實驗</td>
-                                        <td>T7T8R7R8</td>
-                                        <td>EECS資電326/DELTA台達105</td>
-                                        <td>朱宏國</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="actions">
-                            <div id="cancel_search" class="small ui basic button">Cancel</div>
-                            <div id="submit_search"class="small ui basic button">Submit</div>
+                        <div class="ui fullscreen second modal">
+                            <div class="header">
+                                課程詳情
+                                <div id="left_pointing" class="ui small horizontal teal left pointing basic label">
+                                    還 沒 想 到 啦 嗚 嗚
+                                </div>
+                            </div>
+                            <div class="scrolling content">
+                                <div class="ui piled segment">
+                                    <h4 id="course_name" class="ui header"> </h4>
+                                    <div id="no" class="ui tag label">
+                                    </div>
+                                    <div id="teacher" class="ui tag label">
+                                    </div>
+                                    <div id="time" class="ui tag label">
+                                    </div>
+                                    <div id="classroom" class="ui tag label">
+                                    </div>
+                                    <div id="population" class="ui tag label">
+                                    </div>
+
+                                    <div class="ui styled fluid accordion">
+                                        <div class="title active">
+                                            <i class="dropdown icon"></i>
+                                            課程簡述
+                                        </div>
+                                        <div class="content active">
+                                            <p id="description" class="transition visible" style="display: block !important;"></p>
+                                        </div>
+                                        <div class="title">
+                                            <i class="dropdown icon"></i>
+                                            課程大綱
+                                        </div>
+                                        <div class="content">
+                                            <p id="syllabus" class="transition hidden" style="display: block !important;"></p>
+                                            <div id="pdf_page">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <div class="small ui cancel basic button">Cancel</div>
+                                <div class="small ui approve basic button">Submit</div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="content_item choosePage">
@@ -404,41 +324,6 @@
                     </div>
 
                     <div id="clicktoflip" class="ui right floated teal button">Flip</div>
-                </div>
-
-                <div class="content_item singlePage">
-                    <div class="ui piled segment">
-                        <h4 id="course_name" class="ui header"> </h4>
-                        <div id="no" class="ui tag label">
-                        </div>
-                        <div id="teacher" class="ui tag label">
-                        </div>
-                        <div id="time" class="ui tag label">
-                        </div>
-                        <div id="classroom" class="ui tag label">
-                        </div>
-                        <div id="population" class="ui tag label">
-                        </div>
-
-                        <div class="ui styled fluid accordion">
-                            <div class="title active">
-                                <i class="dropdown icon"></i>
-                                課程簡述
-                            </div>
-                            <div class="content active">
-                                <p id="description" class="transition visible" style="display: block !important;"></p>
-                            </div>
-                            <div class="title">
-                                <i class="dropdown icon"></i>
-                                課程大綱
-                            </div>
-                            <div class="content">
-                                <p id="syllabus" class="transition hidden" style="display: block !important;"></p>
-                                <div id="pdf_page">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

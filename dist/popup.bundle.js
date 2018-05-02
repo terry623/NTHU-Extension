@@ -103,10 +103,8 @@
 	    var stu_no = (0, _helper.getUrlVars)(tabs[0].url)["hint"];
 	
 	    // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。可以把 Data 丟進 DB 去檢查。
-	    var course_no_file = "10620CS  342300";
-	    var course_have_file = "10620CS  340400";
-	    var course_from_ISS = "10620ISS 508400";
-	    (0, _api.getCourseInfo)(acix, course_from_ISS);
+	    // const course_no_file = "10620CS  342300";
+	    // const course_have_file = "10620CS  340400";
 	
 	    //  選課紀錄
 	    //  100  第 1 次選課 log 記錄
@@ -133,6 +131,13 @@
 	        $("#change_phase").dropdown("set text", text);
 	        $("#change_phase").dropdown("hide");
 	      }
+	    });
+	
+	    $("#search_result > tbody > tr").click(function () {
+	      $(this).css("cursor", "pointer");
+	      var course_from_click = $("td:nth-child(1)", this).text();
+	      console.log(course_from_click);
+	      (0, _api.getCourseInfo)(acix, course_from_click);
 	    });
 	  });
 	});
@@ -167,20 +172,32 @@
 	    var t = $(".content_item");
 	    t.show();
 	
-	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();else if ($(this).hasClass("singlePage")) t.not(".singlePage").hide();
+	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();
 	  }
 	});
 	$("#clickme").click(function () {
 	  (0, _server.searchByKeyword)($("#keyword").val());
-	  $(".ui.fullscreen.modal").modal({
-	    inverted: true
+	  $(".coupled.modal").modal({
+	    allowMultiple: false
+	  });
+	  $(".second.modal").modal({
+	    inverted: true,
+	    onApprove: function onApprove() {
+	      // window.alert("Second Modal Approve !");
+	    }
+	  });
+	  $(".first.modal").modal({
+	    inverted: true,
+	    onApprove: function onApprove() {
+	      // window.alert("First Modal Approve !");
+	    }
 	  }).modal("show");
 	});
 	$("#cart_submit").click(function () {
 	  // TODO: 將存在 Storage API 的課表送去校務資訊系統選課
 	});
-	$("#cancel_search").click(function () {
-	  $(".ui.fullscreen.modal").modal("hide");
+	$("#search_result > tbody > tr").hover(function () {
+	  $(this).css("cursor", "pointer");
 	});
 
 /***/ }),
@@ -286,35 +303,48 @@
 	      var str = iconv.decode(new Buffer(body), "big5");
 	      var temp = document.createElement("div");
 	      temp.innerHTML = str;
+	      console.log.apply(console, $(temp));
+	      console.log("Before: " + course_no);
 	
-	      var no = $("div > table:nth-child(1) > tbody > tr:nth-child(2) > td:nth-child(2)", temp);
-	      var name_zh = $("div > table:nth-child(1) > tbody > tr:nth-child(3) > td.class3", temp);
-	      var name_en = $("div > table:nth-child(1) > tbody > tr:nth-child(4) > td.class3", temp);
-	      var teacher = $("div > table:nth-child(1) > tbody > tr:nth-child(5) > td.class3", temp);
-	      var time = $("div > table:nth-child(1) > tbody > tr:nth-child(6) > td:nth-child(2)", temp);
-	      var classroom = $("div > table:nth-child(1) > tbody > tr:nth-child(6) > td:nth-child(4)", temp);
-	      var description = $("div > table:nth-child(4) > tbody > tr:nth-child(2) > td", temp);
-	      var syllabus = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td", temp);
-	      var find_file = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a", temp);
-	
-	      // TODO: 數據抓很久，可以用個 Loader 再一起顯示
-	      // getPopulation(acix, course_no);
-	
-	      $("#no").text(no.text());
-	      $("#course_name").prepend(name_zh.text() + " " + name_en.text());
-	      $("#teacher").text(teacher.text());
-	      $("#time").text(time.text());
-	      $("#classroom").text(classroom.text());
-	      $("#description").append(description.html());
-	
-	      if (find_file.length > 0) {
-	        var pdf_path = "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
-	        $("#pdf_page").append("<div align=\"right\">\n                    <button id=\"prev\" class=\"tiny ui basic button\">\n                        <i class=\"angle left icon\"></i>\n                    </button>\n                    <button id=\"next\" class=\"tiny ui basic button\">\n                        <i class=\"angle right icon\"></i>\n                    </button>\n                    &nbsp; &nbsp;\n                    <span>Page:\n                        <span id=\"page_num\"></span> /\n                        <span id=\"page_count\"></span>\n                    </span>\n                </div>\n                <canvas id=\"the-canvas\" />\n                ");
-	
-	        // TODO: 看 PDF 可不可以放大
-	        (0, _pdf2html.transform)(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
+	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
+	        alert("請重新登入 !");
+	      } else if ($(temp).text().indexOf("錯誤的科目") >= 0) {
+	        var myRe = /[0-9]+[A-Za-z]+/g;
+	        var myArray = myRe.exec(course_no);
+	        var output = [course_no.slice(0, myRe.lastIndex), course_no.slice(myRe.lastIndex)].join(" ");
+	        console.log("After: " + output);
+	        getCourseInfo(acix, output);
 	      } else {
-	        $("#syllabus").append(syllabus.html());
+	        var no = $("div > table:nth-child(1) > tbody > tr:nth-child(2) > td:nth-child(2)", temp);
+	        var name_zh = $("div > table:nth-child(1) > tbody > tr:nth-child(3) > td.class3", temp);
+	        var name_en = $("div > table:nth-child(1) > tbody > tr:nth-child(4) > td.class3", temp);
+	        var teacher = $("div > table:nth-child(1) > tbody > tr:nth-child(5) > td.class3", temp);
+	        var time = $("div > table:nth-child(1) > tbody > tr:nth-child(6) > td:nth-child(2)", temp);
+	        var classroom = $("div > table:nth-child(1) > tbody > tr:nth-child(6) > td:nth-child(4)", temp);
+	        var description = $("div > table:nth-child(4) > tbody > tr:nth-child(2) > td", temp);
+	        var syllabus = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td", temp);
+	        var find_file = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a", temp);
+	
+	        // TODO: 數據抓很久，可以用個 Loader 再一起顯示
+	        // getPopulation(acix, course_no);
+	
+	        $("#no").text(no.text());
+	        $("#course_name").text(name_zh.text() + " " + name_en.text());
+	        $("#teacher").text(teacher.text());
+	        $("#time").text(time.text());
+	        $("#classroom").text(classroom.text());
+	        $("#description").html(description.html());
+	
+	        // FIXME: 從有 PDF 的頁面改成沒 PDF 時，PDF 還會留著
+	        if (find_file.length > 0) {
+	          var pdf_path = "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
+	          $("#pdf_page").html("<div align=\"right\">\n                      <button id=\"prev\" class=\"tiny ui basic button\">\n                          <i class=\"angle left icon\"></i>\n                      </button>\n                      <button id=\"next\" class=\"tiny ui basic button\">\n                          <i class=\"angle right icon\"></i>\n                      </button>\n                      &nbsp; &nbsp;\n                      <span>Page:\n                          <span id=\"page_num\"></span> /\n                          <span id=\"page_count\"></span>\n                      </span>\n                  </div>\n                  <canvas id=\"the-canvas\" />\n                  ");
+	          // TODO: 看 PDF 可不可以放大
+	          (0, _pdf2html.transform)(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
+	        } else {
+	          $("#syllabus").html(syllabus.html());
+	        }
+	        $(".second.modal").modal("show");
 	      }
 	    }
 	  });
