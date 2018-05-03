@@ -104,13 +104,12 @@ $("#clickme").click(function() {
   $(".coupled.modal").modal({
     allowMultiple: false
   });
-  $(".second.modal")
-    .modal({
-      inverted: true,
-      onApprove: function() {
-        // window.alert("Second Modal Approve !");
-      }
-    });
+  $(".second.modal").modal({
+    inverted: true,
+    onApprove: function() {
+      // window.alert("Second Modal Approve !");
+    }
+  });
   $(".first.modal")
     .modal({
       inverted: true,

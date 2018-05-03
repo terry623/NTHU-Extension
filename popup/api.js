@@ -154,7 +154,6 @@ function getCourseInfo(acix, course_no) {
           $("#classroom").text(classroom.text());
           $("#description").html(description.html());
 
-          // FIXME: 從有 PDF 的頁面改成沒 PDF 時，PDF 還會留著
           if (find_file.length > 0) {
             var pdf_path =
               "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
@@ -175,11 +174,14 @@ function getCourseInfo(acix, course_no) {
                   <canvas id="the-canvas" />
                   `
             );
-            // TODO: 看 PDF 可不可以放大
+            $("#syllabus").empty();
             transform(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
           } else {
+            $("#pdf_page").empty();
             $("#syllabus").html(syllabus.html());
           }
+          $("#class_accordion > div")
+            .removeClass("active");
           $(".second.modal").modal("show");
         }
       }

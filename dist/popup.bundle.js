@@ -335,15 +335,16 @@
 	        $("#classroom").text(classroom.text());
 	        $("#description").html(description.html());
 	
-	        // FIXME: 從有 PDF 的頁面改成沒 PDF 時，PDF 還會留著
 	        if (find_file.length > 0) {
 	          var pdf_path = "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
 	          $("#pdf_page").html("<div align=\"right\">\n                      <button id=\"prev\" class=\"tiny ui basic button\">\n                          <i class=\"angle left icon\"></i>\n                      </button>\n                      <button id=\"next\" class=\"tiny ui basic button\">\n                          <i class=\"angle right icon\"></i>\n                      </button>\n                      &nbsp; &nbsp;\n                      <span>Page:\n                          <span id=\"page_num\"></span> /\n                          <span id=\"page_count\"></span>\n                      </span>\n                  </div>\n                  <canvas id=\"the-canvas\" />\n                  ");
-	          // TODO: 看 PDF 可不可以放大
+	          $("#syllabus").empty();
 	          (0, _pdf2html.transform)(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
 	        } else {
+	          $("#pdf_page").empty();
 	          $("#syllabus").html(syllabus.html());
 	        }
+	        $("#class_accordion > div").removeClass("active");
 	        $(".second.modal").modal("show");
 	      }
 	    }
@@ -2509,7 +2510,7 @@
 	    pageNum = 1,
 	    pageRendering = false,
 	    pageNumPending = null,
-	    scale = 0.8,
+	    scale = 1,
 	    canvas,
 	    ctx;
 	
@@ -2524,6 +2525,8 @@
 	    var viewport = page.getViewport(scale);
 	    canvas.height = viewport.height;
 	    canvas.width = viewport.width;
+	    // canvas.height = 707.844;
+	    // canvas.width = 623.391;
 	
 	    // Render PDF page into canvas context
 	    var renderContext = {
