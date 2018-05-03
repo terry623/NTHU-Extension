@@ -180,8 +180,7 @@ function getCourseInfo(acix, course_no) {
             $("#pdf_page").empty();
             $("#syllabus").html(syllabus.html());
           }
-          $("#class_accordion > div")
-            .removeClass("active");
+          $("#class_accordion > div").removeClass("active");
           $(".second.modal").modal("show");
         }
       }
