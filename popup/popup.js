@@ -59,9 +59,6 @@ $(document).ready(function() {
 
 $(".shape").shape();
 $(".ui.accordion").accordion();
-$("#clicktoflip").click(function() {
-  $(".shape").shape("flip right");
-});
 $(".ui.tabular.menu").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown")) {
     $(this)

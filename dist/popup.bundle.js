@@ -144,9 +144,6 @@
 	
 	$(".shape").shape();
 	$(".ui.accordion").accordion();
-	$("#clicktoflip").click(function () {
-	  $(".shape").shape("flip right");
-	});
 	$(".ui.tabular.menu").on("click", ".item", function () {
 	  if (!$(this).hasClass("dropdown")) {
 	    $(this).addClass("active").siblings(".item").removeClass("active");
@@ -260,7 +257,6 @@
 	  });
 	}
 	
-	// TODO: 把人數整理在一個需要滑鼠移上去才會顯示的地方，這樣就看不到 Loading 畫面
 	function getPopulation(acix, course_no) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt);
@@ -335,9 +331,7 @@
 	        var syllabus = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td", temp);
 	        var find_file = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a", temp);
 	
-	        // TODO: 數據抓很久，可以用個 Loader 再一起顯示
 	        getPopulation(acix, course_no);
-	
 	        $("#no").text(no.text());
 	        $("#course_name").text(name_zh.text() + " " + name_en.text());
 	        $("#credit").text(credit.text());
@@ -362,6 +356,22 @@
 	  });
 	}
 	
+	function match_name_course(table2, con) {
+	  var re;
+	  $("tbody > tr > td:nth-child(1)", table2).each(function () {
+	    // console.log("Want to find: " + con);
+	    var parent = $(this).parent();
+	    var str = $("td:nth-child(2)", parent).text();
+	    var n = str.includes(con);
+	    if (n == true) {
+	      // console.log("I found: " + $("td:nth-child(2)", parent).text());
+	      re = $("td:nth-child(1)", parent).text();
+	      return false;
+	    }
+	  });
+	  return re;
+	}
+	
 	function getResultCourse(acix, stu_no, phaseNo, year, term) {
 	  request.post({
 	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.9/JH729002.php",
@@ -380,9 +390,11 @@
 	      temp.innerHTML = str;
 	
 	      var table = $("form > table:nth-child(7)", temp);
+	      var table2 = $("form > table:nth-child(3)", temp);
 	      $("tbody > tr > td:nth-child(7)", table).remove();
 	      $("tbody > tr", table).removeClass("word");
 	      $(table).find("td").removeAttr("width");
+	
 	      $("tbody > tr > td > div", table).each(function () {
 	        $(this).html(function (index, text) {
 	          if ($(this).find("b").length > 0) {
@@ -393,19 +405,36 @@
 	          }
 	        });
 	      });
-	      $(table).find("div").removeAttr("align");
-	      $("tbody > tr:nth-child(15) > td:nth-child(1)", table).text("無上課時間");
-	      $("tbody > tr.class1", table).remove();
-	      $("tbody > tr > td > div", table).each(function () {
-	        var text = $(this).text();
-	        text = text.replace("--", "-");
-	        $(this).text(text);
-	      });
 	
+	      $(table).find("div").removeAttr("align");
+	      $("tbody > tr > td", table).each(function () {
+	        if (!$(this).has("div").length) {
+	          $(this).addClass("selectable").html("<a href=\"#do_not_jump\">" + $(this).text() + "</a>");
+	          var con = $(this).text();
+	          var found_id = match_name_course(table2, con);
+	          // console.log("Found id: " + found_id);
+	          $(this).attr("id", found_id);
+	        } else {
+	          var text = $("div", this).text();
+	          text = text.replace("--", "-");
+	          $("div", this).text(text);
+	        }
+	      });
+	      $("tbody > tr:nth-child(15) > td:nth-child(1)", table).html("無上課時間").removeClass("selectable");
+	      $("tbody > tr.class1", table).remove();
 	      if ($("#school_table").has("tbody").length) {
 	        $("#school_table > tbody").remove();
 	      }
 	      $("#school_table").append(table.html());
+	
+	      $("#school_table > tbody > tr").on("click", "td", function () {
+	        $(".second.modal").modal({
+	          inverted: true,
+	          onApprove: function onApprove() {
+	            // window.alert("Second Modal Approve !");
+	          }
+	        }).modal("show");
+	      });
 	    }
 	  });
 	}
