@@ -8,7 +8,7 @@
     "default_icon": "static/icon.png",
     "default_popup": "popup/popup.html"
   },
-  "permissions": ["activeTab", "tabs"],
+  "permissions": ["activeTab", "tabs", "storage"],
   "content_scripts": [
     {
       "matches": ["*://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/select_entry.php?*"],

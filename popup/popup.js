@@ -57,6 +57,10 @@ $(document).ready(function() {
   );
 });
 
+chrome.storage.sync.clear(function() {
+  console.log("Clear Data...");
+});
+
 // TODO: 在課程介紹頁面，還要放此門的推薦 & 相關課程
 $(".ui.accordion").accordion();
 $(".ui.tabular.menu").on("click", ".item", function() {
@@ -117,4 +121,40 @@ $(".first.modal").modal({
 });
 $("#back").click(function() {
   $(".first.modal").modal("show");
+});
+
+$("#submit").click(function() {
+  chrome.storage.sync.get("cart", function(items) {
+    chrome.storage.sync.get("cart", function(items) {
+      var temp = {};
+      var data = {
+        no: $("#no").text(),
+        course_name: $("#course_name").text(),
+        time: $("#time").text()
+      };
+
+      if (items.cart != undefined) {
+        Object.assign(temp, items.cart);
+        temp[Object.keys(temp).length] = data;
+
+        chrome.storage.sync.remove("cart", function() {
+          console.log("cart has been removed");
+          chrome.storage.sync.set({ cart: temp }, function() {
+            console.log("cart has been set");
+            chrome.storage.sync.get("cart", function(items) {
+              console.log(items);
+            });
+          });
+        });
+      } else {
+        temp[0] = data;
+        chrome.storage.sync.set({ cart: temp }, function() {
+          console.log("cart has been set");
+          chrome.storage.sync.get("cart", function(items) {
+            console.log(items);
+          });
+        });
+      }
+    });
+  });
 });
