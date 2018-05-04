@@ -136,13 +136,13 @@
 	    $("#search_result > tbody > tr").click(function () {
 	      $(this).css("cursor", "pointer");
 	      var course_from_click = $("td:nth-child(1)", this).text();
-	      console.log(course_from_click);
+	      // console.log(course_from_click);
 	      (0, _api.getCourseInfo)(acix, course_from_click);
 	    });
 	  });
 	});
 	
-	$(".shape").shape();
+	// TODO: 在課程介紹頁面，還要放此門的推薦 & 相關課程
 	$(".ui.accordion").accordion();
 	$(".ui.tabular.menu").on("click", ".item", function () {
 	  if (!$(this).hasClass("dropdown")) {
@@ -174,27 +174,25 @@
 	});
 	$("#clickme").click(function () {
 	  (0, _server.searchByKeyword)($("#keyword").val());
-	  $(".coupled.modal").modal({
-	    allowMultiple: false
-	  });
-	  $(".second.modal").modal({
-	    inverted: true,
-	    onApprove: function onApprove() {
-	      // window.alert("Second Modal Approve !");
-	    }
-	  });
-	  $(".first.modal").modal({
-	    inverted: true,
-	    onApprove: function onApprove() {
-	      // window.alert("First Modal Approve !");
-	    }
-	  }).modal("show");
+	  $(".first.modal").modal("show");
 	});
 	$("#cart_submit").click(function () {
 	  // TODO: 將存在 Storage API 的課表送去校務資訊系統選課
 	});
 	$("#search_result > tbody > tr").hover(function () {
 	  $(this).css("cursor", "pointer");
+	});
+	$(".coupled.modal").modal({
+	  allowMultiple: false
+	});
+	$(".second.modal").modal({
+	  inverted: true
+	});
+	$(".first.modal").modal({
+	  inverted: true
+	});
+	$("#back").click(function () {
+	  $(".first.modal").modal("show");
 	});
 
 /***/ }),
@@ -235,6 +233,7 @@
 	
 	var _server = __webpack_require__(12);
 	
+	// TODO: 這些函式都要進行 Error 處理，包括 Session 及 錯誤科目
 	var iconv = __webpack_require__(265);
 	var request = __webpack_require__(13);
 	
@@ -308,8 +307,8 @@
 	      var str = iconv.decode(new Buffer(body), "big5");
 	      var temp = document.createElement("div");
 	      temp.innerHTML = str;
-	      console.log.apply(console, $(temp));
-	      console.log("Before: " + course_no);
+	      // console.log.apply(console, $(temp));
+	      // console.log("Before: " + course_no);
 	
 	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
 	        alert("請重新登入 !");
@@ -317,7 +316,7 @@
 	        var myRe = /[0-9]+[A-Za-z]+/g;
 	        var myArray = myRe.exec(course_no);
 	        var output = [course_no.slice(0, myRe.lastIndex), course_no.slice(myRe.lastIndex)].join(" ");
-	        console.log("After: " + output);
+	        // console.log("After: " + output);
 	        getCourseInfo(acix, output);
 	      } else {
 	        var no = $("div > table:nth-child(1) > tbody > tr:nth-child(2) > td:nth-child(2)", temp);
@@ -349,8 +348,10 @@
 	          $("#pdf_page").empty();
 	          $("#syllabus").html(syllabus.html());
 	        }
-	        $("#class_accordion > div").removeClass("active");
-	        $(".second.modal").modal("show");
+	
+	        for (var i = 0; i < 3; i++) {
+	          $(".ui.accordion").accordion("close", i);
+	        }$(".second.modal").modal("show");
 	      }
 	    }
 	  });
@@ -428,12 +429,8 @@
 	      $("#school_table").append(table.html());
 	
 	      $("#school_table > tbody > tr").on("click", "td", function () {
-	        $(".second.modal").modal({
-	          inverted: true,
-	          onApprove: function onApprove() {
-	            // window.alert("Second Modal Approve !");
-	          }
-	        }).modal("show");
+	        getCourseInfo(acix, $(this).attr("id"));
+	        $(".second.modal").modal("show");
 	      });
 	    }
 	  });
@@ -2631,7 +2628,7 @@
 	  canvas = document.getElementById("the-canvas");
 	  ctx = canvas.getContext("2d");
 	
-	  document.getElementById("prev").addEventListener("click", onPrevPage);
+	  pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null, scale = 1, document.getElementById("prev").addEventListener("click", onPrevPage);
 	  document.getElementById("next").addEventListener("click", onNextPage);
 	
 	  pdfjsLib.getDocument(url).then(function (pdfDoc_) {
@@ -2704,7 +2701,7 @@
 	    url: "http://127.0.0.1:5000/api/searchByKeyword?keyword=" + keyword
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
-	      console.log(body);
+	      // console.log(body);
 	    }
 	  });
 	}

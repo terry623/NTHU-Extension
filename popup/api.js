@@ -1,3 +1,4 @@
+// TODO: 這些函式都要進行 Error 處理，包括 Session 及 錯誤科目
 var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
@@ -92,8 +93,8 @@ function getCourseInfo(acix, course_no) {
         var str = iconv.decode(new Buffer(body), "big5");
         var temp = document.createElement("div");
         temp.innerHTML = str;
-        console.log.apply(console, $(temp));
-        console.log("Before: " + course_no);
+        // console.log.apply(console, $(temp));
+        // console.log("Before: " + course_no);
 
         if (
           $(temp)
@@ -112,7 +113,7 @@ function getCourseInfo(acix, course_no) {
             course_no.slice(0, myRe.lastIndex),
             course_no.slice(myRe.lastIndex)
           ].join(" ");
-          console.log("After: " + output);
+          // console.log("After: " + output);
           getCourseInfo(acix, output);
         } else {
           var no = $(
@@ -191,7 +192,8 @@ function getCourseInfo(acix, course_no) {
             $("#pdf_page").empty();
             $("#syllabus").html(syllabus.html());
           }
-          $("#class_accordion > div").removeClass("active");
+
+          for (var i = 0; i < 3; i++) $(".ui.accordion").accordion("close", i);
           $(".second.modal").modal("show");
         }
       }
@@ -282,14 +284,8 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         $("#school_table").append(table.html());
 
         $("#school_table > tbody > tr").on("click", "td", function() {
-          $(".second.modal")
-            .modal({
-              inverted: true,
-              onApprove: function() {
-                // window.alert("Second Modal Approve !");
-              }
-            })
-            .modal("show");
+          getCourseInfo(acix, $(this).attr("id"));
+          $(".second.modal").modal("show");
         });
       }
     }

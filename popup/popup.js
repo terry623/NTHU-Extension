@@ -50,14 +50,14 @@ $(document).ready(function() {
       $("#search_result > tbody > tr").click(function() {
         $(this).css("cursor", "pointer");
         var course_from_click = $("td:nth-child(1)", this).text();
-        console.log(course_from_click);
+        // console.log(course_from_click);
         getCourseInfo(acix, course_from_click);
       });
     }
   );
 });
 
-$(".shape").shape();
+// TODO: 在課程介紹頁面，還要放此門的推薦 & 相關課程
 $(".ui.accordion").accordion();
 $(".ui.tabular.menu").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown")) {
@@ -98,27 +98,23 @@ $(".ui.pointing.menu").on("click", ".item", function() {
 });
 $("#clickme").click(function() {
   searchByKeyword($("#keyword").val());
-  $(".coupled.modal").modal({
-    allowMultiple: false
-  });
-  $(".second.modal").modal({
-    inverted: true,
-    onApprove: function() {
-      // window.alert("Second Modal Approve !");
-    }
-  });
-  $(".first.modal")
-    .modal({
-      inverted: true,
-      onApprove: function() {
-        // window.alert("First Modal Approve !");
-      }
-    })
-    .modal("show");
+  $(".first.modal").modal("show");
 });
 $("#cart_submit").click(function() {
   // TODO: 將存在 Storage API 的課表送去校務資訊系統選課
 });
 $("#search_result > tbody > tr").hover(function() {
   $(this).css("cursor", "pointer");
+});
+$(".coupled.modal").modal({
+  allowMultiple: false
+});
+$(".second.modal").modal({
+  inverted: true
+});
+$(".first.modal").modal({
+  inverted: true
+});
+$("#back").click(function() {
+  $(".first.modal").modal("show");
 });

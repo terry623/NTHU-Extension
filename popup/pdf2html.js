@@ -30,7 +30,7 @@ function renderPage(num) {
     canvas.width = viewport.width;
     // canvas.height = 707.844;
     // canvas.width = 623.391;
-
+    
     // Render PDF page into canvas context
     var renderContext = {
       canvasContext: ctx,
@@ -93,6 +93,12 @@ function transform(url) {
    */
   canvas = document.getElementById("the-canvas");
   ctx = canvas.getContext("2d");
+  
+  pdfDoc = null,
+  pageNum = 1,
+  pageRendering = false,
+  pageNumPending = null,
+  scale = 1,
 
   document.getElementById("prev").addEventListener("click", onPrevPage);
   document.getElementById("next").addEventListener("click", onNextPage);

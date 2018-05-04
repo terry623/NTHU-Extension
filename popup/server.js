@@ -57,7 +57,7 @@ function searchByKeyword(keyword) {
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
-        console.log(body);
+        // console.log(body);
       }
     }
   );
