@@ -97,9 +97,8 @@
 	
 	  chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
 	    var acix = (0, _helper.getUrlVars)(tabs[0].url)["ACIXSTORE"];
-	    console.log("ACIXSTORE is " + acix);
+	    // console.log("ACIXSTORE is " + acix);
 	    (0, _api.getUserName)(acix);
-	
 	    var stu_no = (0, _helper.getUrlVars)(tabs[0].url)["hint"];
 	
 	    // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。可以把 Data 丟進 DB 去檢查。
@@ -143,7 +142,7 @@
 	});
 	
 	chrome.storage.sync.clear(function () {
-	  console.log("Clear Data...");
+	  console.log("Clear Storage Data");
 	});
 	
 	// TODO: 在課程介紹頁面，還要放此門的推薦 & 相關課程
@@ -180,9 +179,8 @@
 	  (0, _server.searchByKeyword)($("#keyword").val());
 	  $(".first.modal").modal("show");
 	});
-	$("#cart_submit").click(function () {
-	  // TODO: 將存在 Storage API 的課表送去校務資訊系統選課
-	});
+	// TODO: 將存在 Storage 的課表送去校務資訊系統選課
+	$("#cart_submit").click(function () {});
 	$("#search_result > tbody > tr").hover(function () {
 	  $(this).css("cursor", "pointer");
 	});
@@ -198,34 +196,29 @@
 	$("#back").click(function () {
 	  $(".first.modal").modal("show");
 	});
-	
 	$("#submit").click(function () {
 	  chrome.storage.sync.get("cart", function (items) {
 	    chrome.storage.sync.get("cart", function (items) {
 	      var temp = {};
 	      var data = {
-	        no: $("#no").text(),
 	        course_name: $("#course_name").text(),
 	        time: $("#time").text()
 	      };
 	
 	      if (items.cart != undefined) {
 	        Object.assign(temp, items.cart);
-	        temp[Object.keys(temp).length] = data;
+	        temp[$("#no").text()] = data;
 	
 	        chrome.storage.sync.remove("cart", function () {
-	          console.log("cart has been removed");
 	          chrome.storage.sync.set({ cart: temp }, function () {
-	            console.log("cart has been set");
 	            chrome.storage.sync.get("cart", function (items) {
 	              console.log(items);
 	            });
 	          });
 	        });
 	      } else {
-	        temp[0] = data;
+	        temp[$("#no").text()] = data;
 	        chrome.storage.sync.set({ cart: temp }, function () {
-	          console.log("cart has been set");
 	          chrome.storage.sync.get("cart", function (items) {
 	            console.log(items);
 	          });
@@ -319,10 +312,12 @@
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
 	      var str = iconv.decode(new Buffer(body), "big5");
+	      str = str.replace("<img id='jh_loading' src='/style/JH/jh_loading.gif' style='position:fixed;'>", "");
 	      var temp = document.createElement("div");
 	      temp.innerHTML = str;
 	      // console.log.apply(console, $(temp));
 	
+	      // $("#jh_loading", temp).remove();
 	      var found = $("div > form > table.sortable > tbody > tr", temp).filter(function (index) {
 	        return $("td:nth-child(1) > div", this).text() == course_no;
 	      });
@@ -52440,6 +52435,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	// TODO: 將 Storage 的 Data 匯入至等待送出清單
 	function getCart() {
 	    var table = "<tbody>\n        <tr class=\"\">\n            <td>\n                <div>08:00 - 08:50</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>09:00 - 09:50</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>10:10 - 11:00</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>11:10 - 12:00</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>12:10 - 13:00</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>13:20 - 14:10</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>14:20 - 15:10</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>15:30 - 16:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>16:30 - 17:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>17:30 - 18:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>18:30 - 19:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>19:30 - 20:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>20:30 - 21:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n            <td colspan=\"6\">\n            </td>\n        </tr>\n    </tbody>";
 	

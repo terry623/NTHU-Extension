@@ -56,10 +56,15 @@ function getPopulation(acix, course_no) {
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
         var str = iconv.decode(new Buffer(body), "big5");
+        str = str.replace(
+          "<img id='jh_loading' src='/style/JH/jh_loading.gif' style='position:fixed;'>",
+          ""
+        );
         var temp = document.createElement("div");
         temp.innerHTML = str;
         // console.log.apply(console, $(temp));
 
+        // $("#jh_loading", temp).remove();
         var found = $("div > form > table.sortable > tbody > tr", temp).filter(
           function(index) {
             return $("td:nth-child(1) > div", this).text() == course_no;

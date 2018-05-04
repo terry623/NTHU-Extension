@@ -11,9 +11,8 @@ $(document).ready(function() {
     { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
     function(tabs) {
       var acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
-      console.log("ACIXSTORE is " + acix);
+      // console.log("ACIXSTORE is " + acix);
       getUserName(acix);
-
       var stu_no = getUrlVars(tabs[0].url)["hint"];
 
       // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。可以把 Data 丟進 DB 去檢查。
@@ -58,7 +57,7 @@ $(document).ready(function() {
 });
 
 chrome.storage.sync.clear(function() {
-  console.log("Clear Data...");
+  console.log("Clear Storage Data");
 });
 
 // TODO: 在課程介紹頁面，還要放此門的推薦 & 相關課程
@@ -104,9 +103,8 @@ $("#clickme").click(function() {
   searchByKeyword($("#keyword").val());
   $(".first.modal").modal("show");
 });
-$("#cart_submit").click(function() {
-  // TODO: 將存在 Storage API 的課表送去校務資訊系統選課
-});
+// TODO: 將存在 Storage 的課表送去校務資訊系統選課
+$("#cart_submit").click(function() {});
 $("#search_result > tbody > tr").hover(function() {
   $(this).css("cursor", "pointer");
 });
@@ -122,34 +120,29 @@ $(".first.modal").modal({
 $("#back").click(function() {
   $(".first.modal").modal("show");
 });
-
 $("#submit").click(function() {
   chrome.storage.sync.get("cart", function(items) {
     chrome.storage.sync.get("cart", function(items) {
       var temp = {};
       var data = {
-        no: $("#no").text(),
         course_name: $("#course_name").text(),
         time: $("#time").text()
       };
 
       if (items.cart != undefined) {
         Object.assign(temp, items.cart);
-        temp[Object.keys(temp).length] = data;
+        temp[$("#no").text()] = data;
 
         chrome.storage.sync.remove("cart", function() {
-          console.log("cart has been removed");
           chrome.storage.sync.set({ cart: temp }, function() {
-            console.log("cart has been set");
             chrome.storage.sync.get("cart", function(items) {
               console.log(items);
             });
           });
         });
       } else {
-        temp[0] = data;
+        temp[$("#no").text()] = data;
         chrome.storage.sync.set({ cart: temp }, function() {
-          console.log("cart has been set");
           chrome.storage.sync.get("cart", function(items) {
             console.log(items);
           });

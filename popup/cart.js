@@ -1,3 +1,4 @@
+// TODO: 將 Storage 的 Data 匯入至等待送出清單
 function getCart() {
   const table = `<tbody>
         <tr class="">
