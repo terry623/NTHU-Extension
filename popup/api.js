@@ -33,7 +33,10 @@ function getUserName(acix) {
 function getPopulation(acix, course_no) {
   var patt = /[A-Za-z]+/;
   var target = course_no.match(patt);
-
+  $("#size_limit").text("Loading");
+  $("#current_number").text("Loading");
+  $("#remain").text("Loading");
+  $("#be_random").text("Loading");
   request.post(
     {
       url:
@@ -62,8 +65,14 @@ function getPopulation(acix, course_no) {
             return $("td:nth-child(1) > div", this).text() == course_no;
           }
         );
-        var word = $("td:nth-child(6) > div", found);
-        $("#population").text("修課人數: " + word.text());
+        var size_limit = $("td:nth-child(5) > div", found);
+        var current_number = $("td:nth-child(6) > div", found);
+        var remain = $("td:nth-child(7) > div", found);
+        var be_random = $("td:nth-child(8) > div", found);
+        $("#size_limit").text(size_limit.text() + " 人");
+        $("#current_number").text(current_number.text() + " 人");
+        $("#remain").text(remain.text() + " 人");
+        $("#be_random").text(be_random.text() + " 人");
       }
     }
   );
@@ -119,6 +128,10 @@ function getCourseInfo(acix, course_no) {
             "div > table:nth-child(1) > tbody > tr:nth-child(4) > td.class3",
             temp
           );
+          var credit = $(
+            "div > table:nth-child(1) > tbody > tr:nth-child(2) > td:nth-child(4)",
+            temp
+          );
           var teacher = $(
             "div > table:nth-child(1) > tbody > tr:nth-child(5) > td.class3",
             temp
@@ -145,10 +158,11 @@ function getCourseInfo(acix, course_no) {
           );
 
           // TODO: 數據抓很久，可以用個 Loader 再一起顯示
-          // getPopulation(acix, course_no);
+          getPopulation(acix, course_no);
 
           $("#no").text(no.text());
           $("#course_name").text(name_zh.text() + " " + name_en.text());
+          $("#credit").text(credit.text());
           $("#teacher").text(teacher.text());
           $("#time").text(time.text());
           $("#classroom").text(classroom.text());

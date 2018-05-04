@@ -23,10 +23,10 @@ body::-webkit-scrollbar {
   margin-bottom: 3px;
 }
 
-#no {
-  margin-bottom: 10px;
-}
-
 #left_pointing {
   margin-left: 15px;
+}
+
+.info.description {
+  margin-top: 3px;
 }

@@ -149,58 +149,90 @@
                             <div class="scrolling content">
                                 <div class="ui piled segment">
                                     <h4 id="course_name" class="ui header"> </h4>
-                                    <div id="no" class="ui tag label">
-                                    </div>
-                                    <div id="teacher" class="ui tag label">
-                                    </div>
-                                    <div id="time" class="ui tag label">
-                                    </div>
-                                    <div id="classroom" class="ui tag label">
-                                    </div>
-                                    <div id="population" class="ui tag label">
-                                    </div>
-
                                     <div id="class_accordion" class="ui styled fluid accordion">
-                                        <div class="title active">
+                                        <div class="title">
                                             <i class="dropdown icon"></i>
                                             詳細資訊
                                         </div>
-                                        <div class="content active">
-                                            <!-- TODO: 有關於人數的統一整理在一個地方 -->
-                                            <div class="ui list">
-                                                <div class="item">
-                                                    <i class="map marker alternate icon"></i>
-                                                    <div class="content">
-                                                        <div class="header">科號</div>
-                                                        <div class="description">10620CS 135500</div>
+                                        <div class="content">
+                                            <div class="ui equal width grid">
+                                                <div class="column">
+                                                    <div class="ui list">
+                                                        <div class="item">
+                                                            <i class="map marker alternate icon"></i>
+                                                            <div class="content">
+                                                                <div class="header">科號</div>
+                                                                <div id="no" class="info description"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <i class="map marker alternate icon"></i>
+                                                            <div class="content">
+                                                                <div class="header">學分</div>
+                                                                <div id="credit" class="info description">3</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <i class="map marker alternate icon"></i>
+                                                            <div class="content">
+                                                                <div class="header">教師</div>
+                                                                <div id="teacher" class="info description"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <i class="map marker alternate icon"></i>
+                                                            <div class="content">
+                                                                <div class="header">時間</div>
+                                                                <div id="time" class="info description"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <i class="map marker alternate icon"></i>
+                                                            <div class="content">
+                                                                <div class="header">教室</div>
+                                                                <div id="classroom" class="info description"></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="item">
-                                                    <i class="map marker alternate icon"></i>
-                                                    <div class="content">
-                                                        <div class="header">學分</div>
-                                                        <div class="description">3</div>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <i class="map marker alternate icon"></i>
-                                                    <div class="content">
-                                                        <div class="header">教師</div>
-                                                        <div class="description">李哲榮</div>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <i class="map marker alternate icon"></i>
-                                                    <div class="content">
-                                                        <div class="header">時間</div>
-                                                        <div class="description">T7T8F7F8</div>
-                                                    </div>
-                                                </div>
-                                                <div class="item">
-                                                    <i class="map marker alternate icon"></i>
-                                                    <div class="content">
-                                                        <div class="header">教室</div>
-                                                        <div class="description">DELTA台達109</div>
+                                                <div class="column">
+                                                    <div class="ui list">
+                                                        <div class="item">
+                                                            <i class="user outline icon"></i>
+                                                            <div class="content">
+                                                                <div class="header">人數限制</div>
+                                                                <div id="size_limit" class="info description">
+                                                                    Loading
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <i class="user outline icon"></i>
+                                                            <div class="content">
+                                                                <div class="header">選上人數</div>
+                                                                <div id="current_number" class="info description">
+                                                                    Loading
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <i class="user outline icon"></i>
+                                                            <div class="content">
+                                                                <div class="header">剩餘名額</div>
+                                                                <div id="remain" class="info description">
+                                                                    Loading
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="item">
+                                                            <i class="user outline icon"></i>
+                                                            <div class="content">
+                                                                <div class="header">等待亂數</div>
+                                                                <div id="be_random" class="info description">
+                                                                    Loading
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
