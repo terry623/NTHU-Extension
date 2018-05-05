@@ -131,6 +131,23 @@
                             <div class="actions">
                             </div>
                         </div>
+                        <div class="ui mini modal">
+                            <div class="header">
+                                Delete Your Account
+                            </div>
+                            <div class="content">
+                                <p>Are you sure you want to delete your account</p>
+                            </div>
+                            <div class="actions">
+                                <div class="ui negative button">
+                                    No
+                                </div>
+                                <div class="ui positive right labeled icon button">
+                                    Yes
+                                    <i class="checkmark icon"></i>
+                                </div>
+                            </div>
+                        </div>
                         <div class="ui fullscreen second modal">
                             <i class="close icon"></i>
                             <div class="header">
@@ -314,7 +331,7 @@
                             </tr>
                         </thead>
                     </table>
-                    <table id="cart" style="display:none;" class="ui tab2 compact table">
+                    <table style="display:none;" class="ui tab2 compact table">
                         <button id="cart_submit" style="display:none;" class="small ui right floated basic button">
                             送出至校務系統
                             <i class="right arrow icon"></i>
@@ -329,6 +346,8 @@
                                 <th class="two wide">星期五</th>
                             </tr>
                         </thead>
+                        <tbody id="cart">
+                        </tbody>
                     </table>
                 </div>
 

@@ -118,7 +118,7 @@
 	    //  400  停修 log 記錄
 	    var phaseNo = "100";
 	    (0, _api.getResultCourse)(acix, stu_no, phaseNo, "106", "20");
-	    (0, _cart.getCart)();
+	    (0, _cart.getCart)(acix);
 	
 	    (0, _api.getGrade)(acix, stu_no);
 	    (0, _server.collectionOfCourse)();
@@ -136,7 +136,43 @@
 	      $(this).css("cursor", "pointer");
 	      var course_from_click = $("td:nth-child(1)", this).text();
 	      // console.log(course_from_click);
-	      (0, _api.getCourseInfo)(acix, course_from_click);
+	      (0, _api.getCourseInfo)(acix, course_from_click, true);
+	    });
+	
+	    $("#submit").click(function () {
+	      chrome.storage.sync.get("cart", function (items) {
+	        chrome.storage.sync.get("cart", function (items) {
+	          var temp = {};
+	          var data = {
+	            course_name: $("#course_name").text(),
+	            time: $("#time").text()
+	          };
+	
+	          if (items.cart != undefined) {
+	            Object.assign(temp, items.cart);
+	            temp[$("#no").text()] = data;
+	
+	            chrome.storage.sync.remove("cart", function () {
+	              chrome.storage.sync.set({ cart: temp }, function () {
+	                chrome.storage.sync.get("cart", function (items) {
+	                  // console.log(items);
+	                  (0, _cart.getCart)(acix);
+	                });
+	              });
+	            });
+	          } else {
+	            temp[$("#no").text()] = data;
+	            chrome.storage.sync.set({ cart: temp }, function () {
+	              chrome.storage.sync.get("cart", function (items) {
+	                // console.log(items);
+	                (0, _cart.getCart)(acix);
+	              });
+	            });
+	          }
+	        });
+	      });
+	      // TODO: 秀出的訊息還沒有修改
+	      $(".mini.modal").modal("show");
 	    });
 	  });
 	});
@@ -184,6 +220,10 @@
 	$("#search_result > tbody > tr").hover(function () {
 	  $(this).css("cursor", "pointer");
 	});
+	$(".ui.mini.modal").modal({
+	  inverted: true,
+	  duration: 200
+	});
 	$(".coupled.modal").modal({
 	  allowMultiple: false
 	});
@@ -195,37 +235,6 @@
 	});
 	$("#back").click(function () {
 	  $(".first.modal").modal("show");
-	});
-	$("#submit").click(function () {
-	  chrome.storage.sync.get("cart", function (items) {
-	    chrome.storage.sync.get("cart", function (items) {
-	      var temp = {};
-	      var data = {
-	        course_name: $("#course_name").text(),
-	        time: $("#time").text()
-	      };
-	
-	      if (items.cart != undefined) {
-	        Object.assign(temp, items.cart);
-	        temp[$("#no").text()] = data;
-	
-	        chrome.storage.sync.remove("cart", function () {
-	          chrome.storage.sync.set({ cart: temp }, function () {
-	            chrome.storage.sync.get("cart", function (items) {
-	              console.log(items);
-	            });
-	          });
-	        });
-	      } else {
-	        temp[$("#no").text()] = data;
-	        chrome.storage.sync.set({ cart: temp }, function () {
-	          chrome.storage.sync.get("cart", function (items) {
-	            console.log(items);
-	          });
-	        });
-	      }
-	    });
-	  });
 	});
 
 /***/ }),
@@ -333,7 +342,7 @@
 	  });
 	}
 	
-	function getCourseInfo(acix, course_no) {
+	function getCourseInfo(acix, course_no, showButton) {
 	  request({
 	    url: "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=" + acix + "&c_key=" + course_no,
 	    encoding: null
@@ -352,7 +361,7 @@
 	        var myArray = myRe.exec(course_no);
 	        var output = [course_no.slice(0, myRe.lastIndex), course_no.slice(myRe.lastIndex)].join(" ");
 	        // console.log("After: " + output);
-	        getCourseInfo(acix, output);
+	        getCourseInfo(acix, output, showButton);
 	      } else {
 	        var no = $("div > table:nth-child(1) > tbody > tr:nth-child(2) > td:nth-child(2)", temp);
 	        var name_zh = $("div > table:nth-child(1) > tbody > tr:nth-child(3) > td.class3", temp);
@@ -386,7 +395,14 @@
 	
 	        for (var i = 0; i < 3; i++) {
 	          $(".ui.accordion").accordion("close", i);
-	        }$(".second.modal").modal("show");
+	        }if (showButton == true) {
+	          $("#back").show();
+	          $("#submit").show();
+	        } else {
+	          $("#back").hide();
+	          $("#submit").hide();
+	        }
+	        $(".second.modal").modal("show");
 	      }
 	    }
 	  });
@@ -456,7 +472,7 @@
 	          $("div", this).text(text);
 	        }
 	      });
-	      $("tbody > tr:nth-child(15) > td:nth-child(1)", table).html("無上課時間").removeClass("selectable");
+	      $("tbody > tr:nth-child(15) > td:nth-child(1)", table).html("無").removeClass("selectable");
 	      $("tbody > tr.class1", table).remove();
 	      if ($("#school_table").has("tbody").length) {
 	        $("#school_table > tbody").remove();
@@ -464,8 +480,7 @@
 	      $("#school_table").append(table.html());
 	
 	      $("#school_table > tbody > tr").on("click", "td", function () {
-	        getCourseInfo(acix, $(this).attr("id"));
-	        $(".second.modal").modal("show");
+	        getCourseInfo(acix, $(this).attr("id"), false);
 	      });
 	    }
 	  });
@@ -2582,7 +2597,7 @@
 	    pageNum = 1,
 	    pageRendering = false,
 	    pageNumPending = null,
-	    scale = 1,
+	    scale = 1.05,
 	    canvas,
 	    ctx;
 	
@@ -2663,7 +2678,7 @@
 	  canvas = document.getElementById("the-canvas");
 	  ctx = canvas.getContext("2d");
 	
-	  pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null, scale = 1, document.getElementById("prev").addEventListener("click", onPrevPage);
+	  pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null, scale = 1.05, document.getElementById("prev").addEventListener("click", onPrevPage);
 	  document.getElementById("next").addEventListener("click", onNextPage);
 	
 	  pdfjsLib.getDocument(url).then(function (pdfDoc_) {
@@ -52428,18 +52443,43 @@
 
 /***/ }),
 /* 287 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	// TODO: 將 Storage 的 Data 匯入至等待送出清單
-	function getCart() {
-	    var table = "<tbody>\n        <tr class=\"\">\n            <td>\n                <div>08:00 - 08:50</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>09:00 - 09:50</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>10:10 - 11:00</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>11:10 - 12:00</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>12:10 - 13:00</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>13:20 - 14:10</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>14:20 - 15:10</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>15:30 - 16:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>16:30 - 17:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>17:30 - 18:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>18:30 - 19:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>19:30 - 20:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>20:30 - 21:20</div>\n            </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n            <td> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n            <td colspan=\"6\">\n            </td>\n        </tr>\n    </tbody>";
+	exports.getCart = undefined;
 	
-	    $("#cart").append(table);
+	var _api = __webpack_require__(6);
+	
+	function getCart(acix) {
+	    var table = "<tbody id=\"cart\">\n        <tr class=\"\">\n            <td>\n                <div>08:00 - 08:50</div>\n            </td>\n            <td class=\"M1 selectable\"> </td>\n            <td class=\"T1 selectable\"> </td>\n            <td class=\"W1 selectable\"> </td>\n            <td class=\"R1 selectable\"> </td>\n            <td class=\"F1 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>09:00 - 09:50</div>\n            </td>\n            <td class=\"M2 selectable\"> </td>\n            <td class=\"T2 selectable\"> </td>\n            <td class=\"W2 selectable\"> </td>\n            <td class=\"R2 selectable\"> </td>\n            <td class=\"F2 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>10:10 - 11:00</div>\n            </td>\n            <td class=\"M3 selectable\"> </td>\n            <td class=\"T3 selectable\"> </td>\n            <td class=\"W3 selectable\"> </td>\n            <td class=\"R3 selectable\"> </td>\n            <td class=\"F3 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>11:10 - 12:00</div>\n            </td>\n            <td class=\"M4 selectable\"> </td>\n            <td class=\"T4 selectable\"> </td>\n            <td class=\"W4 selectable\"> </td>\n            <td class=\"R4 selectable\"> </td>\n            <td class=\"F4 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>12:10 - 13:00</div>\n            </td>\n            <td class=\"Mn selectable\"> </td>\n            <td class=\"Tn selectable\"> </td>\n            <td class=\"Wn selectable\"> </td>\n            <td class=\"Rn selectable\"> </td>\n            <td class=\"Fn selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>13:20 - 14:10</div>\n            </td>\n            <td class=\"M5 selectable\"> </td>\n            <td class=\"T5 selectable\"> </td>\n            <td class=\"W5 selectable\"> </td>\n            <td class=\"R5 selectable\"> </td>\n            <td class=\"F5 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>14:20 - 15:10</div>\n            </td>\n            <td class=\"M6 selectable\"> </td>\n            <td class=\"T6 selectable\"> </td>\n            <td class=\"W6 selectable\"> </td>\n            <td class=\"R6 selectable\"> </td>\n            <td class=\"F6 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>15:30 - 16:20</div>\n            </td>\n            <td class=\"M7 selectable\"> </td>\n            <td class=\"T7 selectable\"> </td>\n            <td class=\"W7 selectable\"> </td>\n            <td class=\"R7 selectable\"> </td>\n            <td class=\"F7 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>16:30 - 17:20</div>\n            </td>\n            <td class=\"M8 selectable\"> </td>\n            <td class=\"T8 selectable\"> </td>\n            <td class=\"W8 selectable\"> </td>\n            <td class=\"R8 selectable\"> </td>\n            <td class=\"F8 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>17:30 - 18:20</div>\n            </td>\n            <td class=\"M9 selectable\"> </td>\n            <td class=\"T9 selectable\"> </td>\n            <td class=\"W9 selectable\"> </td>\n            <td class=\"R9 selectable\"> </td>\n            <td class=\"F9 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>18:30 - 19:20</div>\n            </td>\n            <td class=\"Ma selectable\"> </td>\n            <td class=\"Ta selectable\"> </td>\n            <td class=\"Wa selectable\"> </td>\n            <td class=\"Ra selectable\"> </td>\n            <td class=\"Fa selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>19:30 - 20:20</div>\n            </td>\n            <td class=\"Mb selectable\"> </td>\n            <td class=\"Tb selectable\"> </td>\n            <td class=\"Wb selectable\"> </td>\n            <td class=\"Rb selectable\"> </td>\n            <td class=\"Fb selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>20:30 - 21:20</div>\n            </td>\n            <td class=\"Mc selectable\"> </td>\n            <td class=\"Tc selectable\"> </td>\n            <td class=\"Wc selectable\"> </td>\n            <td class=\"Rc selectable\"> </td>\n            <td class=\"Fc selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\u7121</td>\n            <td colspan=\"6\">\n            </td>\n        </tr>\n    </tbody>";
+	
+	    chrome.storage.sync.get("cart", function (items) {
+	        var parse_table = $.parseHTML(table);
+	        for (var key in items.cart) {
+	            if (items.cart.hasOwnProperty(key)) {
+	                var slice_time = [];
+	                var j = 0;
+	                for (var i = 0; i < items.cart[key].time.length; i = i + 2) {
+	                    slice_time[j] = items.cart[key].time.slice(i, i + 2);
+	                    j++;
+	                }
+	
+	                for (var i = 0; i < slice_time.length; i++) {
+	                    var name = items.cart[key].course_name.split(" ");
+	                    $(parse_table).find("." + slice_time[i]).append("<a href=\"#do_not_jump\">" + name[0] + "</a>").attr("id", key);
+	                    //   console.log.apply(console, $(parse_table).find("." + slice_time[i]));
+	                }
+	            }
+	        }
+	        $("#cart").replaceWith(parse_table);
+	        $("#cart > tr").on("click", "td", function () {
+	            (0, _api.getCourseInfo)(acix, $(this).attr("id"), false);
+	        });
+	    });
 	}
 	
 	exports.getCart = getCart;

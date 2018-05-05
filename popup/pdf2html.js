@@ -13,7 +13,7 @@ var pdfDoc = null,
   pageNum = 1,
   pageRendering = false,
   pageNumPending = null,
-  scale = 1,
+  scale = 1.05,
   canvas,
   ctx;
 
@@ -98,7 +98,7 @@ function transform(url) {
   pageNum = 1,
   pageRendering = false,
   pageNumPending = null,
-  scale = 1,
+  scale = 1.05,
 
   document.getElementById("prev").addEventListener("click", onPrevPage);
   document.getElementById("next").addEventListener("click", onNextPage);

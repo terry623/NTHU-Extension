@@ -32,7 +32,7 @@ $(document).ready(function() {
       //  400  停修 log 記錄
       var phaseNo = "100";
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
-      getCart();
+      getCart(acix);
 
       getGrade(acix, stu_no);
       collectionOfCourse();
@@ -50,7 +50,43 @@ $(document).ready(function() {
         $(this).css("cursor", "pointer");
         var course_from_click = $("td:nth-child(1)", this).text();
         // console.log(course_from_click);
-        getCourseInfo(acix, course_from_click);
+        getCourseInfo(acix, course_from_click, true);
+      });
+
+      $("#submit").click(function() {
+        chrome.storage.sync.get("cart", function(items) {
+          chrome.storage.sync.get("cart", function(items) {
+            var temp = {};
+            var data = {
+              course_name: $("#course_name").text(),
+              time: $("#time").text()
+            };
+
+            if (items.cart != undefined) {
+              Object.assign(temp, items.cart);
+              temp[$("#no").text()] = data;
+
+              chrome.storage.sync.remove("cart", function() {
+                chrome.storage.sync.set({ cart: temp }, function() {
+                  chrome.storage.sync.get("cart", function(items) {
+                    // console.log(items);
+                    getCart(acix);
+                  });
+                });
+              });
+            } else {
+              temp[$("#no").text()] = data;
+              chrome.storage.sync.set({ cart: temp }, function() {
+                chrome.storage.sync.get("cart", function(items) {
+                  // console.log(items);
+                  getCart(acix);
+                });
+              });
+            }
+          });
+        });
+        // TODO: 秀出的訊息還沒有修改
+        $(".mini.modal").modal("show");
       });
     }
   );
@@ -108,6 +144,10 @@ $("#cart_submit").click(function() {});
 $("#search_result > tbody > tr").hover(function() {
   $(this).css("cursor", "pointer");
 });
+$(".ui.mini.modal").modal({
+  inverted: true,
+  duration: 200
+});
 $(".coupled.modal").modal({
   allowMultiple: false
 });
@@ -119,35 +159,4 @@ $(".first.modal").modal({
 });
 $("#back").click(function() {
   $(".first.modal").modal("show");
-});
-$("#submit").click(function() {
-  chrome.storage.sync.get("cart", function(items) {
-    chrome.storage.sync.get("cart", function(items) {
-      var temp = {};
-      var data = {
-        course_name: $("#course_name").text(),
-        time: $("#time").text()
-      };
-
-      if (items.cart != undefined) {
-        Object.assign(temp, items.cart);
-        temp[$("#no").text()] = data;
-
-        chrome.storage.sync.remove("cart", function() {
-          chrome.storage.sync.set({ cart: temp }, function() {
-            chrome.storage.sync.get("cart", function(items) {
-              console.log(items);
-            });
-          });
-        });
-      } else {
-        temp[$("#no").text()] = data;
-        chrome.storage.sync.set({ cart: temp }, function() {
-          chrome.storage.sync.get("cart", function(items) {
-            console.log(items);
-          });
-        });
-      }
-    });
-  });
 });

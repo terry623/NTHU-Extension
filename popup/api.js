@@ -83,7 +83,7 @@ function getPopulation(acix, course_no) {
   );
 }
 
-function getCourseInfo(acix, course_no) {
+function getCourseInfo(acix, course_no, showButton) {
   request(
     {
       url:
@@ -119,7 +119,7 @@ function getCourseInfo(acix, course_no) {
             course_no.slice(myRe.lastIndex)
           ].join(" ");
           // console.log("After: " + output);
-          getCourseInfo(acix, output);
+          getCourseInfo(acix, output, showButton);
         } else {
           var no = $(
             "div > table:nth-child(1) > tbody > tr:nth-child(2) > td:nth-child(2)",
@@ -199,6 +199,14 @@ function getCourseInfo(acix, course_no) {
           }
 
           for (var i = 0; i < 3; i++) $(".ui.accordion").accordion("close", i);
+
+          if (showButton == true) {
+            $("#back").show();
+            $("#submit").show();
+          } else {
+            $("#back").hide();
+            $("#submit").hide();
+          }
           $(".second.modal").modal("show");
         }
       }
@@ -280,7 +288,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
           }
         });
         $("tbody > tr:nth-child(15) > td:nth-child(1)", table)
-          .html("無上課時間")
+          .html("無")
           .removeClass("selectable");
         $("tbody > tr.class1", table).remove();
         if ($("#school_table").has("tbody").length) {
@@ -289,8 +297,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         $("#school_table").append(table.html());
 
         $("#school_table > tbody > tr").on("click", "td", function() {
-          getCourseInfo(acix, $(this).attr("id"));
-          $(".second.modal").modal("show");
+          getCourseInfo(acix, $(this).attr("id"), false);
         });
       }
     }
