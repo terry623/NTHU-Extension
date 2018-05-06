@@ -149,13 +149,14 @@ function getCart(acix) {
           j++;
         }
 
+        //FIXME: 同時段的課程沒有處理
         for (var i = 0; i < slice_time.length; i++) {
           var name = items.cart[key].course_name.split(" ");
           $(parse_table)
             .find("." + slice_time[i])
             .append(`<a href="#do_not_jump">` + name[0] + `</a>`)
             .attr("id", key);
-          //   console.log.apply(console, $(parse_table).find("." + slice_time[i]));
+        //   console.log.apply(console, $(parse_table).find("." + slice_time[i]));
         }
       }
     }

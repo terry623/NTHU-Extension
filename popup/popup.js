@@ -15,7 +15,7 @@ $(document).ready(function() {
       getUserName(acix);
       var stu_no = getUrlVars(tabs[0].url)["hint"];
 
-      // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。可以把 Data 丟進 DB 去檢查。
+      // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。
       // const course_no_file = "10620CS  342300";
       // const course_have_file = "10620CS  340400";
 
@@ -85,7 +85,8 @@ $(document).ready(function() {
             }
           });
         });
-        // TODO: 秀出的訊息還沒有修改
+        // FIXME: 秀出的訊息還沒有修改
+        // alert("Success");
         $(".mini.modal").modal("show");
       });
     }
@@ -145,8 +146,7 @@ $("#search_result > tbody > tr").hover(function() {
   $(this).css("cursor", "pointer");
 });
 $(".ui.mini.modal").modal({
-  inverted: true,
-  duration: 200
+  inverted: true
 });
 $(".coupled.modal").modal({
   allowMultiple: false
@@ -157,6 +157,6 @@ $(".second.modal").modal({
 $(".first.modal").modal({
   inverted: true
 });
-$("#back").click(function() {
+$(".back_to_search").click(function() {
   $(".first.modal").modal("show");
 });
