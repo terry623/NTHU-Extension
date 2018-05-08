@@ -197,7 +197,7 @@ function getCourseInfo(acix, course_no, showButton) {
             $("#syllabus").html(syllabus.html());
           }
 
-          for (var i = 0; i < 3; i++) $(".ui.accordion").accordion("close", i);
+          for (var i = 0; i < 4; i++) $(".ui.accordion").accordion("close", i);
 
           if (showButton == true) {
             $("#back").show();
@@ -206,7 +206,7 @@ function getCourseInfo(acix, course_no, showButton) {
             $("#back").hide();
             $("#submit").hide();
           }
-          $(".second.modal").modal("show");
+          $(".course_info.modal").modal("show");
         }
       }
     }
@@ -287,7 +287,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
           }
         });
         $("tbody > tr:nth-child(15) > td:nth-child(1)", table)
-          .html("無")
+          .html("無上課時間")
           .removeClass("selectable");
         $("tbody > tr.class1", table).remove();
         if ($("#school_table").has("tbody").length) {
@@ -295,6 +295,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         }
         $("#school_table").append(table.html());
 
+        // TODO: Add Loader
         $("#school_table > tbody > tr").on("click", "td", function() {
           getCourseInfo(acix, $(this).attr("id"), false);
         });

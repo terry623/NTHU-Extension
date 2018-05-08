@@ -183,10 +183,13 @@
 	
 	// TODO: 在課程介紹頁面，還要放此門的推薦 & 相關課程
 	$(".ui.accordion").accordion();
-	$(".ui.tabular.menu").on("click", ".item", function () {
+	$(".ui.dropdown").dropdown();
+	$("#change_school_table").on("click", ".item", function () {
 	  if (!$(this).hasClass("dropdown")) {
-	    $(this).addClass("active").siblings(".item").removeClass("active");
-	
+	    // $(this)
+	    //   .addClass("active")
+	    //   .siblings(".item")
+	    //   .removeClass("active");
 	    var t = $(".ui.compact.table");
 	    t.show();
 	
@@ -202,39 +205,43 @@
 	  }
 	});
 	$(".ui.pointing.menu").on("click", ".item", function () {
-	  if (!$(this).hasClass("dropdown")) {
+	  if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
 	    $(this).addClass("active").siblings(".item").removeClass("active");
 	
 	    var t = $(".content_item");
 	    t.show();
+	    $("#search_bar").hide();
+	    $("#change_school_table").hide();
 	
-	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();
+	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) {
+	      t.not(".searchPage").hide();
+	      $("#search_bar").hide();
+	      $("#search_result_page").hide();
+	      $("#search_entry").show();
+	    } else if ($(this).hasClass("choosePage")) {
+	      t.not(".choosePage").hide();
+	      $("#change_school_table").show();
+	    } else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();
 	  }
 	});
-	$("#clickme").click(function () {
+	// TODO: Add Loader
+	$(".clicktosearch").click(function () {
 	  (0, _server.searchByKeyword)($("#keyword").val());
-	  $(".first.modal").modal("show");
+	  $("#search_entry").hide();
+	  $("#search_bar").show();
+	  $("#search_result_page").show();
 	});
 	// TODO: 將存在 Storage 的課表送去校務資訊系統選課
-	$("#cart_submit").click(function () {});
 	$("#search_result > tbody > tr").hover(function () {
 	  $(this).css("cursor", "pointer");
 	});
 	$(".ui.mini.modal").modal({
 	  inverted: true
 	});
-	$(".coupled.modal").modal({
-	  allowMultiple: false
-	});
-	$(".second.modal").modal({
+	$(".course_info.modal").modal({
 	  inverted: true
 	});
-	$(".first.modal").modal({
-	  inverted: true
-	});
-	$(".back_to_search").click(function () {
-	  $(".first.modal").modal("show");
-	});
+	$("#cart_submit").click(function () {});
 
 /***/ }),
 /* 5 */
@@ -391,7 +398,7 @@
 	          $("#syllabus").html(syllabus.html());
 	        }
 	
-	        for (var i = 0; i < 3; i++) {
+	        for (var i = 0; i < 4; i++) {
 	          $(".ui.accordion").accordion("close", i);
 	        }if (showButton == true) {
 	          $("#back").show();
@@ -400,7 +407,7 @@
 	          $("#back").hide();
 	          $("#submit").hide();
 	        }
-	        $(".second.modal").modal("show");
+	        $(".course_info.modal").modal("show");
 	      }
 	    }
 	  });
@@ -470,13 +477,14 @@
 	          $("div", this).text(text);
 	        }
 	      });
-	      $("tbody > tr:nth-child(15) > td:nth-child(1)", table).html("無").removeClass("selectable");
+	      $("tbody > tr:nth-child(15) > td:nth-child(1)", table).html("無上課時間").removeClass("selectable");
 	      $("tbody > tr.class1", table).remove();
 	      if ($("#school_table").has("tbody").length) {
 	        $("#school_table > tbody").remove();
 	      }
 	      $("#school_table").append(table.html());
 	
+	      // TODO: Add Loader
 	      $("#school_table > tbody > tr").on("click", "td", function () {
 	        getCourseInfo(acix, $(this).attr("id"), false);
 	      });
@@ -52453,7 +52461,7 @@
 	var _api = __webpack_require__(6);
 	
 	function getCart(acix) {
-	    var table = "<tbody id=\"cart\">\n        <tr class=\"\">\n            <td>\n                <div>08:00 - 08:50</div>\n            </td>\n            <td class=\"M1 selectable\"> </td>\n            <td class=\"T1 selectable\"> </td>\n            <td class=\"W1 selectable\"> </td>\n            <td class=\"R1 selectable\"> </td>\n            <td class=\"F1 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>09:00 - 09:50</div>\n            </td>\n            <td class=\"M2 selectable\"> </td>\n            <td class=\"T2 selectable\"> </td>\n            <td class=\"W2 selectable\"> </td>\n            <td class=\"R2 selectable\"> </td>\n            <td class=\"F2 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>10:10 - 11:00</div>\n            </td>\n            <td class=\"M3 selectable\"> </td>\n            <td class=\"T3 selectable\"> </td>\n            <td class=\"W3 selectable\"> </td>\n            <td class=\"R3 selectable\"> </td>\n            <td class=\"F3 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>11:10 - 12:00</div>\n            </td>\n            <td class=\"M4 selectable\"> </td>\n            <td class=\"T4 selectable\"> </td>\n            <td class=\"W4 selectable\"> </td>\n            <td class=\"R4 selectable\"> </td>\n            <td class=\"F4 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>12:10 - 13:00</div>\n            </td>\n            <td class=\"Mn selectable\"> </td>\n            <td class=\"Tn selectable\"> </td>\n            <td class=\"Wn selectable\"> </td>\n            <td class=\"Rn selectable\"> </td>\n            <td class=\"Fn selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>13:20 - 14:10</div>\n            </td>\n            <td class=\"M5 selectable\"> </td>\n            <td class=\"T5 selectable\"> </td>\n            <td class=\"W5 selectable\"> </td>\n            <td class=\"R5 selectable\"> </td>\n            <td class=\"F5 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>14:20 - 15:10</div>\n            </td>\n            <td class=\"M6 selectable\"> </td>\n            <td class=\"T6 selectable\"> </td>\n            <td class=\"W6 selectable\"> </td>\n            <td class=\"R6 selectable\"> </td>\n            <td class=\"F6 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>15:30 - 16:20</div>\n            </td>\n            <td class=\"M7 selectable\"> </td>\n            <td class=\"T7 selectable\"> </td>\n            <td class=\"W7 selectable\"> </td>\n            <td class=\"R7 selectable\"> </td>\n            <td class=\"F7 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>16:30 - 17:20</div>\n            </td>\n            <td class=\"M8 selectable\"> </td>\n            <td class=\"T8 selectable\"> </td>\n            <td class=\"W8 selectable\"> </td>\n            <td class=\"R8 selectable\"> </td>\n            <td class=\"F8 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>17:30 - 18:20</div>\n            </td>\n            <td class=\"M9 selectable\"> </td>\n            <td class=\"T9 selectable\"> </td>\n            <td class=\"W9 selectable\"> </td>\n            <td class=\"R9 selectable\"> </td>\n            <td class=\"F9 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>18:30 - 19:20</div>\n            </td>\n            <td class=\"Ma selectable\"> </td>\n            <td class=\"Ta selectable\"> </td>\n            <td class=\"Wa selectable\"> </td>\n            <td class=\"Ra selectable\"> </td>\n            <td class=\"Fa selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>19:30 - 20:20</div>\n            </td>\n            <td class=\"Mb selectable\"> </td>\n            <td class=\"Tb selectable\"> </td>\n            <td class=\"Wb selectable\"> </td>\n            <td class=\"Rb selectable\"> </td>\n            <td class=\"Fb selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>20:30 - 21:20</div>\n            </td>\n            <td class=\"Mc selectable\"> </td>\n            <td class=\"Tc selectable\"> </td>\n            <td class=\"Wc selectable\"> </td>\n            <td class=\"Rc selectable\"> </td>\n            <td class=\"Fc selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\u7121</td>\n            <td colspan=\"6\">\n            </td>\n        </tr>\n    </tbody>";
+	    var table = "<tbody id=\"cart\">\n        <tr class=\"\">\n            <td>\n                <div>08:00 - 08:50</div>\n            </td>\n            <td class=\"M1 selectable\"> </td>\n            <td class=\"T1 selectable\"> </td>\n            <td class=\"W1 selectable\"> </td>\n            <td class=\"R1 selectable\"> </td>\n            <td class=\"F1 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>09:00 - 09:50</div>\n            </td>\n            <td class=\"M2 selectable\"> </td>\n            <td class=\"T2 selectable\"> </td>\n            <td class=\"W2 selectable\"> </td>\n            <td class=\"R2 selectable\"> </td>\n            <td class=\"F2 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>10:10 - 11:00</div>\n            </td>\n            <td class=\"M3 selectable\"> </td>\n            <td class=\"T3 selectable\"> </td>\n            <td class=\"W3 selectable\"> </td>\n            <td class=\"R3 selectable\"> </td>\n            <td class=\"F3 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>11:10 - 12:00</div>\n            </td>\n            <td class=\"M4 selectable\"> </td>\n            <td class=\"T4 selectable\"> </td>\n            <td class=\"W4 selectable\"> </td>\n            <td class=\"R4 selectable\"> </td>\n            <td class=\"F4 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>12:10 - 13:00</div>\n            </td>\n            <td class=\"Mn selectable\"> </td>\n            <td class=\"Tn selectable\"> </td>\n            <td class=\"Wn selectable\"> </td>\n            <td class=\"Rn selectable\"> </td>\n            <td class=\"Fn selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>13:20 - 14:10</div>\n            </td>\n            <td class=\"M5 selectable\"> </td>\n            <td class=\"T5 selectable\"> </td>\n            <td class=\"W5 selectable\"> </td>\n            <td class=\"R5 selectable\"> </td>\n            <td class=\"F5 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>14:20 - 15:10</div>\n            </td>\n            <td class=\"M6 selectable\"> </td>\n            <td class=\"T6 selectable\"> </td>\n            <td class=\"W6 selectable\"> </td>\n            <td class=\"R6 selectable\"> </td>\n            <td class=\"F6 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>15:30 - 16:20</div>\n            </td>\n            <td class=\"M7 selectable\"> </td>\n            <td class=\"T7 selectable\"> </td>\n            <td class=\"W7 selectable\"> </td>\n            <td class=\"R7 selectable\"> </td>\n            <td class=\"F7 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>16:30 - 17:20</div>\n            </td>\n            <td class=\"M8 selectable\"> </td>\n            <td class=\"T8 selectable\"> </td>\n            <td class=\"W8 selectable\"> </td>\n            <td class=\"R8 selectable\"> </td>\n            <td class=\"F8 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>17:30 - 18:20</div>\n            </td>\n            <td class=\"M9 selectable\"> </td>\n            <td class=\"T9 selectable\"> </td>\n            <td class=\"W9 selectable\"> </td>\n            <td class=\"R9 selectable\"> </td>\n            <td class=\"F9 selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>18:30 - 19:20</div>\n            </td>\n            <td class=\"Ma selectable\"> </td>\n            <td class=\"Ta selectable\"> </td>\n            <td class=\"Wa selectable\"> </td>\n            <td class=\"Ra selectable\"> </td>\n            <td class=\"Fa selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>19:30 - 20:20</div>\n            </td>\n            <td class=\"Mb selectable\"> </td>\n            <td class=\"Tb selectable\"> </td>\n            <td class=\"Wb selectable\"> </td>\n            <td class=\"Rb selectable\"> </td>\n            <td class=\"Fb selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\n                <div>20:30 - 21:20</div>\n            </td>\n            <td class=\"Mc selectable\"> </td>\n            <td class=\"Tc selectable\"> </td>\n            <td class=\"Wc selectable\"> </td>\n            <td class=\"Rc selectable\"> </td>\n            <td class=\"Fc selectable\"> </td>\n        </tr>\n        <tr class=\"\">\n            <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n            <td colspan=\"6\">\n            </td>\n        </tr>\n    </tbody>";
 	
 	    chrome.storage.sync.get("cart", function (items) {
 	        var parse_table = $.parseHTML(table);

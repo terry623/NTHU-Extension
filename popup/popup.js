@@ -98,13 +98,13 @@ chrome.storage.sync.clear(function() {
 
 // TODO: 在課程介紹頁面，還要放此門的推薦 & 相關課程
 $(".ui.accordion").accordion();
-$(".ui.tabular.menu").on("click", ".item", function() {
+$(".ui.dropdown").dropdown();
+$("#change_school_table").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown")) {
-    $(this)
-      .addClass("active")
-      .siblings(".item")
-      .removeClass("active");
-
+    // $(this)
+    //   .addClass("active")
+    //   .siblings(".item")
+    //   .removeClass("active");
     var t = $(".ui.compact.table");
     t.show();
 
@@ -120,7 +120,7 @@ $(".ui.tabular.menu").on("click", ".item", function() {
   }
 });
 $(".ui.pointing.menu").on("click", ".item", function() {
-  if (!$(this).hasClass("dropdown")) {
+  if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
     $(this)
       .addClass("active")
       .siblings(".item")
@@ -128,34 +128,37 @@ $(".ui.pointing.menu").on("click", ".item", function() {
 
     var t = $(".content_item");
     t.show();
+    $("#search_bar").hide();
+    $("#change_school_table").hide();
 
     if ($(this).hasClass("homePage")) t.not(".homePage").hide();
-    else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();
-    else if ($(this).hasClass("choosePage")) t.not(".choosePage").hide();
-    else if ($(this).hasClass("recommendPage")) t.not(".recommendPage").hide();
+    else if ($(this).hasClass("searchPage")) {
+      t.not(".searchPage").hide();
+      $("#search_bar").hide();
+      $("#search_result_page").hide();
+      $("#search_entry").show();
+    } else if ($(this).hasClass("choosePage")) {
+      t.not(".choosePage").hide();
+      $("#change_school_table").show();
+    } else if ($(this).hasClass("recommendPage"))
+      t.not(".recommendPage").hide();
   }
 });
-$("#clickme").click(function() {
+// TODO: Add Loader
+$(".clicktosearch").click(function() {
   searchByKeyword($("#keyword").val());
-  $(".first.modal").modal("show");
+  $("#search_entry").hide();
+  $("#search_bar").show();
+  $("#search_result_page").show();
 });
 // TODO: 將存在 Storage 的課表送去校務資訊系統選課
-$("#cart_submit").click(function() {});
 $("#search_result > tbody > tr").hover(function() {
   $(this).css("cursor", "pointer");
 });
 $(".ui.mini.modal").modal({
   inverted: true
 });
-$(".coupled.modal").modal({
-  allowMultiple: false
-});
-$(".second.modal").modal({
+$(".course_info.modal").modal({
   inverted: true
 });
-$(".first.modal").modal({
-  inverted: true
-});
-$(".back_to_search").click(function() {
-  $(".first.modal").modal("show");
-});
+$("#cart_submit").click(function() {});

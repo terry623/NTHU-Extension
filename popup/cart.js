@@ -132,7 +132,7 @@ function getCart(acix) {
             <td class="Fc selectable"> </td>
         </tr>
         <tr class="">
-            <td>無</td>
+            <td>無上課時間</td>
             <td colspan="6">
             </td>
         </tr>
@@ -156,7 +156,7 @@ function getCart(acix) {
             .find("." + slice_time[i])
             .append(`<a href="#do_not_jump">` + name[0] + `</a>`)
             .attr("id", key);
-        //   console.log.apply(console, $(parse_table).find("." + slice_time[i]));
+          //   console.log.apply(console, $(parse_table).find("." + slice_time[i]));
         }
       }
     }
