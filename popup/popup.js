@@ -13,6 +13,7 @@ $(document).ready(function() {
       var acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
       // console.log("ACIXSTORE is " + acix);
       getUserName(acix);
+      $(".content_item.homePage").show();
       var stu_no = getUrlVars(tabs[0].url)["hint"];
 
       // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。
@@ -85,8 +86,6 @@ $(document).ready(function() {
             }
           });
         });
-        // FIXME: 秀出的訊息還沒有修改
-        // alert("Success");
         $(".mini.modal").modal("show");
       });
     }

@@ -24,7 +24,6 @@ function getUserName(acix) {
 
         var welcome = "<div>Hi~ " + found.text() + " !</div>";
         $("#user").prepend(welcome);
-        $(".content_item.homePage").show();
       }
     }
   );

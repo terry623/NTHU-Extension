@@ -99,6 +99,7 @@
 	    var acix = (0, _helper.getUrlVars)(tabs[0].url)["ACIXSTORE"];
 	    // console.log("ACIXSTORE is " + acix);
 	    (0, _api.getUserName)(acix);
+	    $(".content_item.homePage").show();
 	    var stu_no = (0, _helper.getUrlVars)(tabs[0].url)["hint"];
 	
 	    // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。
@@ -171,8 +172,6 @@
 	          }
 	        });
 	      });
-	      // FIXME: 秀出的訊息還沒有修改
-	      // alert("Success");
 	      $(".mini.modal").modal("show");
 	    });
 	  });
@@ -293,7 +292,6 @@
 	
 	      var welcome = "<div>Hi~ " + found.text() + " !</div>";
 	      $("#user").prepend(welcome);
-	      $(".content_item.homePage").show();
 	    }
 	  });
 	}
