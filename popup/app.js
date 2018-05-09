@@ -1,4 +1,5 @@
 import * as popup from "./popup";
+import * as search from "./search";
 import * as server from "./server";
 import * as api from "./api";
 import * as cart from "./cart";

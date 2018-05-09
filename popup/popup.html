@@ -334,10 +334,9 @@
                 </thead>
             </table>
             <table style="display:none;" class="ui tab2 compact table">
-                <button id="cart_submit" style="display:none;" class="small ui right floated basic button">
-                    送出至校務系統
-                    <i class="right arrow icon"></i>
-                </button>
+                <div id="left_pointing_to_school" style="display:none;" class="ui small horizontal teal left basic label">
+                    確 認 後 請 按 Send ， 送 出 至 校 務 資 訊 系 統
+                </div>
                 <thead>
                     <tr>
                         <th class="two wide">時間 / 星期</th>
@@ -350,6 +349,15 @@
                 </thead>
                 <tbody id="cart">
                 </tbody>
+                <tfoot class="full-width">
+                    <tr>
+                        <th colspan="6">
+                            <button id="cart_submit" style="display:none;" class="small ui right floated teal button">
+                                Send
+                            </button>
+                        </th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 

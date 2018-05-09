@@ -14,10 +14,6 @@ body::-webkit-scrollbar {
   margin-bottom: 20px;
 }
 
-#cart_submit {
-  margin-bottom: 12px;
-}
-
 #change_phase {
   margin-top: 9px;
   margin-bottom: 3px;
@@ -25,6 +21,11 @@ body::-webkit-scrollbar {
 
 #left_pointing {
   margin-left: 15px;
+}
+
+#left_pointing_to_school {
+  margin-top: 5px;
+  margin-bottom: 2px;
 }
 
 .info.description {

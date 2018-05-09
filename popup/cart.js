@@ -133,7 +133,7 @@ function getCart(acix) {
         </tr>
         <tr class="">
             <td>無上課時間</td>
-            <td colspan="6">
+            <td colspan="5">
             </td>
         </tr>
     </tbody>`;

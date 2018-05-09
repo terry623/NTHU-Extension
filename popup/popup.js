@@ -2,7 +2,8 @@ window._crypto = null;
 import { getUrlVars } from "./helper";
 import { getUserName, getCourseInfo, getResultCourse, getGrade } from "./api";
 import { getCart } from "./cart";
-import { collectionOfCourse, searchByKeyword } from "./server";
+import { collectionOfCourse } from "./server";
+import { searchByKeyword } from "./search";
 
 $(document).ready(function() {
   $(".content_item").hide();
@@ -112,9 +113,11 @@ $("#change_school_table").on("click", ".item", function() {
       t.not(".tab1").hide();
       $("#change_phase").show();
       $("#cart_submit").hide();
+      $("#left_pointing_to_school").hide();
     } else if ($(this).hasClass("tab2")) {
       t.not(".tab2").hide();
       $("#cart_submit").show();
+      $("#left_pointing_to_school").show();
       $("#change_phase").hide();
     }
   }

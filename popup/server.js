@@ -50,20 +50,7 @@ function collectionOfCourse() {
   $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
 }
 
-function searchByKeyword(keyword) {
-  request(
-    {
-      url: "http://127.0.0.1:5000/api/searchByKeyword?keyword=" + keyword
-    },
-    function(err, response, body) {
-      if (!err && response.statusCode == 200) {
-        // console.log(body);
-      }
-    }
-  );
-}
-
-export { calculateUserGrade, collectionOfCourse, searchByKeyword };
+export { calculateUserGrade, collectionOfCourse };
 
 // 連 Server 得到 Data 版
 // function collectionOfCourse() {
