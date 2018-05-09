@@ -82,7 +82,9 @@ function getPopulation(acix, course_no) {
   );
 }
 
+// FIXME: 遇到課表上空白科目會有問題
 function getCourseInfo(acix, course_no, showButton) {
+  if (course_no == undefined) return;
   request(
     {
       url:
@@ -120,7 +122,6 @@ function getCourseInfo(acix, course_no, showButton) {
           // console.log("After: " + output);
           getCourseInfo(acix, output, showButton);
         } else {
-
           // TODO: 從 Storage API 裡面讀資料
           var no = $(
             "div > table:nth-child(1) > tbody > tr:nth-child(2) > td:nth-child(2)",
@@ -175,6 +176,7 @@ function getCourseInfo(acix, course_no, showButton) {
           $("#syllabus").empty();
 
           if (find_file.length > 0) {
+            var ran = Math.floor(Math.random() * 100 + 1);
             var pdf_path =
               "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
             $("#pdf_page").html(
@@ -194,6 +196,7 @@ function getCourseInfo(acix, course_no, showButton) {
                   <canvas id="the-canvas" />
                   `
             );
+
             transform(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
           } else $("#syllabus").html(syllabus.html());
 
@@ -295,7 +298,6 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
           $("#school_table > tbody").remove();
         }
         $("#school_table").append(table.html());
-
         // TODO: Add Loader
         $("#school_table > tbody > tr").on("click", "td", function() {
           getCourseInfo(acix, $(this).attr("id"), false);

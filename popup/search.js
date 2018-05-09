@@ -37,6 +37,8 @@ function searchByKeyword(acix, keyword) {
         var hits = resp.hits.hits;
         console.log(hits);
         for (var each_course in hits) {
+          // storeCourseInfo(each_course);
+
           var source = hits[each_course]._source;
           var time = source.時間;
           if (time == "") time = "無";
@@ -66,20 +68,45 @@ function searchByKeyword(acix, keyword) {
           row += teacher.join("<br>") + `</td></tr>`;
           $("#search_result_body").append($.parseHTML(row));
         }
-        $("#search_result_body > tr").hover(function() {
-          $(this).css("cursor", "pointer");
-        });
-        $("#search_result_body > tr").click(function() {
-          $(this).css("cursor", "pointer");
-          var course_from_click = $("td:nth-child(1)", this).text();
-          console.log(course_from_click);
-          getCourseInfo(acix, course_from_click, true);
-        });
+
+        // FIXME: 寫在函式裡的 jquery，可能被創造好幾次
       },
       function(err) {
         console.trace(err.message);
       }
     );
 }
+
+// function storeCourseInfo(each_course) {
+//   chrome.storage.sync.get("course", function(items) {
+//     var temp = {};
+//     var data = {
+//       course_name: $("#course_name").text(),
+//       time: $("#time").text()
+//     };
+
+//     if (items.cart != undefined) {
+//       Object.assign(temp, items.cart);
+//       temp[$("#no").text()] = data;
+
+//       chrome.storage.sync.remove("cart", function() {
+//         chrome.storage.sync.set({ cart: temp }, function() {
+//           chrome.storage.sync.get("cart", function(items) {
+//             // console.log(items);
+//             getCart(acix);
+//           });
+//         });
+//       });
+//     } else {
+//       temp[$("#no").text()] = data;
+//       chrome.storage.sync.set({ cart: temp }, function() {
+//         chrome.storage.sync.get("cart", function(items) {
+//           // console.log(items);
+//           getCart(acix);
+//         });
+//       });
+//     }
+//   });
+// }
 
 export { searchByKeyword };

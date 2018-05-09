@@ -1,9 +1,11 @@
 window._crypto = null;
 import { getUrlVars } from "./helper";
-import { getUserName, getResultCourse, getGrade } from "./api";
+import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
 import { getCart } from "./cart";
 import { collectionOfCourse } from "./server";
 import { searchByKeyword } from "./search";
+
+var acix;
 
 $(document).ready(function() {
   // FIXME: 有時候不知道為什麼，沒有一開始全部都 Hide 起來
@@ -12,7 +14,7 @@ $(document).ready(function() {
   chrome.tabs.query(
     { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
     function(tabs) {
-      var acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
+      acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
       // console.log("ACIXSTORE is " + acix);
       getUserName(acix);
       $(".content_item.homePage").show();
@@ -35,6 +37,7 @@ $(document).ready(function() {
       //  400  停修 log 記錄
       var phaseNo = "100";
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
+
       getCart(acix);
 
       getGrade(acix, stu_no);
@@ -49,43 +52,41 @@ $(document).ready(function() {
         }
       });
 
-      $("#submit").click(function() {
+      $("#submit").on("click", function() {
         chrome.storage.sync.get("cart", function(items) {
-          chrome.storage.sync.get("cart", function(items) {
-            var temp = {};
-            var data = {
-              course_name: $("#course_name").text(),
-              time: $("#time").text()
-            };
+          var temp = {};
+          var data = {
+            course_name: $("#course_name").text(),
+            time: $("#time").text()
+          };
 
-            if (items.cart != undefined) {
-              Object.assign(temp, items.cart);
-              temp[$("#no").text()] = data;
+          if (items.cart != undefined) {
+            Object.assign(temp, items.cart);
+            temp[$("#no").text()] = data;
 
-              chrome.storage.sync.remove("cart", function() {
-                chrome.storage.sync.set({ cart: temp }, function() {
-                  chrome.storage.sync.get("cart", function(items) {
-                    // console.log(items);
-                    getCart(acix);
-                  });
-                });
-              });
-            } else {
-              temp[$("#no").text()] = data;
+            chrome.storage.sync.remove("cart", function() {
               chrome.storage.sync.set({ cart: temp }, function() {
                 chrome.storage.sync.get("cart", function(items) {
                   // console.log(items);
                   getCart(acix);
                 });
               });
-            }
-          });
+            });
+          } else {
+            temp[$("#no").text()] = data;
+            chrome.storage.sync.set({ cart: temp }, function() {
+              chrome.storage.sync.get("cart", function(items) {
+                // console.log(items);
+                getCart(acix);
+              });
+            });
+          }
         });
         $(".mini.modal").modal("show");
       });
 
       // TODO: Add Loader
-      $(".clicktosearch").click(function() {
+      $(".clicktosearch").on("click", function() {
         searchByKeyword(acix, $("#keyword").val());
         $("#search_entry").hide();
         $("#search_bar").show();
@@ -156,4 +157,12 @@ $(".course_info.modal").modal({
   inverted: true
 });
 // TODO: 將存在 Storage 的課表送去校務資訊系統選課
-$("#cart_submit").click(function() {});
+$("#cart_submit").on("click", function() {});
+$("#search_result_body > tr").hover(function() {
+  $(this).css("cursor", "pointer");
+});
+$("#search_result_body").on("click", "tr", function() {
+  $(this).css("cursor", "pointer");
+  var course_from_click = $("td:nth-child(1)", this).text();
+  getCourseInfo(acix, course_from_click, true);
+});
