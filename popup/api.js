@@ -120,6 +120,8 @@ function getCourseInfo(acix, course_no, showButton) {
           // console.log("After: " + output);
           getCourseInfo(acix, output, showButton);
         } else {
+
+          // TODO: 從 Storage API 裡面讀資料
           var no = $(
             "div > table:nth-child(1) > tbody > tr:nth-child(2) > td:nth-child(2)",
             temp
@@ -169,6 +171,8 @@ function getCourseInfo(acix, course_no, showButton) {
           $("#time").text(time.text());
           $("#classroom").text(classroom.text());
           $("#description").html(description.html());
+          $("#pdf_page").empty();
+          $("#syllabus").empty();
 
           if (find_file.length > 0) {
             var pdf_path =
@@ -190,14 +194,11 @@ function getCourseInfo(acix, course_no, showButton) {
                   <canvas id="the-canvas" />
                   `
             );
-            $("#syllabus").empty();
             transform(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
-          } else {
-            $("#pdf_page").empty();
-            $("#syllabus").html(syllabus.html());
-          }
+          } else $("#syllabus").html(syllabus.html());
 
-          for (var i = 0; i < 4; i++) $(".ui.accordion").accordion("close", i);
+          for (var i = 0; i < $("#class_accordion > div").length / 2; i++)
+            $(".ui.accordion").accordion("close", i);
 
           if (showButton == true) {
             $("#back").show();

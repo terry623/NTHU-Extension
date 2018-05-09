@@ -1,11 +1,12 @@
 window._crypto = null;
 import { getUrlVars } from "./helper";
-import { getUserName, getCourseInfo, getResultCourse, getGrade } from "./api";
+import { getUserName, getResultCourse, getGrade } from "./api";
 import { getCart } from "./cart";
 import { collectionOfCourse } from "./server";
 import { searchByKeyword } from "./search";
 
 $(document).ready(function() {
+  // FIXME: 有時候不知道為什麼，沒有一開始全部都 Hide 起來
   $(".content_item").hide();
 
   chrome.tabs.query(
@@ -48,13 +49,6 @@ $(document).ready(function() {
         }
       });
 
-      $("#search_result > tbody > tr").click(function() {
-        $(this).css("cursor", "pointer");
-        var course_from_click = $("td:nth-child(1)", this).text();
-        // console.log(course_from_click);
-        getCourseInfo(acix, course_from_click, true);
-      });
-
       $("#submit").click(function() {
         chrome.storage.sync.get("cart", function(items) {
           chrome.storage.sync.get("cart", function(items) {
@@ -88,6 +82,14 @@ $(document).ready(function() {
           });
         });
         $(".mini.modal").modal("show");
+      });
+
+      // TODO: Add Loader
+      $(".clicktosearch").click(function() {
+        searchByKeyword(acix, $("#keyword").val());
+        $("#search_entry").hide();
+        $("#search_bar").show();
+        $("#search_result_page").show();
       });
     }
   );
@@ -147,21 +149,11 @@ $(".ui.pointing.menu").on("click", ".item", function() {
       t.not(".recommendPage").hide();
   }
 });
-// TODO: Add Loader
-$(".clicktosearch").click(function() {
-  searchByKeyword($("#keyword").val());
-  $("#search_entry").hide();
-  $("#search_bar").show();
-  $("#search_result_page").show();
-});
-// TODO: 將存在 Storage 的課表送去校務資訊系統選課
-$("#search_result > tbody > tr").hover(function() {
-  $(this).css("cursor", "pointer");
-});
 $(".ui.mini.modal").modal({
   inverted: true
 });
 $(".course_info.modal").modal({
   inverted: true
 });
+// TODO: 將存在 Storage 的課表送去校務資訊系統選課
 $("#cart_submit").click(function() {});
