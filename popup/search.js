@@ -17,8 +17,10 @@ client.ping(
   }
 );
 
-function searchByKeyword(acix, keyword) {
+function searchByKeyword(acix, keyword, callback) {
   $("#search_result_body").empty();
+  $("#search_loading").addClass("active");
+
   client
     .search({
       index: "nthu",
@@ -71,7 +73,8 @@ function searchByKeyword(acix, keyword) {
           row += teacher.join("<br>") + `</td></tr>`;
           $("#search_result_body").append($.parseHTML(row));
         }
-        // FIXME: 寫在函式裡的 jquery，可能被創造好幾次
+        callback();
+
         $("#search_result_body > tr").hover(function() {
           $(this).css("cursor", "pointer");
         });
@@ -121,9 +124,7 @@ function storeCourseInfo(hits, callback) {
         chrome.storage.local.set({ course: temp }, function() {
           chrome.storage.local.get("course", function(items) {
             console.log(items);
-            if (callback && typeof callback === "function") {
-              callback();
-            }
+            if (callback) callback();
           });
         });
       });
@@ -133,16 +134,13 @@ function storeCourseInfo(hits, callback) {
       chrome.storage.local.set({ course: temp }, function() {
         chrome.storage.local.get("course", function(items) {
           console.log(items);
-          if (callback && typeof callback === "function") {
-            callback();
-          }
+          if (callback) callback();
         });
       });
     }
   });
 }
 
-//FIXME: 要回傳正確 Match 的，目前是回傳多個
 function searchBySingleCourseNo(acix, course_no) {
   client
     .search({
@@ -159,12 +157,12 @@ function searchBySingleCourseNo(acix, course_no) {
     .then(
       function(resp) {
         var hits = resp.hits.hits;
-        console.log("searchBySingleCourse");
         console.log(hits);
 
-        // TODO: 全部的 code 能改成 callback 的都要改
         storeCourseInfo(hits, function() {
-          getCourseInfo(acix, course_no, hits[0]._id, false);
+          getCourseInfo(acix, course_no, hits[0]._id, false, function() {
+            $("#course_info_loading").removeClass("active");
+          });
         });
       },
       function(err) {

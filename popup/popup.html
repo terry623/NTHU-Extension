@@ -15,6 +15,15 @@
 <!-- TODO: 把此檔分成好幾個資料夾 ( 必做，不然會有不可預期的問題 ) -->
 
 <body>
+    <div id="course_info_loading" class="ui inverted dimmer">
+        <div class="ui loader"></div>
+    </div>
+    <div id="search_loading" class="ui inverted dimmer">
+        <div class="ui loader"></div>
+    </div>
+    <div id="course_result_loading" class="ui inverted dimmer">
+        <div class="ui loader"></div>
+    </div>
     <div class="main">
         <h3>NTHU Course</h3>
         <div id="sidebar" class="ui pointing menu">
@@ -52,7 +61,6 @@
         <div id="user" class="content_item homePage">
             我們推薦了幾樣課程給你
         </div>
-
         <div class="content_item searchPage">
             <div id="search_entry">
                 <div class="ui fluid icon input">
@@ -134,6 +142,7 @@
                     <div class="small ui basic cancel button">Close</div>
                 </div>
             </div>
+
             <div class="ui fullscreen course_info modal">
                 <i class="close icon"></i>
                 <div class="header">

@@ -45,7 +45,6 @@ function collectionOfCourse() {
       name: local_course[v].name
     };
   }
-
   $(".ui.dropdown.search_list_1").dropdown("refresh");
   $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
 }

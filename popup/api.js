@@ -5,7 +5,7 @@ import { transform } from "./pdf2html";
 import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourseNo } from "./search";
 
-function getUserName(acix) {
+function getUserName(acix, callback) {
   request(
     {
       url:
@@ -24,6 +24,7 @@ function getUserName(acix) {
         );
         var welcome = "<div>Hi~ " + found.text() + " !</div>";
         $("#user").prepend(welcome);
+        callback();
       }
     }
   );
@@ -74,7 +75,8 @@ function getPopulation(acix, course_no, fresh_num) {
   );
 }
 
-function getCourseInfo(acix, course_no, id, showButton) {
+function getCourseInfo(acix, course_no, id, showButton, callback) {
+  $("#course_info_loading").addClass("active");
   if (course_no == undefined) return;
   request(
     {
@@ -108,11 +110,12 @@ function getCourseInfo(acix, course_no, id, showButton) {
             course_no.slice(0, myRe.lastIndex),
             course_no.slice(myRe.lastIndex)
           ].join(" ");
-          getCourseInfo(acix, output, id, showButton);
+          getCourseInfo(acix, output, id, showButton, function() {
+            $("#course_info_loading").removeClass("active");
+          });
         } else {
           chrome.storage.local.get("course", function(items) {
             getSimilarities(id, function(info) {
-              // TODO: 把類似課程的結果貼上去
               console.log(info);
               $("#similar").empty();
 
@@ -207,6 +210,7 @@ function getCourseInfo(acix, course_no, id, showButton) {
             if (showButton == true) $(".submit-back").show();
             else $(".submit-back").hide();
             $(".course_info.modal").modal("show");
+            callback();
           });
         }
       }
@@ -228,7 +232,8 @@ function match_name_course(table2, con) {
   return re;
 }
 
-function getResultCourse(acix, stu_no, phaseNo, year, term) {
+function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
+  $("#course_result_loading").addClass("active");
   request.post(
     {
       url:
@@ -265,7 +270,6 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
             }
           });
         });
-
         $(table)
           .find("div")
           .removeAttr("align");
@@ -276,7 +280,6 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
               .html(`<a href="#do_not_jump">` + $(this).text() + `</a>`);
             var con = $(this).text();
             var course_name = match_name_course(table2, con);
-            // console.log("Found id: " + found_id);
             $(this).attr("course_name", course_name);
           } else {
             var text = $("div", this).text();
@@ -290,13 +293,13 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
           .html("無上課時間")
           .removeClass("selectable");
         $("tbody > tr.class1", table).remove();
-        if ($("#school_table").has("tbody").length) {
+        if ($("#school_table").has("tbody").length)
           $("#school_table > tbody").remove();
-        }
         $("#school_table").append(table.html());
         $("#school_table > tbody > tr").on("click", "td", function() {
           searchBySingleCourseNo(acix, $(this).attr("course_name"));
         });
+        callback();
       }
     }
   );

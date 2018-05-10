@@ -14,9 +14,10 @@ $(document).ready(function() {
     { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
     function(tabs) {
       acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
-      getUserName(acix);
-      $(".content_item.homePage").show();
       var stu_no = getUrlVars(tabs[0].url)["hint"];
+      getUserName(acix, function() {
+        $(".content_item.homePage").show();
+      });
 
       // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。
       // const course_no_file = "10620CS  342300";
@@ -34,7 +35,9 @@ $(document).ready(function() {
       //  300P 加退選結束(已處理)
       //  400  停修 log 記錄
       var phaseNo = "100";
-      getResultCourse(acix, stu_no, phaseNo, "106", "20");
+      getResultCourse(acix, stu_no, phaseNo, "106", "20", function() {
+        $("#course_result_loading").removeClass("active");
+      });
       getCart(acix);
       getGrade(acix, stu_no);
       collectionOfCourse();
@@ -42,7 +45,9 @@ $(document).ready(function() {
       $("#change_phase").dropdown({
         on: "click",
         action: function(text, value, element) {
-          getResultCourse(acix, stu_no, value, "106", "20");
+          getResultCourse(acix, stu_no, value, "106", "20", function() {
+            $("#course_result_loading").removeClass("active");
+          });
           $("#change_phase").dropdown("set text", text);
           $("#change_phase").dropdown("hide");
         }
@@ -81,12 +86,14 @@ $(document).ready(function() {
         });
         $(".mini.modal").modal("show");
       });
-      // TODO: 加搜尋不同類別 & Loader
+      // TODO: 加搜尋不同類別
       $(".clicktosearch").on("click", function() {
-        searchByKeyword(acix, $("#keyword").val());
-        $("#search_entry").hide();
-        $("#search_bar").show();
-        $("#search_result_page").show();
+        searchByKeyword(acix, $("#keyword").val(), function() {
+          $("#search_loading").removeClass("active");
+          $("#search_entry").hide();
+          $("#search_bar").show();
+          $("#search_result_page").show();
+        });
       });
     }
   );
@@ -100,10 +107,6 @@ $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
 $("#change_school_table").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown")) {
-    // $(this)
-    //   .addClass("active")
-    //   .siblings(".item")
-    //   .removeClass("active");
     var t = $(".ui.compact.table");
     t.show();
 
@@ -155,7 +158,8 @@ $("#search_result_body").on("click", "tr", function() {
   $(this).css("cursor", "pointer");
   var course_from_click = $("td:nth-child(1)", this).text();
   var course_id = $(this).attr("id");
-  getCourseInfo(acix, course_from_click, course_id, true);
+  getCourseInfo(acix, course_from_click, course_id, true, function() {
+    $("#course_info_loading").removeClass("active");
+  });
 });
-// TODO: 將存在 Storage 的課表送去校務資訊系統選課
 $("#cart_submit").on("click", function() {});
