@@ -7,14 +7,13 @@ import { searchByKeyword } from "./search";
 var acix;
 
 $(document).ready(function() {
-  // FIXME: 有時候不知道為什麼，沒有一開始全部都 Hide 起來
+  // FIXME: 有時候不知道為什麼，沒有一開始全部 Hide 起來
   $(".content_item").hide();
 
   chrome.tabs.query(
     { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
     function(tabs) {
       acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
-      // console.log("ACIXSTORE is " + acix);
       getUserName(acix);
       $(".content_item.homePage").show();
       var stu_no = getUrlVars(tabs[0].url)["hint"];
@@ -50,29 +49,31 @@ $(document).ready(function() {
       });
       $("#submit").on("click", function() {
         chrome.storage.local.get("cart", function(items) {
+          var get_course_id = $(".ui.piled.segment").attr("id")
           var temp = {};
           var data = {
+            course_no: $("#no").text(),
             course_name: $("#course_name").text(),
             time: $("#time").text()
           };
-
+          
           if (items.cart != undefined) {
             Object.assign(temp, items.cart);
-            temp[$("#no").text()] = data;
+            temp[get_course_id] = data;
 
             chrome.storage.local.remove("cart", function() {
               chrome.storage.local.set({ cart: temp }, function() {
                 chrome.storage.local.get("cart", function(items) {
-                  // console.log(items);
+                  console.log(items);
                   getCart(acix);
                 });
               });
             });
           } else {
-            temp[$("#no").text()] = data;
+            temp[get_course_id] = data;
             chrome.storage.local.set({ cart: temp }, function() {
               chrome.storage.local.get("cart", function(items) {
-                // console.log(items);
+                console.log(items);
                 getCart(acix);
               });
             });
@@ -80,7 +81,7 @@ $(document).ready(function() {
         });
         $(".mini.modal").modal("show");
       });
-      // TODO: Add Loader
+      // TODO: 加搜尋不同類別 & Loader
       $(".clicktosearch").on("click", function() {
         searchByKeyword(acix, $("#keyword").val());
         $("#search_entry").hide();
@@ -95,7 +96,6 @@ chrome.storage.local.clear(function() {
   console.log("Clear Storage Data");
 });
 
-// TODO: 在課程介紹頁面，還要放此門的推薦 & 相關課程
 $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
 $("#change_school_table").on("click", ".item", function() {
@@ -151,10 +151,11 @@ $(".ui.mini.modal").modal({
 $(".course_info.modal").modal({
   inverted: true
 });
-// TODO: 將存在 Storage 的課表送去校務資訊系統選課
-$("#cart_submit").on("click", function() {});
 $("#search_result_body").on("click", "tr", function() {
   $(this).css("cursor", "pointer");
   var course_from_click = $("td:nth-child(1)", this).text();
-  getCourseInfo(acix, course_from_click, true);
+  var course_id = $(this).attr("id");
+  getCourseInfo(acix, course_from_click, course_id, true);
 });
+// TODO: 將存在 Storage 的課表送去校務資訊系統選課
+$("#cart_submit").on("click", function() {});

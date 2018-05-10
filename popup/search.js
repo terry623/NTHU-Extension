@@ -37,6 +37,7 @@ function searchByKeyword(acix, keyword) {
         console.log(hits);
         storeCourseInfo(hits);
         for (var each_course in hits) {
+          var id = hits[each_course]._id;
           var source = hits[each_course]._source;
 
           var time = source.時間;
@@ -45,7 +46,10 @@ function searchByKeyword(acix, keyword) {
           if (classroom == "") classroom = "無";
 
           var row =
-            `<tr>
+            `<tr ` +
+            `id="` +
+            id +
+            `">
               <td>` +
             source.科號 +
             `</td>
@@ -83,41 +87,39 @@ function storeCourseInfo(hits, callback) {
     var temp = {};
     var data = {};
     for (var each_course in hits) {
-      var each = hits[each_course]._source;
-
-      //   授課語言: each.授課語言,
-      data[each.科號] = {
-        不可加簽說明: each.不可加簽說明,
-        人限: each.人限,
-        備註: each.備註,
-        學分數: each.學分數,
-        授課語言: each.授課語言,
-        擋修說明: each.擋修說明,
-        新生保留人數: each.新生保留人數,
-        科號: each.科號,
-        課程中文名稱: each.課程中文名稱,
-        課程英文名稱: each.課程英文名稱,
-        課程限制說明: each.課程限制說明,
-        通識對象: each.通識對象,
-        通識類別: each.通識類別,
-        開課代碼: each.開課代碼,
-        教師: each.教師,
-        教室: each.教室,
-        時間: each.時間,
-        學程: each.學程,
-        必選修: each.必選修,
-        第一二專長: each.第一二專長
+      var each = hits[each_course];
+      var source = each._source;
+      data[each._id] = {
+        不可加簽說明: source.不可加簽說明,
+        人限: source.人限,
+        備註: source.備註,
+        學分數: source.學分數,
+        授課語言: source.授課語言,
+        擋修說明: source.擋修說明,
+        新生保留人數: source.新生保留人數,
+        科號: source.科號,
+        課程中文名稱: source.課程中文名稱,
+        課程英文名稱: source.課程英文名稱,
+        課程限制說明: source.課程限制說明,
+        通識對象: source.通識對象,
+        通識類別: source.通識類別,
+        開課代碼: source.開課代碼,
+        教師: source.教師,
+        教室: source.教室,
+        時間: source.時間,
+        學程: source.學程,
+        必選修: source.必選修,
+        第一二專長: source.第一二專長
       };
     }
 
     if (items.course != undefined) {
       Object.assign(temp, items.course);
-      for (var each_data in data) temp[data[each_data].科號] = data[each_data];
+      for (var each_data in data) temp[each_data] = data[each_data];
 
       chrome.storage.local.remove("course", function() {
         chrome.storage.local.set({ course: temp }, function() {
           chrome.storage.local.get("course", function(items) {
-            console.log("Get Item");
             console.log(items);
             if (callback && typeof callback === "function") {
               callback();
@@ -126,11 +128,10 @@ function storeCourseInfo(hits, callback) {
         });
       });
     } else {
-      for (var each_data in data) temp[data[each_data].科號] = data[each_data];
+      for (var each_data in data) temp[each_data] = data[each_data];
 
       chrome.storage.local.set({ course: temp }, function() {
         chrome.storage.local.get("course", function(items) {
-          console.log("Get Item");
           console.log(items);
           if (callback && typeof callback === "function") {
             callback();
@@ -141,6 +142,7 @@ function storeCourseInfo(hits, callback) {
   });
 }
 
+//FIXME: 要回傳正確 Match 的，目前是回傳多個
 function searchBySingleCourse(acix, course_no) {
   client
     .search({
@@ -157,11 +159,12 @@ function searchBySingleCourse(acix, course_no) {
     .then(
       function(resp) {
         var hits = resp.hits.hits;
+        console.log("searchBySingleCourse");
         console.log(hits);
 
         // TODO: 把全部的 code，能改成 callback 的都要改
         storeCourseInfo(hits, function() {
-          getCourseInfo(acix, course_no, false);
+          getCourseInfo(acix, course_no, hits[0]._id, false);
         });
       },
       function(err) {

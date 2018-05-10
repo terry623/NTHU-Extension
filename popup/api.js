@@ -2,7 +2,7 @@
 var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
-import { calculateUserGrade } from "./server";
+import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourse } from "./search";
 
 function getUserName(acix) {
@@ -74,7 +74,7 @@ function getPopulation(acix, course_no, fresh_num) {
   );
 }
 
-function getCourseInfo(acix, course_no, showButton) {
+function getCourseInfo(acix, course_no, id, showButton) {
   if (course_no == undefined) return;
   request(
     {
@@ -108,11 +108,14 @@ function getCourseInfo(acix, course_no, showButton) {
             course_no.slice(0, myRe.lastIndex),
             course_no.slice(myRe.lastIndex)
           ].join(" ");
-          getCourseInfo(acix, output, showButton);
+          getCourseInfo(acix, output, id, showButton);
         } else {
           chrome.storage.local.get("course", function(items) {
-            var info = items.course[course_no];
+            getSimilarities(course_no, function() {
+              // TODO: 把類似課程的結果貼上去
+            });
 
+            var info = items.course[id];
             var description = $(
               "div > table:nth-child(4) > tbody > tr:nth-child(2) > td",
               temp
@@ -131,6 +134,7 @@ function getCourseInfo(acix, course_no, showButton) {
             if (time == "") time = "無";
             if (classroom == "") classroom = "無";
             getPopulation(acix, course_no, info.新生保留人數);
+            $(".ui.piled.segment").attr("id", id);
 
             var teacher = [];
             for (var each in info.教師)
@@ -257,15 +261,17 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
               .addClass("selectable")
               .html(`<a href="#do_not_jump">` + $(this).text() + `</a>`);
             var con = $(this).text();
-            var found_id = match_name_course(table2, con);
+            var course_name = match_name_course(table2, con);
             // console.log("Found id: " + found_id);
-            $(this).attr("id", found_id);
+            $(this).attr("course_name", course_name);
           } else {
             var text = $("div", this).text();
             text = text.replace("--", "-");
             $("div", this).text(text);
           }
         });
+
+        // FIXME: 沒有上課時間的不能連結到單一課程介紹
         $("tbody > tr:nth-child(15) > td:nth-child(1)", table)
           .html("無上課時間")
           .removeClass("selectable");
@@ -275,7 +281,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         }
         $("#school_table").append(table.html());
         $("#school_table > tbody > tr").on("click", "td", function() {
-          searchBySingleCourse(acix, $(this).attr("id"));
+          searchBySingleCourse(acix, $(this).attr("course_name"));
         });
       }
     }

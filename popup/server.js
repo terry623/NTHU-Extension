@@ -50,31 +50,29 @@ function collectionOfCourse() {
   $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
 }
 
-export { calculateUserGrade, collectionOfCourse };
+function getSimilarities(course_no, callback) {
+  // request(
+  //   {
+  //     url: "http://127.0.0.1:5000/api/getSimilarities"
+  //   },
+  //   function(err, response, body) {
+  //     if (!err && response.statusCode == 200) {
+  //       var info = JSON.parse(body);
+  //       var obj = {
+  //         values: []
+  //       };
+  //       for (var v in info.values) {
+  //         obj.values[v] = {
+  //           value: info.values[v].value,
+  //           text: info.values[v].text,
+  //           name: info.values[v].name
+  //         };
+  //       }
+  //       $(".ui.dropdown.search_list_1").dropdown("refresh");
+  //       $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
+  //     }
+  //   }
+  // );
+}
 
-// 連 Server 得到 Data 版
-// function collectionOfCourse() {
-//   request(
-//     {
-//       url: "http://127.0.0.1:5000/api/collectionOfCourse"
-//     },
-//     function(err, response, body) {
-//       if (!err && response.statusCode == 200) {
-//         var info = JSON.parse(body);
-//         var obj = {
-//           values: []
-//         };
-//         for (var v in info.values) {
-//           obj.values[v] = {
-//             value: info.values[v].value,
-//             text: info.values[v].text,
-//             name: info.values[v].name
-//           };
-//         }
-
-//         $(".ui.dropdown.search_list_1").dropdown("refresh");
-//         $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
-//       }
-//     }
-//   );
-// }
+export { calculateUserGrade, collectionOfCourse, getSimilarities };

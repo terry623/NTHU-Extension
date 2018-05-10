@@ -138,7 +138,7 @@ function getCart(acix) {
         </tr>
     </tbody>`;
 
-  // TODO: 無上課時間的，還沒有加入課表
+  // FIXME: 無上課時間的送到 cart，不會出現在課表上
   chrome.storage.local.get("cart", function(items) {
     var parse_table = $.parseHTML(table);
     for (var key in items.cart) {
@@ -156,15 +156,14 @@ function getCart(acix) {
           $(parse_table)
             .find("." + slice_time[i])
             .append(`<a href="#do_not_jump">` + name[0] + `</a>`)
-            .attr("id", key);
-          //   console.log.apply(console, $(parse_table).find("." + slice_time[i]));
+            .attr("id", key)
+            .attr("course_no", items.cart[key].course_no);
         }
       }
     }
     $("#cart").replaceWith(parse_table);
     $("#cart > tr").on("click", "td", function() {
-      console.log("Click #cart > tr");
-      getCourseInfo(acix, $(this).attr("id"), false);
+      getCourseInfo(acix, $(this).attr("course_no"), $(this).attr("id"), false);
     });
   });
 }
