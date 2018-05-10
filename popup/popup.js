@@ -4,7 +4,6 @@ import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
 import { getCart } from "./cart";
 import { collectionOfCourse } from "./server";
 import { searchByKeyword } from "./search";
-
 var acix;
 
 $(document).ready(function() {
@@ -37,9 +36,7 @@ $(document).ready(function() {
       //  400  停修 log 記錄
       var phaseNo = "100";
       getResultCourse(acix, stu_no, phaseNo, "106", "20");
-
       getCart(acix);
-
       getGrade(acix, stu_no);
       collectionOfCourse();
 
@@ -51,9 +48,8 @@ $(document).ready(function() {
           $("#change_phase").dropdown("hide");
         }
       });
-
       $("#submit").on("click", function() {
-        chrome.storage.sync.get("cart", function(items) {
+        chrome.storage.local.get("cart", function(items) {
           var temp = {};
           var data = {
             course_name: $("#course_name").text(),
@@ -64,9 +60,9 @@ $(document).ready(function() {
             Object.assign(temp, items.cart);
             temp[$("#no").text()] = data;
 
-            chrome.storage.sync.remove("cart", function() {
-              chrome.storage.sync.set({ cart: temp }, function() {
-                chrome.storage.sync.get("cart", function(items) {
+            chrome.storage.local.remove("cart", function() {
+              chrome.storage.local.set({ cart: temp }, function() {
+                chrome.storage.local.get("cart", function(items) {
                   // console.log(items);
                   getCart(acix);
                 });
@@ -74,8 +70,8 @@ $(document).ready(function() {
             });
           } else {
             temp[$("#no").text()] = data;
-            chrome.storage.sync.set({ cart: temp }, function() {
-              chrome.storage.sync.get("cart", function(items) {
+            chrome.storage.local.set({ cart: temp }, function() {
+              chrome.storage.local.get("cart", function(items) {
                 // console.log(items);
                 getCart(acix);
               });
@@ -84,7 +80,6 @@ $(document).ready(function() {
         });
         $(".mini.modal").modal("show");
       });
-
       // TODO: Add Loader
       $(".clicktosearch").on("click", function() {
         searchByKeyword(acix, $("#keyword").val());
@@ -96,7 +91,7 @@ $(document).ready(function() {
   );
 });
 
-chrome.storage.sync.clear(function() {
+chrome.storage.local.clear(function() {
   console.log("Clear Storage Data");
 });
 
@@ -158,9 +153,6 @@ $(".course_info.modal").modal({
 });
 // TODO: 將存在 Storage 的課表送去校務資訊系統選課
 $("#cart_submit").on("click", function() {});
-$("#search_result_body > tr").hover(function() {
-  $(this).css("cursor", "pointer");
-});
 $("#search_result_body").on("click", "tr", function() {
   $(this).css("cursor", "pointer");
   var course_from_click = $("td:nth-child(1)", this).text();

@@ -18,6 +18,7 @@ client.ping(
 );
 
 function searchByKeyword(acix, keyword) {
+  $("#search_result_body").empty();
   client
     .search({
       index: "nthu",
@@ -36,10 +37,10 @@ function searchByKeyword(acix, keyword) {
       function(resp) {
         var hits = resp.hits.hits;
         console.log(hits);
+        storeCourseInfo(hits);
         for (var each_course in hits) {
-          // storeCourseInfo(each_course);
-
           var source = hits[each_course]._source;
+
           var time = source.時間;
           if (time == "") time = "無";
           var classroom = source.教室;
@@ -68,8 +69,10 @@ function searchByKeyword(acix, keyword) {
           row += teacher.join("<br>") + `</td></tr>`;
           $("#search_result_body").append($.parseHTML(row));
         }
-
         // FIXME: 寫在函式裡的 jquery，可能被創造好幾次
+        $("#search_result_body > tr").hover(function() {
+          $(this).css("cursor", "pointer");
+        });
       },
       function(err) {
         console.trace(err.message);
@@ -77,36 +80,61 @@ function searchByKeyword(acix, keyword) {
     );
 }
 
-// function storeCourseInfo(each_course) {
-//   chrome.storage.sync.get("course", function(items) {
-//     var temp = {};
-//     var data = {
-//       course_name: $("#course_name").text(),
-//       time: $("#time").text()
-//     };
+function storeCourseInfo(hits, num) {
+  chrome.storage.local.get("course", function(items) {
+    var temp = {};
+    var data = {};
+    for (var each_course in hits) {
+      var each = hits[each_course]._source;
 
-//     if (items.cart != undefined) {
-//       Object.assign(temp, items.cart);
-//       temp[$("#no").text()] = data;
+      //   授課語言: each.授課語言,
+      data[each.科號] = {
+        不可加簽說明: each.不可加簽說明,
+        人限: each.人限,
+        備註: each.備註,
+        學分數: each.學分數,
+        授課語言: each.授課語言,
+        擋修說明: each.擋修說明,
+        新生保留人數: each.新生保留人數,
+        科號: each.科號,
+        課程中文名稱: each.課程中文名稱,
+        課程英文名稱: each.課程英文名稱,
+        課程限制說明: each.課程限制說明,
+        通識對象: each.通識對象,
+        通識類別: each.通識類別,
+        開課代碼: each.開課代碼,
+        教師: each.教師,
+        教室: each.教室,
+        時間: each.時間,
+        學程: each.學程,
+        必選修: each.必選修,
+        第一二專長: each.第一二專長
+      };
+    }
 
-//       chrome.storage.sync.remove("cart", function() {
-//         chrome.storage.sync.set({ cart: temp }, function() {
-//           chrome.storage.sync.get("cart", function(items) {
-//             // console.log(items);
-//             getCart(acix);
-//           });
-//         });
-//       });
-//     } else {
-//       temp[$("#no").text()] = data;
-//       chrome.storage.sync.set({ cart: temp }, function() {
-//         chrome.storage.sync.get("cart", function(items) {
-//           // console.log(items);
-//           getCart(acix);
-//         });
-//       });
-//     }
-//   });
-// }
+    if (items.course != undefined) {
+      Object.assign(temp, items.course);
+      for (var each_data in data) temp[data[each_data].科號] = data[each_data];
+
+      chrome.storage.local.remove("course", function() {
+        chrome.storage.local.set({ course: temp }, function() {
+          chrome.storage.local.get("course", function(items) {
+            console.log("In Storage");
+            console.log(items);
+          });
+        });
+      });
+    } else {
+      for (var each_data in data) temp[data[each_data].科號] = data[each_data];
+
+      chrome.storage.local.set({ course: temp }, function() {
+        chrome.storage.local.get("course", function(items) {
+          console.log("In Storage");
+          console.log(items);
+        });
+      });
+    }
+  });
+}
 
 export { searchByKeyword };

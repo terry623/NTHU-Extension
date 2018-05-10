@@ -197,7 +197,7 @@
                                                 <i class="user outline icon"></i>
                                                 <div class="content">
                                                     <div class="header">人數限制</div>
-                                                    <div id="size_limit" class="info description">
+                                                    <div id="size_limit" class="info description fetch_people">
                                                         Loading
                                                     </div>
                                                 </div>
@@ -206,7 +206,7 @@
                                                 <i class="user outline icon"></i>
                                                 <div class="content">
                                                     <div class="header">選上人數</div>
-                                                    <div id="current_number" class="info description">
+                                                    <div id="current_number" class="info description fetch_people">
                                                         Loading
                                                     </div>
                                                 </div>
@@ -215,7 +215,7 @@
                                                 <i class="user outline icon"></i>
                                                 <div class="content">
                                                     <div class="header">剩餘名額</div>
-                                                    <div id="remain" class="info description">
+                                                    <div id="remain" class="info description fetch_people">
                                                         Loading
                                                     </div>
                                                 </div>
@@ -224,11 +224,107 @@
                                                 <i class="user outline icon"></i>
                                                 <div class="content">
                                                     <div class="header">等待亂數</div>
-                                                    <div id="be_random" class="info description">
+                                                    <div id="be_random" class="info description fetch_people">
                                                         Loading
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="item">
+                                                <i class="user outline icon"></i>
+                                                <div class="content">
+                                                    <div class="header">新生保留</div>
+                                                    <div id="fresh_num" class="info description fetch_people">
+                                                        Loading
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="title">
+                                <i class="dropdown icon"></i>
+                                修課限制
+                            </div>
+                            <div class="content">
+                                <div class="ui equal width grid">
+                                    <div class="column">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="map marker alternate icon"></i>
+                                                <div class="content">
+                                                    <div class="header">課程規定</div>
+                                                    <div id="limit_rule" class="info description">Loading</div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <i class="map marker alternate icon"></i>
+                                                <div class="content">
+                                                    <div class="header">擋修說明</div>
+                                                    <div id="block_rule" class="info description">Loading</div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <i class="map marker alternate icon"></i>
+                                                <div class="content">
+                                                    <div class="header">不可加簽</div>
+                                                    <div id="join_limit" class="info description">Loading</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="ui list">
+                                            <div class="item">
+                                                <i class="map marker alternate icon"></i>
+                                                <div class="content">
+                                                    <div class="header">課程備註</div>
+                                                    <div id="ps" class="info description">Loading</div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <i class="map marker alternate icon"></i>
+                                                <div class="content">
+                                                    <div class="header">通識對象</div>
+                                                    <div id="GE_people" class="info description">Loading</div>
+                                                </div>
+                                            </div>
+                                            <div class="item">
+                                                <i class="map marker alternate icon"></i>
+                                                <div class="content">
+                                                    <div class="header">通識類別</div>
+                                                    <div id="GE_type" class="info description">Loading</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="title">
+                                <i class="dropdown icon"></i>
+                                授課對象
+                            </div>
+                            <div class="content">
+                                <div class="ui list">
+                                    <div class="item">
+                                        <i class="map marker alternate icon"></i>
+                                        <div class="content">
+                                            <div class="header">系必選修</div>
+                                            <div id="must_choose" class="info description">Loading</div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <i class="map marker alternate icon"></i>
+                                        <div class="content">
+                                            <div class="header">學分學程</div>
+                                            <div id="program" class="info description">Loading</div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <i class="map marker alternate icon"></i>
+                                        <div class="content">
+                                            <div class="header">專長學程</div>
+                                            <div id="skill" class="info description">Loading</div>
                                         </div>
                                     </div>
                                 </div>
@@ -260,8 +356,8 @@
                     </div>
                 </div>
                 <div class="actions">
-                    <div id="back" class="small ui basic cancel button">Back</div>
-                    <div id="submit" class="small ui teal button">Submit</div>
+                    <div id="back" class="small ui basic cancel button submit-back">Back</div>
+                    <div id="submit" class="small ui teal button submit-back">Submit</div>
                 </div>
             </div>
 

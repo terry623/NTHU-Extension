@@ -138,8 +138,8 @@ function getCart(acix) {
         </tr>
     </tbody>`;
 
-  // TODO: 沒有上課時間的，還沒有加入課表
-  chrome.storage.sync.get("cart", function(items) {
+  // TODO: 無上課時間的，還沒有加入課表
+  chrome.storage.local.get("cart", function(items) {
     var parse_table = $.parseHTML(table);
     for (var key in items.cart) {
       if (items.cart.hasOwnProperty(key)) {
