@@ -3,6 +3,7 @@ var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
 import { calculateUserGrade } from "./server";
+import { searchBySingleCourse } from "./search";
 
 function getUserName(acix) {
   request(
@@ -274,7 +275,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         }
         $("#school_table").append(table.html());
         $("#school_table > tbody > tr").on("click", "td", function() {
-          getCourseInfo(acix, $(this).attr("id"), false);
+          searchBySingleCourse(acix, $(this).attr("id"));
         });
       }
     }

@@ -24,8 +24,6 @@ function searchByKeyword(acix, keyword) {
       index: "nthu",
       type: "course",
       body: {
-        from: 1,
-        size: 10,
         query: {
           match: {
             課程中文名稱: keyword
@@ -80,7 +78,7 @@ function searchByKeyword(acix, keyword) {
     );
 }
 
-function storeCourseInfo(hits, num) {
+function storeCourseInfo(hits, callback) {
   chrome.storage.local.get("course", function(items) {
     var temp = {};
     var data = {};
@@ -119,8 +117,11 @@ function storeCourseInfo(hits, num) {
       chrome.storage.local.remove("course", function() {
         chrome.storage.local.set({ course: temp }, function() {
           chrome.storage.local.get("course", function(items) {
-            console.log("In Storage");
+            console.log("Get Item");
             console.log(items);
+            if (callback && typeof callback === "function") {
+              callback();
+            }
           });
         });
       });
@@ -129,12 +130,44 @@ function storeCourseInfo(hits, num) {
 
       chrome.storage.local.set({ course: temp }, function() {
         chrome.storage.local.get("course", function(items) {
-          console.log("In Storage");
+          console.log("Get Item");
           console.log(items);
+          if (callback && typeof callback === "function") {
+            callback();
+          }
         });
       });
     }
   });
 }
 
-export { searchByKeyword };
+function searchBySingleCourse(acix, course_no) {
+  client
+    .search({
+      index: "nthu",
+      type: "course",
+      body: {
+        query: {
+          match: {
+            科號: course_no
+          }
+        }
+      }
+    })
+    .then(
+      function(resp) {
+        var hits = resp.hits.hits;
+        console.log(hits);
+
+        // TODO: 把全部的 code，能改成 callback 的都要改
+        storeCourseInfo(hits, function() {
+          getCourseInfo(acix, course_no, false);
+        });
+      },
+      function(err) {
+        console.trace(err.message);
+      }
+    );
+}
+
+export { searchByKeyword, searchBySingleCourse };
