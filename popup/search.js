@@ -143,7 +143,7 @@ function storeCourseInfo(hits, callback) {
 }
 
 //FIXME: 要回傳正確 Match 的，目前是回傳多個
-function searchBySingleCourse(acix, course_no) {
+function searchBySingleCourseNo(acix, course_no) {
   client
     .search({
       index: "nthu",
@@ -162,7 +162,7 @@ function searchBySingleCourse(acix, course_no) {
         console.log("searchBySingleCourse");
         console.log(hits);
 
-        // TODO: 把全部的 code，能改成 callback 的都要改
+        // TODO: 全部的 code 能改成 callback 的都要改
         storeCourseInfo(hits, function() {
           getCourseInfo(acix, course_no, hits[0]._id, false);
         });
@@ -173,4 +173,4 @@ function searchBySingleCourse(acix, course_no) {
     );
 }
 
-export { searchByKeyword, searchBySingleCourse };
+export { searchByKeyword, searchBySingleCourseNo };

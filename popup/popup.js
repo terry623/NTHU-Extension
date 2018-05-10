@@ -49,14 +49,14 @@ $(document).ready(function() {
       });
       $("#submit").on("click", function() {
         chrome.storage.local.get("cart", function(items) {
-          var get_course_id = $(".ui.piled.segment").attr("id")
+          var get_course_id = $(".ui.piled.segment").attr("id");
           var temp = {};
           var data = {
             course_no: $("#no").text(),
             course_name: $("#course_name").text(),
             time: $("#time").text()
           };
-          
+
           if (items.cart != undefined) {
             Object.assign(temp, items.cart);
             temp[get_course_id] = data;

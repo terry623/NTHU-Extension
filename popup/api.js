@@ -3,7 +3,7 @@ var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
 import { calculateUserGrade, getSimilarities } from "./server";
-import { searchBySingleCourse } from "./search";
+import { searchBySingleCourseNo } from "./search";
 
 function getUserName(acix) {
   request(
@@ -111,8 +111,22 @@ function getCourseInfo(acix, course_no, id, showButton) {
           getCourseInfo(acix, output, id, showButton);
         } else {
           chrome.storage.local.get("course", function(items) {
-            getSimilarities(course_no, function() {
+            getSimilarities(id, function(info) {
               // TODO: 把類似課程的結果貼上去
+              console.log(info);
+              $("#similar").empty();
+
+              for (var each in info) {
+                var similar_course =
+                  `<div class="title">
+                    <i class="dropdown icon"></i>` +
+                  info[each].c_id +
+                  `</div>
+                <div class="content">` +
+                  info[each].percent +
+                  `</div>`;
+                $("#similar").append($.parseHTML(similar_course));
+              }
             });
 
             var info = items.course[id];
@@ -281,7 +295,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term) {
         }
         $("#school_table").append(table.html());
         $("#school_table > tbody > tr").on("click", "td", function() {
-          searchBySingleCourse(acix, $(this).attr("course_name"));
+          searchBySingleCourseNo(acix, $(this).attr("course_name"));
         });
       }
     }
