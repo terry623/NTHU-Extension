@@ -1,9 +1,11 @@
 // TODO: 這些函式都要進行 Error 處理，包括 Session 及 錯誤科目
+// FIXME: 資料更新時，要把舊的全都清掉，不然有時候新資料是 null，會新舊交雜
 var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
 import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourseNo } from "./search";
+import { courseAddSpace } from "./helper";
 
 function getUserName(acix, callback) {
   request(
@@ -104,13 +106,9 @@ function getCourseInfo(acix, course_no, id, showButton, callback) {
             .text()
             .indexOf("錯誤的科目") >= 0
         ) {
-          var myRe = /[0-9]+[A-Za-z]+/g;
-          var myArray = myRe.exec(course_no);
-          var output = [
-            course_no.slice(0, myRe.lastIndex),
-            course_no.slice(myRe.lastIndex)
-          ].join(" ");
-          getCourseInfo(acix, output, id, showButton, function() {
+          alert("錯誤科號 ! " + course_no);
+          var new_course_no = courseAddSpace(course_no);
+          getCourseInfo(acix, new_course_no, id, showButton, function() {
             $("#course_info_loading").removeClass("active");
           });
         } else {

@@ -10,4 +10,14 @@ function getUrlVars(url) {
   return vars;
 }
 
-export { getUrlVars };
+function courseAddSpace(course_no) {
+  var myRe = /[0-9]+[A-Za-z]+/g;
+  var myArray = myRe.exec(course_no);
+  var output = [
+    course_no.slice(0, myRe.lastIndex),
+    course_no.slice(myRe.lastIndex)
+  ].join(" ");
+  return output;
+}
+
+export { getUrlVars, courseAddSpace };
