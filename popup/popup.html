@@ -62,35 +62,66 @@
             我們推薦了幾樣課程給你
         </div>
         <div class="content_item searchPage">
-            <div id="search_entry">
-                <div class="ui fluid icon input">
-                    <i class="search icon"></i>
-                    <input id="keyword" placeholder="中文課名 / 英文課名 / 老師名稱" type="text">
-                </div>
-                <br/>
-
-                <div class="ui fluid search selection dropdown search_list_1 ">
-                    <input name="c_name" type="hidden">
-                    <i class="dropdown icon"></i>
-                    <div class="default text">開課代號 / 專長 / 學程</div>
-                    <div class="menu">
+            <div class="ui two column centered grid">
+                <div class="column">
+                    <div id="search_entry">
+                        <!-- TODO: 一開始只出現搜尋頁，再根據選擇，跳出不同進階選項 -->
+                        <div id="search_entry_first" class="ui fluid right action left icon input search_entry_item">
+                            <i class="small search icon"></i>
+                            <input id="keyword" placeholder="主要輸入" type="text">
+                            <div id="course_type_menu" class="ui small menu">
+                                <a class="course_type browse item">
+                                    Topic
+                                    <i class="dropdown icon"></i>
+                                </a>
+                            </div>
+                            <div id="course_type_popup" class="ui fluid course_type popup transition hidden">
+                                <div class="ui four column relaxed equal height divided grid">
+                                    <div class="column">
+                                        <h4 class="ui header">基本</h4>
+                                        <div class="ui link list">
+                                            <a class="item">課名</a>
+                                            <a class="item">科號</a>
+                                            <a class="item">教師</a>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <h4 class="ui header">進階</h4>
+                                        <div class="ui link list">
+                                            <a class="item">時間</a>
+                                            <a class="item">地點</a>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <h4 class="ui header">通識</h4>
+                                        <div class="ui link list">
+                                            <a class="item">對象</a>
+                                            <a class="item">類別</a>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <h4 class="ui header">補充</h4>
+                                        <div class="ui link list">
+                                            <a class="item">必選修</a>
+                                            <a class="item">學程</a>
+                                            <a class="item">專長</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui fluid search selection dropdown search_list_1 search_entry_item">
+                            <input name="c_name" type="hidden">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">進階輸入</div>
+                            <div class="menu">
+                            </div>
+                        </div>
+                        <div class="ui right floated teal button clicktosearch search_entry_item">Search</div>
                     </div>
                 </div>
-                <br/>
-
-                <div class="ui fluid search selection dropdown search_list_2">
-                    <input name="c_direction" type="hidden">
-                    <i class="dropdown icon"></i>
-                    <div class="default text">必選修 / 向度</div>
-                    <div class="menu">
-                    </div>
-                </div>
-                <br/>
-
-                <div class="ui right floated teal button clicktosearch">Search</div>
-                <br/>
-
             </div>
+
             <div id="search_result_page" class="ui segment" style="display:none;">
                 <h3 class="ui header">搜尋結果
                     <div id="left_pointing" class="ui small horizontal teal left pointing basic label">

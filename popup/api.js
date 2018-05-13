@@ -121,10 +121,10 @@ function getCourseInfo(acix, course_no, id, showButton, callback) {
                 var similar_course =
                   `<div class="title">
                     <i class="dropdown icon"></i>` +
-                  info[each].c_id +
+                  info[each].sim.other +
                   `</div>
                 <div class="content">` +
-                  info[each].percent +
+                  info[each].sim.percent +
                   `</div>`;
                 $("#similar").append($.parseHTML(similar_course));
               }

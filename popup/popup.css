@@ -31,3 +31,21 @@ body::-webkit-scrollbar {
 .info.description {
   margin-top: 3px;
 }
+
+#search_entry {
+  margin-top: 70px;
+}
+
+.search_entry_item {
+  margin-top: 20px !important;
+}
+
+#course_type_menu {
+  margin: 0px;
+  right: 10px !important;
+}
+
+#course_type_popup {
+  margin: -1px;
+  top: 50px !important;
+}

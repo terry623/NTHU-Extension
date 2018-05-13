@@ -23,6 +23,7 @@ $(document).ready(function() {
       // const course_no_file = "10620CS  342300";
       // const course_have_file = "10620CS  340400";
 
+      // TODO: 偵測 Session 過期了就要丟提醒
       //  選課紀錄
       //  100  第 1 次選課 log 記錄
       //  100P 第 1 次選課亂數結果
@@ -103,6 +104,11 @@ chrome.storage.local.clear(function() {
   console.log("Clear Storage Data");
 });
 
+$(".course_type.browse").popup({
+  popup: $(".ui.course_type.popup"),
+  position: "bottom right",
+  on: "click"
+});
 $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
 $("#change_school_table").on("click", ".item", function() {
