@@ -18,12 +18,16 @@
     <div id="course_info_loading" class="ui inverted dimmer">
         <div class="ui loader"></div>
     </div>
+    <div id="home_loading" class="ui inverted dimmer">
+        <div class="ui loader"></div>
+    </div>
     <div id="search_loading" class="ui inverted dimmer">
         <div class="ui loader"></div>
     </div>
     <div id="course_result_loading" class="ui inverted dimmer">
         <div class="ui loader"></div>
     </div>
+
     <div class="main">
         <h3>NTHU Course</h3>
         <div id="sidebar" class="ui pointing menu">
@@ -42,7 +46,7 @@
             <div id="search_bar" class="right menu" style="display:none;">
                 <div class="item searchPage notActive">
                     <div class="ui transparent icon input">
-                        <input placeholder="Search..." type="text">
+                        <input id="search_result_rightbar" placeholder="Search..." type="text">
                         <i class="search link icon clicktosearch"></i>
                     </div>
                 </div>
@@ -61,16 +65,16 @@
         <div id="user" class="content_item homePage">
             我們推薦了幾樣課程給你
         </div>
+
         <div class="content_item searchPage">
             <div class="ui two column centered grid">
                 <div class="column">
                     <div id="search_entry">
-                        <!-- TODO: 一開始只出現搜尋頁，再根據選擇，跳出不同進階選項 -->
                         <div id="search_entry_first" class="ui fluid right action left icon input search_entry_item">
                             <i class="small search icon"></i>
                             <input id="keyword" placeholder="主要輸入" type="text">
                             <div id="course_type_menu" class="ui small menu">
-                                <a class="course_type browse item">
+                                <a id="topic_name" class="course_type browse item">
                                     Topic
                                     <i class="dropdown icon"></i>
                                 </a>
@@ -102,7 +106,7 @@
                                     <div class="column">
                                         <h4 class="ui header">補充</h4>
                                         <div class="ui link list">
-                                            <a class="item">必選修</a>
+                                            <a class="item">科系</a>
                                             <a class="item">學程</a>
                                             <a class="item">專長</a>
                                         </div>
@@ -113,7 +117,7 @@
                         <div class="ui fluid search selection dropdown search_list_1 search_entry_item">
                             <input name="c_name" type="hidden">
                             <i class="dropdown icon"></i>
-                            <div class="default text">進階輸入</div>
+                            <div class="default text">額外輸入</div>
                             <div class="menu">
                             </div>
                         </div>
@@ -121,7 +125,28 @@
                     </div>
                 </div>
             </div>
-
+            <div id="search_alert_empty" class="ui mini modal">
+                <div class="header">
+                    你什麼都沒輸入
+                </div>
+                <div class="content">
+                    <p>可以 . . .</p>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">Close</div>
+                </div>
+            </div>
+            <div id="search_alert_topic" class="ui mini modal">
+                <div class="header">
+                    你沒有選擇主題
+                </div>
+                <div class="content">
+                    <p>可以 . . .</p>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">Close</div>
+                </div>
+            </div>
             <div id="search_result_page" class="ui segment" style="display:none;">
                 <h3 class="ui header">搜尋結果
                     <div id="left_pointing" class="ui small horizontal teal left pointing basic label">
@@ -161,7 +186,7 @@
                 <div class="actions">
                 </div>
             </div>
-            <div class="ui mini modal">
+            <div id="submit_to_list" class="ui mini modal">
                 <div class="header">
                     成功送出至清單 !
                 </div>
@@ -173,7 +198,6 @@
                     <div class="small ui basic cancel button">Close</div>
                 </div>
             </div>
-
             <div class="ui fullscreen course_info modal">
                 <i class="close icon"></i>
                 <div class="header">
@@ -404,7 +428,6 @@
                     <div id="submit" class="small ui teal button submit-back">Submit</div>
                 </div>
             </div>
-
         </div>
 
         <div class="content_item choosePage">
@@ -474,7 +497,7 @@
                 <tfoot class="full-width">
                     <tr>
                         <th colspan="6">
-                            <button id="cart_submit" style="display:none;" class="small ui right floated teal button">
+                            <button id="cart_submit" style="display:none;" class="ui right floated teal small button">
                                 Send
                             </button>
                         </th>

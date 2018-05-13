@@ -1,4 +1,5 @@
 import { getCourseInfo } from "./api";
+import { translateTopic } from "./helper";
 var elasticsearch = require("elasticsearch");
 var client = new elasticsearch.Client({
   host: "http://localhost:9200"
@@ -17,10 +18,10 @@ client.ping(
   }
 );
 
-function searchByKeyword(acix, keyword, callback) {
+function searchByKeyword(acix, keyword, topic, callback) {
   $("#search_result_body").empty();
   $("#search_loading").addClass("active");
-
+  var search_topic = translateTopic(topic);
   client
     .search({
       index: "nthu",
@@ -28,7 +29,7 @@ function searchByKeyword(acix, keyword, callback) {
       body: {
         query: {
           match: {
-            課程中文名稱: keyword
+            [search_topic]: keyword
           }
         }
       }
@@ -72,6 +73,8 @@ function searchByKeyword(acix, keyword, callback) {
           teacher.splice(-1, 1);
           row += teacher.join("<br>") + `</td></tr>`;
           $("#search_result_body").append($.parseHTML(row));
+          console.log(topic);
+          $("#search_result_rightbar").attr("placeholder", topic);
         }
         callback();
 

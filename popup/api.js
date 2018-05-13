@@ -8,6 +8,7 @@ import { searchBySingleCourseNo } from "./search";
 import { courseAddSpace } from "./helper";
 
 function getUserName(acix, callback) {
+  $("#home_loading").addClass("active");
   request(
     {
       url:
@@ -106,6 +107,7 @@ function getCourseInfo(acix, course_no, id, showButton, callback) {
             .text()
             .indexOf("錯誤的科目") >= 0
         ) {
+          // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。
           alert("錯誤科號 ! " + course_no);
           var new_course_no = courseAddSpace(course_no);
           getCourseInfo(acix, new_course_no, id, showButton, function() {
@@ -231,7 +233,7 @@ function match_name_course(table2, con) {
 }
 
 function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
-  $("#course_result_loading").addClass("active");
+  if (callback) $("#course_result_loading").addClass("active");
   request.post(
     {
       url:
@@ -297,7 +299,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
         $("#school_table > tbody > tr").on("click", "td", function() {
           searchBySingleCourseNo(acix, $(this).attr("course_name"));
         });
-        callback();
+        if (callback) callback();
       }
     }
   );

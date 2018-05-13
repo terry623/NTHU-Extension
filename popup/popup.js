@@ -1,116 +1,111 @@
 window._crypto = null;
-import { getUrlVars } from "./helper";
+import { getUrlVars, getCurrentPhase } from "./helper";
 import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
 import { getCart } from "./cart";
 import { collectionOfCourse } from "./server";
 import { searchByKeyword } from "./search";
-var acix;
-
-$(document).ready(function() {
-  // FIXME: 有時候不知道為什麼，沒有一開始全部 Hide 起來
-  $(".content_item").hide();
-
-  chrome.tabs.query(
-    { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
-    function(tabs) {
-      acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
-      var stu_no = getUrlVars(tabs[0].url)["hint"];
-      getUserName(acix, function() {
-        $(".content_item.homePage").show();
-      });
-
-      // FIXME: 科目空白數很不固定，0 ~ 2 個都有，而且不是全站統一。
-      // const course_no_file = "10620CS  342300";
-      // const course_have_file = "10620CS  340400";
-
-      // TODO: 偵測 Session 過期了就要丟提醒
-      //  選課紀錄
-      //  100  第 1 次選課 log 記錄
-      //  100P 第 1 次選課亂數結果
-      //  101  第 2 次選課 log 記錄
-      //  101P 第 2 次選課結束(已亂數處理)
-      //  200  第 3 次選課 log 記錄
-      //  200P 第 3 次選課結束(已亂數處理)
-      //  200S 加退選開始前(含擋修、衝堂)
-      //  300  加退選 log 記錄
-      //  300P 加退選結束(已處理)
-      //  400  停修 log 記錄
-      var phaseNo = "100";
-      getResultCourse(acix, stu_no, phaseNo, "106", "20", function() {
-        $("#course_result_loading").removeClass("active");
-      });
-      getCart(acix);
-      getGrade(acix, stu_no);
-      collectionOfCourse();
-
-      $("#change_phase").dropdown({
-        on: "click",
-        action: function(text, value, element) {
-          getResultCourse(acix, stu_no, value, "106", "20", function() {
-            $("#course_result_loading").removeClass("active");
-          });
-          $("#change_phase").dropdown("set text", text);
-          $("#change_phase").dropdown("hide");
-        }
-      });
-      $("#submit").on("click", function() {
-        chrome.storage.local.get("cart", function(items) {
-          var get_course_id = $(".ui.piled.segment").attr("id");
-          var temp = {};
-          var data = {
-            course_no: $("#no").text(),
-            course_name: $("#course_name").text(),
-            time: $("#time").text()
-          };
-
-          if (items.cart != undefined) {
-            Object.assign(temp, items.cart);
-            temp[get_course_id] = data;
-
-            chrome.storage.local.remove("cart", function() {
-              chrome.storage.local.set({ cart: temp }, function() {
-                chrome.storage.local.get("cart", function(items) {
-                  console.log(items);
-                  getCart(acix);
-                });
-              });
-            });
-          } else {
-            temp[get_course_id] = data;
-            chrome.storage.local.set({ cart: temp }, function() {
-              chrome.storage.local.get("cart", function(items) {
-                console.log(items);
-                getCart(acix);
-              });
-            });
-          }
-        });
-        $(".mini.modal").modal("show");
-      });
-      // TODO: 加搜尋不同類別
-      $(".clicktosearch").on("click", function() {
-        searchByKeyword(acix, $("#keyword").val(), function() {
-          $("#search_loading").removeClass("active");
-          $("#search_entry").hide();
-          $("#search_bar").show();
-          $("#search_result_page").show();
-        });
-      });
-    }
-  );
-});
+var acix, stu_no;
+const year = "106";
+const semester = "20";
 
 chrome.storage.local.clear(function() {
   console.log("Clear Storage Data");
 });
 
+// TODO: 偵測 Session 過期了就要丟提醒
+$(document).ready(function() {
+  $(".content_item").hide();
+  chrome.tabs.query(
+    { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
+    function(tabs) {
+      acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
+      stu_no = getUrlVars(tabs[0].url)["hint"];
+      getUserName(acix, function() {
+        $("#home_loading").removeClass("active");
+        $(".content_item.homePage").show();
+        getResultCourse(acix, stu_no, getCurrentPhase(), year, semester);
+        getCart(acix);
+        getGrade(acix, stu_no);
+        collectionOfCourse();
+      });
+    }
+  );
+});
+$(".ui.accordion").accordion();
+$(".ui.dropdown").dropdown();
 $(".course_type.browse").popup({
   popup: $(".ui.course_type.popup"),
   position: "bottom right",
   on: "click"
 });
-$(".ui.accordion").accordion();
-$(".ui.dropdown").dropdown();
+$("#submit").on("click", function() {
+  chrome.storage.local.get("cart", function(items) {
+    var get_course_id = $(".ui.piled.segment").attr("id");
+    var temp = {};
+    var data = {
+      course_no: $("#no").text(),
+      course_name: $("#course_name").text(),
+      time: $("#time").text()
+    };
+
+    if (items.cart != undefined) {
+      Object.assign(temp, items.cart);
+      temp[get_course_id] = data;
+
+      chrome.storage.local.remove("cart", function() {
+        chrome.storage.local.set({ cart: temp }, function() {
+          chrome.storage.local.get("cart", function(items) {
+            console.log(items);
+            getCart(acix);
+          });
+        });
+      });
+    } else {
+      temp[get_course_id] = data;
+      chrome.storage.local.set({ cart: temp }, function() {
+        chrome.storage.local.get("cart", function(items) {
+          console.log(items);
+          getCart(acix);
+        });
+      });
+    }
+  });
+  $("#submit_to_list").modal("show");
+});
+$("#search_result_body").on("click", "tr", function() {
+  $(this).css("cursor", "pointer");
+  var course_from_click = $("td:nth-child(1)", this).text();
+  var course_id = $(this).attr("id");
+  getCourseInfo(acix, course_from_click, course_id, true, function() {
+    $("#course_info_loading").removeClass("active");
+  });
+});
+$(".clicktosearch").on("click", function() {
+  var topic = $("#topic_name").text();
+  var keyword = $("#keyword").val();
+  if ($("#keyword").val() == "") {
+    $("#search_alert_empty").modal("show");
+  } else if (topic.includes("Topic")) {
+    $("#search_alert_topic").modal("show");
+  } else {
+    searchByKeyword(acix, keyword, topic, function() {
+      $("#search_loading").removeClass("active");
+      $("#search_entry").hide();
+      $("#search_bar").show();
+      $("#search_result_page").show();
+    });
+  }
+});
+$("#change_phase").dropdown({
+  on: "click",
+  action: function(text, value, element) {
+    getResultCourse(acix, stu_no, value, "106", "20", function() {
+      $("#course_result_loading").removeClass("active");
+    });
+    $("#change_phase").dropdown("set text", text);
+    $("#change_phase").dropdown("hide");
+  }
+});
 $("#change_school_table").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown")) {
     var t = $(".ui.compact.table");
@@ -160,12 +155,10 @@ $(".ui.mini.modal").modal({
 $(".course_info.modal").modal({
   inverted: true
 });
-$("#search_result_body").on("click", "tr", function() {
-  $(this).css("cursor", "pointer");
-  var course_from_click = $("td:nth-child(1)", this).text();
-  var course_id = $(this).attr("id");
-  getCourseInfo(acix, course_from_click, course_id, true, function() {
-    $("#course_info_loading").removeClass("active");
-  });
+$(".ui.course_type.popup").on("click", ".item", function() {
+  $("#topic_name").html($(this).text() + `<i class="dropdown icon"></i>`);
+  $(".ui.course_type.popup").popup("hide all");
 });
-$("#cart_submit").on("click", function() {});
+$("#cart_submit").on("click", function() {
+  alert("Send cart to school !");
+});
