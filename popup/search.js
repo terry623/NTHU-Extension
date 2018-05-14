@@ -18,6 +18,7 @@ client.ping(
   }
 );
 
+// TODO: 要可以搜尋課程大綱
 function searchByKeyword(acix, keyword, topic, callback) {
   $("#search_result_body").empty();
   $("#search_loading").addClass("active");
@@ -27,6 +28,7 @@ function searchByKeyword(acix, keyword, topic, callback) {
       index: "nthu",
       type: "course",
       body: {
+        size: 50,
         query: {
           match: {
             [search_topic]: keyword
@@ -73,7 +75,11 @@ function searchByKeyword(acix, keyword, topic, callback) {
           teacher.splice(-1, 1);
           row += teacher.join("<br>") + `</td></tr>`;
           $("#search_result_body").append($.parseHTML(row));
-          console.log(topic);
+          $("#search_result_body > tr")
+            .filter(function(index) {
+              return index >= 10;
+            })
+            .hide();
           $("#search_result_rightbar").attr("placeholder", topic);
         }
         callback();

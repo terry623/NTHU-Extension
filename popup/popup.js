@@ -4,9 +4,9 @@ import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
 import { getCart } from "./cart";
 import { collectionOfCourse } from "./server";
 import { searchByKeyword } from "./search";
-var acix, stu_no;
 const year = "106";
 const semester = "20";
+var acix, stu_no;
 
 chrome.storage.local.clear(function() {
   console.log("Clear Storage Data");
@@ -95,6 +95,19 @@ $(".clicktosearch").on("click", function() {
       $("#search_result_page").show();
     });
   }
+});
+$("#search_page_change").on("click", ".page.item", function() {
+  $(this)
+    .addClass("active")
+    .siblings(".item")
+    .removeClass("active");
+  var start = (parseInt($(this).text()) - 1) * 10;
+  $("#search_result_body > tr")
+    .show()
+    .filter(function(index) {
+      return index < start || index >= start + 10;
+    })
+    .hide();
 });
 $("#change_phase").dropdown({
   on: "click",
