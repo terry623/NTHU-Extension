@@ -74,7 +74,7 @@ function searchByKeyword(acix, keyword, topic, callback) {
             teacher.push(source.教師[each_teacher].split("\t")[0]);
           teacher.splice(-1, 1);
           row += teacher.join("<br>") + `</td></tr>`;
-          $("#search_result_body").append($.parseHTML(row));
+          $("#search_result_body").append(row);
           $("#search_result_body > tr")
             .filter(function(index) {
               return index >= 10;

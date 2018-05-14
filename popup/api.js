@@ -25,7 +25,7 @@ function getUserName(acix, callback) {
           "div > form > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(4)",
           temp
         );
-        var welcome = "<div>Hi~ " + found.text() + " !</div>";
+        var welcome = "你今天選課了嗎，" + found.text() +" ?";
         $("#user").prepend(welcome);
         callback();
       }
@@ -128,7 +128,7 @@ function getCourseInfo(acix, course_no, id, showButton, callback) {
                 <div class="content">` +
                   info[each].sim.percent +
                   `</div>`;
-                $("#similar").append($.parseHTML(similar_course));
+                $("#similar").append(similar_course);
               }
             });
 

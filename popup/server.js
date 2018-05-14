@@ -63,4 +63,128 @@ function getSimilarities(course_id, callback) {
   );
 }
 
-export { calculateUserGrade, collectionOfCourse, getSimilarities };
+function getNewsFromServer(callback) {
+  request(
+    {
+      url: "http://127.0.0.1:5000/api/getNewsFromServer"
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var info = JSON.parse(body);
+        $("#news").empty();
+        $("#news").append(`<h4 class="header">News</h4>`);
+
+        for (var each in info) {
+          var news =
+            `<div class="comment">
+                <a class="avatar">
+                    <img src="../static/joe.jpg">
+                </a>
+                <div class="content">
+                    <a class="author">NTHU</a>
+                    <div class="metadata">
+                        <span class="date">` +
+            info[each].time +
+            `</span>
+                    </div>
+                    <div class="text">` +
+            info[each].message +
+            `</div>
+                </div>
+              </div>`;
+          $("#news").append(news);
+        }
+        callback();
+      }
+    }
+  );
+}
+
+function getCurrentPhase(callback) {
+  request(
+    {
+      url: "http://127.0.0.1:5000/api/getCurrentPhase"
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var info = JSON.parse(body);
+        var phase = parseInt(info.currentPhase);
+        $("#change_phase")
+          .find(".item")
+          .filter(function(index) {
+            return index > phase;
+          })
+          .addClass("disabled");
+
+        //  選課紀錄
+        //  000  第 1 次選課
+        //  100  第 1 次選課 log 記錄
+        //  100P 第 1 次選課亂數結果
+
+        /// 000  第 2 次選課
+        //  101  第 2 次選課 log 記錄
+        //  101P 第 2 次選課結束(已亂數處理)
+
+        //  000  第 3 次選課
+        //  200  第 3 次選課 log 記錄
+        //  200P 第 3 次選課結束(已亂數處理)
+
+        //  200S 加退選開始前(含擋修、衝堂)
+        //  300  加退選 log 記錄
+        //  300P 加退選結束(已處理)
+        //  400  停修 log 記錄
+        var tran_phase;
+        var default_text;
+        switch (phase) {
+          case 1:
+            tran_phase = "100";
+            default_text = "第 1 次選課 log 記錄";
+            break;
+          case 2:
+            tran_phase = "100P";
+            default_text = "第 1 次選課亂數結果";
+            break;
+          case 4:
+            tran_phase = "101";
+            default_text = "第 2 次選課 log 記錄";
+            break;
+          case 5:
+            tran_phase = "101P";
+            default_text = "第 2 次選課 log 記錄";
+            break;
+          case 7:
+            tran_phase = "200";
+            default_text = "第 3 次選課 log 記錄";
+            break;
+          case 8:
+            tran_phase = "200P";
+            default_text = "第 3 次選課結束(已亂數處理)";
+            break;
+          case 9:
+            tran_phase = "200S";
+            default_text = "加退選開始前(含擋修、衝堂)";
+          case 10:
+            tran_phase = "300";
+            default_text = "加退選 log 記錄";
+            break;
+          case 11:
+            tran_phase = "300P";
+            default_text = "加退選結束(已處理)";
+          case 12:
+            tran_phase = "400";
+            default_text = "停修 log 記錄";
+        }
+        $("#change_phase_text").text(default_text);
+        callback(tran_phase);
+      }
+    }
+  );
+}
+
+export {
+  calculateUserGrade,
+  collectionOfCourse,
+  getSimilarities,
+  getNewsFromServer,
+  getCurrentPhase
+};

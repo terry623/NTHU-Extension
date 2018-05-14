@@ -62,68 +62,12 @@
                 </div>
             </div>
         </div>
-        <div id="user" class="content_item homePage">
-            我們推薦了幾樣課程給你
-            <div class="ui comments">
-                <h3 class="header">News</h3>
-                <div class="comment">
-                    <a class="avatar">
-                        <img src="../static/matt.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author">Matt</a>
-                        <div class="metadata">
-                            <span class="date">Today at 5:42PM</span>
-                        </div>
-                        <div class="text">
-                            How artistic!
-                        </div>
-                    </div>
-                </div>
-                <div class="comment">
-                    <a class="avatar">
-                        <img src="../static/elliot.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author">Elliot Fu</a>
-                        <div class="metadata">
-                            <span class="date">Yesterday at 12:30AM</span>
-                        </div>
-                        <div class="text">
-                            <p>This has been very useful for my research. Thanks as well!</p>
-                        </div>
-                    </div>
-                    <div class="comments">
-                        <div class="comment">
-                            <a class="avatar">
-                                <img src="../static/jenny.jpg">
-                            </a>
-                            <div class="content">
-                                <a class="author">Jenny Hess</a>
-                                <div class="metadata">
-                                    <span class="date">Just now</span>
-                                </div>
-                                <div class="text">
-                                    Elliot you are always so right :)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="comment">
-                    <a class="avatar">
-                        <img src="../static/christian.jpg">
-                    </a>
-                    <div class="content">
-                        <a class="author">Joe Henderson</a>
-                        <div class="metadata">
-                            <span class="date">5 days ago</span>
-                        </div>
-                        <div class="text">
-                            Dude, this is awesome. Thanks so much
-                        </div>
-                    </div>
-                </div>
+        <div class="content_item homePage">
+            <h4 id="user" class="ui header">
+            </h4>
+            <p>我們推薦了幾樣課程給你</p>
+            <div id="news" class="ui comments">
+                <h4 class="header">News</h4>
             </div>
         </div>
 
@@ -496,7 +440,7 @@
         <div class="content_item choosePage">
             <table id="school_table" class="ui tab1 compact table">
                 <div id="change_phase" class="ui dropdown">
-                    <div class="text">第 1 次選課 log 記錄</div>
+                    <div id="change_phase_text" class="text"></div>
                     <i class="dropdown icon"></i>
                     <div class="menu">
                         <div class="item">
@@ -524,10 +468,10 @@
                             </div>
                         </div>
                         <div class="divider"></div>
-                        <div class="item" data-value="200S">加退選開始前(含擋修、衝堂)</div>
-                        <div class="item" data-value="300">加退選 log 記錄</div>
-                        <div class="item" data-value="300P">加退選結束(已處理)</div>
-                        <div class="item" data-value="400">停修 log 記錄</div>
+                        <div class="phase item" data-value="200S">加退選開始前(含擋修、衝堂)</div>
+                        <div class="phase item" data-value="300">加退選 log 記錄</div>
+                        <div class="phase item" data-value="300P">加退選結束(已處理)</div>
+                        <div class="phase item" data-value="400">停修 log 記錄</div>
                     </div>
                 </div>
                 <thead>

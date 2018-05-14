@@ -20,22 +20,6 @@ function courseAddSpace(course_no) {
   return output;
 }
 
-function getCurrentPhase() {
-  //  選課紀錄
-  //  100  第 1 次選課 log 記錄
-  //  100P 第 1 次選課亂數結果
-  //  101  第 2 次選課 log 記錄
-  //  101P 第 2 次選課結束(已亂數處理)
-  //  200  第 3 次選課 log 記錄
-  //  200P 第 3 次選課結束(已亂數處理)
-  //  200S 加退選開始前(含擋修、衝堂)
-  //  300  加退選 log 記錄
-  //  300P 加退選結束(已處理)
-  //  400  停修 log 記錄
-  var currentPhase = 100;
-  return currentPhase;
-}
-
 function translateTopic(topic) {
   var result;
   switch (topic) {
@@ -76,4 +60,4 @@ function translateTopic(topic) {
   return result;
 }
 
-export { getUrlVars, courseAddSpace, getCurrentPhase, translateTopic };
+export { getUrlVars, courseAddSpace, translateTopic };

@@ -1,9 +1,14 @@
 window._crypto = null;
-import { getUrlVars, getCurrentPhase } from "./helper";
+import { getUrlVars } from "./helper";
 import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
-import { getCart } from "./cart";
-import { collectionOfCourse } from "./server";
 import { searchByKeyword } from "./search";
+import { getCart } from "./cart";
+import {
+  collectionOfCourse,
+  getNewsFromServer,
+  getCurrentPhase
+} from "./server";
+
 const year = "106";
 const semester = "20";
 var acix, stu_no;
@@ -22,11 +27,15 @@ $(document).ready(function() {
       stu_no = getUrlVars(tabs[0].url)["hint"];
       getUserName(acix, function() {
         $("#home_loading").removeClass("active");
-        $(".content_item.homePage").show();
-        getResultCourse(acix, stu_no, getCurrentPhase(), year, semester);
-        getCart(acix);
-        getGrade(acix, stu_no);
-        collectionOfCourse();
+        getNewsFromServer(function() {
+          $(".content_item.homePage").show();
+          getCurrentPhase(function(phase) {
+            getResultCourse(acix, stu_no, phase, year, semester);
+            getCart(acix);
+            getGrade(acix, stu_no);
+            collectionOfCourse();
+          });
+        });
       });
     }
   );
@@ -102,7 +111,7 @@ $("#search_page_change").on("click", ".page.item", function() {
     .siblings(".item")
     .removeClass("active");
   var start = (parseInt($(this).text()) - 1) * 10;
-  $("#search_result_body > tr")
+  $("#change_phase > tr")
     .show()
     .filter(function(index) {
       return index < start || index >= start + 10;
