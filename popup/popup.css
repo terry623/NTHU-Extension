@@ -53,3 +53,8 @@ body::-webkit-scrollbar {
   margin: -1px;
   top: 50px !important;
 }
+
+#cards_group {
+  margin: 15px;
+  margin-top: 40px;
+}

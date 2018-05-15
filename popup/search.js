@@ -95,7 +95,6 @@ function searchByKeyword(acix, keyword, topic, callback) {
 }
 
 function storeCourseInfo(hits, callback) {
-  // FIXME: 要變成只儲存新的課程
   chrome.storage.local.get("course", function(items) {
     var temp = {};
     var data = {};

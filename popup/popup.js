@@ -112,7 +112,7 @@ $("#search_page_change").on("click", ".page.item", function() {
     .siblings(".item")
     .removeClass("active");
   var start = (parseInt($(this).text()) - 1) * 10;
-  $("#change_phase > tr")
+  $("#search_result_body  > tr")
     .show()
     .filter(function(index) {
       return index < start || index >= start + 10;
@@ -184,4 +184,7 @@ $(".ui.course_type.popup").on("click", ".item", function() {
 });
 $("#cart_submit").on("click", function() {
   alert("Send cart to school !");
+});
+$('.special.cards .image').dimmer({
+  on: 'hover'
 });
