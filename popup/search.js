@@ -95,6 +95,7 @@ function searchByKeyword(acix, keyword, topic, callback) {
 }
 
 function storeCourseInfo(hits, callback) {
+  // FIXME: 要變成只儲存新的課程
   chrome.storage.local.get("course", function(items) {
     var temp = {};
     var data = {};
@@ -128,8 +129,11 @@ function storeCourseInfo(hits, callback) {
 
     if (items.course != undefined) {
       Object.assign(temp, items.course);
-      for (var each_data in data) temp[each_data] = data[each_data];
-
+      for (var each_data in data) {
+        if (!temp.hasOwnProperty(each_data)) {
+          temp[each_data] = data[each_data];
+        }
+      }
       chrome.storage.local.remove("course", function() {
         chrome.storage.local.set({ course: temp }, function() {
           chrome.storage.local.get("course", function(items) {
@@ -140,7 +144,6 @@ function storeCourseInfo(hits, callback) {
       });
     } else {
       for (var each_data in data) temp[each_data] = data[each_data];
-
       chrome.storage.local.set({ course: temp }, function() {
         chrome.storage.local.get("course", function(items) {
           console.log(items);
@@ -167,7 +170,6 @@ function searchBySingleCourseNo(acix, course_no) {
     .then(
       function(resp) {
         var hits = resp.hits.hits;
-        console.log(hits);
 
         storeCourseInfo(hits, function() {
           getCourseInfo(acix, course_no, hits[0]._id, false, function() {

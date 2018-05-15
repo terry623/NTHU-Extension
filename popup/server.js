@@ -1,3 +1,5 @@
+import { Server } from "tls";
+
 var request = require("request");
 
 function calculateUserGrade(stu_no, userGrade) {
