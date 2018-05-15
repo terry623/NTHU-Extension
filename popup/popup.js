@@ -17,7 +17,7 @@ chrome.storage.local.clear(function() {
   console.log("Clear Storage Data");
 });
 
-// TODO: 偵測 Session 過期了就要丟提醒
+// TODO: 要降低送要求到 Server 的次數
 $(document).ready(function() {
   $(".content_item").hide();
   chrome.tabs.query(
@@ -25,11 +25,12 @@ $(document).ready(function() {
     function(tabs) {
       acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
       stu_no = getUrlVars(tabs[0].url)["hint"];
+
       getUserName(acix, function() {
-        $("#home_loading").removeClass("active");
         getNewsFromServer(function() {
           $(".content_item.homePage").show();
           getCurrentPhase(function(phase) {
+            $("#home_loading").removeClass("active");
             getResultCourse(acix, stu_no, phase, year, semester);
             getCart(acix);
             getGrade(acix, stu_no);

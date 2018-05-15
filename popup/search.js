@@ -121,7 +121,8 @@ function storeCourseInfo(hits, callback) {
         時間: source.時間,
         學程: source.學程,
         必選修: source.必選修,
-        第一二專長: source.第一二專長
+        第一二專長: source.第一二專長,
+        相似課程: []
       };
     }
 
