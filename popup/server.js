@@ -68,7 +68,7 @@ function getSimilarities(course_id, callback) {
             temp[course_id].相似課程 = info;
             chrome.storage.local.set({ course: temp }, function() {
               chrome.storage.local.get("course", function(items) {
-                console.log(items);
+                // console.log(items);
               });
             });
             callback(info);

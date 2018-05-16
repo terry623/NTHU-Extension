@@ -41,7 +41,6 @@ function getUserName(acix, callback) {
   );
 }
 
-// FIXME: 通識多了向度，所以抓取人數會跑掉，可以改成對應欄位名字
 function getPopulation(acix, course_no, fresh_num) {
   var patt = /[A-Za-z]+/;
   var target = course_no.match(patt);
@@ -87,10 +86,17 @@ function getPopulation(acix, course_no, fresh_num) {
             return $("td:nth-child(1) > div", this).text() == course_no;
           });
 
-          $("#size_limit").text($("td:nth-child(5) > div", found).text());
-          $("#current_number").text($("td:nth-child(6) > div", found).text());
-          $("#remain").text($("td:nth-child(7) > div", found).text());
-          $("#be_random").text($("td:nth-child(8) > div", found).text());
+          if (target[0] == "GE" || target[0] == "GEC") {
+            $("#size_limit").text($("td:nth-child(6) > div", found).text());
+            $("#current_number").text($("td:nth-child(7) > div", found).text());
+            $("#remain").text($("td:nth-child(8) > div", found).text());
+            $("#be_random").text($("td:nth-child(9) > div", found).text());
+          } else {
+            $("#size_limit").text($("td:nth-child(5) > div", found).text());
+            $("#current_number").text($("td:nth-child(6) > div", found).text());
+            $("#remain").text($("td:nth-child(7) > div", found).text());
+            $("#be_random").text($("td:nth-child(8) > div", found).text());
+          }
           $("#fresh_num").text(fresh_num);
         }
       }

@@ -37,6 +37,8 @@ $(document).ready(function() {
     }
   );
 });
+
+// TODO: 想清楚換頁的時候有什麼東西沒有重置，整個頁面好好檢查
 $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
 $(".course_type.browse").popup({
@@ -61,7 +63,7 @@ $("#submit").on("click", function() {
       chrome.storage.local.remove("cart", function() {
         chrome.storage.local.set({ cart: temp }, function() {
           chrome.storage.local.get("cart", function(items) {
-            console.log(items);
+            // console.log(items);
             getCart(acix);
           });
         });
@@ -70,7 +72,7 @@ $("#submit").on("click", function() {
       temp[get_course_id] = data;
       chrome.storage.local.set({ cart: temp }, function() {
         chrome.storage.local.get("cart", function(items) {
-          console.log(items);
+          // console.log(items);
           getCart(acix);
         });
       });
@@ -88,7 +90,7 @@ $("#delete").on("click", function() {
     chrome.storage.local.remove("cart", function() {
       chrome.storage.local.set({ cart: temp }, function() {
         chrome.storage.local.get("cart", function(items) {
-          console.log(items);
+          // console.log(items);
           getCart(acix);
         });
       });

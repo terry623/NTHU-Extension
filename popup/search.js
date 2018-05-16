@@ -13,7 +13,7 @@ client.ping(
     if (error) {
       console.trace("Elasticsearch cluster is down");
     } else {
-      console.log("Elasticsearch is well");
+      // console.log("Elasticsearch is well");
     }
   }
 );
@@ -136,7 +136,7 @@ function storeCourseInfo(hits, callback) {
       chrome.storage.local.remove("course", function() {
         chrome.storage.local.set({ course: temp }, function() {
           chrome.storage.local.get("course", function(items) {
-            console.log(items);
+            // console.log(items);
             if (callback) callback();
           });
         });
@@ -145,7 +145,7 @@ function storeCourseInfo(hits, callback) {
       for (var each_data in data) temp[each_data] = data[each_data];
       chrome.storage.local.set({ course: temp }, function() {
         chrome.storage.local.get("course", function(items) {
-          console.log(items);
+          // console.log(items);
           if (callback) callback();
         });
       });
