@@ -239,6 +239,7 @@ function match_name_course(table2, con) {
   return re;
 }
 
+// TODO: 課表來源改成從上面表格拿，再去對應時間。而不是直接複製課表
 function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
   if (callback) $("#course_result_loading").addClass("active");
   request.post(
@@ -293,6 +294,9 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
                 .addClass("selectable")
                 .html(`<a href="#do_not_jump">` + $(this).text() + `</a>`);
               var con = $(this).text();
+              console.log(table2);
+              console.log(con);
+
               var course_name = match_name_course(table2, con);
               $(this).attr("course_name", course_name);
             } else {

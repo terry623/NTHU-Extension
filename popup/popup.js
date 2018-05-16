@@ -17,7 +17,7 @@ chrome.storage.local.clear(function() {
   console.log("Clear Storage Data");
 });
 
-// TODO: 要降低送要求到 Server 的次數
+// TODO: 要降低送要求到 Server 的次數，有些一次性的要求，改成在 event.js 執行
 $(document).ready(function() {
   $(".content_item").hide();
   chrome.tabs.query(
@@ -178,6 +178,9 @@ $(".ui.mini.modal").modal({
 $(".course_info.modal").modal({
   inverted: true
 });
+$(".reply_form.modal").modal({
+  inverted: true
+});
 $(".ui.course_type.popup").on("click", ".item", function() {
   $("#topic_name").html($(this).text() + `<i class="dropdown icon"></i>`);
   $(".ui.course_type.popup").popup("hide all");
@@ -185,6 +188,6 @@ $(".ui.course_type.popup").on("click", ".item", function() {
 $("#cart_submit").on("click", function() {
   alert("Send cart to school !");
 });
-$('.special.cards .image').dimmer({
-  on: 'hover'
+$("#reply").on("click", function() {
+  $(".reply_form.modal").modal("show");
 });

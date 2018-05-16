@@ -71,12 +71,35 @@
                 </div>
             </div>
         </div>
+
         <div class="content_item homePage">
             <h4 id="user" class="ui header">
             </h4>
             <p>我們推薦了幾樣課程給你</p>
+            <div id="reply" class="ui teal button">Comment</div>
             <div id="news" class="ui comments">
                 <h4 class="header">News</h4>
+            </div>
+            <div class="ui small reply_form modal">
+                <i class="close icon"></i>
+                <div class="header">
+                    意見回饋
+                    <div id="left_pointing" class="ui small horizontal teal left pointing basic label">
+                        想 說 什 麼 都 可 以 啦
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="ui form">
+                        <div class="field">
+                            <label>Tell us</label>
+                            <textarea></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">Back</div>
+                    <div class="small ui teal button">Send</div>
+                </div>
             </div>
         </div>
 
@@ -251,7 +274,7 @@
                                             <div class="item">
                                                 <i class="map marker alternate icon"></i>
                                                 <div class="content">
-                                                    <div class="header">教師</div>
+                                                    <div class="header">教師</div> ㄒ
                                                     <div id="teacher" class="info description">Loading</div>
                                                 </div>
                                             </div>
@@ -524,18 +547,12 @@
 
         <div class="content_item recommendPage">
             <div id="cards_group" class="ui special cards">
+                <h4 class="ui header">
+                    XX 類別
+                </h4>
+                <!-- TODO: 可以試試用 swiper 展示課程 -->
                 <div class="ui three cards">
-                    <div class="ui raised card">
-                        <div class="blurring dimmable image">
-                            <div class="ui dimmer">
-                                <div class="content">
-                                    <div class="center">
-                                        <div class="ui inverted button">Add Course</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <img src="/static/molly.png">
-                        </div>
+                    <div class="ui raised link card">
                         <div class="content">
                             <div class="header">Molly</div>
                             <div class="meta">
@@ -546,26 +563,13 @@
                             </div>
                         </div>
                         <div class="extra content">
-                            <span class="right floated">
-                                Joined in 2011
-                            </span>
                             <span>
-                                <i class="user icon"></i>
-                                35 Friends
+                                <i class="users icon"></i>
+                                2 Members
                             </span>
                         </div>
                     </div>
-                    <div class="ui raised card">
-                        <div class="blurring dimmable image">
-                            <div class="ui dimmer">
-                                <div class="content">
-                                    <div class="center">
-                                        <div class="ui inverted button">Add Course</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <img src="/static/matthew.png">
-                        </div>
+                    <div class="ui raised link card">
                         <div class="content">
                             <div class="header">Molly</div>
                             <div class="meta">
@@ -576,26 +580,13 @@
                             </div>
                         </div>
                         <div class="extra content">
-                            <span class="right floated">
-                                Joined in 2011
-                            </span>
                             <span>
-                                <i class="user icon"></i>
-                                35 Friends
+                                <i class="users icon"></i>
+                                2 Members
                             </span>
                         </div>
                     </div>
-                    <div class="ui raised card">
-                        <div class="blurring dimmable image">
-                            <div class="ui dimmer">
-                                <div class="content">
-                                    <div class="center">
-                                        <div class="ui inverted button">Add Course</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <img src="/static/elyse.png">
-                        </div>
+                    <div class="ui raised link card">
                         <div class="content">
                             <div class="header">Molly</div>
                             <div class="meta">
@@ -606,12 +597,9 @@
                             </div>
                         </div>
                         <div class="extra content">
-                            <span class="right floated">
-                                Joined in 2011
-                            </span>
                             <span>
-                                <i class="user icon"></i>
-                                35 Friends
+                                <i class="users icon"></i>
+                                2 Members
                             </span>
                         </div>
                     </div>
