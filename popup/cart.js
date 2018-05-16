@@ -38,15 +38,14 @@ function getCart(acix) {
     }
     $("#cart").replaceWith(parse_table);
     $("#cart > tr").on("click", "td", function() {
-      getCourseInfo(
-        acix,
-        $(this).attr("course_no"),
-        $(this).attr("id"),
-        false,
-        function() {
-          $("#course_info_loading").removeClass("active");
-        }
-      );
+      var course_no = $(this).attr("course_no");
+      var id = $(this).attr("id");
+      getCourseInfo(acix, course_no, id, function() {
+        $(".course_action").hide();
+        $("#delete").show();
+        $("#back").show();
+        $("#course_info_loading").removeClass("active");
+      });
     });
   });
 }

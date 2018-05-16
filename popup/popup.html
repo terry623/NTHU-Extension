@@ -190,14 +190,14 @@
                         點 擊 課 程 可 查 看 詳 細 資 訊
                     </div>
                 </h3>
-                <table id="search_result" class="ui selectable table">
+                <table id="search_result" class="ui selectable table" style="height:800px;">
                     <thead>
                         <tr>
-                            <th>科號</th>
-                            <th>科目</th>
-                            <th>時間</th>
-                            <th>地點</th>
-                            <th>教師</th>
+                            <th class="three wide">科號</th>
+                            <th class="five wide">科目</th>
+                            <th class="two wide">時間</th>
+                            <th class="three wide">地點</th>
+                            <th class="three wide">教師</th>
                         </tr>
                     </thead>
                     <tbody id="search_result_body">
@@ -232,6 +232,18 @@
                 <div class="content">
                     <p>注意，要到課表頁面送出</p>
                     <p>校務資訊系統才會真正選到課</p>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">Close</div>
+                </div>
+            </div>
+            <div id="delete_course_msg" class="ui mini modal">
+                <div class="header">
+                    成功刪除此課程 !
+                </div>
+                <div class="content">
+                    <p>還沒想到要說什麼</p>
+                    <p>想清楚再刪課程啦嗚嗚</p>
                 </div>
                 <div class="actions">
                     <div class="small ui basic cancel button">Close</div>
@@ -463,8 +475,9 @@
                     </div>
                 </div>
                 <div class="actions">
-                    <div id="back" class="small ui basic cancel button submit-back">Back</div>
-                    <div id="submit" class="small ui teal button submit-back">Submit</div>
+                    <div id="back" class="small ui basic cancel button course_action">Back</div>
+                    <div id="submit" class="small ui teal button course_action">Submit</div>
+                    <div id="delete" class="small ui red button course_action">Delete</div>
                 </div>
             </div>
         </div>

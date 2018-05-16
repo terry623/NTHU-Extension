@@ -98,7 +98,7 @@ function getPopulation(acix, course_no, fresh_num) {
   );
 }
 
-function getCourseInfo(acix, course_no, id, showButton, callback) {
+function getCourseInfo(acix, course_no, id, callback) {
   if (course_no == undefined) return;
   $("#course_info_loading").addClass("active");
   request(
@@ -215,8 +215,6 @@ function getCourseInfo(acix, course_no, id, showButton, callback) {
             for (var i = 0; i < $("#class_accordion > div").length / 2; i++)
               $(".ui.accordion").accordion("close", i);
 
-            if (showButton == true) $(".submit-back").show();
-            else $(".submit-back").hide();
             $(".course_info.modal").modal("show");
             callback();
           });

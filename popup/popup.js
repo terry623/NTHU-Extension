@@ -13,10 +13,6 @@ const year = "106";
 const semester = "20";
 var acix, stu_no;
 
-chrome.storage.local.clear(function() {
-  console.log("Clear Storage Data");
-});
-
 // TODO: 要降低送要求到 Server 的次數，有些一次性的要求，改成在 event.js 執行
 $(document).ready(function() {
   $(".content_item").hide();
@@ -82,11 +78,32 @@ $("#submit").on("click", function() {
   });
   $("#submit_to_list").modal("show");
 });
+$("#delete").on("click", function() {
+  chrome.storage.local.get("cart", function(items) {
+    var get_course_id = $(".ui.piled.segment").attr("id");
+    var temp = {};
+    Object.assign(temp, items.cart);
+    delete temp[get_course_id];
+
+    chrome.storage.local.remove("cart", function() {
+      chrome.storage.local.set({ cart: temp }, function() {
+        chrome.storage.local.get("cart", function(items) {
+          console.log(items);
+          getCart(acix);
+        });
+      });
+    });
+    $("#delete_course_msg").modal("show");
+  });
+});
 $("#search_result_body").on("click", "tr", function() {
   $(this).css("cursor", "pointer");
   var course_from_click = $("td:nth-child(1)", this).text();
   var course_id = $(this).attr("id");
-  getCourseInfo(acix, course_from_click, course_id, true, function() {
+  getCourseInfo(acix, course_from_click, course_id, function() {
+    $(".course_action").hide();
+    $("#submit").show();
+    $("#back").show();
     $("#course_info_loading").removeClass("active");
   });
 });
@@ -104,6 +121,8 @@ $(".clicktosearch").on("click", function() {
       $("#search_bar").show();
       $("#search_result_page").show();
     });
+    $("#search_page_change > a").removeClass("active");
+    $("#search_page_change > a:nth-child(2)").addClass("active");
   }
 });
 $("#search_page_change").on("click", ".page.item", function() {

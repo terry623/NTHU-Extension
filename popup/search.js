@@ -171,7 +171,8 @@ function searchBySingleCourseNo(acix, course_no) {
         var hits = resp.hits.hits;
 
         storeCourseInfo(hits, function() {
-          getCourseInfo(acix, course_no, hits[0]._id, false, function() {
+          getCourseInfo(acix, course_no, hits[0]._id, function() {
+            $(".course_action").hide();
             $("#course_info_loading").removeClass("active");
           });
         });
