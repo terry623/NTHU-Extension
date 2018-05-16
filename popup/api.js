@@ -4,6 +4,7 @@ var request = require("request");
 import { transform } from "./pdf2html";
 import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourseNo } from "./search";
+import { course_table, removeLongCourseName } from "./helper";
 
 function getUserName(acix, callback) {
   $("#home_loading").addClass("active");
@@ -225,21 +226,6 @@ function getCourseInfo(acix, course_no, id, showButton, callback) {
   );
 }
 
-function match_name_course(table2, con) {
-  var re;
-  $("tbody > tr > td:nth-child(1)", table2).each(function() {
-    var parent = $(this).parent();
-    var str = $("td:nth-child(2)", parent).text();
-    var n = str.includes(con);
-    if (n == true) {
-      re = $("td:nth-child(1)", parent).text();
-      return false;
-    }
-  });
-  return re;
-}
-
-// TODO: 課表來源改成從上面表格拿，再去對應時間。而不是直接複製課表
 function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
   if (callback) $("#course_result_loading").addClass("active");
   request.post(
@@ -268,53 +254,42 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
         ) {
           $("#session_alert").modal("show");
         } else {
-          var table = $("form > table:nth-child(7)", temp);
-          var table2 = $("form > table:nth-child(3)", temp);
-          $("tbody > tr > td:nth-child(7)", table).remove();
-          $("tbody > tr", table).removeClass("word");
-          $(table)
-            .find("td")
-            .removeAttr("width");
-          $("tbody > tr > td > div", table).each(function() {
-            $(this).html(function(index, text) {
-              if ($(this).find("b").length > 0) {
-                var t = $("b:nth-child(2)", this).text();
-                t = t.replace("全民國防教育軍事訓練--", "");
-                $("b:nth-child(2)", this).text(t);
-                return $(this).replaceWith(t);
-              }
-            });
-          });
-          $(table)
-            .find("div")
-            .removeAttr("align");
-          $("tbody > tr > td", table).each(function() {
-            if (!$(this).has("div").length) {
-              $(this)
-                .addClass("selectable")
-                .html(`<a href="#do_not_jump">` + $(this).text() + `</a>`);
-              var con = $(this).text();
-              console.log(table2);
-              console.log(con);
+          var table = $("form > table:nth-child(3)", temp);
 
-              var course_name = match_name_course(table2, con);
-              $(this).attr("course_name", course_name);
-            } else {
-              var text = $("div", this).text();
-              text = text.replace("--", "-");
-              $("div", this).text(text);
+          var parse_table = $.parseHTML(course_table);
+          $(parse_table).attr("id", "course_result_from_nthu");
+
+          $("tbody > tr", table).each(function() {
+            if ($(this).index() > 0) {
+              var course_no = $("td:nth-child(1)", this).text();
+              var course_name = $("td:nth-child(2)", this)
+                .text()
+                .split(/[A-Za-z]+/)[0];
+              course_name = removeLongCourseName(course_name);
+              var time = $("td:nth-child(4)", this).text();
+
+              if (time.length == 1) {
+                $(parse_table)
+                  .find(".none")
+                  .append(`<a href="#do_not_jump">` + course_name + `</a>`)
+                  .attr("course_no", course_no);
+              } else {
+                var slice_time = [];
+                for (var i = 0, j = 0; i < time.length; i = i + 2, j++) {
+                  slice_time[j] = time.slice(i, i + 2);
+                }
+                for (var i = 0; i < slice_time.length; i++) {
+                  $(parse_table)
+                    .find("." + slice_time[i])
+                    .append(`<a href="#do_not_jump">` + course_name + `</a>`)
+                    .attr("course_no", course_no);
+                }
+              }
             }
           });
-
-          $("tbody > tr:nth-child(15) > td:nth-child(1)", table)
-            .html("無上課時間")
-            .removeClass("selectable");
-          $("tbody > tr.class1", table).remove();
-          if ($("#school_table").has("tbody").length)
-            $("#school_table > tbody").remove();
-          $("#school_table").append(table.html());
-          $("#school_table > tbody > tr").on("click", "td", function() {
-            searchBySingleCourseNo(acix, $(this).attr("course_name"));
+          $("#course_result_from_nthu").replaceWith(parse_table);
+          $("#course_result_from_nthu > tr").on("click", "td", function() {
+            searchBySingleCourseNo(acix, $(this).attr("course_no"));
           });
           if (callback) callback();
         }
