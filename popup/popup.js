@@ -1,4 +1,6 @@
 window._crypto = null;
+import { initDrift } from "./drift";
+initDrift();
 import { getUrlVars } from "./helper";
 import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
 import { searchByKeyword } from "./search";
@@ -179,9 +181,16 @@ $(".ui.pointing.menu").on("click", ".item", function() {
     t.show();
     $("#search_bar").hide();
     $("#change_school_table").hide();
+    drift.on("ready", function(api, payload) {
+      api.sidebar.close();
+    });
 
-    if ($(this).hasClass("homePage")) t.not(".homePage").hide();
-    else if ($(this).hasClass("searchPage")) {
+    if ($(this).hasClass("homePage")) {
+      t.not(".homePage").hide();
+      drift.on("ready", function(api, payload) {
+        api.sidebar.open();
+      });
+    } else if ($(this).hasClass("searchPage")) {
       t.not(".searchPage").hide();
       $("#search_bar").hide();
       $("#search_result_page").hide();
