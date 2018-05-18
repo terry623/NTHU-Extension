@@ -5,11 +5,7 @@ import { getUrlVars } from "./helper";
 import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
 import { searchByKeyword } from "./search";
 import { getCart } from "./cart";
-import {
-  collectionOfCourse,
-  getNewsFromServer,
-  getCurrentPhase
-} from "./server";
+import { collectionOfCourse, getCurrentPhase } from "./server";
 
 const year = "106";
 const semester = "20";
@@ -25,15 +21,13 @@ $(document).ready(function() {
       stu_no = getUrlVars(tabs[0].url)["hint"];
 
       getUserName(acix, function() {
-        getNewsFromServer(function() {
-          $(".content_item.homePage").show();
-          getCurrentPhase(function(phase) {
-            $("#home_loading").removeClass("active");
-            getResultCourse(acix, stu_no, phase, year, semester);
-            getCart(acix);
-            getGrade(acix, stu_no);
-            collectionOfCourse();
-          });
+        $(".content_item.homePage").show();
+        getCurrentPhase(function(phase) {
+          $("#home_loading").removeClass("active");
+          getResultCourse(acix, stu_no, phase, year, semester);
+          getCart(acix);
+          getGrade(acix, stu_no);
+          collectionOfCourse();
         });
       });
     }
@@ -170,8 +164,12 @@ $("#change_school_table").on("click", ".item", function() {
     }
   }
 });
-$(".ui.pointing.menu").on("click", ".item", function() {
+$(".ui.secondary.menu").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
+    drift.on("ready", function(api, payload) {
+      api.sidebar.close();
+      api.widget.hide();
+    });
     $(this)
       .addClass("active")
       .siblings(".item")
@@ -181,13 +179,11 @@ $(".ui.pointing.menu").on("click", ".item", function() {
     t.show();
     $("#search_bar").hide();
     $("#change_school_table").hide();
-    drift.on("ready", function(api, payload) {
-      api.sidebar.close();
-    });
 
     if ($(this).hasClass("homePage")) {
       t.not(".homePage").hide();
       drift.on("ready", function(api, payload) {
+        api.widget.show();
         api.sidebar.open();
       });
     } else if ($(this).hasClass("searchPage")) {
@@ -208,16 +204,10 @@ $(".ui.mini.modal").modal({
 $(".course_info.modal").modal({
   inverted: true
 });
-$(".reply_form.modal").modal({
-  inverted: true
-});
 $(".ui.course_type.popup").on("click", ".item", function() {
   $("#topic_name").html($(this).text() + `<i class="dropdown icon"></i>`);
   $(".ui.course_type.popup").popup("hide all");
 });
 $("#cart_submit").on("click", function() {
   alert("Send cart to school !");
-});
-$("#reply").on("click", function() {
-  $(".reply_form.modal").modal("show");
 });

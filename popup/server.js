@@ -79,43 +79,6 @@ function getSimilarities(course_id, callback) {
   });
 }
 
-function getNewsFromServer(callback) {
-  request(
-    {
-      url: "http://127.0.0.1:5000/api/getNewsFromServer"
-    },
-    function(err, response, body) {
-      if (!err && response.statusCode == 200) {
-        var info = JSON.parse(body);
-        $("#news").empty();
-        $("#news").append(`<h4 class="header">News</h4>`);
-
-        for (var each in info) {
-          var news =
-            `<div class="comment">
-                <a class="avatar">
-                    <img src="../static/joe.jpg">
-                </a>
-                <div class="content">
-                    <a class="author">NTHU</a>
-                    <div class="metadata">
-                        <span class="date">` +
-            info[each].time +
-            `</span>
-                    </div>
-                    <div class="text">` +
-            info[each].message +
-            `</div>
-                </div>
-              </div>`;
-          $("#news").append(news);
-        }
-        callback();
-      }
-    }
-  );
-}
-
 function getCurrentPhase(callback) {
   request(
     {
@@ -201,6 +164,5 @@ export {
   calculateUserGrade,
   collectionOfCourse,
   getSimilarities,
-  getNewsFromServer,
   getCurrentPhase
 };

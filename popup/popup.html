@@ -39,7 +39,7 @@
 
     <div class="main">
         <h3>NTHU Course</h3>
-        <div id="sidebar" class="ui pointing menu">
+        <div id="sidebar" class="ui secondary menu">
             <a class="item active homePage">
                 首頁
             </a>
@@ -54,7 +54,7 @@
             </a>
             <div id="search_bar" class="right menu" style="display:none;">
                 <div class="item searchPage notActive">
-                    <div class="ui transparent icon input">
+                    <div class="ui icon input">
                         <input id="search_result_rightbar" placeholder="Search..." type="text">
                         <i class="search link icon clicktosearch"></i>
                     </div>
@@ -73,33 +73,50 @@
         </div>
 
         <div class="content_item homePage">
-            <!-- TODO: 參考 Pinkoi 的首頁設計 -->
             <h4 id="user" class="ui header">
             </h4>
-            <p>我們推薦了幾樣課程給你</p>
-            <div id="reply" class="ui teal button">Comment</div>
-            <div id="news" class="ui comments">
-                <h4 class="header">News</h4>
-            </div>
-            <div class="ui small reply_form modal">
-                <i class="close icon"></i>
-                <div class="header">
-                    意見回饋
-                    <div id="left_pointing" class="ui small horizontal teal left pointing basic label">
-                        想 說 什 麼 都 可 以 啦
-                    </div>
-                </div>
-                <div class="content">
-                    <div class="ui form">
-                        <div class="field">
-                            <label>Tell us</label>
-                            <textarea></textarea>
+            <div id="introduce">
+                <div class="ui very relaxed list">
+                    <div class="item">
+                        <img class="ui avatar image" src="../static/search.png">
+                        <div class="content">
+                            <a class="header">搜尋課程</a>
+                            <div class="description">Last seen watching
+                                <a>
+                                    <b>Arrested Development</b>
+                                </a> just now.</div>
                         </div>
                     </div>
-                </div>
-                <div class="actions">
-                    <div class="small ui basic cancel button">Back</div>
-                    <div class="small ui teal button">Send</div>
+                    <div class="item">
+                        <img class="ui avatar image" src="../static/calendar.png">
+                        <div class="content">
+                            <a class="header">目前選課</a>
+                            <div class="description">Last seen watching
+                                <a>
+                                    <b>Bob's Burgers</b>
+                                </a> 10 hours ago.</div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img class="ui avatar image" src="../static/brainstorm.png">
+                        <div class="content">
+                            <a class="header">推薦課程</a>
+                            <div class="description">Last seen watching
+                                <a>
+                                    <b>The Godfather Part 2</b>
+                                </a> yesterday.</div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img class="ui avatar image" src="../static/chat.png">
+                        <div class="content">
+                            <a class="header">意見回饋</a>
+                            <div class="description">Last seen watching
+                                <a>
+                                    <b>Twin Peaks</b>
+                                </a> 3 days ago.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

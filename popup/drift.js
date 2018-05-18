@@ -51,6 +51,23 @@ function initDrift() {
   drift.on("ready", function(api, payload) {
     api.sidebar.open();
   });
+
+  window.drift.on("startConversation", function(data) {
+    console.log("User started a new conversation " + data.conversationId);
+  });
+
+  window.drift.on("message:sent", function(data) {
+    console.log("User replied to conversation " + data.conversationId);
+  });
+
+  window.drift.on("message", function(data) {
+    console.log(
+      "User received a message from " +
+        data.teamMember.name +
+        " in conversation " +
+        data.conversationId
+    );
+  });
 }
 
 export { initDrift };
