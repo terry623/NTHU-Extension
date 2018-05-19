@@ -58,3 +58,15 @@ body::-webkit-scrollbar {
   margin: 15px;
   margin-top: 40px;
 }
+
+.article.description {
+  margin-top: 3px;
+}
+
+#user {
+  margin-top: 25px;
+}
+
+#introduce {
+  margin-top: 25px;
+}

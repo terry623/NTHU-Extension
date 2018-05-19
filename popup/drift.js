@@ -53,6 +53,7 @@ function initDrift() {
   });
 
   window.drift.on("startConversation", function(data) {
+    // TODO: 要把新創的 conversationId 存在 Server 端
     console.log("User started a new conversation " + data.conversationId);
   });
 
