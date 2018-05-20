@@ -64,9 +64,19 @@ body::-webkit-scrollbar {
 }
 
 #user {
-  margin-top: 25px;
+  margin-top: 10px;
 }
 
 #introduce {
-  margin-top: 25px;
+  margin-top: 35px;
+}
+
+#day {
+  margin-top: 110px;
+  padding-left: 25px;
+}
+
+#left_home {
+  padding-top: 25px;
+  padding-left: 50px;
 }

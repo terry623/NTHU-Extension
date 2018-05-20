@@ -184,7 +184,7 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       t.not(".homePage").hide();
       drift.on("ready", function(api, payload) {
         api.widget.show();
-        api.sidebar.open();
+        // api.sidebar.open();
       });
     } else if ($(this).hasClass("searchPage")) {
       t.not(".searchPage").hide();
