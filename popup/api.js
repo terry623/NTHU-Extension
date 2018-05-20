@@ -7,7 +7,6 @@ import { searchBySingleCourseNo } from "./search";
 import { course_table, removeLongCourseName } from "./helper";
 
 function getUserName(acix, callback) {
-  $("#home_loading").addClass("active");
   request(
     {
       url:

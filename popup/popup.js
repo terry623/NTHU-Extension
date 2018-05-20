@@ -5,13 +5,13 @@ import { getUrlVars } from "./helper";
 import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
 import { searchByKeyword } from "./search";
 import { getCart } from "./cart";
-import { collectionOfCourse, getCurrentPhase } from "./server";
+import { collectionOfCourse, getCurrentStateOfNTHU } from "./server";
 
 const year = "106";
 const semester = "20";
 var acix, stu_no;
 
-// TODO: 要降低送要求到 Server 的次數，有些一次性的要求，改成在 event.js 執行
+// TODO: 降低送要求到 Server 的次數，有些一次性、或每天執行一次的要求，改成在 event.js 執行
 $(document).ready(function() {
   $(".content_item").hide();
   chrome.tabs.query(
@@ -22,8 +22,7 @@ $(document).ready(function() {
 
       getUserName(acix, function() {
         $(".content_item.homePage").show();
-        getCurrentPhase(function(phase) {
-          $("#home_loading").removeClass("active");
+        getCurrentStateOfNTHU(function(phase) {
           getResultCourse(acix, stu_no, phase, year, semester);
           getCart(acix);
           getGrade(acix, stu_no);

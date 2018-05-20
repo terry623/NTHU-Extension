@@ -1,6 +1,6 @@
 // FIXME: 要等它一段時間才會 load 上次的對話
 function initDrift() {
-  $("#conversation_loading").addClass("active");
+  $("#home_loading").addClass("active");
   !(function() {
     var t = (window.driftt = window.drift = window.driftt || []);
     if (!t.init) {
@@ -50,7 +50,7 @@ function initDrift() {
   drift.load("etd922wyz5fx");
 
   drift.on("ready", function(api, payload) {
-    $("#conversation_loading").removeClass("active");
+    $("#home_loading").removeClass("active");
     api.sidebar.open();
   });
 
