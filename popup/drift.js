@@ -1,4 +1,3 @@
-// FIXME: 要等它一段時間才會 load 上次的對話
 function initDrift() {
   $("#home_loading").addClass("active");
   !(function() {

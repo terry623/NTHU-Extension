@@ -39,8 +39,9 @@ function searchByKeyword(acix, keyword, topic, callback) {
     .then(
       function(resp) {
         var hits = resp.hits.hits;
-        console.log(hits);
         storeCourseInfo(hits);
+
+        // TODO: 要偵測衝堂課程，在欄位中以 negative 去表示
         for (var each_course in hits) {
           var id = hits[each_course]._id;
           var source = hits[each_course]._source;
@@ -55,19 +56,19 @@ function searchByKeyword(acix, keyword, topic, callback) {
             `id="` +
             id +
             `">
-              <td>` +
+          <td>` +
             source.科號 +
             `</td>
               <td>` +
             source.課程中文名稱 +
             `</td>
-              <td>` +
+            <td>` +
             time +
             `</td>
-              <td>` +
+            <td>` +
             classroom +
             `</td>
-              <td>`;
+            <td>`;
 
           var teacher = [];
           for (var each_teacher in source.教師)

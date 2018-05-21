@@ -133,10 +133,8 @@
                 <div class="seven wide column">
                     <div id="day" class="ui statistic">
                         <div id="count_down" class="value">
-                            0 days
                         </div>
-                        <div class="label">
-                            離第一次選課結束
+                        <div id="count_down_text" class="label">
                         </div>
                     </div>
                 </div>
@@ -525,7 +523,7 @@
         <div class="content_item choosePage">
             <table id="school_table" class="ui tab1 compact table">
                 <div id="change_phase" class="ui dropdown">
-                    <div id="change_phase_text" class="text"></div>
+                    <div id="change_phase_text" class="text">選課尚未開始</div>
                     <i class="dropdown icon"></i>
                     <div class="menu">
                         <div class="item">
@@ -572,6 +570,18 @@
                 <tbody id="course_result_from_nthu">
                 </tbody>
             </table>
+            <div id="multiple_class" class="ui mini modal">
+                <div class="header">
+                    多個課程
+                </div>
+                <div class="content">
+                    <div id="multiple_class_list" class="ui middle aligned selection list">
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">Close</div>
+                </div>
+            </div>
             <table style="display:none;" class="ui tab2 compact table">
                 <div id="left_pointing_to_school" style="display:none;" class="ui small horizontal teal left basic label">
                     確 認 後 請 按 Send ， 送 出 至 校 務 資 訊 系 統

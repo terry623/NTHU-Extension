@@ -3,7 +3,7 @@ import { initDrift } from "./drift";
 initDrift();
 import { getUrlVars } from "./helper";
 import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
-import { searchByKeyword } from "./search";
+import { searchByKeyword, searchBySingleCourseNo } from "./search";
 import { getCart } from "./cart";
 import { collectionOfCourse, getCurrentStateOfNTHU } from "./server";
 
@@ -23,7 +23,10 @@ $(document).ready(function() {
       getUserName(acix, function() {
         $(".content_item.homePage").show();
         getCurrentStateOfNTHU(function(phase) {
-          getResultCourse(acix, stu_no, phase, year, semester);
+          if (phase != undefined)
+            getResultCourse(acix, stu_no, phase, year, semester);
+          else $("#change_phase").addClass("disabled");
+
           getCart(acix);
           getGrade(acix, stu_no);
           collectionOfCourse();
@@ -197,10 +200,7 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       t.not(".recommendPage").hide();
   }
 });
-$(".ui.mini.modal").modal({
-  inverted: true
-});
-$(".course_info.modal").modal({
+$(".ui.modal").modal({
   inverted: true
 });
 $(".ui.course_type.popup").on("click", ".item", function() {
@@ -209,4 +209,19 @@ $(".ui.course_type.popup").on("click", ".item", function() {
 });
 $("#cart_submit").on("click", function() {
   alert("Send cart to school !");
+});
+$("#multiple_class_list").on("click", ".item", function() {
+  var course_no = $(this).attr("course_no");
+  var id = $(this).attr("id");
+  getCourseInfo(
+    acix,
+    course_no,
+    id,
+    function() {
+      $(".course_action").hide();
+      $("#delete").show();
+      $("#back").show();
+    },
+    true
+  );
 });

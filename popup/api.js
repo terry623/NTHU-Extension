@@ -103,9 +103,9 @@ function getPopulation(acix, course_no, fresh_num) {
   );
 }
 
-function getCourseInfo(acix, course_no, id, callback) {
+function getCourseInfo(acix, course_no, id, callback, from_multiple) {
   if (course_no == undefined) return;
-  $("#course_info_loading").addClass("active");
+  if (!from_multiple) $("#course_info_loading").addClass("active");
   request(
     {
       url:
@@ -292,7 +292,8 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
           });
           $("#course_result_from_nthu").replaceWith(parse_table);
           $("#course_result_from_nthu > tr").on("click", "td", function() {
-            searchBySingleCourseNo(acix, $(this).attr("course_no"));
+            if ($(this).attr("course_no"))
+              searchBySingleCourseNo(acix, $(this).attr("course_no"));
           });
           if (callback) callback();
         }

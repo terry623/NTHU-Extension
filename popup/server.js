@@ -146,6 +146,7 @@ function currentPhase(phase) {
       default_text = "停修 log 記錄";
   }
   $("#change_phase_text").text(default_text);
+  return tran_phase;
 }
 
 function getCurrentStateOfNTHU(callback) {
@@ -156,10 +157,49 @@ function getCurrentStateOfNTHU(callback) {
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
         var info = JSON.parse(body);
+        // TODO: 日期要多測試
         var phase = parseInt(info.currentPhase);
         var tran_phase = currentPhase(phase);
         var countDown = parseInt(info.countDown);
         $("#count_down").text(countDown + " days");
+
+        //  加退選之後日期都沒考慮
+        //  1  第 1 次選課 log 記錄
+        //  2  第 1 次選課亂數結果
+        //  4  第 2 次選課 log 記錄
+        //  5  第 2 次選課結束(已亂數處理)
+        //  7  第 3 次選課 log 記錄
+        //  8  第 3 次選課結束(已亂數處理)
+        //  9  加退選開始前(含擋修、衝堂)
+        //  10 加退選 log 記錄
+        //  11 加退選結束(已處理)
+        //  12 停修 log 記錄
+        var count_down_text;
+        if (info.currentPhase != "too_early") {
+          switch (phase) {
+            case 1:
+              count_down_text = "離第一次選課結束";
+              break;
+            case 2:
+              count_down_text = "離第二次選課開始";
+              break;
+            case 4:
+              count_down_text = "離第二次選課結束";
+              break;
+            case 5:
+              count_down_text = "離第三次選課開始";
+              break;
+            case 7:
+              count_down_text = "離第三次選課結束";
+              break;
+            default:
+              count_down_text = "加退選";
+              $("#count_down").text("0 days");
+              break;
+          }
+        } else count_down_text = "離第一次選課開始";
+
+        $("#count_down_text").text(count_down_text);
         callback(tran_phase);
       }
     }
