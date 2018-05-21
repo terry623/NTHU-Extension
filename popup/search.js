@@ -1,5 +1,6 @@
 import { getCourseInfo } from "./api";
 import { translateTopic } from "./helper";
+import { checkConflict } from "./conflict";
 var elasticsearch = require("elasticsearch");
 var client = new elasticsearch.Client({
   host: "http://localhost:9200"
@@ -41,53 +42,55 @@ function searchByKeyword(acix, keyword, topic, callback) {
         var hits = resp.hits.hits;
         storeCourseInfo(hits);
 
-        // TODO: 要偵測衝堂課程，在欄位中以 negative 去表示
-        for (var each_course in hits) {
-          var id = hits[each_course]._id;
-          var source = hits[each_course]._source;
-
-          var time = source.時間;
+        for (let each_course in hits) {
+          let id = hits[each_course]._id;
+          let source = hits[each_course]._source;
+          
+          let time = source.時間;
           if (time == "") time = "無";
-          var classroom = source.教室;
+          let classroom = source.教室;
           if (classroom == "") classroom = "無";
-
-          var row =
-            `<tr ` +
-            `id="` +
-            id +
-            `">
-          <td>` +
-            source.科號 +
-            `</td>
+          
+          // TODO: 要說明衝堂參考的是 Cart 及校務資訊系統最新的資料
+          checkConflict(time, function(negative) {
+            let row =
+              `<tr ` +
+              negative +
+              ` id="` +
+              id +
+              `">
+            <td>` +
+              source.科號 +
+              `</td>
+                <td>` +
+              source.課程中文名稱 +
+              `</td>
               <td>` +
-            source.課程中文名稱 +
-            `</td>
-            <td>` +
-            time +
-            `</td>
-            <td>` +
-            classroom +
-            `</td>
-            <td>`;
+              time +
+              `</td>
+              <td>` +
+              classroom +
+              `</td>
+              <td>`;
 
-          var teacher = [];
-          for (var each_teacher in source.教師)
-            teacher.push(source.教師[each_teacher].split("\t")[0]);
-          teacher.splice(-1, 1);
-          row += teacher.join("<br>") + `</td></tr>`;
-          $("#search_result_body").append(row);
-          $("#search_result_body > tr")
-            .filter(function(index) {
-              return index >= 10;
-            })
-            .hide();
-          $("#search_result_rightbar").attr("placeholder", topic);
+            let teacher = [];
+            for (let each_teacher in source.教師)
+              teacher.push(source.教師[each_teacher].split("\t")[0]);
+            teacher.splice(-1, 1);
+            row += teacher.join("<br>") + `</td></tr>`;
+            $("#search_result_body").append(row);
+            $("#search_result_body > tr")
+              .filter(function(index) {
+                return index >= 10;
+              })
+              .hide();
+            $("#search_result_rightbar").attr("placeholder", topic);
+            $("#search_result_body > tr").hover(function() {
+              $(this).css("cursor", "pointer");
+            });
+          });
         }
         callback();
-
-        $("#search_result_body > tr").hover(function() {
-          $(this).css("cursor", "pointer");
-        });
       },
       function(err) {
         console.trace(err.message);

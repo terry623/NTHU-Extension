@@ -157,7 +157,6 @@ function getCurrentStateOfNTHU(callback) {
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
         var info = JSON.parse(body);
-        // TODO: 日期要多測試
         var phase = parseInt(info.currentPhase);
         var tran_phase = currentPhase(phase);
         var countDown = parseInt(info.countDown);

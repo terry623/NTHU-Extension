@@ -5,6 +5,7 @@ import { transform } from "./pdf2html";
 import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourseNo } from "./search";
 import { course_table, removeLongCourseName } from "./helper";
+import { storeSliceTime } from "./conflict";
 
 function getUserName(acix, callback) {
   request(
@@ -229,6 +230,7 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
   );
 }
 
+// FIXME: 課表中關於 log 紀錄，可能會有同時段多個課程
 function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
   if (callback) $("#course_result_loading").addClass("active");
   request.post(
@@ -262,6 +264,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
           var parse_table = $.parseHTML(course_table);
           $(parse_table).attr("id", "course_result_from_nthu");
 
+          var all_time = [];
           $("tbody > tr", table).each(function() {
             if ($(this).index() > 0) {
               var course_no = $("td:nth-child(1)", this).text();
@@ -280,7 +283,9 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
                 var slice_time = [];
                 for (var i = 0, j = 0; i < time.length; i = i + 2, j++) {
                   slice_time[j] = time.slice(i, i + 2);
+                  all_time.push(slice_time[j]);
                 }
+
                 for (var i = 0; i < slice_time.length; i++) {
                   $(parse_table)
                     .find("." + slice_time[i])
@@ -296,6 +301,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
               searchBySingleCourseNo(acix, $(this).attr("course_no"));
           });
           if (callback) callback();
+          else storeSliceTime(all_time);
         }
       }
     }

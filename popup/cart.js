@@ -1,11 +1,13 @@
 import { getCourseInfo } from "./api";
 import { course_table } from "./helper";
+import { storeSliceTime } from "./conflict";
 
 function getCart(acix) {
   chrome.storage.local.get("cart", function(items) {
     var parse_table = $.parseHTML(course_table);
     $(parse_table).attr("id", "cart");
 
+    var all_time = [];
     for (var key in items.cart) {
       if (items.cart.hasOwnProperty(key)) {
         var name = items.cart[key].course_name.split(" ");
@@ -30,6 +32,7 @@ function getCart(acix) {
             i = i + 2, j++
           ) {
             slice_time[j] = items.cart[key].time.slice(i, i + 2);
+            all_time.push(slice_time[j]);
           }
           for (var i = 0; i < slice_time.length; i++) {
             $(parse_table)
@@ -39,8 +42,8 @@ function getCart(acix) {
         }
       }
     }
+    storeSliceTime(all_time);
     $("#cart").replaceWith(parse_table);
-    //TODO: 通識的話，可以在此 modal 看志願
     $("#cart > tr").on("click", "td", function() {
       $("#multiple_class_list").empty();
       if ($(this).children().length > 1) {
@@ -51,15 +54,16 @@ function getCart(acix) {
             `" course_no="` +
             $(this).attr("course_no") +
             `" class="item">
-          <div class="content">
-              <div class="description">` +
+            <div class="content">
+            <div class="description">` +
             $(this).text() +
             `</div>
-          </div>
-      </div>`;
-          // console.log.apply(console, $(this));
+            </div>
+            </div>`;
           $("#multiple_class_list").append(content);
         });
+
+        //TODO: 通識的話，可以在此 modal 看志願
         $("#multiple_class").modal("show");
       } else {
         var course_no = $("a", this).attr("course_no");

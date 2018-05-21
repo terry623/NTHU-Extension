@@ -36,6 +36,14 @@ $(document).ready(function() {
   );
 });
 
+chrome.storage.local.clear(function() {
+  console.log("Clear Local Data");
+  var error = chrome.runtime.lastError;
+  if (error) {
+    console.error(error);
+  }
+});
+
 // TODO: 想清楚換頁的時候有什麼東西沒有重置，整個頁面好好檢查
 $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
