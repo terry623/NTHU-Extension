@@ -230,7 +230,6 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
   );
 }
 
-// FIXME: 課表中關於 log 紀錄，可能會有同時段多個課程
 function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
   if (callback) $("#course_result_loading").addClass("active");
   request.post(
@@ -273,33 +272,57 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
                 .split(/[A-Za-z]+/)[0];
               course_name = removeLongCourseName(course_name);
               var time = $("td:nth-child(4)", this).text();
-
+              var content =
+                `<a course_no="` +
+                course_no +
+                `" href="#do_not_jump">` +
+                course_name +
+                `</a>`;
               if (time.length == 1) {
                 $(parse_table)
                   .find(".none")
-                  .append(`<a href="#do_not_jump">` + course_name + `</a>`)
-                  .attr("course_no", course_no);
+                  .append(content)
+                  .append(content);
               } else {
                 var slice_time = [];
                 for (var i = 0, j = 0; i < time.length; i = i + 2, j++) {
                   slice_time[j] = time.slice(i, i + 2);
                   all_time.push(slice_time[j]);
                 }
-
                 for (var i = 0; i < slice_time.length; i++) {
                   $(parse_table)
                     .find("." + slice_time[i])
-                    .append(`<a href="#do_not_jump">` + course_name + `</a>`)
-                    .attr("course_no", course_no);
+                    .append(content);
                 }
               }
             }
           });
           $("#course_result_from_nthu").replaceWith(parse_table);
           $("#course_result_from_nthu > tr").on("click", "td", function() {
-            if ($(this).attr("course_no"))
-              searchBySingleCourseNo(acix, $(this).attr("course_no"));
+            if (!$("a", this).attr("course_no")) return;
+            $("#multiple_class_list_bySingle").empty();
+            if ($(this).children().length > 1) {
+              $("a", this).each(function() {
+                var content =
+                  `<div` +
+                  ` course_no="` +
+                  $(this).attr("course_no") +
+                  `" class="item">
+                  <div class="content">
+                  <div class="description">` +
+                  $(this).text() +
+                  `</div>
+                  </div>
+                  </div>`;
+                $("#multiple_class_list_bySingle").append(content);
+              });
+              $("#multiple_class_bySingle").modal("show");
+            } else {
+              var course_no = $("a", this).attr("course_no");
+              searchBySingleCourseNo(acix, course_no);
+            }
           });
+
           if (callback) callback();
           else storeSliceTime(all_time);
         }

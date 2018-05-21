@@ -14,7 +14,7 @@ client.ping(
     if (error) {
       console.trace("Elasticsearch cluster is down");
     } else {
-      // console.log("Elasticsearch is well");
+      console.log("Elasticsearch is well");
     }
   }
 );
@@ -45,12 +45,12 @@ function searchByKeyword(acix, keyword, topic, callback) {
         for (let each_course in hits) {
           let id = hits[each_course]._id;
           let source = hits[each_course]._source;
-          
+
           let time = source.時間;
           if (time == "") time = "無";
           let classroom = source.教室;
           if (classroom == "") classroom = "無";
-          
+
           // TODO: 要說明衝堂參考的是 Cart 及校務資訊系統最新的資料
           checkConflict(time, function(negative) {
             let row =
@@ -175,10 +175,15 @@ function searchBySingleCourseNo(acix, course_no) {
         var hits = resp.hits.hits;
 
         storeCourseInfo(hits, function() {
-          getCourseInfo(acix, course_no, hits[0]._id, function() {
-            $(".course_action").hide();
-            $("#course_info_loading").removeClass("active");
-          });
+          getCourseInfo(
+            acix,
+            course_no,
+            hits[0]._id,
+            function() {
+              $(".course_action").hide();
+            },
+            true
+          );
         });
       },
       function(err) {

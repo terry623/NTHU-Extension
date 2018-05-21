@@ -11,7 +11,7 @@ const year = "106";
 const semester = "20";
 var acix, stu_no;
 
-// TODO: 降低送要求到 Server 的次數，有些一次性、或每天執行一次的要求，改成在 event.js 執行
+// TODO: 降低送要求到 Server 的次數，有些一次性的要求，改成在 event.js 執行
 $(document).ready(function() {
   $(".content_item").hide();
   chrome.tabs.query(
@@ -44,7 +44,6 @@ chrome.storage.local.clear(function() {
   }
 });
 
-// TODO: 想清楚換頁的時候有什麼東西沒有重置，整個頁面好好檢查
 $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
 $(".course_type.browse").popup({
@@ -233,3 +232,8 @@ $("#multiple_class_list").on("click", ".item", function() {
     true
   );
 });
+$("#multiple_class_bySingle").on("click", ".item", function() {
+  var course_no = $(this).attr("course_no");
+  searchBySingleCourseNo(acix, course_no);
+});
+$("#conflict_explain").popup();

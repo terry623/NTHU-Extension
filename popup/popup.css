@@ -11,7 +11,7 @@ body::-webkit-scrollbar {
 }
 
 a:focus {
-  outline:none;
+  outline: none;
 }
 
 .content_item.homePage {
@@ -34,6 +34,10 @@ a:focus {
 #left_pointing_to_school {
   margin-top: 5px;
   margin-bottom: 2px;
+}
+
+#search_result_page_title {
+  margin-top: 1px;
 }
 
 .info.description {

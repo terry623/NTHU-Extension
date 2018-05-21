@@ -10,7 +10,7 @@ function storeSliceTime(slice_time) {
       chrome.storage.local.remove("time", function() {
         chrome.storage.local.set({ time: temp }, function() {
           chrome.storage.local.get("time", function(items) {
-            console.log(items);
+            // console.log(items);
           });
         });
       });
@@ -18,7 +18,7 @@ function storeSliceTime(slice_time) {
       for (var each_data in data) temp[each_data] = data[each_data];
       chrome.storage.local.set({ time: temp }, function() {
         chrome.storage.local.get("time", function(items) {
-          console.log(items);
+          // console.log(items);
         });
       });
     }

@@ -223,12 +223,22 @@
                 </div>
             </div>
             <div id="search_result_page" class="ui segment" style="display:none;">
-                <h3 class="ui header">搜尋結果
-                    <div id="left_pointing" class="ui small horizontal teal left pointing basic label">
-                        點 擊 課 程 可 查 看 詳 細 資 訊
+                <div class="ui grid">
+                    <div class="two column row">
+                        <div class="left floated column left aligned">
+                            <h3 id="search_result_page_title" class="ui header">搜尋結果
+                                <div id="left_pointing" class="ui small horizontal teal left pointing basic label">
+                                    點 擊 課 程 可 查 看 詳 細 資 訊
+                                </div>
+                            </h3>
+                        </div>
+                        <div class="right floated column right aligned">
+                            <div class="ui red basic small horizontal label">衝堂
+                            </div>
+                        </div>
                     </div>
-                </h3>
-                <table id="search_result" class="ui selectable table" style="height:800px;">
+                </div>
+                <table id="search_result" class="ui selectable table" style="height:700px;">
                     <thead>
                         <tr>
                             <th class="three wide">科號</th>
@@ -521,6 +531,18 @@
         </div>
 
         <div class="content_item choosePage">
+            <div id="multiple_class_bySingle" class="ui mini modal">
+                <div class="header">
+                    多個課程
+                </div>
+                <div class="content">
+                    <div id="multiple_class_list_bySingle" class="ui middle aligned selection list">
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">Close</div>
+                </div>
+            </div>
             <table id="school_table" class="ui tab1 compact table">
                 <div id="change_phase" class="ui dropdown">
                     <div id="change_phase_text" class="text">選課尚未開始</div>
