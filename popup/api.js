@@ -324,7 +324,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
           });
 
           if (callback) callback();
-          else storeSliceTime(all_time);
+          else storeSliceTime(all_time, "from_school");
         }
       }
     }

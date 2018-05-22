@@ -42,7 +42,7 @@ function getCart(acix) {
         }
       }
     }
-    storeSliceTime(all_time);
+    storeSliceTime(all_time, "from_cart");
     $("#cart").replaceWith(parse_table);
     $("#cart > tr").on("click", "td", function() {
       $("#multiple_class_list").empty();

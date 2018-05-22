@@ -51,7 +51,6 @@ function searchByKeyword(acix, keyword, topic, callback) {
           let classroom = source.教室;
           if (classroom == "") classroom = "無";
 
-          // TODO: 要說明衝堂參考的是 Cart 及校務資訊系統最新的資料
           checkConflict(time, function(negative) {
             let row =
               `<tr ` +

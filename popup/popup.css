@@ -88,3 +88,8 @@ a:focus {
   padding-top: 25px;
   padding-left: 50px;
 }
+
+#back_to_search {
+  margin-top: 3px;
+  margin-left: 10px;
+}

@@ -193,13 +193,12 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       t.not(".homePage").hide();
       drift.on("ready", function(api, payload) {
         api.widget.show();
-        // api.sidebar.open();
       });
     } else if ($(this).hasClass("searchPage")) {
       t.not(".searchPage").hide();
-      $("#search_bar").hide();
-      $("#search_result_page").hide();
-      $("#search_entry").show();
+      if ($("#search_result_page").is(":visible")) {
+        $("#search_bar").show();
+      }
     } else if ($(this).hasClass("choosePage")) {
       t.not(".choosePage").hide();
       $("#change_school_table").show();
@@ -237,3 +236,8 @@ $("#multiple_class_bySingle").on("click", ".item", function() {
   searchBySingleCourseNo(acix, course_no);
 });
 $("#conflict_explain").popup();
+$("#back_to_search").on("click", function() {
+  $("#search_entry").show();
+  $("#search_bar").hide();
+  $("#search_result_page").hide();
+});

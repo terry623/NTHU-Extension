@@ -1,16 +1,19 @@
-function storeSliceTime(slice_time) {
+function storeSliceTime(slice_time, source) {
   chrome.storage.local.get("time", function(items) {
     var temp = {};
     var data = {};
-    for (var each_time in slice_time) data[slice_time[each_time]] = 1;
+    var text;
+    if (source == "from_school") text = "校務資訊系統";
+    else text = "等待送出清單";
+    for (var each_time in slice_time) data[slice_time[each_time]] = text;
 
     if (items.time != undefined) {
       Object.assign(temp, items.time);
-      for (var each_data in data) temp[each_data] = 1;
+      for (var each_data in data) temp[each_data] = text;
       chrome.storage.local.remove("time", function() {
         chrome.storage.local.set({ time: temp }, function() {
           chrome.storage.local.get("time", function(items) {
-            // console.log(items);
+            console.log(items);
           });
         });
       });
@@ -18,7 +21,7 @@ function storeSliceTime(slice_time) {
       for (var each_data in data) temp[each_data] = data[each_data];
       chrome.storage.local.set({ time: temp }, function() {
         chrome.storage.local.get("time", function(items) {
-          // console.log(items);
+          console.log(items);
         });
       });
     }
