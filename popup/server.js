@@ -3,6 +3,7 @@ var iconv = require("iconv-lite");
 var request = require("request");
 
 function calculateUserGrade(acix, stu_no, userGrade) {
+  var all_pr = {};
   for (let course_no in userGrade) {
     let grade = userGrade[course_no];
     let translateMap = {
@@ -26,7 +27,34 @@ function calculateUserGrade(acix, stu_no, userGrade) {
       for (let i = 0; i <= translateMap[grade]; i++)
         user_grade_people += distribution[i];
       let pr = 1 - user_grade_people / 100;
-      console.log(course_no, grade, pr);
+      all_pr[course_no] = pr;
+
+      chrome.storage.local.get("pr", function(items) {
+        var temp = {};
+        var data = {};
+        for (var each in all_pr) data[each] = all_pr[each];
+
+        if (items.pr != undefined) {
+          Object.assign(temp, items.all_pr);
+          for (var each_data in data) {
+            temp[each_data] = data[each_data];
+          }
+          chrome.storage.local.remove("pr", function() {
+            chrome.storage.local.set({ pr: temp }, function() {
+              chrome.storage.local.get("pr", function(items) {
+                // console.log(items);
+              });
+            });
+          });
+        } else {
+          for (var each_data in data) temp[each_data] = data[each_data];
+          chrome.storage.local.set({ pr: temp }, function() {
+            chrome.storage.local.get("pr", function(items) {
+              // console.log(items);
+            });
+          });
+        }
+      });
     });
   }
 }

@@ -3,10 +3,9 @@ var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
 import { calculateUserGrade, getSimilarities } from "./server";
-import { searchBySingleCourseNo } from "./search";
+import { searchBySingleCourseNo, storeCourseInfo } from "./search";
 import { course_table, removeLongCourseName } from "./helper";
 import { storeSliceTime } from "./conflict";
-import { Z_DEFAULT_COMPRESSION } from "zlib";
 
 function getUserName(acix, callback) {
   request(
@@ -320,7 +319,19 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
               $("#multiple_class_bySingle").modal("show");
             } else {
               var course_no = $("a", this).attr("course_no");
-              searchBySingleCourseNo(acix, course_no);
+              searchBySingleCourseNo(course_no, function(hits) {
+                storeCourseInfo(hits, function() {
+                  getCourseInfo(
+                    acix,
+                    course_no,
+                    hits[0]._id,
+                    function() {
+                      $(".course_action").hide();
+                    },
+                    true
+                  );
+                });
+              });
             }
           });
 

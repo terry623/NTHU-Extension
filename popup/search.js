@@ -156,7 +156,7 @@ function storeCourseInfo(hits, callback) {
   });
 }
 
-function searchBySingleCourseNo(acix, course_no) {
+function searchBySingleCourseNo(course_no, callback) {
   client
     .search({
       index: "nthu",
@@ -172,18 +172,7 @@ function searchBySingleCourseNo(acix, course_no) {
     .then(
       function(resp) {
         var hits = resp.hits.hits;
-
-        storeCourseInfo(hits, function() {
-          getCourseInfo(
-            acix,
-            course_no,
-            hits[0]._id,
-            function() {
-              $(".course_action").hide();
-            },
-            true
-          );
-        });
+        callback(hits);
       },
       function(err) {
         console.trace(err.message);
@@ -191,4 +180,4 @@ function searchBySingleCourseNo(acix, course_no) {
     );
 }
 
-export { searchByKeyword, searchBySingleCourseNo };
+export { searchByKeyword, searchBySingleCourseNo, storeCourseInfo };

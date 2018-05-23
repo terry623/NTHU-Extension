@@ -3,8 +3,13 @@ import { initDrift } from "./drift";
 initDrift();
 import { getUrlVars } from "./helper";
 import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
-import { searchByKeyword, searchBySingleCourseNo } from "./search";
+import {
+  searchByKeyword,
+  searchBySingleCourseNo,
+  storeCourseInfo
+} from "./search";
 import { getCart } from "./cart";
+import { getRecommendPage } from "./recommend";
 import { collectionOfCourse, getCurrentStateOfNTHU } from "./server";
 
 const year = "106";
@@ -202,8 +207,10 @@ $(".ui.secondary.menu").on("click", ".item", function() {
     } else if ($(this).hasClass("choosePage")) {
       t.not(".choosePage").hide();
       $("#change_school_table").show();
-    } else if ($(this).hasClass("recommendPage"))
+    } else if ($(this).hasClass("recommendPage")) {
       t.not(".recommendPage").hide();
+      getRecommendPage();
+    }
   }
 });
 $(".ui.modal").modal({
@@ -233,7 +240,19 @@ $("#multiple_class_list").on("click", ".item", function() {
 });
 $("#multiple_class_bySingle").on("click", ".item", function() {
   var course_no = $(this).attr("course_no");
-  searchBySingleCourseNo(acix, course_no);
+  searchBySingleCourseNo(course_no, function(hits) {
+    storeCourseInfo(hits, function() {
+      getCourseInfo(
+        acix,
+        course_no,
+        hits[0]._id,
+        function() {
+          $(".course_action").hide();
+        },
+        true
+      );
+    });
+  });
 });
 $("#conflict_explain").popup();
 $("#back_to_search").on("click", function() {
