@@ -6,6 +6,7 @@ import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourseNo } from "./search";
 import { course_table, removeLongCourseName } from "./helper";
 import { storeSliceTime } from "./conflict";
+import { Z_DEFAULT_COMPRESSION } from "zlib";
 
 function getUserName(acix, callback) {
   request(
@@ -359,13 +360,21 @@ function getGrade(acix, stu_no) {
           var userGrade = Object.create(null);
           $(allGradeOfStudent).each(function(index) {
             if (index > 2 && index < allGradeOfStudent.length - 1) {
-              var getCourseNo = $("td:nth-child(3)", this).text();
-              var getCourseGrade = $("td:nth-child(6)", this).text();
-              if (!getCourseGrade.includes("Grade Not Submitted"))
-                userGrade[getCourseNo.trim()] = getCourseGrade.trim();
+              let year = $("td:nth-child(1)", this).text();
+              let semester = $("td:nth-child(2)", this).text();
+              let getCourseNo = $("td:nth-child(3)", this).text();
+              let getCourseGrade = $("td:nth-child(6)", this).text();
+              if (
+                getCourseGrade.includes("Grade Not Submitted") == false &&
+                getCourseGrade.includes("二退") == false
+              ) {
+                userGrade[
+                  year + semester + getCourseNo.trim()
+                ] = getCourseGrade.trim();
+              }
             }
           });
-          calculateUserGrade(stu_no, userGrade);
+          calculateUserGrade(acix, stu_no, userGrade);
         }
       }
     }
