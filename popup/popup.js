@@ -13,12 +13,15 @@ import {
   getRecommendPage,
   toStorage,
   before_hits_group,
-  compare_group
+  compare_group,
+  num_of_old_course,
+  num_of_each_similar
 } from "./recommend";
 import { collectionOfCourse, getCurrentStateOfNTHU } from "./server";
 
 const year = "106";
 const semester = "20";
+const search_result_num = 10;
 var acix, stu_no;
 
 // TODO: 降低送要求到 Server 的次數，有些一次性的要求，改成在 event.js 執行
@@ -153,18 +156,18 @@ $("#search_page_change").on("click", ".page.item", function() {
     .addClass("active")
     .siblings(".item")
     .removeClass("active");
-  var start = (parseInt($(this).text()) - 1) * 10;
+  var start = (parseInt($(this).text()) - 1) * search_result_num;
   $("#search_result_body  > tr")
     .show()
     .filter(function(index) {
-      return index < start || index >= start + 10;
+      return index < start || index >= start + search_result_num;
     })
     .hide();
 });
 $("#change_phase").dropdown({
   on: "click",
   action: function(text, value, element) {
-    getResultCourse(acix, stu_no, value, "106", "20", function() {
+    getResultCourse(acix, stu_no, value, year, semester, function() {
       $("#course_result_loading").removeClass("active");
     });
     $("#change_phase").dropdown("set text", text);
@@ -224,10 +227,13 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       compare_group.length = 0;
       var content_group = [];
       getRecommendPage(acix, function() {
-        if (before_hits_group.length == 9) {
+        if (
+          before_hits_group.length ==
+          num_of_old_course * num_of_each_similar
+        ) {
           toStorage(acix, function(content, count, compare_value) {
             content_group.push({ content, compare_value });
-            if (count == 8) {
+            if (count == num_of_old_course * num_of_each_similar - 1) {
               content_group.sort(function(a, b) {
                 return b.compare_value - a.compare_value;
               });

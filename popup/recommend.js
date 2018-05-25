@@ -6,6 +6,8 @@ import {
 import { getSimilarities_forRecommend } from "./server";
 import { oldyear_to_newyear } from "./helper";
 import { getCourseDescription } from "./api";
+const num_of_old_course = 3;
+const num_of_each_similar = 3;
 var before_hits_group = [];
 let compare_group = [];
 
@@ -48,7 +50,11 @@ function getRecommendPage(acix, callback) {
   chrome.storage.local.get("pr", function(items) {
     if (items.pr != undefined) {
       var sort_pr = sortObject(items.pr);
-      for (let course_number = 0; course_number < 3; course_number++) {
+      for (
+        let course_number = 0;
+        course_number < num_of_old_course;
+        course_number++
+      ) {
         let pr_key = sort_pr[course_number].key;
         let pr_value = sort_pr[course_number].value;
         let new_course_no = oldyear_to_newyear(pr_key);
@@ -58,7 +64,7 @@ function getRecommendPage(acix, callback) {
             getSimilarities_forRecommend(hits[0]._id, function(info) {
               let sort_pr_and_percent = sortComplexObject(info, pr_value);
               let id_group = [];
-              for (let each = 0; each < 3; each++) {
+              for (let each = 0; each < num_of_each_similar; each++) {
                 let other_id = sort_pr_and_percent[each].key;
                 let compare_value = sort_pr_and_percent[each].value;
                 compare_group.push({
@@ -71,9 +77,8 @@ function getRecommendPage(acix, callback) {
                 });
               }
               searchByID_Group(id_group, function(hits) {
-                before_hits_group.push(hits[0]);
-                before_hits_group.push(hits[1]);
-                before_hits_group.push(hits[2]);
+                for (let i = 0; i < num_of_each_similar; i++)
+                  before_hits_group.push(hits[i]);
                 callback();
               });
             });
@@ -98,7 +103,11 @@ function toStorage(acix, callback) {
   // console.log(compare_group);
 
   storeCourseInfo(hits_group, function() {
-    for (let count = 0; count < 9; count++) {
+    for (
+      let count = 0;
+      count < num_of_old_course * num_of_each_similar;
+      count++
+    ) {
       let id = hits_group[count]._id;
       let source = hits_group[count]._source;
       let course_no = source.科號;
@@ -141,4 +150,11 @@ function toStorage(acix, callback) {
   });
 }
 
-export { getRecommendPage, toStorage, before_hits_group, compare_group };
+export {
+  getRecommendPage,
+  toStorage,
+  before_hits_group,
+  compare_group,
+  num_of_old_course,
+  num_of_each_similar
+};
