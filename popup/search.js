@@ -98,6 +98,8 @@ function searchByKeyword(acix, keyword, topic, callback) {
 }
 
 function storeCourseInfo(hits, callback) {
+  // console.log("storeCourseInfo");
+  // console.log(hits);
   chrome.storage.local.get("course", function(items) {
     var temp = {};
     var data = {};
@@ -173,6 +175,7 @@ function searchBySingleCourseNo(course_no, callback) {
       function(resp) {
         var hits = resp.hits.hits;
         callback(hits);
+        // console.log(hits);
       },
       function(err) {
         console.trace(err.message);
@@ -180,4 +183,39 @@ function searchBySingleCourseNo(course_no, callback) {
     );
 }
 
-export { searchByKeyword, searchBySingleCourseNo, storeCourseInfo };
+function searchByID_Group(course_id_group, callback) {
+  // console.log("searchByID_Group");
+  // console.log(course_id_group);
+  client
+    .search({
+      index: "nthu",
+      type: "course",
+      body: {
+        query: {
+          terms: {
+            _id: [
+              course_id_group[0].other_id,
+              course_id_group[1].other_id,
+              course_id_group[2].other_id
+            ]
+          }
+        }
+      }
+    })
+    .then(
+      function(resp) {
+        var hits = resp.hits.hits;
+        callback(hits);
+      },
+      function(err) {
+        console.trace(err.message);
+      }
+    );
+}
+
+export {
+  searchByKeyword,
+  searchBySingleCourseNo,
+  storeCourseInfo,
+  searchByID_Group
+};

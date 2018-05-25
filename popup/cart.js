@@ -68,12 +68,18 @@ function getCart(acix) {
       } else {
         var course_no = $("a", this).attr("course_no");
         var id = $("a", this).attr("id");
-        getCourseInfo(acix, course_no, id, function() {
-          $(".course_action").hide();
-          $("#delete").show();
-          $("#back").show();
-          $("#course_info_loading").removeClass("active");
-        });
+        getCourseInfo(
+          acix,
+          course_no,
+          id,
+          function() {
+            $(".course_action").hide();
+            $("#delete").show();
+            $("#back").show();
+            $("#course_info_loading").removeClass("active");
+          },
+          false
+        );
       }
     });
   });

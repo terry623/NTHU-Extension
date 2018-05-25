@@ -204,10 +204,21 @@ function removeLongCourseName(course_name) {
   return after;
 }
 
+function oldyear_to_newyear(course_no) {
+    course_no = course_no.replace("100", "106");
+    course_no = course_no.replace("101", "106");
+    course_no = course_no.replace("102", "106");
+    course_no = course_no.replace("103", "106");
+    course_no = course_no.replace("104", "106");
+    course_no = course_no.replace("105", "106");
+    return course_no;
+  }
+
 export {
   getUrlVars,
   courseAddSpace,
   translateTopic,
   course_table,
-  removeLongCourseName
+  removeLongCourseName,
+  oldyear_to_newyear
 };

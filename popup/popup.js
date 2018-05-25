@@ -9,7 +9,12 @@ import {
   storeCourseInfo
 } from "./search";
 import { getCart } from "./cart";
-import { getRecommendPage } from "./recommend";
+import {
+  getRecommendPage,
+  toStorage,
+  before_hits_group,
+  compare_group
+} from "./recommend";
 import { collectionOfCourse, getCurrentStateOfNTHU } from "./server";
 
 const year = "106";
@@ -112,12 +117,18 @@ $("#search_result_body").on("click", "tr", function() {
   $(this).css("cursor", "pointer");
   var course_from_click = $("td:nth-child(1)", this).text();
   var course_id = $(this).attr("id");
-  getCourseInfo(acix, course_from_click, course_id, function() {
-    $(".course_action").hide();
-    $("#submit").show();
-    $("#back").show();
-    $("#course_info_loading").removeClass("active");
-  });
+  getCourseInfo(
+    acix,
+    course_from_click,
+    course_id,
+    function() {
+      $(".course_action").hide();
+      $("#submit").show();
+      $("#back").show();
+      $("#course_info_loading").removeClass("active");
+    },
+    false
+  );
 });
 $(".clicktosearch").on("click", function() {
   var topic = $("#topic_name").text();
@@ -209,7 +220,26 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       $("#change_school_table").show();
     } else if ($(this).hasClass("recommendPage")) {
       t.not(".recommendPage").hide();
-      getRecommendPage();
+      before_hits_group.length = 0;
+      compare_group.length = 0;
+      var content_group = [];
+      getRecommendPage(acix, function() {
+        if (before_hits_group.length == 9) {
+          toStorage(acix, function(content, count, compare_value) {
+            content_group.push({ content, compare_value });
+            if (count == 8) {
+              content_group.sort(function(a, b) {
+                return b.compare_value - a.compare_value;
+              });
+              for (let each in content_group) {
+                let data = content_group[each];
+                $("#recommend_list").append(data.content);
+              }
+              $("#recommend_loading").removeClass("active");
+            }
+          });
+        }
+      });
     }
   }
 });
@@ -259,4 +289,20 @@ $("#back_to_search").on("click", function() {
   $("#search_entry").show();
   $("#search_bar").hide();
   $("#search_result_page").hide();
+});
+$("#recommend_list").on("click", ".item", function() {
+  var course_no = $(this).attr("course_no");
+  var id = $(this).attr("id");
+  getCourseInfo(
+    acix,
+    course_no,
+    id,
+    function() {
+      $(".course_action").hide();
+      $("#submit").show();
+      $("#back").show();
+      $("#course_info_loading").removeClass("active");
+    },
+    false
+  );
 });

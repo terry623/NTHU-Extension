@@ -147,6 +147,7 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
             });
 
             var info = items.course[id];
+
             var description = $(
               "div > table:nth-child(4) > tbody > tr:nth-child(2) > td",
               temp
@@ -230,6 +231,42 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
   );
 }
 
+function getCourseDescription(acix, course_no, callback) {
+  if (course_no == undefined) return;
+  request(
+    {
+      url:
+        "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=" +
+        acix +
+        "&c_key=" +
+        course_no,
+      encoding: null
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var str = iconv.decode(new Buffer(body), "big5");
+        var temp = document.createElement("div");
+        temp.innerHTML = str;
+        // console.log.apply(console, $(temp));
+
+        if (
+          $(temp)
+            .text()
+            .indexOf("session is interrupted!") >= 0
+        ) {
+          $("#session_alert").modal("show");
+        } else {
+          var description = $(
+            "div > table:nth-child(4) > tbody > tr:nth-child(2) > td",
+            temp
+          );
+          callback(description.html());
+        }
+      }
+    }
+  );
+}
+
 function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
   if (callback) $("#course_result_loading").addClass("active");
   request.post(
@@ -281,7 +318,6 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
               if (time.length == 1) {
                 $(parse_table)
                   .find(".none")
-                  .append(content)
                   .append(content);
               } else {
                 var slice_time = [];
@@ -327,8 +363,9 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
                     hits[0]._id,
                     function() {
                       $(".course_action").hide();
+                      $("#course_info_loading").removeClass("active");
                     },
-                    true
+                    false
                   );
                 });
               });
@@ -377,7 +414,8 @@ function getGrade(acix, stu_no) {
               let getCourseGrade = $("td:nth-child(6)", this).text();
               if (
                 getCourseGrade.includes("Grade Not Submitted") == false &&
-                getCourseGrade.includes("二退") == false
+                getCourseGrade.includes("二退") == false &&
+                semester == "20"
               ) {
                 userGrade[
                   year + semester + getCourseNo.trim()
@@ -392,4 +430,10 @@ function getGrade(acix, stu_no) {
   );
 }
 
-export { getUserName, getCourseInfo, getResultCourse, getGrade };
+export {
+  getUserName,
+  getCourseInfo,
+  getResultCourse,
+  getGrade,
+  getCourseDescription
+};

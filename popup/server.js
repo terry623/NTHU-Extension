@@ -167,6 +167,20 @@ function getSimilarities(course_id, callback) {
   });
 }
 
+function getSimilarities_forRecommend(course_id, callback) {
+  request(
+    {
+      url: "http://127.0.0.1:5000/api/getSimilarities?course_id=" + course_id
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var info = JSON.parse(body);
+        callback(info);
+      }
+    }
+  );
+}
+
 function currentPhase(phase) {
   $("#change_phase")
     .find(".item")
@@ -297,5 +311,6 @@ export {
   calculateUserGrade,
   collectionOfCourse,
   getSimilarities,
-  getCurrentStateOfNTHU
+  getCurrentStateOfNTHU,
+  getSimilarities_forRecommend
 };
