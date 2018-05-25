@@ -6,7 +6,8 @@ import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
 import {
   searchByKeyword,
   searchBySingleCourseNo,
-  storeCourseInfo
+  storeCourseInfo,
+  dependOnType
 } from "./search";
 import { getCart } from "./cart";
 import {
@@ -133,7 +134,7 @@ $("#search_result_body").on("click", "tr", function() {
     false
   );
 });
-$(".clicktosearch").on("click", function() {
+$("#clicktosearch").on("click", function() {
   var topic = $("#topic_name").text();
   var keyword = $("#keyword").val();
   if ($("#keyword").val() == "") {
@@ -141,10 +142,13 @@ $(".clicktosearch").on("click", function() {
   } else if (topic.includes("Topic")) {
     $("#search_alert_topic").modal("show");
   } else {
+    // TODO: 尚未真的把取到的值做搜尋
+    if (topic == "上課時間") console.log($("#time_select_text").val());
+    else if (topic == "通識對象")
+      console.log($("#ge_people_select_text").val());
+
     searchByKeyword(acix, keyword, topic, function() {
       $("#search_loading").removeClass("active");
-      $("#search_entry").hide();
-      $("#search_bar").show();
       $("#search_result_page").show();
     });
     $("#search_page_change > a").removeClass("active");
@@ -205,7 +209,6 @@ $(".ui.secondary.menu").on("click", ".item", function() {
 
     var t = $(".content_item");
     t.show();
-    $("#search_bar").hide();
     $("#change_school_table").hide();
 
     if ($(this).hasClass("homePage")) {
@@ -215,9 +218,6 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       });
     } else if ($(this).hasClass("searchPage")) {
       t.not(".searchPage").hide();
-      if ($("#search_result_page").is(":visible")) {
-        $("#search_bar").show();
-      }
     } else if ($(this).hasClass("choosePage")) {
       t.not(".choosePage").hide();
       $("#change_school_table").show();
@@ -253,6 +253,7 @@ $(".ui.modal").modal({
   inverted: true
 });
 $(".ui.course_type.popup").on("click", ".item", function() {
+  dependOnType($(this).text());
   $("#topic_name").html($(this).text() + `<i class="dropdown icon"></i>`);
   $(".ui.course_type.popup").popup("hide all");
 });
@@ -291,11 +292,6 @@ $("#multiple_class_bySingle").on("click", ".item", function() {
   });
 });
 $("#conflict_explain").popup();
-$("#back_to_search").on("click", function() {
-  $("#search_entry").show();
-  $("#search_bar").hide();
-  $("#search_result_page").hide();
-});
 $("#recommend_list").on("click", ".item", function() {
   var course_no = $(this).attr("course_no");
   var id = $(this).attr("id");

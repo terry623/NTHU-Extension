@@ -161,34 +161,37 @@ function courseAddSpace(course_no) {
 function translateTopic(topic) {
   var result;
   switch (topic) {
-    case "課名":
-      result = "課程中文名稱";
-      break;
     case "科號":
       result = "科號";
       break;
-    case "教師":
+    case "課程名稱":
+      result = "課程中文名稱";
+      break;
+    case "授課教師":
       result = "教師";
       break;
-    case "時間":
+    case "上課時間":
       result = "時間";
       break;
-    case "地點":
+    case "教室地點":
       result = "教室";
       break;
-    case "對象":
+    case "課程內容":
+      result = "課綱";
+      break;
+    case "通識對象":
       result = "通識對象";
       break;
-    case "類別":
+    case "通識類別":
       result = "通識類別";
       break;
-    case "科系":
+    case "系必選修":
       result = "必選修";
       break;
-    case "學程":
+    case "學分學程":
       result = "學程";
       break;
-    case "專長":
+    case "第一二專長":
       result = "第一二專長";
       break;
     default:
@@ -205,14 +208,14 @@ function removeLongCourseName(course_name) {
 }
 
 function oldyear_to_newyear(course_no) {
-    course_no = course_no.replace("100", "106");
-    course_no = course_no.replace("101", "106");
-    course_no = course_no.replace("102", "106");
-    course_no = course_no.replace("103", "106");
-    course_no = course_no.replace("104", "106");
-    course_no = course_no.replace("105", "106");
-    return course_no;
-  }
+  course_no = course_no.replace("100", "106");
+  course_no = course_no.replace("101", "106");
+  course_no = course_no.replace("102", "106");
+  course_no = course_no.replace("103", "106");
+  course_no = course_no.replace("104", "106");
+  course_no = course_no.replace("105", "106");
+  return course_no;
+}
 
 export {
   getUrlVars,

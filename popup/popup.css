@@ -18,8 +18,9 @@ a:focus {
   margin: 25px;
 }
 
-#clickme {
-  margin-bottom: 20px;
+#clicktosearch {
+  width: 120px;
+  margin-top: 0px !important;
 }
 
 #change_phase {
@@ -40,12 +41,12 @@ a:focus {
   margin-top: 1px;
 }
 
-.info.description {
-  margin-top: 3px;
+#search_result_page {
+  margin-top: 70px;
 }
 
-#search_entry {
-  margin-top: 70px;
+.info.description {
+  margin-top: 3px;
 }
 
 .search_entry_item {
@@ -87,9 +88,4 @@ a:focus {
 #left_home {
   padding-top: 25px;
   padding-left: 50px;
-}
-
-#back_to_search {
-  margin-top: 3px;
-  margin-left: 10px;
 }

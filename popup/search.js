@@ -19,11 +19,11 @@ client.ping(
   }
 );
 
-// TODO: 要可以搜尋課程大綱
 function searchByKeyword(acix, keyword, topic, callback) {
   $("#search_result_body").empty();
   $("#search_loading").addClass("active");
   var search_topic = translateTopic(topic);
+  // console.log("topic:", topic, ", search_topic:", search_topic);
   client
     .search({
       index: "nthu",
@@ -127,6 +127,7 @@ function storeCourseInfo(hits, callback) {
         學程: source.學程,
         必選修: source.必選修,
         第一二專長: source.第一二專長,
+        課綱: source.課綱,
         相似課程: []
       };
     }
@@ -213,9 +214,20 @@ function searchByID_Group(course_id_group, callback) {
     );
 }
 
+function dependOnType(topic) {
+  $(".other_entry").hide();
+  $(".ui.dropdown.search_entry_item").dropdown("clear");
+  if (topic == "上課時間") {
+    $("#time_select_entry").show();
+  } else if (topic == "通識對象") {
+    $("#ge_people_select_entry").show();
+  } else $("#main_other_entry").show();
+}
+
 export {
   searchByKeyword,
   searchBySingleCourseNo,
   storeCourseInfo,
-  searchByID_Group
+  searchByID_Group,
+  dependOnType
 };

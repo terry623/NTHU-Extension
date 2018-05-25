@@ -23,8 +23,8 @@
         <div class="ui loader"></div>
     </div>
     <div id="recommend_loading" class="ui inverted dimmer">
-            <div class="ui loader"></div>
-        </div>
+        <div class="ui loader"></div>
+    </div>
     <div id="home_loading" class="ui inverted dimmer">
         <div class="ui text loader">L O A D I N G</div>
     </div>
@@ -55,14 +55,6 @@
             <a class="item recommendPage">
                 推薦課程
             </a>
-            <div id="search_bar" class="right menu" style="display:none;">
-                <div class="item searchPage notActive">
-                    <div class="ui icon input">
-                        <input id="search_result_rightbar" placeholder="Search..." type="text">
-                        <i class="search link icon clicktosearch"></i>
-                    </div>
-                </div>
-            </div>
             <div id="change_school_table" class="right menu" style="display:none;">
                 <div class="ui dropdown item">
                     <div class="text">校務資訊系統</div>
@@ -145,64 +137,6 @@
         </div>
 
         <div class="content_item searchPage">
-            <div class="ui two column centered grid">
-                <div class="column">
-                    <div id="search_entry">
-                        <div id="search_entry_first" class="ui fluid right action left icon input search_entry_item">
-                            <i class="small search icon"></i>
-                            <input id="keyword" placeholder="主要輸入" type="text">
-                            <div id="course_type_menu" class="ui small menu">
-                                <a id="topic_name" class="course_type browse item">
-                                    Topic
-                                    <i class="dropdown icon"></i>
-                                </a>
-                            </div>
-                            <div id="course_type_popup" class="ui fluid course_type popup transition hidden">
-                                <div class="ui four column relaxed equal height divided grid">
-                                    <div class="column">
-                                        <h4 class="ui header">基本</h4>
-                                        <div class="ui link list">
-                                            <a class="item">課名</a>
-                                            <a class="item">科號</a>
-                                            <a class="item">教師</a>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <h4 class="ui header">進階</h4>
-                                        <div class="ui link list">
-                                            <a class="item">時間</a>
-                                            <a class="item">地點</a>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <h4 class="ui header">通識</h4>
-                                        <div class="ui link list">
-                                            <a class="item">對象</a>
-                                            <a class="item">類別</a>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <h4 class="ui header">補充</h4>
-                                        <div class="ui link list">
-                                            <a class="item">科系</a>
-                                            <a class="item">學程</a>
-                                            <a class="item">專長</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui fluid search selection dropdown search_list_1 search_entry_item">
-                            <input name="c_name" type="hidden">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">額外輸入</div>
-                            <div class="menu">
-                            </div>
-                        </div>
-                        <div class="ui right floated teal button clicktosearch search_entry_item">Search</div>
-                    </div>
-                </div>
-            </div>
             <div id="search_alert_empty" class="ui mini modal">
                 <div class="header">
                     你什麼都沒輸入
@@ -225,6 +159,174 @@
                     <div class="small ui basic cancel button">Close</div>
                 </div>
             </div>
+            <form id="search_entry" class="ui form">
+                <div class="field">
+                    <div id="search_entry_first" class="ui fluid right action left icon input search_entry_item">
+                        <i class="small search icon"></i>
+                        <input id="keyword" placeholder="關鍵字" type="text">
+                        <div id="course_type_menu" class="ui small menu">
+                            <a id="topic_name" class="course_type browse item">
+                                請選擇類別
+                                <i class="dropdown icon"></i>
+                            </a>
+                        </div>
+                        <div id="course_type_popup" style="width:500px;" class="ui flowing course_type popup transition hidden">
+                            <div class="ui four column relaxed equal height divided grid">
+                                <div class="column">
+                                    <h4 class="ui header">基本</h4>
+                                    <div class="ui link list">
+                                        <a class="item">科號</a>
+                                        <a class="item">課程名稱</a>
+                                        <a class="item">授課教師</a>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <h4 class="ui header">進階</h4>
+                                    <div class="ui link list">
+                                        <a class="item">上課時間</a>
+                                        <a class="item">教室地點</a>
+                                        <a class="item">課程內容</a>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <h4 class="ui header">通識</h4>
+                                    <div class="ui link list">
+                                        <a class="item">通識對象</a>
+                                        <a class="item">通識類別</a>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <h4 class="ui header">補充</h4>
+                                    <div class="ui link list">
+                                        <a class="item">系必選修</a>
+                                        <a class="item">學分學程</a>
+                                        <a class="item">第一二專長</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="main_other_entry" class="field other_entry">
+                    <div class="ui disabled fluid search selection dropdown search_list_1 search_entry_item">
+                        <input name="c_name" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">進階輸入</div>
+                        <div class="menu">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TODO: 時間還沒有填完 -->
+                <div id="time_select_entry" class="field other_entry" style="display:none;">
+                    <div class="ui fluid multiple search selection dropdown search_entry_item">
+                        <input id="time_select_text" name="time" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">選擇時間</div>
+                        <div class="menu">
+                            <div class="header">
+                                <i class="clock outline icon"></i>
+                                星期一
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item" data-value="M1">
+                                M1</div>
+                            <div class="item" data-value="M2">
+                                M2</div>
+                            <div class="item" data-value="M3">
+                                M3</div>
+                            <div class="item" data-value="M4">
+                                M4</div>
+                            <div class="item" data-value="M5">
+                                Mn</div>
+                            <div class="header">
+                                <i class="clock icon"></i>
+                                星期二
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item" data-value="T1">
+                                T1</div>
+                            <div class="item" data-value="T2">
+                                T2</div>
+                            <div class="item" data-value="T3">
+                                T3</div>
+                            <div class="item" data-value="T4">
+                                T4</div>
+                            <div class="item" data-value="T5">
+                                Tn</div>
+                            <div class="header">
+                                <i class="clock outline icon"></i>
+                                星期三
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item" data-value="W1">
+                                W1</div>
+                            <div class="item" data-value="W2">
+                                W2</div>
+                            <div class="item" data-value="W3">
+                                W3</div>
+                            <div class="item" data-value="W4">
+                                W4</div>
+                            <div class="item" data-value="W5">
+                                Wn</div>
+                            <div class="header">
+                                <i class="clock icon"></i>
+                                星期四
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item" data-value="R1">
+                                R1</div>
+                            <div class="item" data-value="R2">
+                                R2</div>
+                            <div class="item" data-value="R3">
+                                R3</div>
+                            <div class="item" data-value="R4">
+                                R4</div>
+                            <div class="item" data-value="R5">
+                                Rn</div>
+                            <div class="header">
+                                <i class="clock outline icon"></i>
+                                星期五
+                            </div>
+                            <div class="divider"></div>
+                            <div class="item" data-value="F1">
+                                F1</div>
+                            <div class="item" data-value="F2">
+                                F2</div>
+                            <div class="item" data-value="F3">
+                                F3</div>
+                            <div class="item" data-value="F4">
+                                F4</div>
+                            <div class="item" data-value="F5">
+                                F5</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ge_people_select_entry" class="field other_entry" style="display:none;">
+                    <div class="ui fluid selection dropdown search_entry_item">
+                        <input id="ge_people_select_text" name="time" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">選擇通識對象</div>
+                        <div class="menu">
+                            <div class="item" data-value="*1">
+                                *1&nbsp;&nbsp;&nbsp;各系學生可做為通識學分課程</div>
+                            <div class="item" data-value="*2">
+                                *2&nbsp;&nbsp;&nbsp;限人文社會學院學生做為通識學分課程，其他(院)系學生不得選修</div>
+                            <div class="item" data-value="*3">
+                                *3&nbsp;&nbsp;&nbsp;全校學生皆可選修；但開課系(所)所屬(院)學生選修，不列入通識課程學分</div>
+                            <div class="item" data-value="*4">
+                                *4&nbsp;&nbsp;&nbsp;開課系（所）所屬學院學生不可選修，其他(院)系學生可做為通識學分課程</div>
+                            <div class="item" data-value="*5">
+                                *5&nbsp;&nbsp;&nbsp;開課系(所)之學生不可選修，其他系(所)學生可選修</div>
+                            <div class="item" data-value="*6">
+                                *6&nbsp;&nbsp;&nbsp;師資培育中心開設課程，非修習教育學程學生可選修且列入通識課程學分</div>
+                            <div class="item" data-value="*7">
+                                *7&nbsp;&nbsp;&nbsp;全校學生皆可選修；但開課系(所)之學生選修，不列入通識課程學分</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="clicktosearch" class="ui right floated teal button search_entry_item">Search</div>
+            </form>
             <div id="search_result_page" class="ui segment" style="display:none;">
                 <div class="ui grid">
                     <div class="two column row">
@@ -244,8 +346,8 @@
                 <table id="search_result" class="ui selectable table" style="height:700px;">
                     <thead>
                         <tr>
-                            <th class="three wide">科號</th>
-                            <th class="five wide">科目</th>
+                            <th class="four wide">科號</th>
+                            <th class="four wide">科目</th>
                             <th class="two wide">時間</th>
                             <th class="three wide">地點</th>
                             <th class="three wide">教師</th>
@@ -256,14 +358,12 @@
                     <tfoot>
                         <tr>
                             <th colspan="5">
-                                <button id="back_to_search" class="ui basic button">
-                                    <i class="arrow left icon"></i>
-                                    Back
-                                </button>
                                 <div id="search_page_change" class="ui right floated pagination menu">
                                     <a class="icon item">
                                         <i class="left chevron icon"></i>
                                     </a>
+
+                                    <!-- TODO: 頁數若少於五，要變成真實頁數 -->
                                     <a class="page active item">1</a>
                                     <a class="page item">2</a>
                                     <a class="page item">3</a>
@@ -589,11 +689,11 @@
                 <thead>
                     <tr>
                         <th class="two wide">時間 / 星期</th>
-                        <th class="two wide">星期一</th>
-                        <th class="two wide">星期二</th>
-                        <th class="two wide">星期三</th>
-                        <th class="two wide">星期四</th>
-                        <th class="two wide">星期五</th>
+                        <th class="two wide"> </th>
+                        <th class="two wide"> </th>
+                        <th class="two wide"> </th>
+                        <th class="two wide"> </th>
+                        <th class="two wide"> </th>
                     </tr>
                 </thead>
                 <tbody id="course_result_from_nthu">
@@ -618,11 +718,11 @@
                 <thead>
                     <tr>
                         <th class="two wide">時間 / 星期</th>
-                        <th class="two wide">星期一</th>
-                        <th class="two wide">星期二</th>
-                        <th class="two wide">星期三</th>
-                        <th class="two wide">星期四</th>
-                        <th class="two wide">星期五</th>
+                        <th class="two wide"> </th>
+                        <th class="two wide"> </th>
+                        <th class="two wide"> </th>
+                        <th class="two wide"> </th>
+                        <th class="two wide"> </th>
                     </tr>
                 </thead>
                 <tbody id="cart">

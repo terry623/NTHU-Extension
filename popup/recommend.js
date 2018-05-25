@@ -101,7 +101,6 @@ function toStorage(acix, callback) {
   // console.log(hits_group);
   // console.log("compare_group");
   // console.log(compare_group);
-
   storeCourseInfo(hits_group, function() {
     for (
       let count = 0;
@@ -142,8 +141,6 @@ function toStorage(acix, callback) {
                       </div>
                   </div>
               </div>`;
-
-        // FIXME: 還沒照乘起來的值去排序
         callback(content, count, match.compare_value);
       });
     }
