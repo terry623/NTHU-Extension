@@ -161,15 +161,14 @@
             </div>
             <form id="search_entry" class="ui form">
                 <div class="field">
-                    <div id="search_entry_first" class="ui fluid right action left icon input search_entry_item">
-                        <i class="small search icon"></i>
-                        <input id="keyword" placeholder="關鍵字" type="text">
+                    <div id="search_entry_first" class="ui fluid left action right icon input search_entry_item">
                         <div id="course_type_menu" class="ui small menu">
-                            <a id="topic_name" class="course_type browse item">
-                                請選擇類別
-                                <i class="dropdown icon"></i>
+                            <a class="course_type browse item">
+                                <i id="choose_type_icon" class="dropdown icon"></i>
+                                <span id="topic_name" class="text">請選擇類別</span>
                             </a>
                         </div>
+                        <input id="keyword" placeholder="關鍵字" type="text">
                         <div id="course_type_popup" style="width:500px;" class="ui flowing course_type popup transition hidden">
                             <div class="ui four column relaxed equal height divided grid">
                                 <div class="column">
@@ -211,7 +210,7 @@
                     <div class="ui disabled fluid search selection dropdown search_list_1 search_entry_item">
                         <input name="c_name" type="hidden">
                         <i class="dropdown icon"></i>
-                        <div class="default text">進階輸入</div>
+                        <div class="default text">目前類別無進階輸入</div>
                         <div class="menu">
                         </div>
                     </div>
@@ -302,9 +301,9 @@
                         </div>
                     </div>
                 </div>
-                <div id="ge_people_select_entry" class="field other_entry" style="display:none;">
+                <div id="ge_people_entry" class="field other_entry" style="display:none;">
                     <div class="ui fluid selection dropdown search_entry_item">
-                        <input id="ge_people_select_text" name="time" type="hidden">
+                        <input id="ge_people_text" name="ge_people" type="hidden">
                         <i class="dropdown icon"></i>
                         <div class="default text">選擇通識對象</div>
                         <div class="menu">
@@ -322,6 +321,100 @@
                                 *6&nbsp;&nbsp;&nbsp;師資培育中心開設課程，非修習教育學程學生可選修且列入通識課程學分</div>
                             <div class="item" data-value="*7">
                                 *7&nbsp;&nbsp;&nbsp;全校學生皆可選修；但開課系(所)之學生選修，不列入通識課程學分</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="ge_type_select_entry" class="field other_entry" style="display:none;">
+                    <div class="ui fluid selection dropdown search_entry_item">
+                        <input id="ge_type_select_text" name="ge_type" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">選擇通識類別</div>
+                        <div class="menu">
+                            <div class="item" data-value="核心通識Core GE courses 1">
+                                向度一&nbsp;&nbsp;&nbsp;思維方式</div>
+                            <div class="item" data-value="核心通識Core GE courses 2">
+                                向度二&nbsp;&nbsp;&nbsp;生命探索</div>
+                            <div class="item" data-value="核心通識Core GE courses 3">
+                                向度三&nbsp;&nbsp;&nbsp;藝術與文學</div>
+                            <div class="item" data-value="核心通識Core GE courses 4">
+                                向度四&nbsp;&nbsp;&nbsp;社會文化脈動</div>
+                            <div class="item" data-value="核心通識Core GE courses 5">
+                                向度五&nbsp;&nbsp;&nbsp;科學、技術與社會</div>
+                            <div class="item" data-value="核心通識Core GE courses 6">
+                                向度六&nbsp;&nbsp;&nbsp;歷史分析</div>
+                            <div class="item" data-value="自然科學領域">
+                                選修&nbsp;&nbsp;&nbsp;自然科學領域</div>
+                            <div class="item" data-value="社會科學領域">
+                                選修&nbsp;&nbsp;&nbsp;社會科學領域</div>
+                            <div class="item" data-value="人文學領域">
+                                選修&nbsp;&nbsp;&nbsp;人文學領域</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="dept_entry" class="field other_entry" style="display:none;">
+                    <div class="ui fluid selection dropdown search_entry_item">
+                        <input id="dept_entry_text" name="dept" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">選擇系必選修</div>
+                        <div class="menu">
+                            <div class="item" data-value="">
+                                xxx&nbsp;&nbsp;&nbsp;XXX</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="program_entry" class="field other_entry" style="display:none;">
+                    <div class="ui fluid search selection dropdown search_entry_item">
+                        <input id="program_entry_text" name="program" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">選擇學分學程</div>
+                        <div class="menu">
+                            <div class="item" data-value="(跨院系)奈米與光電半導體產業學分學程">奈米與光電半導體產業學分學程</div>
+                            <div class="item" data-value="(跨院系)生物產業技術學分學程">生物產業技術學分學程</div>
+                            <div class="item" data-value="(跨院系)生物資訊學分學程">生物資訊學分學程</div>
+                            <div class="item" data-value="文化研究學程(台聯大跨校學程)">文化研究學程(台聯大跨校學程)</div>
+                            <div class="item" data-value="(跨院系)生物醫學物理學分學程">生物醫學物理學分學程</div>
+                            <div class="item" data-value="(跨院系)奈米科技學分學程">奈米科技學分學程</div>
+                            <div class="item" data-value="(跨院系)社會研究學分學程">社會研究學分學程</div>
+                            <div class="item" data-value="(跨院系)計量財務學分學程">計量財務學分學程</div>
+                            <div class="item" data-value="(跨院系)微系統科技整合學分學程">微系統科技整合學分學程</div>
+                            <div class="item" data-value="(跨院系)資訊傳媒學分學程">資訊傳媒學分學程</div>
+                            <div class="item" data-value="(跨院系)電子商務學分學程">電子商務學分學程</div>
+                            <div class="item" data-value="(跨院系)環境與安全學分學程">環境與安全學分學程</div>
+                            <div class="item" data-value="(跨院系)積體電路設計學分學程">積體電路設計學分學程</div>
+                            <div class="item" data-value="(跨院系)生物科技管理學分學程">生物科技管理學分學程</div>
+                            <div class="item" data-value="(跨院系)性別研究學分學程">性別研究學分學程</div>
+                            <div class="item" data-value="(跨院系)晶片系統商管學分學程">晶片系統商管學分學程</div>
+                            <div class="item" data-value="(跨院系)全球供應鏈與運籌管理學分學程">全球供應鏈與運籌管理學分學程</div>
+                            <div class="item" data-value="(跨院系)影像顯示科技學分學程">影像顯示科技學分學程</div>
+                            <div class="item" data-value="(跨校區)潛能開發增能學分學程">潛能開發增能學分學程</div>
+                            <div class="item" data-value="(跨院系)太陽光電科技學分學程">太陽光電科技學分學程</div>
+                            <div class="item" data-value="(跨院系)能源科技與永續學分學程">能源科技與永續學分學程</div>
+                            <div class="item" data-value="(跨院系)先進能源研究生學分學程">先進能源研究生學分學程</div>
+                            <div class="item" data-value="(跨院系)能源學分學程">能源學分學程</div>
+                            <div class="item" data-value="(跨院系)法律學分學程">法律學分學程</div>
+                            <div class="item" data-value="(跨院系)工學院國際研究生全英語學分學程">工學院國際研究生全英語學分學程</div>
+                            <div class="item" data-value="(跨院系)藝術學分學程">藝術學分學程</div>
+                            <div class="item" data-value="(跨院系)創新創業學分學程">創新創業學分學程</div>
+                            <div class="item" data-value="(跨院系)語言治療學分學程">語言治療學分學程</div>
+                            <div class="item" data-value="(跨院系)教育知能學分學程">教育知能學分學程</div>
+                            <div class="item" data-value="(跨院系)金融數學學分學程">金融數學學分學程</div>
+                            <div class="item" data-value="(跨院系)數據科學學分學程">數據科學學分學程</div>
+                            <div class="item" data-value="(跨院系)永續發展與環境管理學分學程">永續發展與環境管理學分學程</div>
+                            <div class="item" data-value="(跨院系)觀光旅遊學分學程">觀光旅遊學分學程</div>
+                            <div class="item" data-value="(跨院系)金融科技學分學程">金融科技學分學程</div>
+                            <div class="item" data-value="(跨院系)奈微米機電元件與系統全英語學分學程">奈微米機電元件與系統全英語學分學程</div>
+                            <div class="item" data-value="(跨院系)創新設計學分學程">創新設計學分學程</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="skill_entry" class="field other_entry" style="display:none;">
+                    <div class="ui fluid selection dropdown search_entry_item">
+                        <input id="skill_entry_text" name="skill" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">選擇第一二專長</div>
+                        <div class="menu">
+                            <div class="item" data-value="">
+                                xxx&nbsp;&nbsp;&nbsp;XXX</div>
                         </div>
                     </div>
                 </div>

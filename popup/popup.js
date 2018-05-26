@@ -18,7 +18,7 @@ import {
   num_of_old_course,
   num_of_each_similar
 } from "./recommend";
-import { collectionOfCourse, getCurrentStateOfNTHU } from "./server";
+import { getCurrentStateOfNTHU } from "./server";
 
 const year = "106";
 const semester = "20";
@@ -43,7 +43,6 @@ $(document).ready(function() {
 
           getCart(acix);
           getGrade(acix, stu_no);
-          collectionOfCourse();
         });
       });
     }
@@ -62,7 +61,7 @@ $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
 $(".course_type.browse").popup({
   popup: $(".ui.course_type.popup"),
-  position: "bottom right",
+  position: "bottom left",
   on: "click"
 });
 $("#submit").on("click", function() {
@@ -142,12 +141,22 @@ $("#clicktosearch").on("click", function() {
   } else if (topic.includes("Topic")) {
     $("#search_alert_topic").modal("show");
   } else {
-    // TODO: 尚未真的把取到的值做搜尋
-    if (topic == "上課時間") console.log($("#time_select_text").val());
-    else if (topic == "通識對象")
-      console.log($("#ge_people_select_text").val());
+    var other_keyword = "";
+    if (topic == "上課時間") {
+      other_keyword = $("#time_select_text").val();
+    } else if (topic == "通識對象") {
+      other_keyword = $("#ge_people_text").val();
+    } else if (topic == "通識類別") {
+      other_keyword = $("#ge_type_select_text").val();
+    } else if (topic == "系必選修") {
+      other_keyword = $("#dept_entry_text").val();
+    } else if (topic == "學分學程") {
+      other_keyword = $("#program_entry_text").val();
+    } else if (topic == "第一二專長") {
+      other_keyword = $("#skill_entry_text").val();
+    }
 
-    searchByKeyword(acix, keyword, topic, function() {
+    searchByKeyword(acix, keyword, other_keyword, topic, function() {
       $("#search_loading").removeClass("active");
       $("#search_result_page").show();
     });
@@ -254,7 +263,7 @@ $(".ui.modal").modal({
 });
 $(".ui.course_type.popup").on("click", ".item", function() {
   dependOnType($(this).text());
-  $("#topic_name").html($(this).text() + `<i class="dropdown icon"></i>`);
+  $("#topic_name").text($(this).text());
   $(".ui.course_type.popup").popup("hide all");
 });
 $("#cart_submit").on("click", function() {

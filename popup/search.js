@@ -19,11 +19,15 @@ client.ping(
   }
 );
 
-function searchByKeyword(acix, keyword, topic, callback) {
+function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
   $("#search_result_body").empty();
   $("#search_loading").addClass("active");
   var search_topic = translateTopic(topic);
-  // console.log("topic:", topic, ", search_topic:", search_topic);
+  console.log("keyword:", keyword);
+  console.log("other_keyword:", other_keyword);
+  console.log("search_topic:", search_topic);
+
+  // FIXME: Elastic Search 去 Match 的方式要修正
   client
     .search({
       index: "nthu",
@@ -31,8 +35,19 @@ function searchByKeyword(acix, keyword, topic, callback) {
       body: {
         size: 50,
         query: {
-          match: {
-            [search_topic]: keyword
+          bool: {
+            must: [
+              {
+                match: {
+                  課程中文名稱: keyword
+                }
+              },
+              {
+                match: {
+                  [search_topic]: other_keyword
+                }
+              }
+            ]
           }
         }
       }
@@ -127,7 +142,6 @@ function storeCourseInfo(hits, callback) {
         學程: source.學程,
         必選修: source.必選修,
         第一二專長: source.第一二專長,
-        課綱: source.課綱,
         相似課程: []
       };
     }
@@ -217,11 +231,13 @@ function searchByID_Group(course_id_group, callback) {
 function dependOnType(topic) {
   $(".other_entry").hide();
   $(".ui.dropdown.search_entry_item").dropdown("clear");
-  if (topic == "上課時間") {
-    $("#time_select_entry").show();
-  } else if (topic == "通識對象") {
-    $("#ge_people_select_entry").show();
-  } else $("#main_other_entry").show();
+  if (topic == "上課時間") $("#time_select_entry").show();
+  else if (topic == "通識對象") $("#ge_people_entry").show();
+  else if (topic == "通識類別") $("#ge_type_select_entry").show();
+  else if (topic == "系必選修") $("#dept_entry").show();
+  else if (topic == "學分學程") $("#program_entry").show();
+  else if (topic == "第一二專長") $("#skill_entry").show();
+  else $("#main_other_entry").show();
 }
 
 export {

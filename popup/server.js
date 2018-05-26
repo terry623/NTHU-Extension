@@ -107,37 +107,37 @@ function getGradeDistribution(acix, course_no, callback) {
   );
 }
 
-function collectionOfCourse() {
-  var obj = {
-    values: []
-  };
-  const local_course = [
-    {
-      value: "課程編號1",
-      text: "選項1",
-      name: "選項詳情1"
-    },
-    {
-      value: "課程編號2",
-      text: "選項2",
-      name: "選項詳情2"
-    },
-    {
-      value: "課程編號3",
-      text: "選項3",
-      name: "選項詳情3"
-    }
-  ];
-  for (var v in local_course) {
-    obj.values[v] = {
-      value: local_course[v].value,
-      text: local_course[v].text,
-      name: local_course[v].name
-    };
-  }
-  $(".ui.dropdown.search_list_1").dropdown("refresh");
-  $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
-}
+// function collectionOfCourse() {
+//   var obj = {
+//     values: []
+//   };
+//   const local_course = [
+//     {
+//       value: "課程編號1",
+//       text: "選項1",
+//       name: "選項詳情1"
+//     },
+//     {
+//       value: "課程編號2",
+//       text: "選項2",
+//       name: "選項詳情2"
+//     },
+//     {
+//       value: "課程編號3",
+//       text: "選項3",
+//       name: "選項詳情3"
+//     }
+//   ];
+//   for (var v in local_course) {
+//     obj.values[v] = {
+//       value: local_course[v].value,
+//       text: local_course[v].text,
+//       name: local_course[v].name
+//     };
+//   }
+//   $(".ui.dropdown.search_list_1").dropdown("refresh");
+//   $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
+// }
 
 function getSimilarities(course_id, callback) {
   chrome.storage.local.get("course", function(items) {
@@ -309,7 +309,6 @@ function getCurrentStateOfNTHU(callback) {
 
 export {
   calculateUserGrade,
-  collectionOfCourse,
   getSimilarities,
   getCurrentStateOfNTHU,
   getSimilarities_forRecommend
