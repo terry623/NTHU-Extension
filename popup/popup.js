@@ -1,6 +1,6 @@
 window._crypto = null;
 import { initDrift } from "./drift";
-initDrift();
+// initDrift();
 import { getUrlVars } from "./helper";
 import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
 import {
@@ -19,6 +19,7 @@ import {
   num_of_each_similar
 } from "./recommend";
 import { getCurrentStateOfNTHU } from "./server";
+import { planAllCourse } from "./select";
 
 const year = "106";
 const semester = "20";
@@ -43,6 +44,7 @@ $(document).ready(function() {
 
           getCart(acix);
           getGrade(acix, stu_no);
+          planAllCourse(acix);
         });
       });
     }

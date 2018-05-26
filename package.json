@@ -2,7 +2,6 @@
   "name": "nthu-extension",
   "version": "1.0.0",
   "dependencies": {
-    "axios": "^0.18.0",
     "elasticsearch": "^14.2.2",
     "iconv-lite": "^0.4.21",
     "jquery": "^3.3.1",

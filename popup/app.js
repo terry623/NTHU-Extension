@@ -1,5 +1,6 @@
 import * as popup from "./popup";
 import * as drift from "./drift";
+import * as select from "./select";
 import * as conflict from "./conflict";
 import * as search from "./search";
 import * as server from "./server";
