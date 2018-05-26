@@ -1,6 +1,6 @@
 window._crypto = null;
 import { initDrift } from "./drift";
-// initDrift();
+initDrift();
 import { getUrlVars } from "./helper";
 import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
 import {

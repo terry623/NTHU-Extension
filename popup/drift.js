@@ -1,5 +1,5 @@
 function initDrift() {
-  // $("#home_loading").addClass("active");
+  $("#home_loading").addClass("active");
   !(function() {
     var t = (window.driftt = window.drift = window.driftt || []);
     if (!t.init) {
