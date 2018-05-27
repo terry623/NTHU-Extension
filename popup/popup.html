@@ -148,9 +148,20 @@
         </div>
 
         <div class="content_item searchPage">
-            <div id="search_alert_empty" class="ui mini modal">
+            <div id="search_alert_keyword_empty" class="ui mini modal">
                 <div class="header">
-                    你什麼都沒輸入
+                    你的關鍵字沒輸入
+                </div>
+                <div class="content">
+                    <p>可以 . . .</p>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">Close</div>
+                </div>
+            </div>
+            <div id="search_alert_otherkeyword_empty" class="ui mini modal">
+                <div class="header">
+                    你沒有選擇進階輸入
                 </div>
                 <div class="content">
                     <p>可以 . . .</p>
@@ -161,7 +172,7 @@
             </div>
             <div id="search_alert_topic" class="ui mini modal">
                 <div class="header">
-                    你沒有選擇主題
+                    你沒有選擇類別
                 </div>
                 <div class="content">
                     <p>可以 . . .</p>
@@ -219,15 +230,13 @@
                 </div>
                 <div id="main_other_entry" class="field other_entry">
                     <div class="ui disabled fluid search selection dropdown search_list_1 search_entry_item">
-                        <input name="c_name" type="hidden">
+                        <input id="other_keyword" name="c_name" type="hidden">
                         <i class="dropdown icon"></i>
                         <div class="default text">此類別無進階輸入</div>
                         <div class="menu">
                         </div>
                     </div>
                 </div>
-
-                <!-- TODO: 時間要換個呈現方式 -->
                 <div id="time_select_entry" class="field other_entry" style="display:none;">
                     <div class="ui fluid multiple search selection dropdown search_entry_item">
                         <input id="time_select_text" name="time" type="hidden">
@@ -583,8 +592,6 @@
                                     <a class="icon item">
                                         <i class="left chevron icon"></i>
                                     </a>
-
-                                    <!-- TODO: 頁數若少於五，要變成真實頁數 -->
                                     <a class="page active item">1</a>
                                     <a class="page item">2</a>
                                     <a class="page item">3</a>

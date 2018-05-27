@@ -26,7 +26,6 @@ const semester = "20";
 const search_result_num = 10;
 var acix, stu_no;
 
-// TODO: 降低送要求到 Server 的次數，有些一次性的要求，改成在 event.js 執行
 $(document).ready(function() {
   $(".content_item").hide();
   chrome.tabs.query(
@@ -120,8 +119,8 @@ $("#delete").on("click", function() {
 });
 $("#search_result_body").on("click", "tr", function() {
   $(this).css("cursor", "pointer");
-  var course_from_click = $("td:nth-child(1)", this).text();
-  var course_id = $(this).attr("id");
+  let course_from_click = $("td:nth-child(1)", this).text();
+  let course_id = $(this).attr("id");
   getCourseInfo(
     acix,
     course_from_click,
@@ -136,14 +135,14 @@ $("#search_result_body").on("click", "tr", function() {
   );
 });
 $("#clicktosearch").on("click", function() {
-  var topic = $("#topic_name").text();
-  var keyword = $("#keyword").val();
-  if ($("#keyword").val() == "") {
-    $("#search_alert_empty").modal("show");
-  } else if (topic.includes("Topic")) {
+  let topic = $("#topic_name").text();
+  let keyword = $("#keyword").val();
+  if (topic.includes("請選擇類別")) {
     $("#search_alert_topic").modal("show");
+  } else if ($("#keyword").val() == "") {
+    $("#search_alert_keyword_empty").modal("show");
   } else {
-    var other_keyword = "";
+    let other_keyword = "NoNeedToChoose";
     if (topic == "上課時間") {
       other_keyword = $("#time_select_text").val();
     } else if (topic == "通識對象") {
@@ -158,6 +157,12 @@ $("#clicktosearch").on("click", function() {
       other_keyword = $("#skill_entry_text").val();
     }
 
+    if (other_keyword == "") {
+      $("#search_alert_otherkeyword_empty").modal("show");
+      return;
+    } else if (other_keyword == "NoNeedToChoose") {
+      other_keyword = "";
+    }
     searchByKeyword(acix, keyword, other_keyword, topic, function() {
       $("#search_loading").removeClass("active");
       $("#search_result_page").show();
@@ -171,7 +176,7 @@ $("#search_page_change").on("click", ".page.item", function() {
     .addClass("active")
     .siblings(".item")
     .removeClass("active");
-  var start = (parseInt($(this).text()) - 1) * search_result_num;
+  let start = (parseInt($(this).text()) - 1) * search_result_num;
   $("#search_result_body  > tr")
     .show()
     .filter(function(index) {
@@ -191,7 +196,7 @@ $("#change_phase").dropdown({
 });
 $("#change_school_table").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown")) {
-    var t = $(".ui.compact.table");
+    let t = $(".ui.compact.table");
     t.show();
 
     if ($(this).hasClass("tab1")) {
@@ -218,7 +223,7 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       .siblings(".item")
       .removeClass("active");
 
-    var t = $(".content_item");
+    let t = $(".content_item");
     t.show();
     $("#change_school_table").hide();
 
@@ -236,7 +241,7 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       t.not(".recommendPage").hide();
       before_hits_group.length = 0;
       compare_group.length = 0;
-      var content_group = [];
+      let content_group = [];
       getRecommendPage(acix, function() {
         if (
           before_hits_group.length ==
@@ -265,16 +270,21 @@ $(".ui.modal").modal({
 });
 $(".ui.course_type.popup").on("click", ".item", function() {
   dependOnType($(this).text());
+  if (
+    $("#topic_name")
+      .text()
+      .includes("請選擇類別") == false
+  )
+    $("#keyword").val("");
   $("#topic_name").text($(this).text());
-  $("#keyword").val("");
   $(".ui.course_type.popup").popup("hide all");
 });
 $("#cart_submit").on("click", function() {
   alert("Send cart to school !");
 });
 $("#multiple_class_list").on("click", ".item", function() {
-  var course_no = $(this).attr("course_no");
-  var id = $(this).attr("id");
+  let course_no = $(this).attr("course_no");
+  let id = $(this).attr("id");
   getCourseInfo(
     acix,
     course_no,
@@ -288,7 +298,7 @@ $("#multiple_class_list").on("click", ".item", function() {
   );
 });
 $("#multiple_class_bySingle").on("click", ".item", function() {
-  var course_no = $(this).attr("course_no");
+  let course_no = $(this).attr("course_no");
   searchBySingleCourseNo(course_no, function(hits) {
     storeCourseInfo(hits, function() {
       getCourseInfo(
@@ -305,8 +315,8 @@ $("#multiple_class_bySingle").on("click", ".item", function() {
 });
 $("#conflict_explain").popup();
 $("#recommend_list").on("click", ".item", function() {
-  var course_no = $(this).attr("course_no");
-  var id = $(this).attr("id");
+  let course_no = $(this).attr("course_no");
+  let id = $(this).attr("id");
   getCourseInfo(
     acix,
     course_no,

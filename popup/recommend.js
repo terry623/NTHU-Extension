@@ -60,7 +60,6 @@ function getRecommendPage(acix, callback) {
         let new_course_no = oldyear_to_newyear(pr_key);
         searchBySingleCourseNo(new_course_no, function(hits) {
           if (hits.length > 0) {
-            // TODO: 減少送 Request 的數量
             getSimilarities_forRecommend(hits[0]._id, function(info) {
               let sort_pr_and_percent = sortComplexObject(info, pr_value);
               let id_group = [];

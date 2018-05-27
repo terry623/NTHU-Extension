@@ -1,6 +1,7 @@
 import { getCourseInfo } from "./api";
 import { translateTopic } from "./helper";
 import { checkConflict } from "./conflict";
+var request = require("request");
 var elasticsearch = require("elasticsearch");
 var client = new elasticsearch.Client({
   host: "http://localhost:9200"
@@ -71,66 +72,44 @@ function renderSearchResult(hits, callback) {
 }
 
 function searchOnlyKeyword(search_topic, keyword, callback) {
-  console.log("searchOnlyKeyword");
-  client
-    .search({
-      index: "nthu",
-      type: "course",
-      body: {
-        size: 50,
-        query: {
-          match: {
-            [search_topic]: keyword
-          }
-        }
-      }
-    })
-    .then(
-      function(resp) {
+  request(
+    {
+      url:
+        "http://127.0.0.1:5000/api/searchOnlyKeyword?search_topic=" +
+        search_topic +
+        "&keyword=" +
+        keyword
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        let resp = JSON.parse(body);
         let hits = resp.hits.hits;
         renderSearchResult(hits, callback);
-      },
-      function(err) {
-        console.trace(err.message);
       }
-    );
+    }
+  );
 }
 
 function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
-  console.log("searchDoubleKeyword");
-  client
-    .search({
-      index: "nthu",
-      type: "course",
-      body: {
-        size: 50,
-        query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  課程中文名稱: keyword
-                }
-              },
-              {
-                match: {
-                  [search_topic]: other_keyword
-                }
-              }
-            ]
-          }
-        }
-      }
-    })
-    .then(
-      function(resp) {
+  console.log(other_keyword);
+  request(
+    {
+      url:
+        "http://127.0.0.1:5000/api/searchDoubleKeyword?search_topic=" +
+        search_topic +
+        "&keyword=" +
+        keyword +
+        "&other_keyword=" +
+        other_keyword
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        let resp = JSON.parse(body);
         let hits = resp.hits.hits;
         renderSearchResult(hits, callback);
-      },
-      function(err) {
-        console.trace(err.message);
       }
-    );
+    }
+  );
 }
 
 function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
@@ -138,16 +117,19 @@ function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
   $("#search_loading").addClass("active");
   let search_topic = translateTopic(topic);
   if (search_topic == "時間") {
+    console.log("Change Time");
     other_keyword = other_keyword.replace(",", "");
   }
-  console.log("keyword:", keyword);
-  console.log("other_keyword:", other_keyword);
-  console.log("search_topic:", search_topic);
 
   // FIXME: Elastic Search 去 Match 的方式要修正
-  if (other_keyword == "") {
+  if (other_keyword === "") {
+    console.log("search_topic:", search_topic);
+    console.log("keyword:", keyword);
     searchOnlyKeyword(search_topic, keyword, callback);
   } else {
+    console.log("search_topic:", search_topic);
+    console.log("keyword:", keyword);
+    console.log("other_keyword:", other_keyword);
     searchDoubleKeyword(search_topic, keyword, other_keyword, callback);
   }
 }
@@ -214,58 +196,41 @@ function storeCourseInfo(hits, callback) {
 }
 
 function searchBySingleCourseNo(course_no, callback) {
-  client
-    .search({
-      index: "nthu",
-      type: "course",
-      body: {
-        query: {
-          match: {
-            科號: course_no
-          }
-        }
-      }
-    })
-    .then(
-      function(resp) {
-        var hits = resp.hits.hits;
+  request(
+    {
+      url:
+        "http://127.0.0.1:5000/api/searchBySingleCourseNo?course_no=" +
+        course_no
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        let resp = JSON.parse(body);
+        let hits = resp.hits.hits;
         callback(hits);
-        // console.log(hits);
-      },
-      function(err) {
-        console.trace(err.message);
       }
-    );
+    }
+  );
 }
 
 function searchByID_Group(course_id_group, callback) {
-  // console.log("searchByID_Group");
-  // console.log(course_id_group);
-  client
-    .search({
-      index: "nthu",
-      type: "course",
-      body: {
-        query: {
-          terms: {
-            _id: [
-              course_id_group[0].other_id,
-              course_id_group[1].other_id,
-              course_id_group[2].other_id
-            ]
-          }
-        }
-      }
-    })
-    .then(
-      function(resp) {
-        var hits = resp.hits.hits;
+  request(
+    {
+      url:
+        "http://127.0.0.1:5000/api/searchByID_Group?id_0=" +
+        course_id_group[0].other_id +
+        "&id_1=" +
+        course_id_group[1].other_id +
+        "&id_2=" +
+        course_id_group[2].other_id
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        let resp = JSON.parse(body);
+        let hits = resp.hits.hits;
         callback(hits);
-      },
-      function(err) {
-        console.trace(err.message);
       }
-    );
+    }
+  );
 }
 
 function dependOnType(topic) {
