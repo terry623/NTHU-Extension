@@ -1,4 +1,3 @@
-// TODO: 這些函式都要進行 Error 處理
 var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";

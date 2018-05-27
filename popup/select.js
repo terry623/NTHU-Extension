@@ -19,6 +19,7 @@ function planAllCourse(acix) {
         );
         let temp = document.createElement("div");
         temp.innerHTML = str;
+        // console.log.apply(console, $(temp));
 
         if (
           $(temp)
@@ -36,9 +37,19 @@ function planAllCourse(acix) {
             ckey: "",
             chkbtn: ""
           };
+
+          // choose_data["toChk"] = $("input[name=toChk]", temp).val();
+          // choose_data["new_dept"] = $("select[name=new_dept]", temp).val();
+          // choose_data["new_class"] = $("select[name=new_class]", temp).val();
+          // choose_data["keyword"] = $("input[name=keyword]", temp).val();
+          // choose_data["chks"] = $("input[name=chks]", temp).val();
+          // choose_data["ckey"] = $("input[name=ckey]", temp).val();
+          // choose_data["chkbtn"] = $("input[name=chkbtn]", temp).val();
+
+          // FIXME: 正式選課開始時，要測試系統到底要什麼值
           choose_data["toChk"] = $("input[name=toChk]", temp).val();
-          choose_data["new_dept"] = $("select[name=new_dept]", temp).val();
-          choose_data["new_class"] = $("select[name=new_class]", temp).val();
+          choose_data["new_dept"] = "CS++";
+          choose_data["new_class"] = "CS++104BA";
           choose_data["keyword"] = $("input[name=keyword]", temp).val();
           choose_data["chks"] = $("input[name=chks]", temp).val();
           choose_data["ckey"] = $("input[name=ckey]", temp).val();
@@ -51,7 +62,7 @@ function planAllCourse(acix) {
 
           const test_course_no = "10710CS  460200";
           planEachCourse(acix, test_course_no, choose_data, function() {
-            console.log("Finish Choose One Course");
+            console.log("Finish Choose One Course !");
           });
         }
       }
@@ -70,16 +81,15 @@ function serialize(obj) {
 
 function planEachCourse(acix, course_no, choose_data, callback) {
   course_no = course_no.replace(/ /g, "+");
-
-  // FIXME: 有些值要寫死，不然會變成 null
-  console.log(choose_data.toChk);
-  console.log(choose_data.new_dept); //
-  console.log(choose_data.new_class); //
-  console.log(choose_data.keyword);
-  console.log(choose_data.chks); //
-  console.log(choose_data.ckey);
-  console.log(choose_data.chkbtn);
-  console.log(course_no); //
+  console.log("The data send to choose course ...")
+  console.log("toChk:", choose_data.toChk);
+  console.log("new_dept:", choose_data.new_dept);
+  console.log("new_class:", choose_data.new_class);
+  console.log("keyword:", choose_data.keyword);
+  console.log("chks:", choose_data.chks);
+  console.log("ckey:", choose_data.ckey);
+  console.log("chkbtn:", choose_data.chkbtn);
+  console.log("course_no:", course_no);
 
   let form = {
     ACIXSTORE: acix,
@@ -112,7 +122,7 @@ function planEachCourse(acix, course_no, choose_data, callback) {
         ``
       );
       temp.innerHTML = decode_data;
-      console.log.apply(console, $(temp));
+      // console.log.apply(console, $(temp));
       if (
         $(temp)
           .text()
@@ -131,7 +141,6 @@ function planEachCourse(acix, course_no, choose_data, callback) {
         $("#choose_course_alert_text").text(res[1]);
         $("#choose_course_alert").modal("show");
       } else {
-        console.log("Correct!");
         callback();
       }
     });
