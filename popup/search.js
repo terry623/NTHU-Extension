@@ -19,15 +19,85 @@ client.ping(
   }
 );
 
-function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
-  $("#search_result_body").empty();
-  $("#search_loading").addClass("active");
-  var search_topic = translateTopic(topic);
-  console.log("keyword:", keyword);
-  console.log("other_keyword:", other_keyword);
-  console.log("search_topic:", search_topic);
+function renderSearchResult(hits, callback) {
+  storeCourseInfo(hits);
+  for (let each_course in hits) {
+    let id = hits[each_course]._id;
+    let source = hits[each_course]._source;
 
-  // FIXME: Elastic Search 去 Match 的方式要修正
+    let time = source.時間;
+    if (time == "") time = "無";
+    let classroom = source.教室;
+    if (classroom == "") classroom = "無";
+
+    checkConflict(time, function(negative) {
+      let row =
+        `<tr ` +
+        negative +
+        ` id="` +
+        id +
+        `">
+      <td>` +
+        source.科號 +
+        `</td>
+          <td>` +
+        source.課程中文名稱 +
+        `</td>
+        <td>` +
+        time +
+        `</td>
+        <td>` +
+        classroom +
+        `</td>
+        <td>`;
+
+      let teacher = [];
+      for (let each_teacher in source.教師)
+        teacher.push(source.教師[each_teacher].split("\t")[0]);
+      teacher.splice(-1, 1);
+      row += teacher.join("<br>") + `</td></tr>`;
+      $("#search_result_body").append(row);
+      $("#search_result_body > tr")
+        .filter(function(index) {
+          return index >= 10;
+        })
+        .hide();
+      $("#search_result_body > tr").hover(function() {
+        $(this).css("cursor", "pointer");
+      });
+    });
+  }
+  callback();
+}
+
+function searchOnlyKeyword(search_topic, keyword, callback) {
+  console.log("searchOnlyKeyword");
+  client
+    .search({
+      index: "nthu",
+      type: "course",
+      body: {
+        size: 50,
+        query: {
+          match: {
+            [search_topic]: keyword
+          }
+        }
+      }
+    })
+    .then(
+      function(resp) {
+        let hits = resp.hits.hits;
+        renderSearchResult(hits, callback);
+      },
+      function(err) {
+        console.trace(err.message);
+      }
+    );
+}
+
+function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
+  console.log("searchDoubleKeyword");
   client
     .search({
       index: "nthu",
@@ -54,62 +124,32 @@ function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
     })
     .then(
       function(resp) {
-        var hits = resp.hits.hits;
-        storeCourseInfo(hits);
-
-        for (let each_course in hits) {
-          let id = hits[each_course]._id;
-          let source = hits[each_course]._source;
-
-          let time = source.時間;
-          if (time == "") time = "無";
-          let classroom = source.教室;
-          if (classroom == "") classroom = "無";
-
-          checkConflict(time, function(negative) {
-            let row =
-              `<tr ` +
-              negative +
-              ` id="` +
-              id +
-              `">
-            <td>` +
-              source.科號 +
-              `</td>
-                <td>` +
-              source.課程中文名稱 +
-              `</td>
-              <td>` +
-              time +
-              `</td>
-              <td>` +
-              classroom +
-              `</td>
-              <td>`;
-
-            let teacher = [];
-            for (let each_teacher in source.教師)
-              teacher.push(source.教師[each_teacher].split("\t")[0]);
-            teacher.splice(-1, 1);
-            row += teacher.join("<br>") + `</td></tr>`;
-            $("#search_result_body").append(row);
-            $("#search_result_body > tr")
-              .filter(function(index) {
-                return index >= 10;
-              })
-              .hide();
-            $("#search_result_rightbar").attr("placeholder", topic);
-            $("#search_result_body > tr").hover(function() {
-              $(this).css("cursor", "pointer");
-            });
-          });
-        }
-        callback();
+        let hits = resp.hits.hits;
+        renderSearchResult(hits, callback);
       },
       function(err) {
         console.trace(err.message);
       }
     );
+}
+
+function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
+  $("#search_result_body").empty();
+  $("#search_loading").addClass("active");
+  let search_topic = translateTopic(topic);
+  if (search_topic == "時間") {
+    other_keyword = other_keyword.replace(",", "");
+  }
+  console.log("keyword:", keyword);
+  console.log("other_keyword:", other_keyword);
+  console.log("search_topic:", search_topic);
+
+  // FIXME: Elastic Search 去 Match 的方式要修正
+  if (other_keyword == "") {
+    searchOnlyKeyword(search_topic, keyword, callback);
+  } else {
+    searchDoubleKeyword(search_topic, keyword, other_keyword, callback);
+  }
 }
 
 function storeCourseInfo(hits, callback) {

@@ -266,6 +266,7 @@ $(".ui.modal").modal({
 $(".ui.course_type.popup").on("click", ".item", function() {
   dependOnType($(this).text());
   $("#topic_name").text($(this).text());
+  $("#keyword").val("");
   $(".ui.course_type.popup").popup("hide all");
 });
 $("#cart_submit").on("click", function() {
