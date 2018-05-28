@@ -2,15 +2,15 @@
   "manifest_version": 2,
   "name": "NTHU Course",
   "description": "幫助你的選課",
-  "version": "1.1",
+  "version": "1.2",
   "page_action": {
     "default_title": "開始選課",
     "default_icon": "static/icon.png",
     "default_popup": "popup/popup.html"
   },
-  "icons": {  
-        "128": "icon128.png"
-    }  ,
+  "icons": {
+    "128": "icon128.png"
+  },
   "permissions": ["activeTab", "tabs", "storage", "http://localhost/*"],
   "content_scripts": [
     {
@@ -23,5 +23,5 @@
     "persistent": false
   },
   "content_security_policy":
-    "script-src 'self' 'unsafe-eval' https://js.driftt.com/include/; object-src 'self'"
+    "script-src 'self' 'unsafe-eval' https://js.driftt.com/include/ https://code.jquery.com/jquery-3.3.1.min.js https://mozilla.github.io/pdf.js/build/pdf.js https://mozilla.github.io/pdf.js/build/pdf.worker.js; object-src 'self'"
 }
