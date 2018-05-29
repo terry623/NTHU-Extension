@@ -40,6 +40,7 @@ function getUserName(acix, callback) {
   );
 }
 
+// TODO: 讓新生限制人數跟著其他一起出現
 function getPopulation(acix, course_no, fresh_num) {
   var patt = /[A-Za-z]+/;
   var target = course_no.match(patt);
@@ -103,6 +104,7 @@ function getPopulation(acix, course_no, fresh_num) {
   );
 }
 
+// FIXME: 注意時間和教室
 function getCourseInfo(acix, course_no, id, callback, from_multiple) {
   if (course_no == undefined) return;
   if (!from_multiple) $("#course_info_loading").addClass("active");
@@ -136,10 +138,10 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
                 var similar_course =
                   `<div class="title">
                     <i class="dropdown icon"></i>` +
-                  info[each].sim.other +
+                  info[each].other +
                   `</div>
                 <div class="content">` +
-                  info[each].sim.percent +
+                  info[each].percent +
                   `</div>`;
                 $("#similar").append(similar_course);
               }

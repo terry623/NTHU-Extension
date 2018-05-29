@@ -323,6 +323,8 @@
 	      _recommend.before_hits_group.length = 0;
 	      _recommend.compare_group.length = 0;
 	      var content_group = [];
+	
+	      // FIXME: 推薦功能目前是壞的
 	      (0, _recommend.getRecommendPage)(acix, function () {
 	        if (_recommend.before_hits_group.length == _recommend.num_of_old_course * _recommend.num_of_each_similar) {
 	          (0, _recommend.toStorage)(acix, function (content, count, compare_value) {
@@ -584,6 +586,7 @@
 	  });
 	}
 	
+	// TODO: 讓新生限制人數跟著其他一起出現
 	function getPopulation(acix, course_no, fresh_num) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt);
@@ -633,6 +636,7 @@
 	  });
 	}
 	
+	// FIXME: 注意時間和教室
 	function getCourseInfo(acix, course_no, id, callback, from_multiple) {
 	  if (course_no == undefined) return;
 	  if (!from_multiple) $("#course_info_loading").addClass("active");
@@ -653,7 +657,7 @@
 	          (0, _server.getSimilarities)(id, function (info) {
 	            $("#similar").empty();
 	            for (var each in info) {
-	              var similar_course = "<div class=\"title\">\n                    <i class=\"dropdown icon\"></i>" + info[each].sim.other + "</div>\n                <div class=\"content\">" + info[each].sim.percent + "</div>";
+	              var similar_course = "<div class=\"title\">\n                    <i class=\"dropdown icon\"></i>" + info[each].other + "</div>\n                <div class=\"content\">" + info[each].percent + "</div>";
 	              $("#similar").append(similar_course);
 	            }
 	          });
@@ -3034,8 +3038,13 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.getSimilarities_forRecommend = exports.getCurrentStateOfNTHU = exports.getSimilarities = exports.calculateUserGrade = undefined;
+	
+	var _search = __webpack_require__(316);
+	
 	var iconv = __webpack_require__(14);
 	var request = __webpack_require__(64);
+	
 	
 	function calculateUserGrade(acix, stu_no, userGrade) {
 	  var all_pr = {};
@@ -3168,12 +3177,13 @@
 	//   $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
 	// }
 	
+	// FIXME: 把相似度為 1 的拿掉
 	function getSimilarities(course_id, callback) {
 	  chrome.storage.local.get("course", function (items) {
 	    var info = items.course[course_id];
 	    if (info.相似課程.length == 0) {
 	      request({
-	        url: "http://127.0.0.1:5000/api/getSimilarities?course_id=" + course_id
+	        url: _search.baseURL + "getSimilarities?course_id=" + course_id
 	      }, function (err, response, body) {
 	        if (!err && response.statusCode == 200) {
 	          var info = JSON.parse(body);
@@ -3194,7 +3204,7 @@
 	
 	function getSimilarities_forRecommend(course_id, callback) {
 	  request({
-	    url: "http://127.0.0.1:5000/api/getSimilarities?course_id=" + course_id
+	    url: _search.baseURL + "getSimilarities?course_id=" + course_id
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
 	      var info = JSON.parse(body);
@@ -3272,7 +3282,7 @@
 	
 	function getCurrentStateOfNTHU(callback) {
 	  request({
-	    url: "http://127.0.0.1:5000/api/getCurrentStateOfNTHU"
+	    url: _search.baseURL + "getCurrentStateOfNTHU"
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
 	      var info = JSON.parse(body);
@@ -57705,7 +57715,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.dependOnType = exports.searchByID_Group = exports.storeCourseInfo = exports.searchBySingleCourseNo = exports.searchByKeyword = undefined;
+	exports.baseURL = exports.dependOnType = exports.searchByID_Group = exports.storeCourseInfo = exports.searchBySingleCourseNo = exports.searchByKeyword = undefined;
 	
 	var _api = __webpack_require__(7);
 	
@@ -57714,7 +57724,9 @@
 	var _conflict = __webpack_require__(317);
 	
 	var request = __webpack_require__(64);
+	var baseURL = "http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/";
 	
+	// TODO: 時間和教室的顯示要排列一下
 	function renderSearchResult(hits, callback) {
 	  storeCourseInfo(hits);
 	
@@ -57722,6 +57734,7 @@
 	    var id = hits[each_course]._id;
 	    var source = hits[each_course]._source;
 	
+	    // FIXME: 時間與教室變成 array
 	    var time = source.時間;
 	    if (time == "") time = "無";
 	    var classroom = source.教室;
@@ -57752,25 +57765,36 @@
 	}
 	
 	function searchOnlyKeyword(search_topic, keyword, callback) {
-	  request({
-	    url: "http://127.0.0.1:5000/api/searchOnlyKeyword?search_topic=" + search_topic + "&keyword=" + keyword
+	  request.post({
+	    url: baseURL + "searchOnlyKeyword",
+	    form: {
+	      search_topic: search_topic,
+	      keyword: keyword
+	    }
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
 	      var hits = resp.hits.hits;
+	      console.log(hits);
 	      renderSearchResult(hits, callback);
 	    }
 	  });
 	}
 	
+	// TODO: 搜尋時間的 Server 端還沒改
 	function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
-	  console.log(other_keyword);
-	  request({
-	    url: "http://127.0.0.1:5000/api/searchDoubleKeyword?search_topic=" + search_topic + "&keyword=" + keyword + "&other_keyword=" + other_keyword
+	  request.post({
+	    url: baseURL + "searchDoubleKeyword",
+	    form: {
+	      search_topic: search_topic,
+	      keyword: keyword,
+	      other_keyword: other_keyword
+	    }
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
 	      var hits = resp.hits.hits;
+	      console.log(hits);
 	      renderSearchResult(hits, callback);
 	    }
 	  });
@@ -57782,10 +57806,11 @@
 	  var search_topic = (0, _helper.translateTopic)(topic);
 	  if (search_topic == "時間") {
 	    console.log("Change Time");
+	
+	    // FIXME: 時間存成 array
 	    other_keyword = other_keyword.replace(",", "");
 	  }
 	
-	  // FIXME: Elastic Search 去 Match 的方式要修正
 	  if (other_keyword === "") {
 	    console.log("search_topic:", search_topic);
 	    console.log("keyword:", keyword);
@@ -57799,8 +57824,6 @@
 	}
 	
 	function storeCourseInfo(hits, callback) {
-	  // console.log("storeCourseInfo");
-	  // console.log(hits);
 	  chrome.storage.local.get("course", function (items) {
 	    var temp = {};
 	    var data = {};
@@ -57860,9 +57883,13 @@
 	  });
 	}
 	
+	// FIXME: 要把科號改成，不管空白幾個都可以搜尋到
 	function searchBySingleCourseNo(course_no, callback) {
-	  request({
-	    url: "http://127.0.0.1:5000/api/searchBySingleCourseNo?course_no=" + course_no
+	  request.post({
+	    url: baseURL + "searchBySingleCourseNo",
+	    form: {
+	      course_no: course_no
+	    }
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
@@ -57872,9 +57899,14 @@
 	  });
 	}
 	
-	function searchByID_Group(course_id_group, callback) {
-	  request({
-	    url: "http://127.0.0.1:5000/api/searchByID_Group?id_0=" + course_id_group[0].other_id + "&id_1=" + course_id_group[1].other_id + "&id_2=" + course_id_group[2].other_id
+	function searchByID_Group(id_group, callback) {
+	  request.post({
+	    url: baseURL + "searchByID_Group",
+	    form: {
+	      id_0: id_group[0].other_id,
+	      id_1: id_group[1].other_id,
+	      id_2: id_group[2].other_id
+	    }
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
@@ -57895,6 +57927,7 @@
 	exports.storeCourseInfo = storeCourseInfo;
 	exports.searchByID_Group = searchByID_Group;
 	exports.dependOnType = dependOnType;
+	exports.baseURL = baseURL;
 
 /***/ }),
 /* 317 */

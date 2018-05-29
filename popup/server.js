@@ -1,5 +1,6 @@
 var iconv = require("iconv-lite");
 var request = require("request");
+import { baseURL } from "./search";
 
 function calculateUserGrade(acix, stu_no, userGrade) {
   var all_pr = {};
@@ -138,14 +139,14 @@ function getGradeDistribution(acix, course_no, callback) {
 //   $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
 // }
 
+// FIXME: 把相似度為 1 的拿掉
 function getSimilarities(course_id, callback) {
   chrome.storage.local.get("course", function(items) {
     var info = items.course[course_id];
     if (info.相似課程.length == 0) {
       request(
         {
-          url:
-            "http://127.0.0.1:5000/api/getSimilarities?course_id=" + course_id
+          url: baseURL + "getSimilarities?course_id=" + course_id
         },
         function(err, response, body) {
           if (!err && response.statusCode == 200) {
@@ -169,7 +170,7 @@ function getSimilarities(course_id, callback) {
 function getSimilarities_forRecommend(course_id, callback) {
   request(
     {
-      url: "http://127.0.0.1:5000/api/getSimilarities?course_id=" + course_id
+      url: baseURL + "getSimilarities?course_id=" + course_id
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
@@ -253,7 +254,7 @@ function currentPhase(phase) {
 function getCurrentStateOfNTHU(callback) {
   request(
     {
-      url: "http://127.0.0.1:5000/api/getCurrentStateOfNTHU"
+      url: baseURL + "getCurrentStateOfNTHU"
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {

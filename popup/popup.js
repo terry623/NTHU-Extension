@@ -242,6 +242,8 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       before_hits_group.length = 0;
       compare_group.length = 0;
       let content_group = [];
+
+      // FIXME: 推薦功能目前是壞的
       getRecommendPage(acix, function() {
         if (
           before_hits_group.length ==

@@ -2,13 +2,17 @@ import { getCourseInfo } from "./api";
 import { translateTopic } from "./helper";
 import { checkConflict } from "./conflict";
 var request = require("request");
+const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
 
+
+// TODO: 時間和教室的顯示要排列一下
 function renderSearchResult(hits, callback) {
   storeCourseInfo(hits);
   for (let each_course in hits) {
     let id = hits[each_course]._id;
     let source = hits[each_course]._source;
 
+    // FIXME: 時間與教室變成 array
     let time = source.時間;
     if (time == "") time = "無";
     let classroom = source.教室;
@@ -55,40 +59,41 @@ function renderSearchResult(hits, callback) {
 }
 
 function searchOnlyKeyword(search_topic, keyword, callback) {
-  request(
+  request.post(
     {
-      url:
-        "http://127.0.0.1:5000/api/searchOnlyKeyword?search_topic=" +
-        search_topic +
-        "&keyword=" +
-        keyword
+      url: baseURL + "searchOnlyKeyword",
+      form: {
+        search_topic: search_topic,
+        keyword: keyword
+      }
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
+        console.log(hits);
         renderSearchResult(hits, callback);
       }
     }
   );
 }
 
+// TODO: 搜尋時間的 Server 端還沒改
 function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
-  console.log(other_keyword);
-  request(
+  request.post(
     {
-      url:
-        "http://127.0.0.1:5000/api/searchDoubleKeyword?search_topic=" +
-        search_topic +
-        "&keyword=" +
-        keyword +
-        "&other_keyword=" +
-        other_keyword
+      url: baseURL + "searchDoubleKeyword",
+      form: {
+        search_topic: search_topic,
+        keyword: keyword,
+        other_keyword: other_keyword
+      }
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
+        console.log(hits);
         renderSearchResult(hits, callback);
       }
     }
@@ -101,10 +106,11 @@ function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
   let search_topic = translateTopic(topic);
   if (search_topic == "時間") {
     console.log("Change Time");
+
+    // FIXME: 時間存成 array
     other_keyword = other_keyword.replace(",", "");
   }
 
-  // FIXME: Elastic Search 去 Match 的方式要修正
   if (other_keyword === "") {
     console.log("search_topic:", search_topic);
     console.log("keyword:", keyword);
@@ -118,8 +124,6 @@ function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
 }
 
 function storeCourseInfo(hits, callback) {
-  // console.log("storeCourseInfo");
-  // console.log(hits);
   chrome.storage.local.get("course", function(items) {
     var temp = {};
     var data = {};
@@ -178,12 +182,14 @@ function storeCourseInfo(hits, callback) {
   });
 }
 
+// FIXME: 要把科號改成，不管空白幾個都可以搜尋到
 function searchBySingleCourseNo(course_no, callback) {
-  request(
+  request.post(
     {
-      url:
-        "http://127.0.0.1:5000/api/searchBySingleCourseNo?course_no=" +
-        course_no
+      url: baseURL + "searchBySingleCourseNo",
+      form: {
+        course_no: course_no
+      }
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
@@ -195,16 +201,15 @@ function searchBySingleCourseNo(course_no, callback) {
   );
 }
 
-function searchByID_Group(course_id_group, callback) {
-  request(
+function searchByID_Group(id_group, callback) {
+  request.post(
     {
-      url:
-        "http://127.0.0.1:5000/api/searchByID_Group?id_0=" +
-        course_id_group[0].other_id +
-        "&id_1=" +
-        course_id_group[1].other_id +
-        "&id_2=" +
-        course_id_group[2].other_id
+      url: baseURL + "searchByID_Group",
+      form: {
+        id_0: id_group[0].other_id,
+        id_1: id_group[1].other_id,
+        id_2: id_group[2].other_id
+      }
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
@@ -233,5 +238,6 @@ export {
   searchBySingleCourseNo,
   storeCourseInfo,
   searchByID_Group,
-  dependOnType
+  dependOnType,
+  baseURL
 };
