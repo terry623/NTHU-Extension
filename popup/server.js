@@ -2,110 +2,110 @@ var iconv = require("iconv-lite");
 var request = require("request");
 import { baseURL } from "./search";
 
-function calculateUserGrade(acix, stu_no, userGrade) {
-  var all_pr = {};
-  for (let course_no in userGrade) {
-    let grade = userGrade[course_no];
-    let translateMap = {
-      "A+": 0,
-      A: 1,
-      "A-": 2,
-      "B+": 3,
-      B: 4,
-      "B-": 5,
-      "C+": 6,
-      C: 7,
-      "C-": 8,
-      D: 9,
-      E: 10,
-      X: 11,
-      NotYet: 12,
-      All: 13
-    };
-    getGradeDistribution(acix, course_no, function(distribution) {
-      var user_grade_people = 0;
-      for (let i = 0; i <= translateMap[grade]; i++)
-        user_grade_people += distribution[i];
-      let pr = 1 - user_grade_people / 100;
-      all_pr[course_no] = pr;
+// function calculateUserGrade(acix, stu_no, userGrade) {
+//   var all_pr = {};
+//   for (let course_no in userGrade) {
+//     let grade = userGrade[course_no];
+//     let translateMap = {
+//       "A+": 0,
+//       A: 1,
+//       "A-": 2,
+//       "B+": 3,
+//       B: 4,
+//       "B-": 5,
+//       "C+": 6,
+//       C: 7,
+//       "C-": 8,
+//       D: 9,
+//       E: 10,
+//       X: 11,
+//       NotYet: 12,
+//       All: 13
+//     };
+//     getGradeDistribution(acix, course_no, function(distribution) {
+//       var user_grade_people = 0;
+//       for (let i = 0; i <= translateMap[grade]; i++)
+//         user_grade_people += distribution[i];
+//       let pr = 1 - user_grade_people / 100;
+//       all_pr[course_no] = pr;
 
-      chrome.storage.local.get("pr", function(items) {
-        var temp = {};
-        var data = {};
-        for (var each in all_pr) data[each] = all_pr[each];
+//       chrome.storage.local.get("pr", function(items) {
+//         var temp = {};
+//         var data = {};
+//         for (var each in all_pr) data[each] = all_pr[each];
 
-        if (items.pr != undefined) {
-          Object.assign(temp, items.all_pr);
-          for (var each_data in data) {
-            temp[each_data] = data[each_data];
-          }
-          chrome.storage.local.remove("pr", function() {
-            chrome.storage.local.set({ pr: temp }, function() {
-              chrome.storage.local.get("pr", function(items) {
-                // console.log(items);
-              });
-            });
-          });
-        } else {
-          for (var each_data in data) temp[each_data] = data[each_data];
-          chrome.storage.local.set({ pr: temp }, function() {
-            chrome.storage.local.get("pr", function(items) {
-              // console.log(items);
-            });
-          });
-        }
-      });
-    });
-  }
-}
+//         if (items.pr != undefined) {
+//           Object.assign(temp, items.all_pr);
+//           for (var each_data in data) {
+//             temp[each_data] = data[each_data];
+//           }
+//           chrome.storage.local.remove("pr", function() {
+//             chrome.storage.local.set({ pr: temp }, function() {
+//               chrome.storage.local.get("pr", function(items) {
+//                 // console.log(items);
+//               });
+//             });
+//           });
+//         } else {
+//           for (var each_data in data) temp[each_data] = data[each_data];
+//           chrome.storage.local.set({ pr: temp }, function() {
+//             chrome.storage.local.get("pr", function(items) {
+//               // console.log(items);
+//             });
+//           });
+//         }
+//       });
+//     });
+//   }
+// }
 
-function getGradeDistribution(acix, course_no, callback) {
-  request(
-    {
-      url:
-        "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/8/8.3/8.3.3/JH83302.php?ACIXSTORE=" +
-        acix +
-        "&c_key=" +
-        course_no +
-        "&from=prg8R63",
-      encoding: null
-    },
-    function(err, response, body) {
-      if (!err && response.statusCode == 200) {
-        var str = iconv.decode(new Buffer(body), "big5");
-        var replace =
-          `<img border="0" src="JH833022_img.php?ACIXSTORE=` + acix + `">`;
-        str = str.replace(replace, "");
-        var temp = document.createElement("div");
-        temp.innerHTML = str;
-        // console.log.apply(console, $(temp));
+// function getGradeDistribution(acix, course_no, callback) {
+//   request(
+//     {
+//       url:
+//         "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/8/8.3/8.3.3/JH83302.php?ACIXSTORE=" +
+//         acix +
+//         "&c_key=" +
+//         course_no +
+//         "&from=prg8R63",
+//       encoding: null
+//     },
+//     function(err, response, body) {
+//       if (!err && response.statusCode == 200) {
+//         var str = iconv.decode(new Buffer(body), "big5");
+//         var replace =
+//           `<img border="0" src="JH833022_img.php?ACIXSTORE=` + acix + `">`;
+//         str = str.replace(replace, "");
+//         var temp = document.createElement("div");
+//         temp.innerHTML = str;
+//         // console.log.apply(console, $(temp));
 
-        var gradeDistributionOfCourse = $(
-          "form > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td",
-          temp
-        );
+//         var gradeDistributionOfCourse = $(
+//           "form > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td",
+//           temp
+//         );
 
-        var gradeDistribution = [];
-        $(gradeDistributionOfCourse).each(function(index) {
-          if (index > 0) {
-            var grade = $(this).text();
-            var words = grade.split("%");
-            var num = "0";
-            var patt = /\d+/;
-            if (words.length != 1) num = words[0];
-            gradeDistribution.push(parseInt(num));
-          }
-        });
-        // var distribution = [];
-        // for (var [key, value] of gradeDistributionMap) {
-        //   if (typeof value === "number") distribution.push(value.toString());
-        //   else distribution.push(value[0]);
-        // }
-        callback(gradeDistribution);
-      }
-    }
-  );
-}
+//         var gradeDistribution = [];
+//         $(gradeDistributionOfCourse).each(function(index) {
+//           if (index > 0) {
+//             var grade = $(this).text();
+//             var words = grade.split("%");
+//             var num = "0";
+//             var patt = /\d+/;
+//             if (words.length != 1) num = words[0];
+//             gradeDistribution.push(parseInt(num));
+//           }
+//         });
+//         // var distribution = [];
+//         // for (var [key, value] of gradeDistributionMap) {
+//         //   if (typeof value === "number") distribution.push(value.toString());
+//         //   else distribution.push(value[0]);
+//         // }
+//         callback(gradeDistribution);
+//       }
+//     }
+//   );
+// }
 
 // function collectionOfCourse() {
 //   var obj = {
@@ -139,32 +139,32 @@ function getGradeDistribution(acix, course_no, callback) {
 //   $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
 // }
 
-function getSimilarities(course_id, callback) {
-  chrome.storage.local.get("course", function(items) {
-    var info = items.course[course_id];
-    if (info.相似課程.length == 0) {
-      request(
-        {
-          url: baseURL + "getSimilarities?course_id=" + course_id
-        },
-        function(err, response, body) {
-          if (!err && response.statusCode == 200) {
-            var info = JSON.parse(body);
-            var temp = {};
-            Object.assign(temp, items.course);
-            temp[course_id].相似課程 = info;
-            chrome.storage.local.set({ course: temp }, function() {
-              chrome.storage.local.get("course", function(items) {
-                // console.log(items);
-              });
-            });
-            callback(info);
-          }
-        }
-      );
-    } else callback(info.相似課程);
-  });
-}
+// function getSimilarities(course_id, callback) {
+//   chrome.storage.local.get("course", function(items) {
+//     var info = items.course[course_id];
+//     if (info.相似課程.length == 0) {
+//       request(
+//         {
+//           url: baseURL + "getSimilarities?course_id=" + course_id
+//         },
+//         function(err, response, body) {
+//           if (!err && response.statusCode == 200) {
+//             var info = JSON.parse(body);
+//             var temp = {};
+//             Object.assign(temp, items.course);
+//             temp[course_id].相似課程 = info;
+//             chrome.storage.local.set({ course: temp }, function() {
+//               chrome.storage.local.get("course", function(items) {
+//                 // console.log(items);
+//               });
+//             });
+//             callback(info);
+//           }
+//         }
+//       );
+//     } else callback(info.相似課程);
+//   });
+// }
 
 // function getSimilarities_forRecommend(course_id, callback) {
 //   request(
@@ -307,8 +307,8 @@ function getCurrentStateOfNTHU(callback) {
 }
 
 export {
-  calculateUserGrade,
-  getSimilarities,
+  // calculateUserGrade,
+  // getSimilarities,
   getCurrentStateOfNTHU
   // getSimilarities_forRecommend
 };

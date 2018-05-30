@@ -28,16 +28,12 @@ function storeSliceTime(slice_time, source) {
   });
 }
 
-function checkConflict(time, callback) {
-  var slice_time = [];
-  for (var i = 0, j = 0; i < time.length; i = i + 2, j++)
-    slice_time[j] = time.slice(i, i + 2);
-
+function checkConflict(time_array, callback) {
   chrome.storage.local.get("time", function(items) {
-    var conflict = false;
+    let conflict = false;
     if (items.time != undefined) {
-      for (var each in slice_time) {
-        if (items.time[slice_time[each]] != undefined) conflict = true;
+      for (let each in time_array) {
+        if (items.time[time_array[each]] != undefined) conflict = true;
       }
       if (conflict) {
         const negative = `class="error"`;

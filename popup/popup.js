@@ -2,7 +2,7 @@ window._crypto = null;
 import { initDrift } from "./drift";
 initDrift();
 import { getUrlVars } from "./helper";
-import { getUserName, getResultCourse, getGrade, getCourseInfo } from "./api";
+import { getUserName, getResultCourse, getCourseInfo } from "./api";
 import {
   searchByKeyword,
   searchBySingleCourseNo,
@@ -40,9 +40,8 @@ $(document).ready(function() {
           if (phase != undefined)
             getResultCourse(acix, stu_no, phase, year, semester);
           else $("#change_phase").addClass("disabled");
-
           getCart(acix);
-          getGrade(acix, stu_no);
+          // getGrade(acix, stu_no);
           // planAllCourse(acix);
         });
       });
@@ -67,12 +66,15 @@ $(".course_type.browse").popup({
 });
 $("#submit").on("click", function() {
   chrome.storage.local.get("cart", function(items) {
-    var get_course_id = $(".ui.piled.segment").attr("id");
-    var temp = {};
-    var data = {
+    let get_course_id = $(".ui.piled.segment").attr("id");
+    let temp = {};
+    let time_array = $("#time")
+      .text()
+      .split(",");
+    let data = {
       course_no: $("#no").text(),
       course_name: $("#course_name").text(),
-      time: $("#time").text()
+      time: time_array
     };
 
     if (items.cart != undefined) {
@@ -223,7 +225,6 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       .addClass("active")
       .siblings(".item")
       .removeClass("active");
-
 
     let t = $(".content_item");
     t.show();

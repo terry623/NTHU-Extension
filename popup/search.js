@@ -1,23 +1,23 @@
 import { getCourseInfo } from "./api";
-import { translateTopic } from "./helper";
+import { translateTopic, sort_weekday } from "./helper";
 import { checkConflict } from "./conflict";
 var request = require("request");
 const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
 // const baseURL = `http://192.168.99.100/api/`;
 // const baseURL = `localhost:80/api/`;
 
-// TODO: 時間和教室的顯示要排列一下
+// TODO: 頁數少於五頁就顯示真實頁數 & 欄位高度要固定
 function renderSearchResult(hits, callback) {
   storeCourseInfo(hits);
   for (let each_course in hits) {
     let id = hits[each_course]._id;
     let source = hits[each_course]._source;
 
-    // FIXME: 時間與教室變成 array
     let time = source.時間;
-    if (time == "") time = "無";
+    if (time.length == 0) time.push("無");
+    sort_weekday(time);
     let classroom = source.教室;
-    if (classroom == "") classroom = "無";
+    if (classroom.length == 0) classroom.push("無");
 
     checkConflict(time, function(negative) {
       let row =
@@ -36,7 +36,7 @@ function renderSearchResult(hits, callback) {
         time +
         `</td>
         <td>` +
-        classroom +
+        classroom.join("<br/>") +
         `</td>
         <td>`;
 
@@ -100,7 +100,6 @@ function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
   );
 }
 
-// FIXME: Server 端的 time 是壞的
 function searchTime(search_topic, keyword, time_group, callback) {
   console.log(time_group);
   request.post(

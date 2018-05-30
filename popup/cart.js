@@ -4,14 +4,14 @@ import { storeSliceTime } from "./conflict";
 
 function getCart(acix) {
   chrome.storage.local.get("cart", function(items) {
-    var parse_table = $.parseHTML(course_table);
+    let parse_table = $.parseHTML(course_table);
     $(parse_table).attr("id", "cart");
 
-    var all_time = [];
-    for (var key in items.cart) {
+    let all_time = [];
+    for (let key in items.cart) {
       if (items.cart.hasOwnProperty(key)) {
-        var name = items.cart[key].course_name.split(" ");
-        var content =
+        let name = items.cart[key].course_name.split(" ");
+        let content =
           `<a href="#do_not_jump" id="` +
           key +
           `" course_no="` +
@@ -25,18 +25,16 @@ function getCart(acix) {
             .find(".none")
             .append(content);
         } else {
-          var slice_time = [];
-          for (
-            var i = 0, j = 0;
-            i < items.cart[key].time.length;
-            i = i + 2, j++
-          ) {
-            slice_time[j] = items.cart[key].time.slice(i, i + 2);
-            all_time.push(slice_time[j]);
+          let slice_time = [];
+          for (let each in items.cart[key].time) {
+            let each_time = items.cart[key].time[each];
+            slice_time.push(each_time);
+            all_time.push(each_time);
           }
-          for (var i = 0; i < slice_time.length; i++) {
+
+          for (let each in slice_time) {
             $(parse_table)
-              .find("." + slice_time[i])
+              .find("." + slice_time[each])
               .append(content);
           }
         }
@@ -48,7 +46,7 @@ function getCart(acix) {
       $("#multiple_class_list").empty();
       if ($(this).children().length > 1) {
         $("a", this).each(function() {
-          var content =
+          let content =
             `<div id="` +
             $(this).attr("id") +
             `" course_no="` +
@@ -66,8 +64,8 @@ function getCart(acix) {
         //TODO: 通識的話，可以在此 modal 看志願
         $("#multiple_class").modal("show");
       } else {
-        var course_no = $("a", this).attr("course_no");
-        var id = $("a", this).attr("id");
+        let course_no = $("a", this).attr("course_no");
+        let id = $("a", this).attr("id");
         getCourseInfo(
           acix,
           course_no,
