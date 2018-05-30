@@ -268,6 +268,7 @@ function getCourseDescription(acix, course_no, callback) {
   );
 }
 
+// TODO: 要加星期六
 function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
   if (callback) $("#course_result_loading").addClass("active");
   request.post(

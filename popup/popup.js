@@ -10,19 +10,19 @@ import {
   dependOnType
 } from "./search";
 import { getCart } from "./cart";
-import {
-  getRecommendPage,
-  toStorage,
-  before_hits_group,
-  compare_group,
-  num_of_old_course,
-  num_of_each_similar
-} from "./recommend";
+// import {
+//   getRecommendPage,
+//   toStorage,
+//   before_hits_group,
+//   compare_group,
+//   num_of_old_course,
+//   num_of_each_similar
+// } from "./recommend";
 import { getCurrentStateOfNTHU } from "./server";
 import { planAllCourse } from "./select";
 
-const year = "106";
-const semester = "20";
+const year = "107";
+const semester = "10";
 const search_result_num = 10;
 var acix, stu_no;
 
@@ -43,7 +43,7 @@ $(document).ready(function() {
 
           getCart(acix);
           getGrade(acix, stu_no);
-          planAllCourse(acix);
+          // planAllCourse(acix);
         });
       });
     }
@@ -214,6 +214,7 @@ $("#change_school_table").on("click", ".item", function() {
 });
 $(".ui.secondary.menu").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
+    if ($(this).hasClass("recommendPage")) return;
     drift.on("ready", function(api, payload) {
       api.sidebar.close();
       api.widget.hide();
@@ -222,6 +223,7 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       .addClass("active")
       .siblings(".item")
       .removeClass("active");
+
 
     let t = $(".content_item");
     t.show();
@@ -238,32 +240,30 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       t.not(".choosePage").hide();
       $("#change_school_table").show();
     } else if ($(this).hasClass("recommendPage")) {
-      t.not(".recommendPage").hide();
-      before_hits_group.length = 0;
-      compare_group.length = 0;
-      let content_group = [];
-
-      // FIXME: 推薦功能目前是壞的
-      getRecommendPage(acix, function() {
-        if (
-          before_hits_group.length ==
-          num_of_old_course * num_of_each_similar
-        ) {
-          toStorage(acix, function(content, count, compare_value) {
-            content_group.push({ content, compare_value });
-            if (count == num_of_old_course * num_of_each_similar - 1) {
-              content_group.sort(function(a, b) {
-                return b.compare_value - a.compare_value;
-              });
-              for (let each in content_group) {
-                let data = content_group[each];
-                $("#recommend_list").append(data.content);
-              }
-              $("#recommend_loading").removeClass("active");
-            }
-          });
-        }
-      });
+      // t.not(".recommendPage").hide();
+      // before_hits_group.length = 0;
+      // compare_group.length = 0;
+      // let content_group = [];
+      // getRecommendPage(acix, function() {
+      //   if (
+      //     before_hits_group.length ==
+      //     num_of_old_course * num_of_each_similar
+      //   ) {
+      //     toStorage(acix, function(content, count, compare_value) {
+      //       content_group.push({ content, compare_value });
+      //       if (count == num_of_old_course * num_of_each_similar - 1) {
+      //         content_group.sort(function(a, b) {
+      //           return b.compare_value - a.compare_value;
+      //         });
+      //         for (let each in content_group) {
+      //           let data = content_group[each];
+      //           $("#recommend_list").append(data.content);
+      //         }
+      //         $("#recommend_loading").removeClass("active");
+      //       }
+      //     });
+      //   }
+      // });
     }
   }
 });
@@ -316,19 +316,19 @@ $("#multiple_class_bySingle").on("click", ".item", function() {
   });
 });
 $("#conflict_explain").popup();
-$("#recommend_list").on("click", ".item", function() {
-  let course_no = $(this).attr("course_no");
-  let id = $(this).attr("id");
-  getCourseInfo(
-    acix,
-    course_no,
-    id,
-    function() {
-      $(".course_action").hide();
-      $("#submit").show();
-      $("#back").show();
-      $("#course_info_loading").removeClass("active");
-    },
-    false
-  );
-});
+// $("#recommend_list").on("click", ".item", function() {
+//   let course_no = $(this).attr("course_no");
+//   let id = $(this).attr("id");
+//   getCourseInfo(
+//     acix,
+//     course_no,
+//     id,
+//     function() {
+//       $(".course_action").hide();
+//       $("#submit").show();
+//       $("#back").show();
+//       $("#course_info_loading").removeClass("active");
+//     },
+//     false
+//   );
+// });

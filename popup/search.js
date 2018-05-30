@@ -3,7 +3,8 @@ import { translateTopic } from "./helper";
 import { checkConflict } from "./conflict";
 var request = require("request");
 const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
-
+// const baseURL = `http://192.168.99.100/api/`;
+// const baseURL = `localhost:80/api/`;
 
 // TODO: 時間和教室的顯示要排列一下
 function renderSearchResult(hits, callback) {
@@ -78,7 +79,6 @@ function searchOnlyKeyword(search_topic, keyword, callback) {
   );
 }
 
-// TODO: 搜尋時間的 Server 端還沒改
 function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
   request.post(
     {
@@ -100,16 +100,33 @@ function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
   );
 }
 
+// FIXME: Server 端的 time 是壞的
+function searchTime(search_topic, keyword, time_group, callback) {
+  console.log(time_group);
+  request.post(
+    {
+      url: baseURL + "searchTime",
+      form: {
+        search_topic: search_topic,
+        keyword: keyword,
+        time_group: JSON.stringify(time_group)
+      }
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        let resp = JSON.parse(body);
+        let hits = resp.hits.hits;
+        console.log(hits);
+        renderSearchResult(hits, callback);
+      }
+    }
+  );
+}
+
 function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
   $("#search_result_body").empty();
   $("#search_loading").addClass("active");
   let search_topic = translateTopic(topic);
-  if (search_topic == "時間") {
-    console.log("Change Time");
-
-    // FIXME: 時間存成 array
-    other_keyword = other_keyword.replace(",", "");
-  }
 
   if (other_keyword === "") {
     console.log("search_topic:", search_topic);
@@ -119,7 +136,9 @@ function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
     console.log("search_topic:", search_topic);
     console.log("keyword:", keyword);
     console.log("other_keyword:", other_keyword);
-    searchDoubleKeyword(search_topic, keyword, other_keyword, callback);
+    if (search_topic == "時間")
+      searchTime(search_topic, keyword, other_keyword, callback);
+    else searchDoubleKeyword(search_topic, keyword, other_keyword, callback);
   }
 }
 

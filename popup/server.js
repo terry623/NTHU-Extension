@@ -139,7 +139,6 @@ function getGradeDistribution(acix, course_no, callback) {
 //   $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
 // }
 
-// FIXME: 把相似度為 1 的拿掉
 function getSimilarities(course_id, callback) {
   chrome.storage.local.get("course", function(items) {
     var info = items.course[course_id];
@@ -167,19 +166,19 @@ function getSimilarities(course_id, callback) {
   });
 }
 
-function getSimilarities_forRecommend(course_id, callback) {
-  request(
-    {
-      url: baseURL + "getSimilarities?course_id=" + course_id
-    },
-    function(err, response, body) {
-      if (!err && response.statusCode == 200) {
-        var info = JSON.parse(body);
-        callback(info);
-      }
-    }
-  );
-}
+// function getSimilarities_forRecommend(course_id, callback) {
+//   request(
+//     {
+//       url: baseURL + "getSimilarities?course_id=" + course_id
+//     },
+//     function(err, response, body) {
+//       if (!err && response.statusCode == 200) {
+//         var info = JSON.parse(body);
+//         callback(info);
+//       }
+//     }
+//   );
+// }
 
 function currentPhase(phase) {
   $("#change_phase")
@@ -310,6 +309,6 @@ function getCurrentStateOfNTHU(callback) {
 export {
   calculateUserGrade,
   getSimilarities,
-  getCurrentStateOfNTHU,
-  getSimilarities_forRecommend
+  getCurrentStateOfNTHU
+  // getSimilarities_forRecommend
 };

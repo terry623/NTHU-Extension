@@ -208,12 +208,13 @@ function removeLongCourseName(course_name) {
 }
 
 function oldyear_to_newyear(course_no) {
-  course_no = course_no.replace("100", "106");
-  course_no = course_no.replace("101", "106");
-  course_no = course_no.replace("102", "106");
-  course_no = course_no.replace("103", "106");
-  course_no = course_no.replace("104", "106");
-  course_no = course_no.replace("105", "106");
+  course_no = course_no.replace("100", "107");
+  course_no = course_no.replace("101", "107");
+  course_no = course_no.replace("102", "107");
+  course_no = course_no.replace("103", "107");
+  course_no = course_no.replace("104", "107");
+  course_no = course_no.replace("105", "107");
+  course_no = course_no.replace("106", "107");
   return course_no;
 }
 
