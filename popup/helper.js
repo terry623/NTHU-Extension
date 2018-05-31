@@ -144,7 +144,7 @@ const course_table = `<tbody>
   </tr>
   <tr class="">
       <td>無上課時間</td>
-      <td class="none selectable" colspan="5">
+      <td class="none selectable" colspan="6">
       </td>
   </tr>
   </tbody>`;

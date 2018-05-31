@@ -1,74 +1,8 @@
+import { getCart } from "./cart";
 var iconv = require("iconv-lite");
 var request = require("request");
-
-function planAllCourse(acix) {
-  request(
-    {
-      url:
-        "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761004.php?toChk=2&ACIXSTORE=" +
-        acix,
-      encoding: null
-    },
-
-    function(err, response, body) {
-      if (!err && response.statusCode == 200) {
-        let str = iconv.decode(new Buffer(body), "big5");
-        str = str.replace(
-          `<img src="templates/pic1.gif" width="351" height="30">`,
-          ``
-        );
-        let temp = document.createElement("div");
-        temp.innerHTML = str;
-        // console.log.apply(console, $(temp));
-
-        if (
-          $(temp)
-            .text()
-            .indexOf("session is interrupted!") >= 0
-        ) {
-          $("#session_alert").modal("show");
-        } else {
-          let choose_data = {
-            toChk: "",
-            new_dept: "",
-            new_class: "",
-            keyword: "",
-            chks: "",
-            ckey: "",
-            chkbtn: ""
-          };
-
-          // choose_data["toChk"] = $("input[name=toChk]", temp).val();
-          // choose_data["new_dept"] = $("select[name=new_dept]", temp).val();
-          // choose_data["new_class"] = $("select[name=new_class]", temp).val();
-          // choose_data["keyword"] = $("input[name=keyword]", temp).val();
-          // choose_data["chks"] = $("input[name=chks]", temp).val();
-          // choose_data["ckey"] = $("input[name=ckey]", temp).val();
-          // choose_data["chkbtn"] = $("input[name=chkbtn]", temp).val();
-
-          // FIXME: 正式選課開始時，要測試系統到底要什麼值
-          choose_data["toChk"] = $("input[name=toChk]", temp).val();
-          choose_data["new_dept"] = "CS++";
-          choose_data["new_class"] = "CS++104BA";
-          choose_data["keyword"] = $("input[name=keyword]", temp).val();
-          choose_data["chks"] = $("input[name=chks]", temp).val();
-          choose_data["ckey"] = $("input[name=ckey]", temp).val();
-          choose_data["chkbtn"] = $("input[name=chkbtn]", temp).val();
-
-          for (var key in choose_data) {
-            if (choose_data.hasOwnProperty(key))
-              choose_data[key] = choose_data[key].replace(/ /g, "+");
-          }
-
-          const test_course_no = "10710CS  460200";
-          planEachCourse(acix, test_course_no, choose_data, function() {
-            console.log("Finish Choose One Course !");
-          });
-        }
-      }
-    }
-  );
-}
+var correct_list = [];
+var wrong_list = [];
 
 function serialize(obj) {
   let str = [];
@@ -79,25 +13,16 @@ function serialize(obj) {
   return str.join("&");
 }
 
-function planEachCourse(acix, course_no, choose_data, callback) {
+// TODO: 正式選課時要處理志願序問題
+function planEachCourse(acix, course_no, callback) {
   course_no = course_no.replace(/ /g, "+");
-  console.log("The data send to choose course ...")
-  console.log("toChk:", choose_data.toChk);
-  console.log("new_dept:", choose_data.new_dept);
-  console.log("new_class:", choose_data.new_class);
-  console.log("keyword:", choose_data.keyword);
-  console.log("chks:", choose_data.chks);
-  console.log("ckey:", choose_data.ckey);
-  console.log("chkbtn:", choose_data.chkbtn);
-  console.log("course_no:", course_no);
-
   let form = {
     ACIXSTORE: acix,
-    toChk: choose_data.toChk,
-    new_dept: choose_data.new_dept,
-    new_class: choose_data.new_class,
-    keyword: choose_data.keyword,
-    chks: choose_data.chks,
+    toChk: "",
+    new_dept: "",
+    new_class: "",
+    keyword: "",
+    chks: "",
     ckey: course_no,
     chkbtn: "add"
   };
@@ -138,12 +63,67 @@ function planEachCourse(acix, course_no, choose_data, callback) {
           .first()
           .text();
         let res = origin.split("'");
-        $("#choose_course_alert_text").text(res[1]);
-        $("#choose_course_alert").modal("show");
+
+        // TODO: 將錯誤訊息記錄起來
+        // $("#choose_course_alert_text").text(res[1]);
+
+        let isSuccess = false;
+        callback(isSuccess);
       } else {
-        callback();
+        let isSuccess = true;
+        callback(isSuccess);
       }
     });
 }
 
-export { planAllCourse };
+function planAllCourse(acix, cart, callback) {
+  let count = 1;
+  correct_list = [];
+  wrong_list = [];
+  for (let key in cart) {
+    let course_no = cart[key].course_no;
+    planEachCourse(acix, course_no, function(isSuccess) {
+      if (isSuccess == true) correct_list.push(course_no);
+      else wrong_list.push(course_no);
+
+      callback(count);
+      count++;
+    });
+  }
+}
+
+function findIdFromObject(obj, course_no) {
+  let id = null;
+  for (let prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      if (obj[prop].course_no == course_no) {
+        id = prop;
+        break;
+      }
+    }
+  }
+  return id;
+}
+
+function removeSuccessSelectCourse(acix, callback) {
+  chrome.storage.local.get("cart", function(items) {
+    let temp = {};
+    Object.assign(temp, items.cart);
+    for (let no in correct_list) {
+      let course_id = findIdFromObject(temp, correct_list[no]);
+      delete temp[course_id];
+    }
+    chrome.storage.local.remove("cart", function() {
+      chrome.storage.local.set({ cart: temp }, function() {
+        chrome.storage.local.get("cart", function(items) {
+          // console.log(items);
+          getCart(acix);
+          callback();
+          $("#select_state").modal("show");
+        });
+      });
+    });
+  });
+}
+
+export { planAllCourse, removeSuccessSelectCourse };

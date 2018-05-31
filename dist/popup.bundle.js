@@ -141,7 +141,6 @@
 	        if (phase != undefined) (0, _api.getResultCourse)(acix, stu_no, phase, year, semester);else $("#change_phase").addClass("disabled");
 	        (0, _cart.getCart)(acix);
 	        // getGrade(acix, stu_no);
-	        // planAllCourse(acix);
 	      });
 	    });
 	  });
@@ -359,9 +358,6 @@
 	  $("#topic_name").text($(this).text());
 	  $(".ui.course_type.popup").popup("hide all");
 	});
-	$("#cart_submit").on("click", function () {
-	  alert("Send cart to school !");
-	});
 	$("#multiple_class_list").on("click", ".item", function () {
 	  var course_no = $(this).attr("course_no");
 	  var id = $(this).attr("id");
@@ -382,6 +378,20 @@
 	  });
 	});
 	$("#conflict_explain").popup();
+	$("#cart_submit").on("click", function () {
+	  $("#send_to_nthu_loading").addClass("active");
+	  chrome.storage.local.get("cart", function (items) {
+	    var course_num = Object.keys(items.cart).length;
+	    (0, _select.planAllCourse)(acix, items.cart, function (count) {
+	      if (count == course_num) {
+	        console.log("Finish Select All Course !");
+	        (0, _select.removeSuccessSelectCourse)(acix, function () {
+	          $("#send_to_nthu_loading").removeClass("active");
+	        });
+	      }
+	    });
+	  });
+	});
 	// $("#recommend_list").on("click", ".item", function() {
 	//   let course_no = $(this).attr("course_no");
 	//   let id = $(this).attr("id");
@@ -463,7 +473,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var course_table = "<tbody>\n  <tr class=\"\">\n      <td>\n          <div>08:00 - 08:50</div>\n      </td>\n      <td class=\"M1 selectable\"> </td>\n      <td class=\"T1 selectable\"> </td>\n      <td class=\"W1 selectable\"> </td>\n      <td class=\"R1 selectable\"> </td>\n      <td class=\"F1 selectable\"> </td>\n      <td class=\"S1 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>09:00 - 09:50</div>\n      </td>\n      <td class=\"M2 selectable\"> </td>\n      <td class=\"T2 selectable\"> </td>\n      <td class=\"W2 selectable\"> </td>\n      <td class=\"R2 selectable\"> </td>\n      <td class=\"F2 selectable\"> </td>\n      <td class=\"S2 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>10:10 - 11:00</div>\n      </td>\n      <td class=\"M3 selectable\"> </td>\n      <td class=\"T3 selectable\"> </td>\n      <td class=\"W3 selectable\"> </td>\n      <td class=\"R3 selectable\"> </td>\n      <td class=\"F3 selectable\"> </td>\n      <td class=\"S3 selectable\"> </td>\n      </tr>\n  <tr class=\"\">\n      <td>\n          <div>11:10 - 12:00</div>\n      </td>\n      <td class=\"M4 selectable\"> </td>\n      <td class=\"T4 selectable\"> </td>\n      <td class=\"W4 selectable\"> </td>\n      <td class=\"R4 selectable\"> </td>\n      <td class=\"F4 selectable\"> </td>\n      <td class=\"S4 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>12:10 - 13:00</div>\n      </td>\n      <td class=\"Mn selectable\"> </td>\n      <td class=\"Tn selectable\"> </td>\n      <td class=\"Wn selectable\"> </td>\n      <td class=\"Rn selectable\"> </td>\n      <td class=\"Fn selectable\"> </td>\n      <td class=\"Sn selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>13:20 - 14:10</div>\n      </td>\n      <td class=\"M5 selectable\"> </td>\n      <td class=\"T5 selectable\"> </td>\n      <td class=\"W5 selectable\"> </td>\n      <td class=\"R5 selectable\"> </td>\n      <td class=\"F5 selectable\"> </td>\n      <td class=\"S5 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>14:20 - 15:10</div>\n      </td>\n      <td class=\"M6 selectable\"> </td>\n      <td class=\"T6 selectable\"> </td>\n      <td class=\"W6 selectable\"> </td>\n      <td class=\"R6 selectable\"> </td>\n      <td class=\"F6 selectable\"> </td>\n      <td class=\"S6 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>15:30 - 16:20</div>\n      </td>\n      <td class=\"M7 selectable\"> </td>\n      <td class=\"T7 selectable\"> </td>\n      <td class=\"W7 selectable\"> </td>\n      <td class=\"R7 selectable\"> </td>\n      <td class=\"F7 selectable\"> </td>\n      <td class=\"S7 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>16:30 - 17:20</div>\n      </td>\n      <td class=\"M8 selectable\"> </td>\n      <td class=\"T8 selectable\"> </td>\n      <td class=\"W8 selectable\"> </td>\n      <td class=\"R8 selectable\"> </td>\n      <td class=\"F8 selectable\"> </td>\n      <td class=\"S8 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>17:30 - 18:20</div>\n      </td>\n      <td class=\"M9 selectable\"> </td>\n      <td class=\"T9 selectable\"> </td>\n      <td class=\"W9 selectable\"> </td>\n      <td class=\"R9 selectable\"> </td>\n      <td class=\"F9 selectable\"> </td>\n      <td class=\"S9 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>18:30 - 19:20</div>\n      </td>\n      <td class=\"Ma selectable\"> </td>\n      <td class=\"Ta selectable\"> </td>\n      <td class=\"Wa selectable\"> </td>\n      <td class=\"Ra selectable\"> </td>\n      <td class=\"Fa selectable\"> </td>\n      <td class=\"Sa selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>19:30 - 20:20</div>\n      </td>\n      <td class=\"Mb selectable\"> </td>\n      <td class=\"Tb selectable\"> </td>\n      <td class=\"Wb selectable\"> </td>\n      <td class=\"Rb selectable\"> </td>\n      <td class=\"Fb selectable\"> </td>\n      <td class=\"Sb selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>20:30 - 21:20</div>\n      </td>\n      <td class=\"Mc selectable\"> </td>\n      <td class=\"Tc selectable\"> </td>\n      <td class=\"Wc selectable\"> </td>\n      <td class=\"Rc selectable\"> </td>\n      <td class=\"Fc selectable\"> </td>\n      <td class=\"Sc selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n      <td class=\"none selectable\" colspan=\"5\">\n      </td>\n  </tr>\n  </tbody>";
+	var course_table = "<tbody>\n  <tr class=\"\">\n      <td>\n          <div>08:00 - 08:50</div>\n      </td>\n      <td class=\"M1 selectable\"> </td>\n      <td class=\"T1 selectable\"> </td>\n      <td class=\"W1 selectable\"> </td>\n      <td class=\"R1 selectable\"> </td>\n      <td class=\"F1 selectable\"> </td>\n      <td class=\"S1 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>09:00 - 09:50</div>\n      </td>\n      <td class=\"M2 selectable\"> </td>\n      <td class=\"T2 selectable\"> </td>\n      <td class=\"W2 selectable\"> </td>\n      <td class=\"R2 selectable\"> </td>\n      <td class=\"F2 selectable\"> </td>\n      <td class=\"S2 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>10:10 - 11:00</div>\n      </td>\n      <td class=\"M3 selectable\"> </td>\n      <td class=\"T3 selectable\"> </td>\n      <td class=\"W3 selectable\"> </td>\n      <td class=\"R3 selectable\"> </td>\n      <td class=\"F3 selectable\"> </td>\n      <td class=\"S3 selectable\"> </td>\n      </tr>\n  <tr class=\"\">\n      <td>\n          <div>11:10 - 12:00</div>\n      </td>\n      <td class=\"M4 selectable\"> </td>\n      <td class=\"T4 selectable\"> </td>\n      <td class=\"W4 selectable\"> </td>\n      <td class=\"R4 selectable\"> </td>\n      <td class=\"F4 selectable\"> </td>\n      <td class=\"S4 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>12:10 - 13:00</div>\n      </td>\n      <td class=\"Mn selectable\"> </td>\n      <td class=\"Tn selectable\"> </td>\n      <td class=\"Wn selectable\"> </td>\n      <td class=\"Rn selectable\"> </td>\n      <td class=\"Fn selectable\"> </td>\n      <td class=\"Sn selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>13:20 - 14:10</div>\n      </td>\n      <td class=\"M5 selectable\"> </td>\n      <td class=\"T5 selectable\"> </td>\n      <td class=\"W5 selectable\"> </td>\n      <td class=\"R5 selectable\"> </td>\n      <td class=\"F5 selectable\"> </td>\n      <td class=\"S5 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>14:20 - 15:10</div>\n      </td>\n      <td class=\"M6 selectable\"> </td>\n      <td class=\"T6 selectable\"> </td>\n      <td class=\"W6 selectable\"> </td>\n      <td class=\"R6 selectable\"> </td>\n      <td class=\"F6 selectable\"> </td>\n      <td class=\"S6 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>15:30 - 16:20</div>\n      </td>\n      <td class=\"M7 selectable\"> </td>\n      <td class=\"T7 selectable\"> </td>\n      <td class=\"W7 selectable\"> </td>\n      <td class=\"R7 selectable\"> </td>\n      <td class=\"F7 selectable\"> </td>\n      <td class=\"S7 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>16:30 - 17:20</div>\n      </td>\n      <td class=\"M8 selectable\"> </td>\n      <td class=\"T8 selectable\"> </td>\n      <td class=\"W8 selectable\"> </td>\n      <td class=\"R8 selectable\"> </td>\n      <td class=\"F8 selectable\"> </td>\n      <td class=\"S8 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>17:30 - 18:20</div>\n      </td>\n      <td class=\"M9 selectable\"> </td>\n      <td class=\"T9 selectable\"> </td>\n      <td class=\"W9 selectable\"> </td>\n      <td class=\"R9 selectable\"> </td>\n      <td class=\"F9 selectable\"> </td>\n      <td class=\"S9 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>18:30 - 19:20</div>\n      </td>\n      <td class=\"Ma selectable\"> </td>\n      <td class=\"Ta selectable\"> </td>\n      <td class=\"Wa selectable\"> </td>\n      <td class=\"Ra selectable\"> </td>\n      <td class=\"Fa selectable\"> </td>\n      <td class=\"Sa selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>19:30 - 20:20</div>\n      </td>\n      <td class=\"Mb selectable\"> </td>\n      <td class=\"Tb selectable\"> </td>\n      <td class=\"Wb selectable\"> </td>\n      <td class=\"Rb selectable\"> </td>\n      <td class=\"Fb selectable\"> </td>\n      <td class=\"Sb selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>20:30 - 21:20</div>\n      </td>\n      <td class=\"Mc selectable\"> </td>\n      <td class=\"Tc selectable\"> </td>\n      <td class=\"Wc selectable\"> </td>\n      <td class=\"Rc selectable\"> </td>\n      <td class=\"Fc selectable\"> </td>\n      <td class=\"Sc selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n      <td class=\"none selectable\" colspan=\"6\">\n      </td>\n  </tr>\n  </tbody>";
 	
 	function getUrlVars(url) {
 	  var vars = [];
@@ -3241,7 +3251,6 @@
 	  });
 	}
 	
-	// TODO: keyword 沒填要搜尋全部，然後檢查頁數，看到底有沒有成功
 	function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
 	  $("#search_result_body").empty();
 	  $("#search_loading").addClass("active");
@@ -52469,7 +52478,7 @@
 	//         });
 	//         // var distribution = [];
 	//         // for (var [key, value] of gradeDistributionMap) {
-	//         //   if (typeof value === "number") distribution.push(value.toString());
+	//         //   if (typeof value == "number") distribution.push(value.toString());
 	//         //   else distribution.push(value[0]);
 	//         // }
 	//         callback(gradeDistribution);
@@ -52677,68 +52686,19 @@
 /* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.removeSuccessSelectCourse = exports.planAllCourse = undefined;
+	
+	var _cart = __webpack_require__(288);
+	
 	var iconv = __webpack_require__(266);
 	var request = __webpack_require__(15);
-	
-	function planAllCourse(acix) {
-	  request({
-	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761004.php?toChk=2&ACIXSTORE=" + acix,
-	    encoding: null
-	  }, function (err, response, body) {
-	    if (!err && response.statusCode == 200) {
-	      var str = iconv.decode(new Buffer(body), "big5");
-	      str = str.replace("<img src=\"templates/pic1.gif\" width=\"351\" height=\"30\">", "");
-	      var temp = document.createElement("div");
-	      temp.innerHTML = str;
-	      // console.log.apply(console, $(temp));
-	
-	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
-	        $("#session_alert").modal("show");
-	      } else {
-	        var choose_data = {
-	          toChk: "",
-	          new_dept: "",
-	          new_class: "",
-	          keyword: "",
-	          chks: "",
-	          ckey: "",
-	          chkbtn: ""
-	        };
-	
-	        // choose_data["toChk"] = $("input[name=toChk]", temp).val();
-	        // choose_data["new_dept"] = $("select[name=new_dept]", temp).val();
-	        // choose_data["new_class"] = $("select[name=new_class]", temp).val();
-	        // choose_data["keyword"] = $("input[name=keyword]", temp).val();
-	        // choose_data["chks"] = $("input[name=chks]", temp).val();
-	        // choose_data["ckey"] = $("input[name=ckey]", temp).val();
-	        // choose_data["chkbtn"] = $("input[name=chkbtn]", temp).val();
-	
-	        // FIXME: 正式選課開始時，要測試系統到底要什麼值
-	        choose_data["toChk"] = $("input[name=toChk]", temp).val();
-	        choose_data["new_dept"] = "CS++";
-	        choose_data["new_class"] = "CS++104BA";
-	        choose_data["keyword"] = $("input[name=keyword]", temp).val();
-	        choose_data["chks"] = $("input[name=chks]", temp).val();
-	        choose_data["ckey"] = $("input[name=ckey]", temp).val();
-	        choose_data["chkbtn"] = $("input[name=chkbtn]", temp).val();
-	
-	        for (var key in choose_data) {
-	          if (choose_data.hasOwnProperty(key)) choose_data[key] = choose_data[key].replace(/ /g, "+");
-	        }
-	
-	        var test_course_no = "10710CS  460200";
-	        planEachCourse(acix, test_course_no, choose_data, function () {
-	          console.log("Finish Choose One Course !");
-	        });
-	      }
-	    }
-	  });
-	}
+	var correct_list = [];
+	var wrong_list = [];
 	
 	function serialize(obj) {
 	  var str = [];
@@ -52749,25 +52709,16 @@
 	  }return str.join("&");
 	}
 	
-	function planEachCourse(acix, course_no, choose_data, callback) {
+	// TODO: 正式選課時要處理志願序問題
+	function planEachCourse(acix, course_no, callback) {
 	  course_no = course_no.replace(/ /g, "+");
-	  console.log("The data send to choose course ...");
-	  console.log("toChk:", choose_data.toChk);
-	  console.log("new_dept:", choose_data.new_dept);
-	  console.log("new_class:", choose_data.new_class);
-	  console.log("keyword:", choose_data.keyword);
-	  console.log("chks:", choose_data.chks);
-	  console.log("ckey:", choose_data.ckey);
-	  console.log("chkbtn:", choose_data.chkbtn);
-	  console.log("course_no:", course_no);
-	
 	  var form = {
 	    ACIXSTORE: acix,
-	    toChk: choose_data.toChk,
-	    new_dept: choose_data.new_dept,
-	    new_class: choose_data.new_class,
-	    keyword: choose_data.keyword,
-	    chks: choose_data.chks,
+	    toChk: "",
+	    new_dept: "",
+	    new_class: "",
+	    keyword: "",
+	    chks: "",
 	    ckey: course_no,
 	    chkbtn: "add"
 	  };
@@ -52792,16 +52743,75 @@
 	    } else if ($(temp).text().indexOf("alert") >= 0) {
 	      var origin = $("script", temp).first().text();
 	      var res = origin.split("'");
-	      $("#choose_course_alert_text").text(res[1]);
-	      $("#choose_course_alert").modal("show");
+	
+	      // TODO: 將錯誤訊息記錄起來
+	      // $("#choose_course_alert_text").text(res[1]);
+	
+	      var isSuccess = false;
+	      callback(isSuccess);
 	    } else {
-	      callback();
+	      var _isSuccess = true;
+	      callback(_isSuccess);
 	    }
 	  });
 	}
 	
+	function planAllCourse(acix, cart, callback) {
+	  var count = 1;
+	  correct_list = [];
+	  wrong_list = [];
+	
+	  var _loop = function _loop(key) {
+	    var course_no = cart[key].course_no;
+	    planEachCourse(acix, course_no, function (isSuccess) {
+	      if (isSuccess == true) correct_list.push(course_no);else wrong_list.push(course_no);
+	
+	      callback(count);
+	      count++;
+	    });
+	  };
+	
+	  for (var key in cart) {
+	    _loop(key);
+	  }
+	}
+	
+	function findIdFromObject(obj, course_no) {
+	  var id = null;
+	  for (var prop in obj) {
+	    if (obj.hasOwnProperty(prop)) {
+	      if (obj[prop].course_no == course_no) {
+	        id = prop;
+	        break;
+	      }
+	    }
+	  }
+	  return id;
+	}
+	
+	function removeSuccessSelectCourse(acix, callback) {
+	  chrome.storage.local.get("cart", function (items) {
+	    var temp = {};
+	    Object.assign(temp, items.cart);
+	    for (var no in correct_list) {
+	      var course_id = findIdFromObject(temp, correct_list[no]);
+	      delete temp[course_id];
+	    }
+	    chrome.storage.local.remove("cart", function () {
+	      chrome.storage.local.set({ cart: temp }, function () {
+	        chrome.storage.local.get("cart", function (items) {
+	          // console.log(items);
+	          (0, _cart.getCart)(acix);
+	          callback();
+	          $("#select_state").modal("show");
+	        });
+	      });
+	    });
+	  });
+	}
+	
 	exports.planAllCourse = planAllCourse;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8).Buffer))
+	exports.removeSuccessSelectCourse = removeSuccessSelectCourse;
 
 /***/ })
 /******/ ]);

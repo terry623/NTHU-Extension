@@ -140,7 +140,6 @@ function searchTime(search_topic, keyword, time_group, callback) {
   );
 }
 
-// TODO: keyword 沒填要搜尋全部，然後檢查頁數，看到底有沒有成功
 function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
   $("#search_result_body").empty();
   $("#search_loading").addClass("active");

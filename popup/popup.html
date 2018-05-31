@@ -25,6 +25,9 @@
     <!-- <div id="recommend_loading" class="ui inverted dimmer">
         <div class="ui loader"></div>
     </div> -->
+    <div id="send_to_nthu_loading" class="ui inverted dimmer">
+        <div class="ui loader"></div>
+    </div>
     <div id="home_loading" class="ui inverted dimmer">
         <div class="ui text loader">L O A D I N G</div>
     </div>
@@ -34,17 +37,6 @@
         </div>
         <div class="content">
             <p>請重新登入校務資訊系統</p>
-        </div>
-        <div class="actions">
-            <div class="small ui basic cancel button">Close</div>
-        </div>
-    </div>
-    <div id="choose_course_alert" class="ui mini modal">
-        <div class="header">
-            選課錯誤
-        </div>
-        <div class="content">
-            <p id="choose_course_alert_text"></p>
         </div>
         <div class="actions">
             <div class="small ui basic cancel button">Close</div>
@@ -1390,6 +1382,18 @@
                 <div class="content">
                     <div id="multiple_class_list_bySingle" class="ui middle aligned selection list">
                     </div>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">Close</div>
+                </div>
+            </div>
+            <div id="select_state" class="ui mini modal">
+                <div class="header">
+                    選課狀態
+                </div>
+                <div class="content">
+                    <p>成功</p>
+                    <p>失敗</p>
                 </div>
                 <div class="actions">
                     <div class="small ui basic cancel button">Close</div>

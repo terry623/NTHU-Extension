@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "NTHU Course",
   "description": "幫助你的選課",
-  "version": "1.3",
+  "version": "1.4",
   "page_action": {
     "default_title": "開始選課",
     "default_icon": "static/icon.png",
@@ -11,7 +11,7 @@
   "icons": {
     "128": "icon128.png"
   },
-  "permissions": ["activeTab", "tabs", "storage", "http://localhost/*"],
+  "permissions": ["activeTab", "tabs", "storage"],
   "content_scripts": [
     {
       "matches": ["*://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/select_entry.php?*"],

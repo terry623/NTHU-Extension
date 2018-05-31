@@ -98,7 +98,7 @@ import { baseURL } from "./search";
 //         });
 //         // var distribution = [];
 //         // for (var [key, value] of gradeDistributionMap) {
-//         //   if (typeof value === "number") distribution.push(value.toString());
+//         //   if (typeof value == "number") distribution.push(value.toString());
 //         //   else distribution.push(value[0]);
 //         // }
 //         callback(gradeDistribution);
