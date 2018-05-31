@@ -1,13 +1,31 @@
 import { getCourseInfo } from "./api";
-import { translateTopic, sort_weekday } from "./helper";
+import { translateTopic, sort_weekday, addSpace_course_no } from "./helper";
 import { checkConflict } from "./conflict";
 var request = require("request");
 const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
 // const baseURL = `http://192.168.99.100/api/`;
 // const baseURL = `localhost:80/api/`;
 
-// TODO: 頁數少於五頁就顯示真實頁數 & 欄位高度要固定
 function renderSearchResult(hits, callback) {
+  let page_num_content = ``;
+  let all_page = Math.ceil(hits.length / 10.0);
+  for (let i = 1; i < all_page; i++) {
+    let page_num = i + 1;
+    page_num_content = page_num_content.concat(
+      `<a class="page item">` + page_num + `</a>`
+    );
+  }
+  let change_page =
+    `<a class="icon item">
+    <i class="left chevron icon"></i></a>
+    <a class="page active item">1</a>` +
+    page_num_content +
+    `<a class="icon item">
+      <i class="right chevron icon"></i>
+    </a>`;
+  $("#search_page_change").empty();
+  $("#search_page_change").append(change_page);
+
   storeCourseInfo(hits);
   for (let each_course in hits) {
     let id = hits[each_course]._id;
@@ -72,7 +90,7 @@ function searchOnlyKeyword(search_topic, keyword, callback) {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
-        console.log(hits);
+        // console.log(hits);
         renderSearchResult(hits, callback);
       }
     }
@@ -93,7 +111,7 @@ function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
-        console.log(hits);
+        // console.log(hits);
         renderSearchResult(hits, callback);
       }
     }
@@ -115,19 +133,20 @@ function searchTime(search_topic, keyword, time_group, callback) {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
-        console.log(hits);
+        // console.log(hits);
         renderSearchResult(hits, callback);
       }
     }
   );
 }
 
+// TODO: keyword 沒填要搜尋全部，然後檢查頁數，看到底有沒有成功
 function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
   $("#search_result_body").empty();
   $("#search_loading").addClass("active");
   let search_topic = translateTopic(topic);
 
-  if (other_keyword === "") {
+  if (other_keyword == "NoNeedToChoose") {
     console.log("search_topic:", search_topic);
     console.log("keyword:", keyword);
     searchOnlyKeyword(search_topic, keyword, callback);
@@ -200,13 +219,13 @@ function storeCourseInfo(hits, callback) {
   });
 }
 
-// FIXME: 要把科號改成，不管空白幾個都可以搜尋到
 function searchBySingleCourseNo(course_no, callback) {
+  let new_course_no = addSpace_course_no(course_no);
   request.post(
     {
       url: baseURL + "searchBySingleCourseNo",
       form: {
-        course_no: course_no
+        course_no: new_course_no
       }
     },
     function(err, response, body) {

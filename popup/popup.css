@@ -94,3 +94,7 @@ a:focus {
   padding-top: 25px;
   padding-left: 50px;
 }
+
+#cart_submit {
+  margin-right: 5px;
+}

@@ -184,7 +184,8 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
             for (let each in info.教師)
               teacher.push(info.教師[each].split("\t")[0]);
             teacher.splice(-1, 1);
-            $("#teacher").text(teacher.join(" / "));
+            if (teacher.length == 0) $("#teacher").text("None");
+            else $("#teacher").text(teacher.join(" / "));
 
             $("#no").text(info.科號);
             $("#course_name").text(info.課程中文名稱 + " " + info.課程英文名稱);
@@ -279,7 +280,6 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
 //   );
 // }
 
-// TODO: 要加星期六
 function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
   if (callback) $("#course_result_loading").addClass("active");
   request.post(

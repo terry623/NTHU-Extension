@@ -8,6 +8,7 @@ const course_table = `<tbody>
       <td class="W1 selectable"> </td>
       <td class="R1 selectable"> </td>
       <td class="F1 selectable"> </td>
+      <td class="S1 selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -18,6 +19,7 @@ const course_table = `<tbody>
       <td class="W2 selectable"> </td>
       <td class="R2 selectable"> </td>
       <td class="F2 selectable"> </td>
+      <td class="S2 selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -28,7 +30,8 @@ const course_table = `<tbody>
       <td class="W3 selectable"> </td>
       <td class="R3 selectable"> </td>
       <td class="F3 selectable"> </td>
-  </tr>
+      <td class="S3 selectable"> </td>
+      </tr>
   <tr class="">
       <td>
           <div>11:10 - 12:00</div>
@@ -38,6 +41,7 @@ const course_table = `<tbody>
       <td class="W4 selectable"> </td>
       <td class="R4 selectable"> </td>
       <td class="F4 selectable"> </td>
+      <td class="S4 selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -48,6 +52,7 @@ const course_table = `<tbody>
       <td class="Wn selectable"> </td>
       <td class="Rn selectable"> </td>
       <td class="Fn selectable"> </td>
+      <td class="Sn selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -58,6 +63,7 @@ const course_table = `<tbody>
       <td class="W5 selectable"> </td>
       <td class="R5 selectable"> </td>
       <td class="F5 selectable"> </td>
+      <td class="S5 selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -68,6 +74,7 @@ const course_table = `<tbody>
       <td class="W6 selectable"> </td>
       <td class="R6 selectable"> </td>
       <td class="F6 selectable"> </td>
+      <td class="S6 selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -78,6 +85,7 @@ const course_table = `<tbody>
       <td class="W7 selectable"> </td>
       <td class="R7 selectable"> </td>
       <td class="F7 selectable"> </td>
+      <td class="S7 selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -88,6 +96,7 @@ const course_table = `<tbody>
       <td class="W8 selectable"> </td>
       <td class="R8 selectable"> </td>
       <td class="F8 selectable"> </td>
+      <td class="S8 selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -98,6 +107,7 @@ const course_table = `<tbody>
       <td class="W9 selectable"> </td>
       <td class="R9 selectable"> </td>
       <td class="F9 selectable"> </td>
+      <td class="S9 selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -108,6 +118,7 @@ const course_table = `<tbody>
       <td class="Wa selectable"> </td>
       <td class="Ra selectable"> </td>
       <td class="Fa selectable"> </td>
+      <td class="Sa selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -118,6 +129,7 @@ const course_table = `<tbody>
       <td class="Wb selectable"> </td>
       <td class="Rb selectable"> </td>
       <td class="Fb selectable"> </td>
+      <td class="Sb selectable"> </td>
   </tr>
   <tr class="">
       <td>
@@ -128,6 +140,7 @@ const course_table = `<tbody>
       <td class="Wc selectable"> </td>
       <td class="Rc selectable"> </td>
       <td class="Fc selectable"> </td>
+      <td class="Sc selectable"> </td>
   </tr>
   <tr class="">
       <td>無上課時間</td>
@@ -236,6 +249,19 @@ function sort_weekday(time_array) {
   return time_array;
 }
 
+function addSpace_course_no(course_no) {
+  let head_patt = /[0-9]+[A-Za-z]+/g;
+  let head = course_no.match(head_patt)[0];
+  let tail_patt = /[0-9]+/g;
+  let tail = course_no.match(tail_patt)[1];
+  let space_shoule = 15 - head.length - tail.length;
+
+  let space = "";
+  for (let i = 0; i < space_shoule; i++) space = space.concat(" ");
+  let new_course_no = head.concat(space).concat(tail);
+  return new_course_no;
+}
+
 export {
   getUrlVars,
   courseAddSpace,
@@ -243,5 +269,6 @@ export {
   course_table,
   removeLongCourseName,
   oldyear_to_newyear,
-  sort_weekday
+  sort_weekday,
+  addSpace_course_no
 };

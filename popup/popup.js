@@ -141,8 +141,6 @@ $("#clicktosearch").on("click", function() {
   let keyword = $("#keyword").val();
   if (topic.includes("請選擇類別")) {
     $("#search_alert_topic").modal("show");
-  } else if ($("#keyword").val() == "") {
-    $("#search_alert_keyword_empty").modal("show");
   } else {
     let other_keyword = "NoNeedToChoose";
     if (topic == "上課時間") {
@@ -163,7 +161,10 @@ $("#clicktosearch").on("click", function() {
       $("#search_alert_otherkeyword_empty").modal("show");
       return;
     } else if (other_keyword == "NoNeedToChoose") {
-      other_keyword = "";
+      if ($("#keyword").val() == "") {
+        $("#search_alert_keyword_empty").modal("show");
+        return;
+      }
     }
     searchByKeyword(acix, keyword, other_keyword, topic, function() {
       $("#search_loading").removeClass("active");

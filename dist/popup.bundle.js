@@ -231,8 +231,6 @@
 	  var keyword = $("#keyword").val();
 	  if (topic.includes("請選擇類別")) {
 	    $("#search_alert_topic").modal("show");
-	  } else if ($("#keyword").val() == "") {
-	    $("#search_alert_keyword_empty").modal("show");
 	  } else {
 	    var other_keyword = "NoNeedToChoose";
 	    if (topic == "上課時間") {
@@ -253,7 +251,10 @@
 	      $("#search_alert_otherkeyword_empty").modal("show");
 	      return;
 	    } else if (other_keyword == "NoNeedToChoose") {
-	      other_keyword = "";
+	      if ($("#keyword").val() == "") {
+	        $("#search_alert_keyword_empty").modal("show");
+	        return;
+	      }
 	    }
 	    (0, _search.searchByKeyword)(acix, keyword, other_keyword, topic, function () {
 	      $("#search_loading").removeClass("active");
@@ -460,105 +461,119 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
-	var course_table = "<tbody>\n  <tr class=\"\">\n      <td>\n          <div>08:00 - 08:50</div>\n      </td>\n      <td class=\"M1 selectable\"> </td>\n      <td class=\"T1 selectable\"> </td>\n      <td class=\"W1 selectable\"> </td>\n      <td class=\"R1 selectable\"> </td>\n      <td class=\"F1 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>09:00 - 09:50</div>\n      </td>\n      <td class=\"M2 selectable\"> </td>\n      <td class=\"T2 selectable\"> </td>\n      <td class=\"W2 selectable\"> </td>\n      <td class=\"R2 selectable\"> </td>\n      <td class=\"F2 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>10:10 - 11:00</div>\n      </td>\n      <td class=\"M3 selectable\"> </td>\n      <td class=\"T3 selectable\"> </td>\n      <td class=\"W3 selectable\"> </td>\n      <td class=\"R3 selectable\"> </td>\n      <td class=\"F3 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>11:10 - 12:00</div>\n      </td>\n      <td class=\"M4 selectable\"> </td>\n      <td class=\"T4 selectable\"> </td>\n      <td class=\"W4 selectable\"> </td>\n      <td class=\"R4 selectable\"> </td>\n      <td class=\"F4 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>12:10 - 13:00</div>\n      </td>\n      <td class=\"Mn selectable\"> </td>\n      <td class=\"Tn selectable\"> </td>\n      <td class=\"Wn selectable\"> </td>\n      <td class=\"Rn selectable\"> </td>\n      <td class=\"Fn selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>13:20 - 14:10</div>\n      </td>\n      <td class=\"M5 selectable\"> </td>\n      <td class=\"T5 selectable\"> </td>\n      <td class=\"W5 selectable\"> </td>\n      <td class=\"R5 selectable\"> </td>\n      <td class=\"F5 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>14:20 - 15:10</div>\n      </td>\n      <td class=\"M6 selectable\"> </td>\n      <td class=\"T6 selectable\"> </td>\n      <td class=\"W6 selectable\"> </td>\n      <td class=\"R6 selectable\"> </td>\n      <td class=\"F6 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>15:30 - 16:20</div>\n      </td>\n      <td class=\"M7 selectable\"> </td>\n      <td class=\"T7 selectable\"> </td>\n      <td class=\"W7 selectable\"> </td>\n      <td class=\"R7 selectable\"> </td>\n      <td class=\"F7 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>16:30 - 17:20</div>\n      </td>\n      <td class=\"M8 selectable\"> </td>\n      <td class=\"T8 selectable\"> </td>\n      <td class=\"W8 selectable\"> </td>\n      <td class=\"R8 selectable\"> </td>\n      <td class=\"F8 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>17:30 - 18:20</div>\n      </td>\n      <td class=\"M9 selectable\"> </td>\n      <td class=\"T9 selectable\"> </td>\n      <td class=\"W9 selectable\"> </td>\n      <td class=\"R9 selectable\"> </td>\n      <td class=\"F9 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>18:30 - 19:20</div>\n      </td>\n      <td class=\"Ma selectable\"> </td>\n      <td class=\"Ta selectable\"> </td>\n      <td class=\"Wa selectable\"> </td>\n      <td class=\"Ra selectable\"> </td>\n      <td class=\"Fa selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>19:30 - 20:20</div>\n      </td>\n      <td class=\"Mb selectable\"> </td>\n      <td class=\"Tb selectable\"> </td>\n      <td class=\"Wb selectable\"> </td>\n      <td class=\"Rb selectable\"> </td>\n      <td class=\"Fb selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>20:30 - 21:20</div>\n      </td>\n      <td class=\"Mc selectable\"> </td>\n      <td class=\"Tc selectable\"> </td>\n      <td class=\"Wc selectable\"> </td>\n      <td class=\"Rc selectable\"> </td>\n      <td class=\"Fc selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n      <td class=\"none selectable\" colspan=\"5\">\n      </td>\n  </tr>\n  </tbody>";
+	var course_table = "<tbody>\n  <tr class=\"\">\n      <td>\n          <div>08:00 - 08:50</div>\n      </td>\n      <td class=\"M1 selectable\"> </td>\n      <td class=\"T1 selectable\"> </td>\n      <td class=\"W1 selectable\"> </td>\n      <td class=\"R1 selectable\"> </td>\n      <td class=\"F1 selectable\"> </td>\n      <td class=\"S1 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>09:00 - 09:50</div>\n      </td>\n      <td class=\"M2 selectable\"> </td>\n      <td class=\"T2 selectable\"> </td>\n      <td class=\"W2 selectable\"> </td>\n      <td class=\"R2 selectable\"> </td>\n      <td class=\"F2 selectable\"> </td>\n      <td class=\"S2 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>10:10 - 11:00</div>\n      </td>\n      <td class=\"M3 selectable\"> </td>\n      <td class=\"T3 selectable\"> </td>\n      <td class=\"W3 selectable\"> </td>\n      <td class=\"R3 selectable\"> </td>\n      <td class=\"F3 selectable\"> </td>\n      <td class=\"S3 selectable\"> </td>\n      </tr>\n  <tr class=\"\">\n      <td>\n          <div>11:10 - 12:00</div>\n      </td>\n      <td class=\"M4 selectable\"> </td>\n      <td class=\"T4 selectable\"> </td>\n      <td class=\"W4 selectable\"> </td>\n      <td class=\"R4 selectable\"> </td>\n      <td class=\"F4 selectable\"> </td>\n      <td class=\"S4 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>12:10 - 13:00</div>\n      </td>\n      <td class=\"Mn selectable\"> </td>\n      <td class=\"Tn selectable\"> </td>\n      <td class=\"Wn selectable\"> </td>\n      <td class=\"Rn selectable\"> </td>\n      <td class=\"Fn selectable\"> </td>\n      <td class=\"Sn selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>13:20 - 14:10</div>\n      </td>\n      <td class=\"M5 selectable\"> </td>\n      <td class=\"T5 selectable\"> </td>\n      <td class=\"W5 selectable\"> </td>\n      <td class=\"R5 selectable\"> </td>\n      <td class=\"F5 selectable\"> </td>\n      <td class=\"S5 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>14:20 - 15:10</div>\n      </td>\n      <td class=\"M6 selectable\"> </td>\n      <td class=\"T6 selectable\"> </td>\n      <td class=\"W6 selectable\"> </td>\n      <td class=\"R6 selectable\"> </td>\n      <td class=\"F6 selectable\"> </td>\n      <td class=\"S6 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>15:30 - 16:20</div>\n      </td>\n      <td class=\"M7 selectable\"> </td>\n      <td class=\"T7 selectable\"> </td>\n      <td class=\"W7 selectable\"> </td>\n      <td class=\"R7 selectable\"> </td>\n      <td class=\"F7 selectable\"> </td>\n      <td class=\"S7 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>16:30 - 17:20</div>\n      </td>\n      <td class=\"M8 selectable\"> </td>\n      <td class=\"T8 selectable\"> </td>\n      <td class=\"W8 selectable\"> </td>\n      <td class=\"R8 selectable\"> </td>\n      <td class=\"F8 selectable\"> </td>\n      <td class=\"S8 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>17:30 - 18:20</div>\n      </td>\n      <td class=\"M9 selectable\"> </td>\n      <td class=\"T9 selectable\"> </td>\n      <td class=\"W9 selectable\"> </td>\n      <td class=\"R9 selectable\"> </td>\n      <td class=\"F9 selectable\"> </td>\n      <td class=\"S9 selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>18:30 - 19:20</div>\n      </td>\n      <td class=\"Ma selectable\"> </td>\n      <td class=\"Ta selectable\"> </td>\n      <td class=\"Wa selectable\"> </td>\n      <td class=\"Ra selectable\"> </td>\n      <td class=\"Fa selectable\"> </td>\n      <td class=\"Sa selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>19:30 - 20:20</div>\n      </td>\n      <td class=\"Mb selectable\"> </td>\n      <td class=\"Tb selectable\"> </td>\n      <td class=\"Wb selectable\"> </td>\n      <td class=\"Rb selectable\"> </td>\n      <td class=\"Fb selectable\"> </td>\n      <td class=\"Sb selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\n          <div>20:30 - 21:20</div>\n      </td>\n      <td class=\"Mc selectable\"> </td>\n      <td class=\"Tc selectable\"> </td>\n      <td class=\"Wc selectable\"> </td>\n      <td class=\"Rc selectable\"> </td>\n      <td class=\"Fc selectable\"> </td>\n      <td class=\"Sc selectable\"> </td>\n  </tr>\n  <tr class=\"\">\n      <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n      <td class=\"none selectable\" colspan=\"5\">\n      </td>\n  </tr>\n  </tbody>";
 	
 	function getUrlVars(url) {
-	    var vars = [];
-	    var hash;
-	    var hashes = url.slice(url.indexOf("?") + 1).split("&");
-	    for (var i = 0; i < hashes.length; i++) {
-	        hash = hashes[i].split("=");
-	        vars.push(hash[0]);
-	        vars[hash[0]] = hash[1];
-	    }
-	    return vars;
+	  var vars = [];
+	  var hash;
+	  var hashes = url.slice(url.indexOf("?") + 1).split("&");
+	  for (var i = 0; i < hashes.length; i++) {
+	    hash = hashes[i].split("=");
+	    vars.push(hash[0]);
+	    vars[hash[0]] = hash[1];
+	  }
+	  return vars;
 	}
 	
 	function courseAddSpace(course_no) {
-	    var myRe = /[0-9]+[A-Za-z]+/g;
-	    var myArray = myRe.exec(course_no);
-	    var output = [course_no.slice(0, myRe.lastIndex), course_no.slice(myRe.lastIndex)].join(" ");
-	    return output;
+	  var myRe = /[0-9]+[A-Za-z]+/g;
+	  var myArray = myRe.exec(course_no);
+	  var output = [course_no.slice(0, myRe.lastIndex), course_no.slice(myRe.lastIndex)].join(" ");
+	  return output;
 	}
 	
 	function translateTopic(topic) {
-	    var result;
-	    switch (topic) {
-	        case "科號":
-	            result = "科號";
-	            break;
-	        case "課程名稱":
-	            result = "課程中文名稱";
-	            break;
-	        case "授課教師":
-	            result = "教師";
-	            break;
-	        case "上課時間":
-	            result = "時間";
-	            break;
-	        case "教室地點":
-	            result = "教室";
-	            break;
-	        case "課程內容":
-	            result = "課綱";
-	            break;
-	        case "通識對象":
-	            result = "通識對象";
-	            break;
-	        case "通識類別":
-	            result = "通識類別";
-	            break;
-	        case "系必選修":
-	            result = "必選修";
-	            break;
-	        case "學分學程":
-	            result = "學程";
-	            break;
-	        case "第一二專長":
-	            result = "第一二專長";
-	            break;
-	        default:
-	            alert("Translate Topic Wrong !");
-	            break;
-	    }
-	    return result;
+	  var result;
+	  switch (topic) {
+	    case "科號":
+	      result = "科號";
+	      break;
+	    case "課程名稱":
+	      result = "課程中文名稱";
+	      break;
+	    case "授課教師":
+	      result = "教師";
+	      break;
+	    case "上課時間":
+	      result = "時間";
+	      break;
+	    case "教室地點":
+	      result = "教室";
+	      break;
+	    case "課程內容":
+	      result = "課綱";
+	      break;
+	    case "通識對象":
+	      result = "通識對象";
+	      break;
+	    case "通識類別":
+	      result = "通識類別";
+	      break;
+	    case "系必選修":
+	      result = "必選修";
+	      break;
+	    case "學分學程":
+	      result = "學程";
+	      break;
+	    case "第一二專長":
+	      result = "第一二專長";
+	      break;
+	    default:
+	      alert("Translate Topic Wrong !");
+	      break;
+	  }
+	  return result;
 	}
 	
 	function removeLongCourseName(course_name) {
-	    var after;
-	    after = course_name.replace("全民國防教育軍事訓練--", "");
-	    return after;
+	  var after;
+	  after = course_name.replace("全民國防教育軍事訓練--", "");
+	  return after;
 	}
 	
 	function oldyear_to_newyear(course_no) {
-	    course_no = course_no.replace("100", "107");
-	    course_no = course_no.replace("101", "107");
-	    course_no = course_no.replace("102", "107");
-	    course_no = course_no.replace("103", "107");
-	    course_no = course_no.replace("104", "107");
-	    course_no = course_no.replace("105", "107");
-	    course_no = course_no.replace("106", "107");
-	    return course_no;
+	  course_no = course_no.replace("100", "107");
+	  course_no = course_no.replace("101", "107");
+	  course_no = course_no.replace("102", "107");
+	  course_no = course_no.replace("103", "107");
+	  course_no = course_no.replace("104", "107");
+	  course_no = course_no.replace("105", "107");
+	  course_no = course_no.replace("106", "107");
+	  return course_no;
 	}
 	
 	function sort_weekday(time_array) {
-	    time_array.sort(function (a, b) {
-	        var weekday = ["M", "T", "W", "R", "F", "S"];
-	        var week_a = weekday.findIndex(function (element) {
-	            return element == a.slice(0, 1);
-	        });
-	        var week_b = weekday.findIndex(function (element) {
-	            return element == b.slice(0, 1);
-	        });
-	        if (week_a == week_b) {
-	            var digitday_a = parseInt(a.slice(1, 2));
-	            var digitday_b = parseInt(b.slice(1, 2));
-	            return digitday_a - digitday_b;
-	        } else return week_a - week_b;
+	  time_array.sort(function (a, b) {
+	    var weekday = ["M", "T", "W", "R", "F", "S"];
+	    var week_a = weekday.findIndex(function (element) {
+	      return element == a.slice(0, 1);
 	    });
-	    return time_array;
+	    var week_b = weekday.findIndex(function (element) {
+	      return element == b.slice(0, 1);
+	    });
+	    if (week_a == week_b) {
+	      var digitday_a = parseInt(a.slice(1, 2));
+	      var digitday_b = parseInt(b.slice(1, 2));
+	      return digitday_a - digitday_b;
+	    } else return week_a - week_b;
+	  });
+	  return time_array;
+	}
+	
+	function addSpace_course_no(course_no) {
+	  var head_patt = /[0-9]+[A-Za-z]+/g;
+	  var head = course_no.match(head_patt)[0];
+	  var tail_patt = /[0-9]+/g;
+	  var tail = course_no.match(tail_patt)[1];
+	  var space_shoule = 15 - head.length - tail.length;
+	
+	  var space = "";
+	  for (var i = 0; i < space_shoule; i++) {
+	    space = space.concat(" ");
+	  }var new_course_no = head.concat(space).concat(tail);
+	  return new_course_no;
 	}
 	
 	exports.getUrlVars = getUrlVars;
@@ -568,6 +583,7 @@
 	exports.removeLongCourseName = removeLongCourseName;
 	exports.oldyear_to_newyear = oldyear_to_newyear;
 	exports.sort_weekday = sort_weekday;
+	exports.addSpace_course_no = addSpace_course_no;
 
 /***/ }),
 /* 7 */
@@ -722,7 +738,7 @@
 	          for (var each in info.教師) {
 	            teacher.push(info.教師[each].split("\t")[0]);
 	          }teacher.splice(-1, 1);
-	          $("#teacher").text(teacher.join(" / "));
+	          if (teacher.length == 0) $("#teacher").text("None");else $("#teacher").text(teacher.join(" / "));
 	
 	          $("#no").text(info.科號);
 	          $("#course_name").text(info.課程中文名稱 + " " + info.課程英文名稱);
@@ -798,7 +814,6 @@
 	//   );
 	// }
 	
-	// TODO: 要加星期六
 	function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
 	  if (callback) $("#course_result_loading").addClass("active");
 	  request.post({
@@ -3125,8 +3140,17 @@
 	// const baseURL = `http://192.168.99.100/api/`;
 	// const baseURL = `localhost:80/api/`;
 	
-	// TODO: 頁數少於五頁就顯示真實頁數 & 欄位高度要固定
 	function renderSearchResult(hits, callback) {
+	  var page_num_content = "";
+	  var all_page = Math.ceil(hits.length / 10.0);
+	  for (var i = 1; i < all_page; i++) {
+	    var page_num = i + 1;
+	    page_num_content = page_num_content.concat("<a class=\"page item\">" + page_num + "</a>");
+	  }
+	  var change_page = "<a class=\"icon item\">\n    <i class=\"left chevron icon\"></i></a>\n    <a class=\"page active item\">1</a>" + page_num_content + "<a class=\"icon item\">\n      <i class=\"right chevron icon\"></i>\n    </a>";
+	  $("#search_page_change").empty();
+	  $("#search_page_change").append(change_page);
+	
 	  storeCourseInfo(hits);
 	
 	  var _loop = function _loop(each_course) {
@@ -3174,7 +3198,7 @@
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
 	      var hits = resp.hits.hits;
-	      console.log(hits);
+	      // console.log(hits);
 	      renderSearchResult(hits, callback);
 	    }
 	  });
@@ -3192,7 +3216,7 @@
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
 	      var hits = resp.hits.hits;
-	      console.log(hits);
+	      // console.log(hits);
 	      renderSearchResult(hits, callback);
 	    }
 	  });
@@ -3211,18 +3235,19 @@
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
 	      var hits = resp.hits.hits;
-	      console.log(hits);
+	      // console.log(hits);
 	      renderSearchResult(hits, callback);
 	    }
 	  });
 	}
 	
+	// TODO: keyword 沒填要搜尋全部，然後檢查頁數，看到底有沒有成功
 	function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
 	  $("#search_result_body").empty();
 	  $("#search_loading").addClass("active");
 	  var search_topic = (0, _helper.translateTopic)(topic);
 	
-	  if (other_keyword === "") {
+	  if (other_keyword == "NoNeedToChoose") {
 	    console.log("search_topic:", search_topic);
 	    console.log("keyword:", keyword);
 	    searchOnlyKeyword(search_topic, keyword, callback);
@@ -3294,12 +3319,12 @@
 	  });
 	}
 	
-	// FIXME: 要把科號改成，不管空白幾個都可以搜尋到
 	function searchBySingleCourseNo(course_no, callback) {
+	  var new_course_no = (0, _helper.addSpace_course_no)(course_no);
 	  request.post({
 	    url: baseURL + "searchBySingleCourseNo",
 	    form: {
-	      course_no: course_no
+	      course_no: new_course_no
 	    }
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
@@ -8464,7 +8489,7 @@
 /* 37 */
 /***/ (function(module, exports) {
 
-	module.exports = {"_from":"tough-cookie@~2.3.3","_id":"tough-cookie@2.3.4","_inBundle":false,"_integrity":"sha512-TZ6TTfI5NtZnuyy/Kecv+CnoROnyXn2DN97LontgQpCwsX2XyLYCC0ENhYkehSOwAp8rTQKc/NUIF7BkQ5rKLA==","_location":"/tough-cookie","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"tough-cookie@~2.3.3","name":"tough-cookie","escapedName":"tough-cookie","rawSpec":"~2.3.3","saveSpec":null,"fetchSpec":"~2.3.3"},"_requiredBy":["/request"],"_resolved":"https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.4.tgz","_shasum":"ec60cee38ac675063ffc97a5c18970578ee83655","_spec":"tough-cookie@~2.3.3","_where":"D:\\SideProject\\nthu-extension\\node_modules\\request","author":{"name":"Jeremy Stashewsky","email":"jstashewsky@salesforce.com"},"bugs":{"url":"https://github.com/salesforce/tough-cookie/issues"},"bundleDependencies":false,"contributors":[{"name":"Alexander Savin"},{"name":"Ian Livingstone"},{"name":"Ivan Nikulin"},{"name":"Lalit Kapoor"},{"name":"Sam Thompson"},{"name":"Sebastian Mayr"}],"dependencies":{"punycode":"^1.4.1"},"deprecated":false,"description":"RFC6265 Cookies and Cookie Jar for node.js","devDependencies":{"async":"^1.4.2","string.prototype.repeat":"^0.2.0","vows":"^0.8.1"},"engines":{"node":">=0.8"},"files":["lib"],"homepage":"https://github.com/salesforce/tough-cookie","keywords":["HTTP","cookie","cookies","set-cookie","cookiejar","jar","RFC6265","RFC2965"],"license":"BSD-3-Clause","main":"./lib/cookie","name":"tough-cookie","repository":{"type":"git","url":"git://github.com/salesforce/tough-cookie.git"},"scripts":{"suffixup":"curl -o public_suffix_list.dat https://publicsuffix.org/list/public_suffix_list.dat && ./generate-pubsuffix.js","test":"vows test/*_test.js"},"version":"2.3.4"}
+	module.exports = {"_args":[["tough-cookie@2.3.4","D:\\SideProject\\nthu-extension"]],"_from":"tough-cookie@2.3.4","_id":"tough-cookie@2.3.4","_inBundle":false,"_integrity":"sha512-TZ6TTfI5NtZnuyy/Kecv+CnoROnyXn2DN97LontgQpCwsX2XyLYCC0ENhYkehSOwAp8rTQKc/NUIF7BkQ5rKLA==","_location":"/tough-cookie","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"tough-cookie@2.3.4","name":"tough-cookie","escapedName":"tough-cookie","rawSpec":"2.3.4","saveSpec":null,"fetchSpec":"2.3.4"},"_requiredBy":["/request"],"_resolved":"https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.4.tgz","_spec":"2.3.4","_where":"D:\\SideProject\\nthu-extension","author":{"name":"Jeremy Stashewsky","email":"jstashewsky@salesforce.com"},"bugs":{"url":"https://github.com/salesforce/tough-cookie/issues"},"contributors":[{"name":"Alexander Savin"},{"name":"Ian Livingstone"},{"name":"Ivan Nikulin"},{"name":"Lalit Kapoor"},{"name":"Sam Thompson"},{"name":"Sebastian Mayr"}],"dependencies":{"punycode":"^1.4.1"},"description":"RFC6265 Cookies and Cookie Jar for node.js","devDependencies":{"async":"^1.4.2","string.prototype.repeat":"^0.2.0","vows":"^0.8.1"},"engines":{"node":">=0.8"},"files":["lib"],"homepage":"https://github.com/salesforce/tough-cookie","keywords":["HTTP","cookie","cookies","set-cookie","cookiejar","jar","RFC6265","RFC2965"],"license":"BSD-3-Clause","main":"./lib/cookie","name":"tough-cookie","repository":{"type":"git","url":"git://github.com/salesforce/tough-cookie.git"},"scripts":{"suffixup":"curl -o public_suffix_list.dat https://publicsuffix.org/list/public_suffix_list.dat && ./generate-pubsuffix.js","test":"vows test/*_test.js"},"version":"2.3.4"}
 
 /***/ }),
 /* 38 */
