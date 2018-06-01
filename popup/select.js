@@ -62,13 +62,9 @@ function planEachCourse(acix, course_no, callback) {
         let origin = $("script", temp)
           .first()
           .text();
-        let res = origin.split("'");
-
-        // TODO: 將錯誤訊息記錄起來
-        // $("#choose_course_alert_text").text(res[1]);
-
+        let message = origin.split("'")[1];
         let isSuccess = false;
-        callback(isSuccess);
+        callback(isSuccess, message);
       } else {
         let isSuccess = true;
         callback(isSuccess);
@@ -82,10 +78,11 @@ function planAllCourse(acix, cart, callback) {
   wrong_list = [];
   for (let key in cart) {
     let course_no = cart[key].course_no;
-    planEachCourse(acix, course_no, function(isSuccess) {
+    planEachCourse(acix, course_no, function(isSuccess, message) {
       if (isSuccess == true) correct_list.push(course_no);
-      else wrong_list.push(course_no);
-
+      else {
+        wrong_list.push({ course_no, message });
+      }
       callback(count);
       count++;
     });
@@ -119,11 +116,33 @@ function removeSuccessSelectCourse(acix, callback) {
           // console.log(items);
           getCart(acix);
           callback();
-          $("#select_state").modal("show");
         });
       });
     });
   });
 }
 
-export { planAllCourse, removeSuccessSelectCourse };
+function showCourseModal(callback) {
+  $("#select_course_status").empty();
+  console.log(wrong_list);
+  if (wrong_list.length != 0)
+    $("#select_course_status").append(`<div class="item">失敗：</div>`);
+  else
+    $("#select_course_status").append(
+      `<div class="item">全數選課成功&nbsp;&nbsp;!&nbsp;&nbsp;請還是依校務資訊系統為主</div>`
+    );
+  for (let each in wrong_list) {
+    let content =
+      `<div class="item">` +
+      wrong_list[each].course_no +
+      ` ( ` +
+      wrong_list[each].message +
+      ` )` +
+      `</div>`;
+    $("#select_course_status").append(content);
+  }
+  $("#select_state").modal("show");
+  callback();
+}
+
+export { planAllCourse, removeSuccessSelectCourse, showCourseModal };

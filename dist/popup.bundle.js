@@ -114,6 +114,7 @@
 	window._crypto = null;
 	
 	(0, _drift.initDrift)();
+	
 	// import {
 	//   getRecommendPage,
 	//   toStorage,
@@ -122,7 +123,6 @@
 	//   num_of_old_course,
 	//   num_of_each_similar
 	// } from "./recommend";
-	
 	
 	var year = "107";
 	var semester = "10";
@@ -381,15 +381,21 @@
 	$("#cart_submit").on("click", function () {
 	  $("#send_to_nthu_loading").addClass("active");
 	  chrome.storage.local.get("cart", function (items) {
-	    var course_num = Object.keys(items.cart).length;
-	    (0, _select.planAllCourse)(acix, items.cart, function (count) {
-	      if (count == course_num) {
-	        console.log("Finish Select All Course !");
-	        (0, _select.removeSuccessSelectCourse)(acix, function () {
-	          $("#send_to_nthu_loading").removeClass("active");
-	        });
-	      }
-	    });
+	    if (items.cart != undefined) {
+	      var course_num = Object.keys(items.cart).length;
+	      (0, _select.planAllCourse)(acix, items.cart, function (count) {
+	        if (count == course_num) {
+	          console.log("Finish Select All Course !");
+	          (0, _select.removeSuccessSelectCourse)(acix, function () {
+	            (0, _select.showCourseModal)(function () {
+	              $("#send_to_nthu_loading").removeClass("active");
+	            });
+	          });
+	        }
+	      });
+	    } else {
+	      $("#send_to_nthu_loading").removeClass("active");
+	    }
 	  });
 	});
 	// $("#recommend_list").on("click", ".item", function() {
@@ -3251,6 +3257,7 @@
 	  });
 	}
 	
+	// TODO: 搜尋結果看可不可以造著科號排
 	function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
 	  $("#search_result_body").empty();
 	  $("#search_loading").addClass("active");
@@ -52691,7 +52698,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.removeSuccessSelectCourse = exports.planAllCourse = undefined;
+	exports.showCourseModal = exports.removeSuccessSelectCourse = exports.planAllCourse = undefined;
 	
 	var _cart = __webpack_require__(288);
 	
@@ -52742,13 +52749,9 @@
 	      $("#session_alert").modal("show");
 	    } else if ($(temp).text().indexOf("alert") >= 0) {
 	      var origin = $("script", temp).first().text();
-	      var res = origin.split("'");
-	
-	      // TODO: 將錯誤訊息記錄起來
-	      // $("#choose_course_alert_text").text(res[1]);
-	
+	      var message = origin.split("'")[1];
 	      var isSuccess = false;
-	      callback(isSuccess);
+	      callback(isSuccess, message);
 	    } else {
 	      var _isSuccess = true;
 	      callback(_isSuccess);
@@ -52763,9 +52766,10 @@
 	
 	  var _loop = function _loop(key) {
 	    var course_no = cart[key].course_no;
-	    planEachCourse(acix, course_no, function (isSuccess) {
-	      if (isSuccess == true) correct_list.push(course_no);else wrong_list.push(course_no);
-	
+	    planEachCourse(acix, course_no, function (isSuccess, message) {
+	      if (isSuccess == true) correct_list.push(course_no);else {
+	        wrong_list.push({ course_no: course_no, message: message });
+	      }
 	      callback(count);
 	      count++;
 	    });
@@ -52803,15 +52807,27 @@
 	          // console.log(items);
 	          (0, _cart.getCart)(acix);
 	          callback();
-	          $("#select_state").modal("show");
 	        });
 	      });
 	    });
 	  });
 	}
 	
+	function showCourseModal(callback) {
+	  $("#select_course_status").empty();
+	  console.log(wrong_list);
+	  if (wrong_list.length != 0) $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");else $("#select_course_status").append("<div class=\"item\">\u5168\u6578\u9078\u8AB2\u6210\u529F&nbsp;&nbsp;!&nbsp;&nbsp;\u8ACB\u9084\u662F\u4F9D\u6821\u52D9\u8CC7\u8A0A\u7CFB\u7D71\u70BA\u4E3B</div>");
+	  for (var each in wrong_list) {
+	    var content = "<div class=\"item\">" + wrong_list[each].course_no + " ( " + wrong_list[each].message + " )" + "</div>";
+	    $("#select_course_status").append(content);
+	  }
+	  $("#select_state").modal("show");
+	  callback();
+	}
+	
 	exports.planAllCourse = planAllCourse;
 	exports.removeSuccessSelectCourse = removeSuccessSelectCourse;
+	exports.showCourseModal = showCourseModal;
 
 /***/ })
 /******/ ]);

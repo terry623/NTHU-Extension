@@ -10,6 +10,12 @@ import {
   dependOnType
 } from "./search";
 import { getCart } from "./cart";
+import { getCurrentStateOfNTHU } from "./server";
+import {
+  planAllCourse,
+  removeSuccessSelectCourse,
+  showCourseModal
+} from "./select";
 // import {
 //   getRecommendPage,
 //   toStorage,
@@ -18,8 +24,6 @@ import { getCart } from "./cart";
 //   num_of_old_course,
 //   num_of_each_similar
 // } from "./recommend";
-import { getCurrentStateOfNTHU } from "./server";
-import { planAllCourse, removeSuccessSelectCourse } from "./select";
 
 const year = "107";
 const semester = "10";
@@ -317,15 +321,21 @@ $("#conflict_explain").popup();
 $("#cart_submit").on("click", function() {
   $("#send_to_nthu_loading").addClass("active");
   chrome.storage.local.get("cart", function(items) {
-    let course_num = Object.keys(items.cart).length;
-    planAllCourse(acix, items.cart, function(count) {
-      if (count == course_num) {
-        console.log("Finish Select All Course !");
-        removeSuccessSelectCourse(acix, function() {
-          $("#send_to_nthu_loading").removeClass("active");
-        });
-      }
-    });
+    if (items.cart != undefined) {
+      let course_num = Object.keys(items.cart).length;
+      planAllCourse(acix, items.cart, function(count) {
+        if (count == course_num) {
+          console.log("Finish Select All Course !");
+          removeSuccessSelectCourse(acix, function() {
+            showCourseModal(function() {
+              $("#send_to_nthu_loading").removeClass("active");
+            });
+          });
+        }
+      });
+    } else {
+      $("#send_to_nthu_loading").removeClass("active");
+    }
   });
 });
 // $("#recommend_list").on("click", ".item", function() {

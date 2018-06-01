@@ -140,6 +140,7 @@ function searchTime(search_topic, keyword, time_group, callback) {
   );
 }
 
+// TODO: 搜尋結果看可不可以造著科號排
 function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
   $("#search_result_body").empty();
   $("#search_loading").addClass("active");
