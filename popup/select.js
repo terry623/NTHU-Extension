@@ -13,7 +13,7 @@ function serialize(obj) {
   return str.join("&");
 }
 
-// TODO: 正式選課時要處理志願序問題
+// TODO: 正式選課時要處理志願序 & 衝堂問題
 function planEachCourse(acix, course_no, callback) {
   course_no = course_no.replace(/ /g, "+");
   let form = {
@@ -124,25 +124,69 @@ function removeSuccessSelectCourse(acix, callback) {
 
 function showCourseModal(callback) {
   $("#select_course_status").empty();
-  console.log(wrong_list);
-  if (wrong_list.length != 0)
+  if (wrong_list.length != 0) {
     $("#select_course_status").append(`<div class="item">失敗：</div>`);
-  else
+    for (let each in wrong_list) {
+      let content =
+        `<div class="item">` +
+        wrong_list[each].course_no +
+        ` ( ` +
+        wrong_list[each].message +
+        ` )` +
+        `</div>`;
+      $("#select_course_status").append(content);
+    }
+  } else {
     $("#select_course_status").append(
       `<div class="item">全數選課成功&nbsp;&nbsp;!&nbsp;&nbsp;請還是依校務資訊系統為主</div>`
     );
-  for (let each in wrong_list) {
-    let content =
-      `<div class="item">` +
-      wrong_list[each].course_no +
-      ` ( ` +
-      wrong_list[each].message +
-      ` )` +
-      `</div>`;
-    $("#select_course_status").append(content);
   }
   $("#select_state").modal("show");
   callback();
 }
 
-export { planAllCourse, removeSuccessSelectCourse, showCourseModal };
+// TODO: 尚未做志願序的參數傳遞
+function submitToNTHU(acix) {
+  chrome.storage.local.get("cart", function(items) {
+    if (items.cart != undefined) {
+      let course_num = Object.keys(items.cart).length;
+      planAllCourse(acix, items.cart, function(count) {
+        if (count == course_num) {
+          console.log("Finish Select All Course !");
+          removeSuccessSelectCourse(acix, function() {
+            showCourseModal(function() {
+              $("#send_to_nthu_loading").removeClass("active");
+            });
+          });
+        }
+      });
+    } else {
+      $("#send_to_nthu_loading").removeClass("active");
+    }
+  });
+}
+
+function storeOrderToStorage(course_id_group, callback) {
+  console.log("storeOrderToStorage");
+  console.log(course_id_group);
+  chrome.storage.local.get("cart", function(items) {
+    let temp = {};
+    Object.assign(temp, items.cart);
+    for (let each in course_id_group) {
+      let id = course_id_group[each].course_id;
+      let order = course_id_group[each].order;
+      temp[id].order = order;
+    }
+
+    chrome.storage.local.remove("cart", function() {
+      chrome.storage.local.set({ cart: temp }, function() {
+        chrome.storage.local.get("cart", function(items) {
+          // console.log(items);
+          callback();
+        });
+      });
+    });
+  });
+}
+
+export { submitToNTHU, storeOrderToStorage };

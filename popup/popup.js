@@ -11,11 +11,7 @@ import {
 } from "./search";
 import { getCart } from "./cart";
 import { getCurrentStateOfNTHU } from "./server";
-import {
-  planAllCourse,
-  removeSuccessSelectCourse,
-  showCourseModal
-} from "./select";
+import { submitToNTHU, storeOrderToStorage } from "./select";
 // import {
 //   getRecommendPage,
 //   toStorage,
@@ -74,10 +70,13 @@ $("#submit").on("click", function() {
     let time_array = $("#time")
       .text()
       .split(",");
+    let order = -1;
+    if ($("#GE_type").text() != "") order = 0;
     let data = {
       course_no: $("#no").text(),
       course_name: $("#course_name").text(),
-      time: time_array
+      time: time_array,
+      order: order
     };
 
     if (items.cart != undefined) {
@@ -319,23 +318,38 @@ $("#multiple_class_bySingle").on("click", ".item", function() {
 });
 $("#conflict_explain").popup();
 $("#cart_submit").on("click", function() {
+  let childNum = $("#course_order_list").length;
+  if (childNum > 0) {
+    let list = document.getElementById("course_order_list");
+    Sortable.create(list, {
+      onUpdate: function(evt) {
+        $("#course_order_list > div > .number").each(function() {
+          $(this).text(
+            $(this)
+              .parent()
+              .index() + 1
+          );
+        });
+      }
+    });
+    $("#course_order").modal("show");
+  } else {
+    $("#send_to_nthu_loading").addClass("active");
+    submitToNTHU();
+  }
+});
+$("#send_to_nthu").on("click", function() {
   $("#send_to_nthu_loading").addClass("active");
-  chrome.storage.local.get("cart", function(items) {
-    if (items.cart != undefined) {
-      let course_num = Object.keys(items.cart).length;
-      planAllCourse(acix, items.cart, function(count) {
-        if (count == course_num) {
-          console.log("Finish Select All Course !");
-          removeSuccessSelectCourse(acix, function() {
-            showCourseModal(function() {
-              $("#send_to_nthu_loading").removeClass("active");
-            });
-          });
-        }
-      });
-    } else {
-      $("#send_to_nthu_loading").removeClass("active");
-    }
+  let course_id_group = [];
+  $("#course_order_list > div > .number").each(function() {
+    let course_id = $(this).attr("id");
+    let order = $(this).text();
+    console.log(course_id, order);
+    course_id_group.push({ course_id, order });
+  });
+
+  storeOrderToStorage(course_id_group, function() {
+    submitToNTHU(acix);
   });
 });
 // $("#recommend_list").on("click", ".item", function() {

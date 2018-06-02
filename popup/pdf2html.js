@@ -40,6 +40,7 @@ function renderPage(num) {
 
     // Wait for rendering to finish
     renderTask.promise.then(function() {
+      $("#pdf_render").show();
       pageRendering = false;
       if (pageNumPending !== null) {
         // New page rendering is pending

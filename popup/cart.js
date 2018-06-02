@@ -8,8 +8,10 @@ function getCart(acix) {
     $(parse_table).attr("id", "cart");
 
     let all_time = [];
+    $("#course_order_list").empty();
     for (let key in items.cart) {
       if (items.cart.hasOwnProperty(key)) {
+        course_order_list(key, items.cart[key]);
         let name = items.cart[key].course_name.split(" ");
         let content =
           `<a href="#do_not_jump" id="` +
@@ -60,8 +62,6 @@ function getCart(acix) {
             </div>`;
           $("#multiple_class_list").append(content);
         });
-
-        //TODO: 通識的話，可以在此 modal 看志願
         $("#multiple_class").modal("show");
       } else {
         let course_no = $("a", this).attr("course_no");
@@ -81,6 +81,25 @@ function getCart(acix) {
       }
     });
   });
+}
+
+function course_order_list(id, item) {
+  if (item.order > -1) {
+    let content =
+      `<div course_no="` +
+      item.course_no +
+      `" class="item">
+  <div id="` +
+      id +
+      `" class="number right floated content">0</div>
+  <div class="content">
+  <div class="description">` +
+      item.course_name.split(" ")[0] +
+      `</div>
+  </div>
+  </div>`;
+    $("#course_order_list").append(content);
+  }
 }
 
 export { getCart };

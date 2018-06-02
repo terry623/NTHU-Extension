@@ -166,10 +166,13 @@
 	    var get_course_id = $(".ui.piled.segment").attr("id");
 	    var temp = {};
 	    var time_array = $("#time").text().split(",");
+	    var order = -1;
+	    if ($("#GE_type").text() != "") order = 0;
 	    var data = {
 	      course_no: $("#no").text(),
 	      course_name: $("#course_name").text(),
-	      time: time_array
+	      time: time_array,
+	      order: order
 	    };
 	
 	    if (items.cart != undefined) {
@@ -379,23 +382,34 @@
 	});
 	$("#conflict_explain").popup();
 	$("#cart_submit").on("click", function () {
+	  var childNum = $("#course_order_list").length;
+	  if (childNum > 0) {
+	    var list = document.getElementById("course_order_list");
+	    Sortable.create(list, {
+	      onUpdate: function onUpdate(evt) {
+	        $("#course_order_list > div > .number").each(function () {
+	          $(this).text($(this).parent().index() + 1);
+	        });
+	      }
+	    });
+	    $("#course_order").modal("show");
+	  } else {
+	    $("#send_to_nthu_loading").addClass("active");
+	    (0, _select.submitToNTHU)();
+	  }
+	});
+	$("#send_to_nthu").on("click", function () {
 	  $("#send_to_nthu_loading").addClass("active");
-	  chrome.storage.local.get("cart", function (items) {
-	    if (items.cart != undefined) {
-	      var course_num = Object.keys(items.cart).length;
-	      (0, _select.planAllCourse)(acix, items.cart, function (count) {
-	        if (count == course_num) {
-	          console.log("Finish Select All Course !");
-	          (0, _select.removeSuccessSelectCourse)(acix, function () {
-	            (0, _select.showCourseModal)(function () {
-	              $("#send_to_nthu_loading").removeClass("active");
-	            });
-	          });
-	        }
-	      });
-	    } else {
-	      $("#send_to_nthu_loading").removeClass("active");
-	    }
+	  var course_id_group = [];
+	  $("#course_order_list > div > .number").each(function () {
+	    var course_id = $(this).attr("id");
+	    var order = $(this).text();
+	    console.log(course_id, order);
+	    course_id_group.push({ course_id: course_id, order: order });
+	  });
+	
+	  (0, _select.storeOrderToStorage)(course_id_group, function () {
+	    (0, _select.submitToNTHU)(acix);
 	  });
 	});
 	// $("#recommend_list").on("click", ".item", function() {
@@ -780,7 +794,7 @@
 	          if (find_file.length > 0) {
 	            var ran = Math.floor(Math.random() * 100 + 1);
 	            var pdf_path = "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
-	            $("#pdf_page").html("<div align=\"right\">\n                        <button id=\"prev\" class=\"tiny ui basic button\">\n                            <i class=\"angle left icon\"></i>\n                        </button>\n                        <button id=\"next\" class=\"tiny ui basic button\">\n                            <i class=\"angle right icon\"></i>\n                        </button>\n                        &nbsp; &nbsp;\n                        <span>Page:\n                            <span id=\"page_num\"></span> /\n                            <span id=\"page_count\"></span>\n                        </span>\n                    </div>\n                    <canvas id=\"the-canvas\" />\n                    ");
+	            $("#pdf_page").html("<div id=\"pdf_render\" align=\"right\" style=\"display:none;\">\n                        <button id=\"prev\" class=\"tiny ui basic button\">\n                            <i class=\"angle left icon\"></i>\n                        </button>\n                        <button id=\"next\" class=\"tiny ui basic button\">\n                            <i class=\"angle right icon\"></i>\n                        </button>\n                        &nbsp; &nbsp;\n                        <span>Page:\n                            <span id=\"page_num\" ></span> /\n                            <span id=\"page_count\"></span>\n                        </span>\n                    </div>\n                    <canvas id=\"the-canvas\" />\n                    ");
 	            (0, _pdf2html.transform)(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
 	          } else $("#syllabus").html(syllabus.html());
 	
@@ -3066,6 +3080,7 @@
 	
 	    // Wait for rendering to finish
 	    renderTask.promise.then(function () {
+	      $("#pdf_render").show();
 	      pageRendering = false;
 	      if (pageNumPending !== null) {
 	        // New page rendering is pending
@@ -3257,7 +3272,6 @@
 	  });
 	}
 	
-	// TODO: 搜尋結果看可不可以造著科號排
 	function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
 	  $("#search_result_body").empty();
 	  $("#search_loading").addClass("active");
@@ -52323,8 +52337,10 @@
 	    $(parse_table).attr("id", "cart");
 	
 	    var all_time = [];
+	    $("#course_order_list").empty();
 	    for (var key in items.cart) {
 	      if (items.cart.hasOwnProperty(key)) {
+	        course_order_list(key, items.cart[key]);
 	        var name = items.cart[key].course_name.split(" ");
 	        var content = "<a href=\"#do_not_jump\" id=\"" + key + "\" course_no=\"" + items.cart[key].course_no + "\">" + name[0] + "</a>";
 	
@@ -52353,8 +52369,6 @@
 	          var content = "<div id=\"" + $(this).attr("id") + "\" course_no=\"" + $(this).attr("course_no") + "\" class=\"item\">\n            <div class=\"content\">\n            <div class=\"description\">" + $(this).text() + "</div>\n            </div>\n            </div>";
 	          $("#multiple_class_list").append(content);
 	        });
-	
-	        //TODO: 通識的話，可以在此 modal 看志願
 	        $("#multiple_class").modal("show");
 	      } else {
 	        var course_no = $("a", this).attr("course_no");
@@ -52368,6 +52382,13 @@
 	      }
 	    });
 	  });
+	}
+	
+	function course_order_list(id, item) {
+	  if (item.order > -1) {
+	    var content = "<div course_no=\"" + item.course_no + "\" class=\"item\">\n  <div id=\"" + id + "\" class=\"number right floated content\">0</div>\n  <div class=\"content\">\n  <div class=\"description\">" + item.course_name.split(" ")[0] + "</div>\n  </div>\n  </div>";
+	    $("#course_order_list").append(content);
+	  }
 	}
 	
 	exports.getCart = getCart;
@@ -52698,7 +52719,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.showCourseModal = exports.removeSuccessSelectCourse = exports.planAllCourse = undefined;
+	exports.storeOrderToStorage = exports.submitToNTHU = undefined;
 	
 	var _cart = __webpack_require__(288);
 	
@@ -52716,7 +52737,7 @@
 	  }return str.join("&");
 	}
 	
-	// TODO: 正式選課時要處理志願序問題
+	// TODO: 正式選課時要處理志願序 & 衝堂問題
 	function planEachCourse(acix, course_no, callback) {
 	  course_no = course_no.replace(/ /g, "+");
 	  var form = {
@@ -52815,19 +52836,65 @@
 	
 	function showCourseModal(callback) {
 	  $("#select_course_status").empty();
-	  console.log(wrong_list);
-	  if (wrong_list.length != 0) $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");else $("#select_course_status").append("<div class=\"item\">\u5168\u6578\u9078\u8AB2\u6210\u529F&nbsp;&nbsp;!&nbsp;&nbsp;\u8ACB\u9084\u662F\u4F9D\u6821\u52D9\u8CC7\u8A0A\u7CFB\u7D71\u70BA\u4E3B</div>");
-	  for (var each in wrong_list) {
-	    var content = "<div class=\"item\">" + wrong_list[each].course_no + " ( " + wrong_list[each].message + " )" + "</div>";
-	    $("#select_course_status").append(content);
+	  if (wrong_list.length != 0) {
+	    $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");
+	    for (var each in wrong_list) {
+	      var content = "<div class=\"item\">" + wrong_list[each].course_no + " ( " + wrong_list[each].message + " )" + "</div>";
+	      $("#select_course_status").append(content);
+	    }
+	  } else {
+	    $("#select_course_status").append("<div class=\"item\">\u5168\u6578\u9078\u8AB2\u6210\u529F&nbsp;&nbsp;!&nbsp;&nbsp;\u8ACB\u9084\u662F\u4F9D\u6821\u52D9\u8CC7\u8A0A\u7CFB\u7D71\u70BA\u4E3B</div>");
 	  }
 	  $("#select_state").modal("show");
 	  callback();
 	}
 	
-	exports.planAllCourse = planAllCourse;
-	exports.removeSuccessSelectCourse = removeSuccessSelectCourse;
-	exports.showCourseModal = showCourseModal;
+	// TODO: 尚未做志願序的參數傳遞
+	function submitToNTHU(acix) {
+	  chrome.storage.local.get("cart", function (items) {
+	    if (items.cart != undefined) {
+	      var course_num = Object.keys(items.cart).length;
+	      planAllCourse(acix, items.cart, function (count) {
+	        if (count == course_num) {
+	          console.log("Finish Select All Course !");
+	          removeSuccessSelectCourse(acix, function () {
+	            showCourseModal(function () {
+	              $("#send_to_nthu_loading").removeClass("active");
+	            });
+	          });
+	        }
+	      });
+	    } else {
+	      $("#send_to_nthu_loading").removeClass("active");
+	    }
+	  });
+	}
+	
+	function storeOrderToStorage(course_id_group, callback) {
+	  console.log("storeOrderToStorage");
+	  console.log(course_id_group);
+	  chrome.storage.local.get("cart", function (items) {
+	    var temp = {};
+	    Object.assign(temp, items.cart);
+	    for (var each in course_id_group) {
+	      var id = course_id_group[each].course_id;
+	      var order = course_id_group[each].order;
+	      temp[id].order = order;
+	    }
+	
+	    chrome.storage.local.remove("cart", function () {
+	      chrome.storage.local.set({ cart: temp }, function () {
+	        chrome.storage.local.get("cart", function (items) {
+	          // console.log(items);
+	          callback();
+	        });
+	      });
+	    });
+	  });
+	}
+	
+	exports.submitToNTHU = submitToNTHU;
+	exports.storeOrderToStorage = storeOrderToStorage;
 
 /***/ })
 /******/ ]);

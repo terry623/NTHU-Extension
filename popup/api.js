@@ -213,7 +213,7 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
               let pdf_path =
                 "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
               $("#pdf_page").html(
-                `<div align="right">
+                `<div id="pdf_render" align="right" style="display:none;">
                         <button id="prev" class="tiny ui basic button">
                             <i class="angle left icon"></i>
                         </button>
@@ -222,7 +222,7 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
                         </button>
                         &nbsp; &nbsp;
                         <span>Page:
-                            <span id="page_num"></span> /
+                            <span id="page_num" ></span> /
                             <span id="page_count"></span>
                         </span>
                     </div>

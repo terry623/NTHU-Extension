@@ -10,6 +10,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="../semantic/dist/semantic.min.js"></script>
     <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.6.1/Sortable.min.js"></script>
 </head>
 
 <body>
@@ -1459,6 +1460,19 @@
                 </div>
                 <div class="actions">
                     <div class="small ui basic cancel button">Close</div>
+                </div>
+            </div>
+            <div id="course_order" class="ui tiny modal">
+                <div class="header">
+                    排列志願序
+                </div>
+                <div class="content">
+                    <div id="course_order_list" class="ui middle aligned order_course selection list">
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">Close</div>
+                    <div id="send_to_nthu" class="small ui teal button">Send</div>
                 </div>
             </div>
             <table style="display:none;" class="ui tab2 compact table">
