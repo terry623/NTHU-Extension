@@ -13,7 +13,6 @@ function serialize(obj) {
   return str.join("&");
 }
 
-// TODO: 正式選課時要處理志願序 & 衝堂問題
 function planEachCourse(acix, course_no, callback) {
   course_no = course_no.replace(/ /g, "+");
   let form = {
@@ -167,8 +166,6 @@ function submitToNTHU(acix) {
 }
 
 function storeOrderToStorage(course_id_group, callback) {
-  console.log("storeOrderToStorage");
-  console.log(course_id_group);
   chrome.storage.local.get("cart", function(items) {
     let temp = {};
     Object.assign(temp, items.cart);

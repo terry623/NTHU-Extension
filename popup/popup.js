@@ -71,7 +71,16 @@ $("#submit").on("click", function() {
       .text()
       .split(",");
     let order = -1;
-    if ($("#GE_type").text() != "") order = 0;
+
+    if (
+      $("#GE_type").text() != "" ||
+      $("#no")
+        .text()
+        .includes("PE")
+    ) {
+      order = 0;
+    }
+
     let data = {
       course_no: $("#no").text(),
       course_name: $("#course_name").text(),
@@ -141,40 +150,36 @@ $("#search_result_body").on("click", "tr", function() {
 $("#clicktosearch").on("click", function() {
   let topic = $("#topic_name").text();
   let keyword = $("#keyword").val();
-  if (topic.includes("請選擇類別")) {
-    $("#search_alert_topic").modal("show");
-  } else {
-    let other_keyword = "NoNeedToChoose";
-    if (topic == "上課時間") {
-      other_keyword = $("#time_select_text").val();
-    } else if (topic == "通識對象") {
-      other_keyword = $("#ge_people_text").val();
-    } else if (topic == "通識類別") {
-      other_keyword = $("#ge_type_select_text").val();
-    } else if (topic == "系必選修") {
-      other_keyword = $("#dept_entry_text").val();
-    } else if (topic == "學分學程") {
-      other_keyword = $("#program_entry_text").val();
-    } else if (topic == "第一二專長") {
-      other_keyword = $("#skill_entry_text").val();
-    }
-
-    if (other_keyword == "") {
-      $("#search_alert_otherkeyword_empty").modal("show");
-      return;
-    } else if (other_keyword == "NoNeedToChoose") {
-      if ($("#keyword").val() == "") {
-        $("#search_alert_keyword_empty").modal("show");
-        return;
-      }
-    }
-    searchByKeyword(acix, keyword, other_keyword, topic, function() {
-      $("#search_loading").removeClass("active");
-      $("#search_result_page").show();
-    });
-    $("#search_page_change > a").removeClass("active");
-    $("#search_page_change > a:nth-child(2)").addClass("active");
+  let other_keyword = "NoNeedToChoose";
+  if (topic == "上課時間") {
+    other_keyword = $("#time_select_text").val();
+  } else if (topic == "通識對象") {
+    other_keyword = $("#ge_people_text").val();
+  } else if (topic == "通識類別") {
+    other_keyword = $("#ge_type_select_text").val();
+  } else if (topic == "系必選修") {
+    other_keyword = $("#dept_entry_text").val();
+  } else if (topic == "學分學程") {
+    other_keyword = $("#program_entry_text").val();
+  } else if (topic == "第一二專長") {
+    other_keyword = $("#skill_entry_text").val();
   }
+
+  if (other_keyword == "") {
+    $("#search_alert_otherkeyword_empty").modal("show");
+    return;
+  } else if (other_keyword == "NoNeedToChoose") {
+    if ($("#keyword").val() == "") {
+      $("#search_alert_keyword_empty").modal("show");
+      return;
+    }
+  }
+  searchByKeyword(acix, keyword, other_keyword, topic, function() {
+    $("#search_loading").removeClass("active");
+    $("#search_result_page").show();
+  });
+  $("#search_page_change > a").removeClass("active");
+  $("#search_page_change > a:nth-child(2)").addClass("active");
 });
 $("#search_page_change").on("click", ".page.item", function() {
   $(this)
@@ -206,14 +211,18 @@ $("#change_school_table").on("click", ".item", function() {
 
     if ($(this).hasClass("tab1")) {
       t.not(".tab1").hide();
-      $("#change_phase").show();
       $("#cart_submit").hide();
       $("#left_pointing_to_school").hide();
+      $("#change_phase").show();
+      $("#change_phase_text").show();
+      $("#change_phase_icon").show();
     } else if ($(this).hasClass("tab2")) {
       t.not(".tab2").hide();
       $("#cart_submit").show();
       $("#left_pointing_to_school").show();
       $("#change_phase").hide();
+      $("#change_phase_text").hide();
+      $("#change_phase_icon").hide();
     }
   }
 });
@@ -276,12 +285,7 @@ $(".ui.modal").modal({
 });
 $(".ui.course_type.popup").on("click", ".item", function() {
   dependOnType($(this).text());
-  if (
-    $("#topic_name")
-      .text()
-      .includes("請選擇類別") == false
-  )
-    $("#keyword").val("");
+  $("#keyword").val("");
   $("#topic_name").text($(this).text());
   $(".ui.course_type.popup").popup("hide all");
 });
