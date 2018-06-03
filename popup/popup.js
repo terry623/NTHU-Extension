@@ -4,7 +4,7 @@ initDrift();
 import { getUrlVars } from "./helper";
 import { getUserName, getResultCourse, getCourseInfo } from "./api";
 import {
-  searchByKeyword,
+  clickToSearch,
   searchBySingleCourseNo,
   storeCourseInfo,
   dependOnType
@@ -65,7 +65,7 @@ $(".course_type.browse").popup({
 });
 $("#submit").on("click", function() {
   chrome.storage.local.get("cart", function(items) {
-    let get_course_id = $(".ui.piled.segment").attr("id");
+    let get_course_id = $(".course_info.scrolling.content").attr("id");
     let temp = {};
     let time_array = $("#time")
       .text()
@@ -114,7 +114,7 @@ $("#submit").on("click", function() {
 });
 $("#delete").on("click", function() {
   chrome.storage.local.get("cart", function(items) {
-    var get_course_id = $(".ui.piled.segment").attr("id");
+    var get_course_id = $(".course_info.scrolling.content").attr("id");
     var temp = {};
     Object.assign(temp, items.cart);
     delete temp[get_course_id];
@@ -147,39 +147,13 @@ $("#search_result_body").on("click", "tr", function() {
     false
   );
 });
+$("#keyword").keypress(function(e) {
+  if (e.which == 13) {
+    clickToSearch(acix);
+  }
+});
 $("#clicktosearch").on("click", function() {
-  let topic = $("#topic_name").text();
-  let keyword = $("#keyword").val();
-  let other_keyword = "NoNeedToChoose";
-  if (topic == "上課時間") {
-    other_keyword = $("#time_select_text").val();
-  } else if (topic == "通識對象") {
-    other_keyword = $("#ge_people_text").val();
-  } else if (topic == "通識類別") {
-    other_keyword = $("#ge_type_select_text").val();
-  } else if (topic == "系必選修") {
-    other_keyword = $("#dept_entry_text").val();
-  } else if (topic == "學分學程") {
-    other_keyword = $("#program_entry_text").val();
-  } else if (topic == "第一二專長") {
-    other_keyword = $("#skill_entry_text").val();
-  }
-
-  if (other_keyword == "") {
-    $("#search_alert_otherkeyword_empty").modal("show");
-    return;
-  } else if (other_keyword == "NoNeedToChoose") {
-    if ($("#keyword").val() == "") {
-      $("#search_alert_keyword_empty").modal("show");
-      return;
-    }
-  }
-  searchByKeyword(acix, keyword, other_keyword, topic, function() {
-    $("#search_loading").removeClass("active");
-    $("#search_result_page").show();
-  });
-  $("#search_page_change > a").removeClass("active");
-  $("#search_page_change > a:nth-child(2)").addClass("active");
+  clickToSearch(acix);
 });
 $("#search_page_change").on("click", ".page.item", function() {
   $(this)
@@ -288,6 +262,7 @@ $(".ui.course_type.popup").on("click", ".item", function() {
   $("#keyword").val("");
   $("#topic_name").text($(this).text());
   $(".ui.course_type.popup").popup("hide all");
+  $(".other_entry_dropdown").dropdown("show");
 });
 $("#multiple_class_list").on("click", ".item", function() {
   let course_no = $(this).attr("course_no");
@@ -322,7 +297,7 @@ $("#multiple_class_bySingle").on("click", ".item", function() {
 });
 $("#conflict_explain").popup();
 $("#cart_submit").on("click", function() {
-  let childNum = $("#course_order_list").length;
+  let childNum = $("#course_order_list").attr("course_num");
   if (childNum > 0) {
     let list = document.getElementById("course_order_list");
     Sortable.create(list, {
@@ -339,16 +314,16 @@ $("#cart_submit").on("click", function() {
     $("#course_order").modal("show");
   } else {
     $("#send_to_nthu_loading").addClass("active");
-    submitToNTHU();
+    submitToNTHU(acix);
   }
 });
 $("#send_to_nthu").on("click", function() {
+  $("#course_order").modal("hide");
   $("#send_to_nthu_loading").addClass("active");
   let course_id_group = [];
   $("#course_order_list > div > .number").each(function() {
     let course_id = $(this).attr("id");
     let order = $(this).text();
-    console.log(course_id, order);
     course_id_group.push({ course_id, order });
   });
 

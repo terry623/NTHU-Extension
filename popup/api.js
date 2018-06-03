@@ -178,7 +178,7 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
             let classroom = info.教室;
             if (classroom.length == 0) classroom.push("無");
             getPopulation(acix, course_no, info.新生保留人數);
-            $(".ui.piled.segment").attr("id", id);
+            $(".course_info.scrolling.content").attr("id", id);
 
             let teacher = [];
             for (let each in info.教師)

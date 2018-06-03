@@ -8,10 +8,12 @@ function getCart(acix) {
     $(parse_table).attr("id", "cart");
 
     let all_time = [];
+    let count = 0;
     $("#course_order_list").empty();
+    $("#course_order_list").attr("course_num", count);
     for (let key in items.cart) {
       if (items.cart.hasOwnProperty(key)) {
-        course_order_list(key, items.cart[key]);
+        count = course_order_list(key, items.cart[key], count);
         let name = items.cart[key].course_name.split(" ");
         let content =
           `<a href="#do_not_jump" id="` +
@@ -83,23 +85,26 @@ function getCart(acix) {
   });
 }
 
-function course_order_list(id, item) {
+function course_order_list(id, item, count) {
   if (item.order > -1) {
     let content =
       `<div course_no="` +
       item.course_no +
       `" class="item">
-  <div id="` +
+    <div id="` +
       id +
       `" class="number right floated content">0</div>
-  <div class="content">
-  <div class="description">` +
+    <div class="content">
+    <div class="description">` +
       item.course_name.split(" ")[0] +
       `</div>
-  </div>
-  </div>`;
+    </div>
+    </div>`;
     $("#course_order_list").append(content);
+    count++;
+    $("#course_order_list").attr("course_num", count);
   }
+  return count;
 }
 
 export { getCart };

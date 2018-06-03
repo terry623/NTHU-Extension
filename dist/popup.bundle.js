@@ -163,7 +163,7 @@
 	});
 	$("#submit").on("click", function () {
 	  chrome.storage.local.get("cart", function (items) {
-	    var get_course_id = $(".ui.piled.segment").attr("id");
+	    var get_course_id = $(".course_info.scrolling.content").attr("id");
 	    var temp = {};
 	    var time_array = $("#time").text().split(",");
 	    var order = -1;
@@ -205,7 +205,7 @@
 	});
 	$("#delete").on("click", function () {
 	  chrome.storage.local.get("cart", function (items) {
-	    var get_course_id = $(".ui.piled.segment").attr("id");
+	    var get_course_id = $(".course_info.scrolling.content").attr("id");
 	    var temp = {};
 	    Object.assign(temp, items.cart);
 	    delete temp[get_course_id];
@@ -232,39 +232,13 @@
 	    $("#course_info_loading").removeClass("active");
 	  }, false);
 	});
+	$("#keyword").keypress(function (e) {
+	  if (e.which == 13) {
+	    (0, _search.clickToSearch)(acix);
+	  }
+	});
 	$("#clicktosearch").on("click", function () {
-	  var topic = $("#topic_name").text();
-	  var keyword = $("#keyword").val();
-	  var other_keyword = "NoNeedToChoose";
-	  if (topic == "上課時間") {
-	    other_keyword = $("#time_select_text").val();
-	  } else if (topic == "通識對象") {
-	    other_keyword = $("#ge_people_text").val();
-	  } else if (topic == "通識類別") {
-	    other_keyword = $("#ge_type_select_text").val();
-	  } else if (topic == "系必選修") {
-	    other_keyword = $("#dept_entry_text").val();
-	  } else if (topic == "學分學程") {
-	    other_keyword = $("#program_entry_text").val();
-	  } else if (topic == "第一二專長") {
-	    other_keyword = $("#skill_entry_text").val();
-	  }
-	
-	  if (other_keyword == "") {
-	    $("#search_alert_otherkeyword_empty").modal("show");
-	    return;
-	  } else if (other_keyword == "NoNeedToChoose") {
-	    if ($("#keyword").val() == "") {
-	      $("#search_alert_keyword_empty").modal("show");
-	      return;
-	    }
-	  }
-	  (0, _search.searchByKeyword)(acix, keyword, other_keyword, topic, function () {
-	    $("#search_loading").removeClass("active");
-	    $("#search_result_page").show();
-	  });
-	  $("#search_page_change > a").removeClass("active");
-	  $("#search_page_change > a:nth-child(2)").addClass("active");
+	  (0, _search.clickToSearch)(acix);
 	});
 	$("#search_page_change").on("click", ".page.item", function () {
 	  $(this).addClass("active").siblings(".item").removeClass("active");
@@ -364,6 +338,7 @@
 	  $("#keyword").val("");
 	  $("#topic_name").text($(this).text());
 	  $(".ui.course_type.popup").popup("hide all");
+	  $(".other_entry_dropdown").dropdown("show");
 	});
 	$("#multiple_class_list").on("click", ".item", function () {
 	  var course_no = $(this).attr("course_no");
@@ -386,7 +361,7 @@
 	});
 	$("#conflict_explain").popup();
 	$("#cart_submit").on("click", function () {
-	  var childNum = $("#course_order_list").length;
+	  var childNum = $("#course_order_list").attr("course_num");
 	  if (childNum > 0) {
 	    var list = document.getElementById("course_order_list");
 	    Sortable.create(list, {
@@ -399,16 +374,16 @@
 	    $("#course_order").modal("show");
 	  } else {
 	    $("#send_to_nthu_loading").addClass("active");
-	    (0, _select.submitToNTHU)();
+	    (0, _select.submitToNTHU)(acix);
 	  }
 	});
 	$("#send_to_nthu").on("click", function () {
+	  $("#course_order").modal("hide");
 	  $("#send_to_nthu_loading").addClass("active");
 	  var course_id_group = [];
 	  $("#course_order_list > div > .number").each(function () {
 	    var course_id = $(this).attr("id");
 	    var order = $(this).text();
-	    console.log(course_id, order);
 	    course_id_group.push({ course_id: course_id, order: order });
 	  });
 	
@@ -578,6 +553,24 @@
 	  return course_no;
 	}
 	
+	function trans(slice) {
+	  switch (slice) {
+	    case "n":
+	      slice = "4.5";
+	      break;
+	    case "a":
+	      slice = "10";
+	      break;
+	    case "b":
+	      slice = "11";
+	      break;
+	    case "c":
+	      slice = "12";
+	      break;
+	  }
+	  return slice;
+	}
+	
 	function sort_weekday(time_array) {
 	  time_array.sort(function (a, b) {
 	    var weekday = ["M", "T", "W", "R", "F", "S"];
@@ -588,8 +581,8 @@
 	      return element == b.slice(0, 1);
 	    });
 	    if (week_a == week_b) {
-	      var digitday_a = parseInt(a.slice(1, 2));
-	      var digitday_b = parseInt(b.slice(1, 2));
+	      var digitday_a = parseFloat(trans(a.slice(1, 2)));
+	      var digitday_b = parseFloat(trans(b.slice(1, 2)));
 	      return digitday_a - digitday_b;
 	    } else return week_a - week_b;
 	  });
@@ -766,7 +759,7 @@
 	          var classroom = info.教室;
 	          if (classroom.length == 0) classroom.push("無");
 	          getPopulation(acix, course_no, info.新生保留人數);
-	          $(".ui.piled.segment").attr("id", id);
+	          $(".course_info.scrolling.content").attr("id", id);
 	
 	          var teacher = [];
 	          for (var each in info.教師) {
@@ -3162,7 +3155,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.baseURL = exports.dependOnType = exports.searchByID_Group = exports.storeCourseInfo = exports.searchBySingleCourseNo = exports.searchByKeyword = undefined;
+	exports.baseURL = exports.dependOnType = exports.searchByID_Group = exports.storeCourseInfo = exports.searchBySingleCourseNo = exports.clickToSearch = undefined;
 	
 	var _api = __webpack_require__(7);
 	
@@ -3392,7 +3385,42 @@
 	  if (topic == "上課時間") $("#time_select_entry").show();else if (topic == "通識對象") $("#ge_people_entry").show();else if (topic == "通識類別") $("#ge_type_select_entry").show();else if (topic == "系必選修") $("#dept_entry").show();else if (topic == "學分學程") $("#program_entry").show();else if (topic == "第一二專長") $("#skill_entry").show();else $("#main_other_entry").show();
 	}
 	
-	exports.searchByKeyword = searchByKeyword;
+	function clickToSearch(acix) {
+	  var topic = $("#topic_name").text();
+	  var keyword = $("#keyword").val();
+	  var other_keyword = "NoNeedToChoose";
+	  if (topic == "上課時間") {
+	    other_keyword = $("#time_select_text").val();
+	  } else if (topic == "通識對象") {
+	    other_keyword = $("#ge_people_text").val();
+	  } else if (topic == "通識類別") {
+	    other_keyword = $("#ge_type_select_text").val();
+	  } else if (topic == "系必選修") {
+	    other_keyword = $("#dept_entry_text").val();
+	  } else if (topic == "學分學程") {
+	    other_keyword = $("#program_entry_text").val();
+	  } else if (topic == "第一二專長") {
+	    other_keyword = $("#skill_entry_text").val();
+	  }
+	
+	  if (other_keyword == "") {
+	    $("#search_alert_otherkeyword_empty").modal("show");
+	    return;
+	  } else if (other_keyword == "NoNeedToChoose") {
+	    if ($("#keyword").val() == "") {
+	      $("#search_alert_keyword_empty").modal("show");
+	      return;
+	    }
+	  }
+	  searchByKeyword(acix, keyword, other_keyword, topic, function () {
+	    $("#search_loading").removeClass("active");
+	    $("#search_result_page").show();
+	  });
+	  $("#search_page_change > a").removeClass("active");
+	  $("#search_page_change > a:nth-child(2)").addClass("active");
+	}
+	
+	exports.clickToSearch = clickToSearch;
 	exports.searchBySingleCourseNo = searchBySingleCourseNo;
 	exports.storeCourseInfo = storeCourseInfo;
 	exports.searchByID_Group = searchByID_Group;
@@ -52341,10 +52369,12 @@
 	    $(parse_table).attr("id", "cart");
 	
 	    var all_time = [];
+	    var count = 0;
 	    $("#course_order_list").empty();
+	    $("#course_order_list").attr("course_num", count);
 	    for (var key in items.cart) {
 	      if (items.cart.hasOwnProperty(key)) {
-	        course_order_list(key, items.cart[key]);
+	        count = course_order_list(key, items.cart[key], count);
 	        var name = items.cart[key].course_name.split(" ");
 	        var content = "<a href=\"#do_not_jump\" id=\"" + key + "\" course_no=\"" + items.cart[key].course_no + "\">" + name[0] + "</a>";
 	
@@ -52388,11 +52418,14 @@
 	  });
 	}
 	
-	function course_order_list(id, item) {
+	function course_order_list(id, item, count) {
 	  if (item.order > -1) {
-	    var content = "<div course_no=\"" + item.course_no + "\" class=\"item\">\n  <div id=\"" + id + "\" class=\"number right floated content\">0</div>\n  <div class=\"content\">\n  <div class=\"description\">" + item.course_name.split(" ")[0] + "</div>\n  </div>\n  </div>";
+	    var content = "<div course_no=\"" + item.course_no + "\" class=\"item\">\n    <div id=\"" + id + "\" class=\"number right floated content\">0</div>\n    <div class=\"content\">\n    <div class=\"description\">" + item.course_name.split(" ")[0] + "</div>\n    </div>\n    </div>";
 	    $("#course_order_list").append(content);
+	    count++;
+	    $("#course_order_list").attr("course_num", count);
 	  }
+	  return count;
 	}
 	
 	exports.getCart = getCart;

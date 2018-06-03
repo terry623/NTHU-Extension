@@ -269,8 +269,43 @@ function dependOnType(topic) {
   else $("#main_other_entry").show();
 }
 
+function clickToSearch(acix) {
+  let topic = $("#topic_name").text();
+  let keyword = $("#keyword").val();
+  let other_keyword = "NoNeedToChoose";
+  if (topic == "上課時間") {
+    other_keyword = $("#time_select_text").val();
+  } else if (topic == "通識對象") {
+    other_keyword = $("#ge_people_text").val();
+  } else if (topic == "通識類別") {
+    other_keyword = $("#ge_type_select_text").val();
+  } else if (topic == "系必選修") {
+    other_keyword = $("#dept_entry_text").val();
+  } else if (topic == "學分學程") {
+    other_keyword = $("#program_entry_text").val();
+  } else if (topic == "第一二專長") {
+    other_keyword = $("#skill_entry_text").val();
+  }
+
+  if (other_keyword == "") {
+    $("#search_alert_otherkeyword_empty").modal("show");
+    return;
+  } else if (other_keyword == "NoNeedToChoose") {
+    if ($("#keyword").val() == "") {
+      $("#search_alert_keyword_empty").modal("show");
+      return;
+    }
+  }
+  searchByKeyword(acix, keyword, other_keyword, topic, function() {
+    $("#search_loading").removeClass("active");
+    $("#search_result_page").show();
+  });
+  $("#search_page_change > a").removeClass("active");
+  $("#search_page_change > a:nth-child(2)").addClass("active");
+}
+
 export {
-  searchByKeyword,
+  clickToSearch,
   searchBySingleCourseNo,
   storeCourseInfo,
   searchByID_Group,

@@ -231,6 +231,24 @@ function oldyear_to_newyear(course_no) {
   return course_no;
 }
 
+function trans(slice) {
+  switch (slice) {
+    case "n":
+      slice = "4.5";
+      break;
+    case "a":
+      slice = "10";
+      break;
+    case "b":
+      slice = "11";
+      break;
+    case "c":
+      slice = "12";
+      break;
+  }
+  return slice;
+}
+
 function sort_weekday(time_array) {
   time_array.sort(function(a, b) {
     const weekday = ["M", "T", "W", "R", "F", "S"];
@@ -241,8 +259,8 @@ function sort_weekday(time_array) {
       return element == b.slice(0, 1);
     });
     if (week_a == week_b) {
-      let digitday_a = parseInt(a.slice(1, 2));
-      let digitday_b = parseInt(b.slice(1, 2));
+      let digitday_a = parseFloat(trans(a.slice(1, 2)));
+      let digitday_b = parseFloat(trans(b.slice(1, 2)));
       return digitday_a - digitday_b;
     } else return week_a - week_b;
   });
