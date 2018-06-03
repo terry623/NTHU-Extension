@@ -2,8 +2,6 @@ var iconv = require("iconv-lite");
 var request = require("request");
 import { baseURL } from "./search";
 
-getDay();
-
 // function calculateUserGrade(acix, stu_no, userGrade) {
 //   var all_pr = {};
 //   for (let course_no in userGrade) {
@@ -253,14 +251,25 @@ function currentPhase(phase) {
 }
 
 function getCurrentStateOfNTHU(callback) {
+  let datetime = new Date();
+  let year = datetime.getFullYear();
+  let month = datetime.getMonth() + 1;
+  let day = datetime.getDate();
   request(
     {
-      url: baseURL + "getCurrentStateOfNTHU?" + "time=" + getDay()
+      url:
+        baseURL +
+        "getCurrentStateOfNTHU?" +
+        "year=" +
+        year +
+        "&month=" +
+        month +
+        "&day=" +
+        day
     },
     function(err, response, body) {
       if (!err && response.statusCode == 200) {
         let info = JSON.parse(body);
-        console.log(info);
         let phase = parseInt(info.currentPhase);
         let tran_phase = currentPhase(phase);
         let countDown = parseInt(info.countDown);
@@ -307,16 +316,6 @@ function getCurrentStateOfNTHU(callback) {
       }
     }
   );
-}
-
-// FIXME: 要將時間傳去 Server
-function getDay() {
-  let datetime = new Date();
-  let year = datetime.getFullYear();
-  let month = datetime.getMonth() + 1;
-  let date = datetime.getDate();
-  let time = year + "-" + month + "-" + date;
-  return time;
 }
 
 export {
