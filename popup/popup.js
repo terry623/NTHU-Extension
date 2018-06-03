@@ -297,6 +297,7 @@ $("#multiple_class_bySingle").on("click", ".item", function() {
 });
 $("#conflict_explain").popup();
 $("#cart_submit").on("click", function() {
+  alert("此產品僅供內部測試，所以選完課請到「預排系統」查看 !")
   let childNum = $("#course_order_list").attr("course_num");
   if (childNum > 0) {
     let list = document.getElementById("course_order_list");

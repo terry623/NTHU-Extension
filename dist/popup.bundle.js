@@ -361,6 +361,7 @@
 	});
 	$("#conflict_explain").popup();
 	$("#cart_submit").on("click", function () {
+	  alert("此產品僅供內部測試，所以選完課請到「預排系統」查看 !");
 	  var childNum = $("#course_order_list").attr("course_num");
 	  if (childNum > 0) {
 	    var list = document.getElementById("course_order_list");
@@ -52447,6 +52448,8 @@
 	var request = __webpack_require__(15);
 	
 	
+	getDay();
+	
 	// function calculateUserGrade(acix, stu_no, userGrade) {
 	//   var all_pr = {};
 	//   for (let course_no in userGrade) {
@@ -52694,10 +52697,11 @@
 	
 	function getCurrentStateOfNTHU(callback) {
 	  request({
-	    url: _search.baseURL + "getCurrentStateOfNTHU"
+	    url: _search.baseURL + "getCurrentStateOfNTHU?" + "time=" + getDay()
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
 	      var info = JSON.parse(body);
+	      console.log(info);
 	      var phase = parseInt(info.currentPhase);
 	      var tran_phase = currentPhase(phase);
 	      var countDown = parseInt(info.countDown);
@@ -52743,6 +52747,16 @@
 	      callback(tran_phase);
 	    }
 	  });
+	}
+	
+	// FIXME: 要將時間傳去 Server
+	function getDay() {
+	  var datetime = new Date();
+	  var year = datetime.getFullYear();
+	  var month = datetime.getMonth() + 1;
+	  var date = datetime.getDate();
+	  var time = year + "-" + month + "-" + date;
+	  return time;
 	}
 	
 	exports.getCurrentStateOfNTHU = getCurrentStateOfNTHU;
