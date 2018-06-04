@@ -202,7 +202,10 @@ $("#change_school_table").on("click", ".item", function() {
 });
 $(".ui.secondary.menu").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
-    if ($(this).hasClass("recommendPage")) return;
+    if ($(this).hasClass("recommendPage")) {
+      alert("此為內部測試版本，「推薦課程」尚未完成 !");
+      return;
+    }
     drift.on("ready", function(api, payload) {
       api.sidebar.close();
       api.widget.hide();
@@ -297,7 +300,7 @@ $("#multiple_class_bySingle").on("click", ".item", function() {
 });
 $("#conflict_explain").popup();
 $("#cart_submit").on("click", function() {
-  alert("此產品僅供內部測試，所以選完課請到「預排系統」查看 !")
+  alert("此為內部測試版本，選完課請到「預排系統」查看 !");
   let childNum = $("#course_order_list").attr("course_num");
   if (childNum > 0) {
     let list = document.getElementById("course_order_list");

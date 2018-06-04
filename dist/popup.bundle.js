@@ -281,7 +281,10 @@
 	});
 	$(".ui.secondary.menu").on("click", ".item", function () {
 	  if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
-	    if ($(this).hasClass("recommendPage")) return;
+	    if ($(this).hasClass("recommendPage")) {
+	      alert("此為內部測試版本，「推薦課程」尚未完成 !");
+	      return;
+	    }
 	    drift.on("ready", function (api, payload) {
 	      api.sidebar.close();
 	      api.widget.hide();
@@ -361,7 +364,7 @@
 	});
 	$("#conflict_explain").popup();
 	$("#cart_submit").on("click", function () {
-	  alert("此產品僅供內部測試，所以選完課請到「預排系統」查看 !");
+	  alert("此為內部測試版本，選完課請到「預排系統」查看 !");
 	  var childNum = $("#course_order_list").attr("course_num");
 	  if (childNum > 0) {
 	    var list = document.getElementById("course_order_list");
@@ -769,7 +772,7 @@
 	          if (teacher.length == 0) $("#teacher").text("None");else $("#teacher").text(teacher.join(" / "));
 	
 	          $("#no").text(info.科號);
-	          $("#course_name").text(info.課程中文名稱 + " " + info.課程英文名稱);
+	          $("#course_name").html(info.課程中文名稱 + "&nbsp;&nbsp;&nbsp;" + info.課程英文名稱);
 	          $("#credit").text(info.學分數);
 	          $("#time").text(time);
 	          $("#classroom").text(classroom.join(" / "));
@@ -3165,8 +3168,8 @@
 	var _conflict = __webpack_require__(14);
 	
 	var request = __webpack_require__(15);
-	// const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
-	var baseURL = "http://192.168.99.100/api/";
+	var baseURL = "http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/";
+	// const baseURL = `http://192.168.99.100/api/`;
 	// const baseURL = `localhost:80/api/`;
 	
 	function renderSearchResult(hits, callback) {

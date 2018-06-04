@@ -188,7 +188,7 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
             else $("#teacher").text(teacher.join(" / "));
 
             $("#no").text(info.科號);
-            $("#course_name").text(info.課程中文名稱 + " " + info.課程英文名稱);
+            $("#course_name").html(info.課程中文名稱 + "&nbsp;&nbsp;&nbsp;" + info.課程英文名稱);
             $("#credit").text(info.學分數);
             $("#time").text(time);
             $("#classroom").text(classroom.join(" / "));
