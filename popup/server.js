@@ -109,7 +109,7 @@ function getGradeDistribution(acix, course_no, callback) {
 
 function getSimilarities(course_id, callback) {
   chrome.storage.local.get("course", function(items) {
-    var info = items.course[course_id];
+    let info = items.course[course_id];
     if (info.相似課程.length == 0) {
       request(
         {
@@ -117,8 +117,8 @@ function getSimilarities(course_id, callback) {
         },
         function(err, response, body) {
           if (!err && response.statusCode == 200) {
-            var info = JSON.parse(body);
-            var temp = {};
+            let info = JSON.parse(body);
+            let temp = {};
             Object.assign(temp, items.course);
             temp[course_id].相似課程 = info;
             chrome.storage.local.set({ course: temp }, function() {

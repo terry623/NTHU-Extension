@@ -2,7 +2,11 @@ var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
 import { calculateUserGrade, getSimilarities } from "./server";
-import { searchBySingleCourseNo, storeCourseInfo } from "./search";
+import {
+  searchBySingleCourseNo,
+  storeCourseInfo,
+  searchByID_Group
+} from "./search";
 import { course_table, removeLongCourseName, sort_weekday } from "./helper";
 import { storeSliceTime } from "./conflict";
 import { semester } from "./popup";
@@ -142,24 +146,40 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
         ) {
           $("#session_alert").modal("show");
         } else {
+          // FIXME: 需要改抓取課程詳情的方法
+          const similar_course_show = 3;
           chrome.storage.local.get("course", function(items) {
             getSimilarities(id, function(info) {
-              $("#similar").empty();
-              for (var each in info) {
-                var similar_course =
-                  `<div class="title">
-                    <i class="dropdown icon"></i>` +
-                  info[each].other +
-                  `</div>
-                <div class="content">` +
-                  info[each].percent +
-                  `</div>`;
-                $("#similar").append(similar_course);
+              let id_group = [];
+              let i = 0;
+              for (let each in info) {
+                if (i < similar_course_show) {
+                  let other_id = info[each].other;
+                  id_group.push({
+                    other_id
+                  });
+                  i++;
+                } else break;
               }
+              searchByID_Group(id_group, function(hits) {
+                console.log(hits);
+                $("#similar").empty();
+                for (let each in hits) {
+                  let source = hits[each]._source;
+                  let similar_course =
+                    `<div class="title">
+                      <i class="dropdown icon"></i>` +
+                    source.課程中文名稱 +
+                    `</div>
+                      <div class="content">` +
+                      source.課綱 +
+                    `</div>`;
+                  $("#similar").append(similar_course);
+                }
+              });
             });
 
             let info = items.course[id];
-
             let description = $(
               "div > table:nth-child(4) > tbody > tr:nth-child(2) > td",
               temp

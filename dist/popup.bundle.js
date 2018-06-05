@@ -732,17 +732,33 @@
 	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
 	        $("#session_alert").modal("show");
 	      } else {
+	        // FIXME: 需要改抓取課程詳情的方法
+	        var similar_course_show = 3;
 	        chrome.storage.local.get("course", function (items) {
 	          (0, _server.getSimilarities)(id, function (info) {
-	            $("#similar").empty();
+	            var id_group = [];
+	            var i = 0;
 	            for (var each in info) {
-	              var similar_course = "<div class=\"title\">\n                    <i class=\"dropdown icon\"></i>" + info[each].other + "</div>\n                <div class=\"content\">" + info[each].percent + "</div>";
-	              $("#similar").append(similar_course);
+	              if (i < similar_course_show) {
+	                var other_id = info[each].other;
+	                id_group.push({
+	                  other_id: other_id
+	                });
+	                i++;
+	              } else break;
 	            }
+	            (0, _search.searchByID_Group)(id_group, function (hits) {
+	              console.log(hits);
+	              $("#similar").empty();
+	              for (var _each in hits) {
+	                var source = hits[_each]._source;
+	                var similar_course = "<div class=\"title\">\n                      <i class=\"dropdown icon\"></i>" + source.課程中文名稱 + "</div>\n                      <div class=\"content\">" + source.課綱 + "</div>";
+	                $("#similar").append(similar_course);
+	              }
+	            });
 	          });
 	
 	          var info = items.course[id];
-	
 	          var description = $("div > table:nth-child(4) > tbody > tr:nth-child(2) > td", temp);
 	          var syllabus = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td", temp);
 	          var find_file = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a", temp);
@@ -52519,16 +52535,16 @@
 	        url: _search.baseURL + "getSimilarities?course_id=" + course_id
 	      }, function (err, response, body) {
 	        if (!err && response.statusCode == 200) {
-	          var info = JSON.parse(body);
+	          var _info = JSON.parse(body);
 	          var temp = {};
 	          Object.assign(temp, items.course);
-	          temp[course_id].相似課程 = info;
+	          temp[course_id].相似課程 = _info;
 	          chrome.storage.local.set({ course: temp }, function () {
 	            chrome.storage.local.get("course", function (items) {
 	              // console.log(items);
 	            });
 	          });
-	          callback(info);
+	          callback(_info);
 	        }
 	      });
 	    } else callback(info.相似課程);
