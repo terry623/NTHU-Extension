@@ -1,10 +1,11 @@
 var iconv = require("iconv-lite");
 var request = require("request");
 import { transform } from "./pdf2html";
-// import { calculateUserGrade, getSimilarities } from "./server";
+import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourseNo, storeCourseInfo } from "./search";
 import { course_table, removeLongCourseName, sort_weekday } from "./helper";
 import { storeSliceTime } from "./conflict";
+import { semester } from "./popup";
 
 function getUserName(acix, callback) {
   request(
@@ -42,7 +43,7 @@ function getUserName(acix, callback) {
 
 function getPopulation(acix, course_no, fresh_num) {
   let patt = /[A-Za-z]+/;
-  let target = course_no.match(patt);  
+  let target = course_no.match(patt);
   $(".fetch_people").text("Loading");
 
   request.post(
@@ -142,20 +143,20 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
           $("#session_alert").modal("show");
         } else {
           chrome.storage.local.get("course", function(items) {
-            // getSimilarities(id, function(info) {
-            //   $("#similar").empty();
-            //   for (var each in info) {
-            //     var similar_course =
-            //       `<div class="title">
-            //         <i class="dropdown icon"></i>` +
-            //       info[each].other +
-            //       `</div>
-            //     <div class="content">` +
-            //       info[each].percent +
-            //       `</div>`;
-            //     $("#similar").append(similar_course);
-            //   }
-            // });
+            getSimilarities(id, function(info) {
+              $("#similar").empty();
+              for (var each in info) {
+                var similar_course =
+                  `<div class="title">
+                    <i class="dropdown icon"></i>` +
+                  info[each].other +
+                  `</div>
+                <div class="content">` +
+                  info[each].percent +
+                  `</div>`;
+                $("#similar").append(similar_course);
+              }
+            });
 
             let info = items.course[id];
 
@@ -188,7 +189,9 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
             else $("#teacher").text(teacher.join(" / "));
 
             $("#no").text(info.科號);
-            $("#course_name").html(info.課程中文名稱 + "&nbsp;&nbsp;" + info.課程英文名稱);
+            $("#course_name").html(
+              info.課程中文名稱 + "&nbsp;&nbsp;" + info.課程英文名稱
+            );
             $("#credit").text(info.學分數);
             $("#time").text(time);
             $("#classroom").text(classroom.join(" / "));
@@ -244,41 +247,41 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
   );
 }
 
-// function getCourseDescription(acix, course_no, callback) {
-//   if (course_no == undefined) return;
-//   request(
-//     {
-//       url:
-//         "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=" +
-//         acix +
-//         "&c_key=" +
-//         course_no,
-//       encoding: null
-//     },
-//     function(err, response, body) {
-//       if (!err && response.statusCode == 200) {
-//         let str = iconv.decode(new Buffer(body), "big5");
-//         let temp = document.createElement("div");
-//         temp.innerHTML = str;
-//         // console.log.apply(console, $(temp));
+function getCourseDescription(acix, course_no, callback) {
+  if (course_no == undefined) return;
+  request(
+    {
+      url:
+        "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=" +
+        acix +
+        "&c_key=" +
+        course_no,
+      encoding: null
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        let str = iconv.decode(new Buffer(body), "big5");
+        let temp = document.createElement("div");
+        temp.innerHTML = str;
+        // console.log.apply(console, $(temp));
 
-//         if (
-//           $(temp)
-//             .text()
-//             .indexOf("session is interrupted!") >= 0
-//         ) {
-//           $("#session_alert").modal("show");
-//         } else {
-//           let description = $(
-//             "div > table:nth-child(4) > tbody > tr:nth-child(2) > td",
-//             temp
-//           );
-//           callback(description.html());
-//         }
-//       }
-//     }
-//   );
-// }
+        if (
+          $(temp)
+            .text()
+            .indexOf("session is interrupted!") >= 0
+        ) {
+          $("#session_alert").modal("show");
+        } else {
+          let description = $(
+            "div > table:nth-child(4) > tbody > tr:nth-child(2) > td",
+            temp
+          );
+          callback(description.html());
+        }
+      }
+    }
+  );
+}
 
 function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
   if (callback) $("#course_result_loading").addClass("active");
@@ -393,60 +396,60 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
   );
 }
 
-// function getGrade(acix, stu_no) {
-//   request(
-//     {
-//       url:
-//         "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/8/R/6.3/JH8R63002.php?ACIXSTORE=" +
-//         acix,
-//       encoding: null
-//     },
-//     function(err, response, body) {
-//       if (!err && response.statusCode == 200) {
-//         var str = iconv.decode(new Buffer(body), "big5");
-//         var temp = document.createElement("div");
-//         temp.innerHTML = str;
+function getGrade(acix, stu_no) {
+  request(
+    {
+      url:
+        "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/8/R/6.3/JH8R63002.php?ACIXSTORE=" +
+        acix,
+      encoding: null
+    },
+    function(err, response, body) {
+      if (!err && response.statusCode == 200) {
+        var str = iconv.decode(new Buffer(body), "big5");
+        var temp = document.createElement("div");
+        temp.innerHTML = str;
 
-//         if (
-//           $(temp)
-//             .text()
-//             .indexOf("session is interrupted!") >= 0
-//         ) {
-//           $("#session_alert").modal("show");
-//         } else {
-//           var allGradeOfStudent = $(
-//             "form > table:nth-child(4) > tbody > tr",
-//             temp
-//           );
-//           var userGrade = Object.create(null);
-//           $(allGradeOfStudent).each(function(index) {
-//             if (index > 2 && index < allGradeOfStudent.length - 1) {
-//               let year = $("td:nth-child(1)", this).text();
-//               let semester = $("td:nth-child(2)", this).text();
-//               let getCourseNo = $("td:nth-child(3)", this).text();
-//               let getCourseGrade = $("td:nth-child(6)", this).text();
-//               if (
-//                 getCourseGrade.includes("Grade Not Submitted") == false &&
-//                 getCourseGrade.includes("二退") == false &&
-//                 semester == "20"
-//               ) {
-//                 userGrade[
-//                   year + semester + getCourseNo.trim()
-//                 ] = getCourseGrade.trim();
-//               }
-//             }
-//           });
-//           calculateUserGrade(acix, stu_no, userGrade);
-//         }
-//       }
-//     }
-//   );
-// }
+        if (
+          $(temp)
+            .text()
+            .indexOf("session is interrupted!") >= 0
+        ) {
+          $("#session_alert").modal("show");
+        } else {
+          var allGradeOfStudent = $(
+            "form > table:nth-child(4) > tbody > tr",
+            temp
+          );
+          var userGrade = Object.create(null);
+          $(allGradeOfStudent).each(function(index) {
+            if (index > 2 && index < allGradeOfStudent.length - 1) {
+              let want_year = $("td:nth-child(1)", this).text();
+              let want_semester = $("td:nth-child(2)", this).text();
+              let getCourseNo = $("td:nth-child(3)", this).text();
+              let getCourseGrade = $("td:nth-child(6)", this).text();
+              if (
+                getCourseGrade.includes("Grade Not Submitted") == false &&
+                getCourseGrade.includes("二退") == false &&
+                want_semester == semester
+              ) {
+                userGrade[
+                  want_year + want_semester + getCourseNo.trim()
+                ] = getCourseGrade.trim();
+              }
+            }
+          });
+          calculateUserGrade(acix, stu_no, userGrade);
+        }
+      }
+    }
+  );
+}
 
 export {
   getUserName,
   getCourseInfo,
-  getResultCourse
-  // getGrade,
-  // getCourseDescription
+  getResultCourse,
+  getGrade,
+  getCourseDescription
 };

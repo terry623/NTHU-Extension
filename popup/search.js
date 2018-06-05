@@ -218,13 +218,13 @@ function storeCourseInfo(hits, callback) {
   });
 }
 
-function searchBySingleCourseNo(course_no, callback) {
-  let new_course_no = addSpace_course_no(course_no);
+function searchBySingleCourseNo(old_course_no, callback) {
+  let course_no = addSpace_course_no(old_course_no);
   request.post(
     {
       url: baseURL + "searchBySingleCourseNo",
       form: {
-        course_no: new_course_no
+        course_no: course_no
       }
     },
     function(err, response, body) {

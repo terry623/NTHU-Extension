@@ -2,7 +2,7 @@ window._crypto = null;
 import { initDrift } from "./drift";
 initDrift();
 import { getUrlVars } from "./helper";
-import { getUserName, getResultCourse, getCourseInfo } from "./api";
+import { getUserName, getResultCourse, getCourseInfo, getGrade } from "./api";
 import {
   clickToSearch,
   searchBySingleCourseNo,
@@ -12,14 +12,15 @@ import {
 import { getCart } from "./cart";
 import { getCurrentStateOfNTHU } from "./server";
 import { submitToNTHU, storeOrderToStorage } from "./select";
-// import {
-//   getRecommendPage,
-//   toStorage,
-//   before_hits_group,
-//   compare_group,
-//   num_of_old_course,
-//   num_of_each_similar
-// } from "./recommend";
+import {
+  getRecommendPage,
+  toStorage,
+  before_hits_group,
+  compare_group,
+  num_of_old_course,
+  num_of_each_similar,
+  show_recommend_course
+} from "./recommend";
 
 const year = "107";
 const semester = "10";
@@ -41,7 +42,7 @@ $(document).ready(function() {
             getResultCourse(acix, stu_no, phase, year, semester);
           else $("#change_phase").addClass("disabled");
           getCart(acix);
-          // getGrade(acix, stu_no);
+          getGrade(acix, stu_no);
         });
       });
     }
@@ -56,6 +57,7 @@ chrome.storage.local.clear(function() {
   }
 });
 
+// TODO: 之後把這些 Jquery 分資料夾放
 $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
 $(".course_type.browse").popup({
@@ -202,10 +204,6 @@ $("#change_school_table").on("click", ".item", function() {
 });
 $(".ui.secondary.menu").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
-    if ($(this).hasClass("recommendPage")) {
-      alert("此為內部測試版本，「推薦課程」尚未完成 !");
-      return;
-    }
     drift.on("ready", function(api, payload) {
       api.sidebar.close();
       api.widget.hide();
@@ -230,30 +228,27 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       t.not(".choosePage").hide();
       $("#change_school_table").show();
     } else if ($(this).hasClass("recommendPage")) {
-      // t.not(".recommendPage").hide();
-      // before_hits_group.length = 0;
-      // compare_group.length = 0;
-      // let content_group = [];
-      // getRecommendPage(acix, function() {
-      //   if (
-      //     before_hits_group.length ==
-      //     num_of_old_course * num_of_each_similar
-      //   ) {
-      //     toStorage(acix, function(content, count, compare_value) {
-      //       content_group.push({ content, compare_value });
-      //       if (count == num_of_old_course * num_of_each_similar - 1) {
-      //         content_group.sort(function(a, b) {
-      //           return b.compare_value - a.compare_value;
-      //         });
-      //         for (let each in content_group) {
-      //           let data = content_group[each];
-      //           $("#recommend_list").append(data.content);
-      //         }
-      //         $("#recommend_loading").removeClass("active");
-      //       }
-      //     });
-      //   }
-      // });
+      t.not(".recommendPage").hide();
+      before_hits_group.length = 0;
+      compare_group.length = 0;
+      let content_group = [];
+      getRecommendPage(acix, function() {
+        if (before_hits_group.length == show_recommend_course) {
+          toStorage(acix, function(content, count, compare_value) {
+            content_group.push({ content, compare_value });
+            if (count == show_recommend_course - 1) {
+              content_group.sort(function(a, b) {
+                return b.compare_value - a.compare_value;
+              });
+              for (let each in content_group) {
+                let data = content_group[each];
+                $("#recommend_list").append(data.content);
+              }
+              $("#recommend_loading").removeClass("active");
+            }
+          });
+        }
+      });
     }
   }
 });
@@ -301,7 +296,7 @@ $("#multiple_class_bySingle").on("click", ".item", function() {
 });
 $("#conflict_explain").popup();
 $("#cart_submit").on("click", function() {
-  // alert("此為內部測試版本，選完課請到「預排系統」查看 !");
+  alert("此為內部測試版本，選完課請到「預排系統」查看 !");
   let childNum = $("#course_order_list").attr("course_num");
   if (childNum > 0) {
     let list = document.getElementById("course_order_list");
@@ -336,19 +331,21 @@ $("#send_to_nthu").on("click", function() {
     submitToNTHU(acix);
   });
 });
-// $("#recommend_list").on("click", ".item", function() {
-//   let course_no = $(this).attr("course_no");
-//   let id = $(this).attr("id");
-//   getCourseInfo(
-//     acix,
-//     course_no,
-//     id,
-//     function() {
-//       $(".course_action").hide();
-//       $("#submit").show();
-//       $("#back").show();
-//       $("#course_info_loading").removeClass("active");
-//     },
-//     false
-//   );
-// });
+$("#recommend_list").on("click", ".item", function() {
+  let course_no = $(this).attr("course_no");
+  let id = $(this).attr("id");
+  getCourseInfo(
+    acix,
+    course_no,
+    id,
+    function() {
+      $(".course_action").hide();
+      $("#submit").show();
+      $("#back").show();
+      $("#course_info_loading").removeClass("active");
+    },
+    false
+  );
+});
+
+export { semester };
