@@ -137,7 +137,7 @@ function showCourseModal(callback) {
     }
   } else {
     $("#select_course_status").append(
-      `<div class="item">全數選課成功&nbsp;&nbsp;!&nbsp;&nbsp;請還是依校務資訊系統為主</div>`
+      `<div class="item">全數選課成功&nbsp;&nbsp;!&nbsp;&nbsp;請至校務資訊系統再次確認</div>`
     );
   }
   $("#select_state").modal("show");

@@ -258,7 +258,8 @@ $(".ui.secondary.menu").on("click", ".item", function() {
   }
 });
 $(".ui.modal").modal({
-  inverted: true
+  inverted: true,
+  duration: 350
 });
 $(".ui.course_type.popup").on("click", ".item", function() {
   dependOnType($(this).text());

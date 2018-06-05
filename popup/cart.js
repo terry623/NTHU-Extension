@@ -14,14 +14,15 @@ function getCart(acix) {
     for (let key in items.cart) {
       if (items.cart.hasOwnProperty(key)) {
         count = course_order_list(key, items.cart[key], count);
-        let name = items.cart[key].course_name.split(" ");
+        let patt = /[^A-Za-z0-9_]+/;
+        let name = items.cart[key].course_name.match(patt)[0];
         let content =
           `<a href="#do_not_jump" id="` +
           key +
           `" course_no="` +
           items.cart[key].course_no +
           `">` +
-          name[0] +
+          name +
           `</a>`;
 
         if (items.cart[key].time.length == 1) {

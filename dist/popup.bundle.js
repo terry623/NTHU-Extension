@@ -334,7 +334,8 @@
 	  }
 	});
 	$(".ui.modal").modal({
-	  inverted: true
+	  inverted: true,
+	  duration: 350
 	});
 	$(".ui.course_type.popup").on("click", ".item", function () {
 	  (0, _search.dependOnType)($(this).text());
@@ -772,7 +773,7 @@
 	          if (teacher.length == 0) $("#teacher").text("None");else $("#teacher").text(teacher.join(" / "));
 	
 	          $("#no").text(info.科號);
-	          $("#course_name").html(info.課程中文名稱 + "&nbsp;&nbsp;&nbsp;" + info.課程英文名稱);
+	          $("#course_name").html(info.課程中文名稱 + "&nbsp;&nbsp;" + info.課程英文名稱);
 	          $("#credit").text(info.學分數);
 	          $("#time").text(time);
 	          $("#classroom").text(classroom.join(" / "));
@@ -52378,8 +52379,9 @@
 	    for (var key in items.cart) {
 	      if (items.cart.hasOwnProperty(key)) {
 	        count = course_order_list(key, items.cart[key], count);
-	        var name = items.cart[key].course_name.split(" ");
-	        var content = "<a href=\"#do_not_jump\" id=\"" + key + "\" course_no=\"" + items.cart[key].course_no + "\">" + name[0] + "</a>";
+	        var patt = /[^A-Za-z0-9_]+/;
+	        var name = items.cart[key].course_name.match(patt)[0];
+	        var content = "<a href=\"#do_not_jump\" id=\"" + key + "\" course_no=\"" + items.cart[key].course_no + "\">" + name + "</a>";
 	
 	        if (items.cart[key].time.length == 1) {
 	          $(parse_table).find(".none").append(content);
@@ -52886,7 +52888,7 @@
 	      $("#select_course_status").append(content);
 	    }
 	  } else {
-	    $("#select_course_status").append("<div class=\"item\">\u5168\u6578\u9078\u8AB2\u6210\u529F&nbsp;&nbsp;!&nbsp;&nbsp;\u8ACB\u9084\u662F\u4F9D\u6821\u52D9\u8CC7\u8A0A\u7CFB\u7D71\u70BA\u4E3B</div>");
+	    $("#select_course_status").append("<div class=\"item\">\u5168\u6578\u9078\u8AB2\u6210\u529F&nbsp;&nbsp;!&nbsp;&nbsp;\u8ACB\u81F3\u6821\u52D9\u8CC7\u8A0A\u7CFB\u7D71\u518D\u6B21\u78BA\u8A8D</div>");
 	  }
 	  $("#select_state").modal("show");
 	  callback();
