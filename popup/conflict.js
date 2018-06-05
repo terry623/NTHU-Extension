@@ -28,6 +28,7 @@ function storeSliceTime(slice_time, source) {
   });
 }
 
+// FIXME: 移除課程，沒有把對應的時間拿掉
 function checkConflict(time_array, callback) {
   chrome.storage.local.get("time", function(items) {
     let conflict = false;

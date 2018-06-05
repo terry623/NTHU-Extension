@@ -365,7 +365,7 @@
 	});
 	$("#conflict_explain").popup();
 	$("#cart_submit").on("click", function () {
-	  alert("此為內部測試版本，選完課請到「預排系統」查看 !");
+	  // alert("此為內部測試版本，選完課請到「預排系統」查看 !");
 	  var childNum = $("#course_order_list").attr("course_num");
 	  if (childNum > 0) {
 	    var list = document.getElementById("course_order_list");
@@ -3472,6 +3472,7 @@
 	  });
 	}
 	
+	// FIXME: 移除課程，沒有把對應的時間拿掉
 	function checkConflict(time_array, callback) {
 	  chrome.storage.local.get("time", function (items) {
 	    var conflict = false;
