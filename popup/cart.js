@@ -7,7 +7,7 @@ function getCart(acix) {
     let parse_table = $.parseHTML(course_table);
     $(parse_table).attr("id", "cart");
 
-    let all_time = [];
+    let target_time = [];
     let count = 0;
     $("#course_order_list").empty();
     $("#course_order_list").attr("course_num", count);
@@ -34,7 +34,7 @@ function getCart(acix) {
           for (let each in items.cart[key].time) {
             let each_time = items.cart[key].time[each];
             slice_time.push(each_time);
-            all_time.push(each_time);
+            target_time.push(each_time);
           }
 
           for (let each in slice_time) {
@@ -45,7 +45,7 @@ function getCart(acix) {
         }
       }
     }
-    storeSliceTime(all_time, "from_cart");
+    storeSliceTime(target_time);
     $("#cart").replaceWith(parse_table);
     $("#cart > tr").on("click", "td", function() {
       $("#multiple_class_list").empty();

@@ -4,7 +4,6 @@ import { transform } from "./pdf2html";
 // import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourseNo, storeCourseInfo } from "./search";
 import { course_table, removeLongCourseName, sort_weekday } from "./helper";
-import { storeSliceTime } from "./conflict";
 
 function getUserName(acix, callback) {
   request(
@@ -42,7 +41,7 @@ function getUserName(acix, callback) {
 
 function getPopulation(acix, course_no, fresh_num) {
   let patt = /[A-Za-z]+/;
-  let target = course_no.match(patt);  
+  let target = course_no.match(patt);
   $(".fetch_people").text("Loading");
 
   request.post(
@@ -188,7 +187,9 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
             else $("#teacher").text(teacher.join(" / "));
 
             $("#no").text(info.科號);
-            $("#course_name").html(info.課程中文名稱 + "&nbsp;&nbsp;" + info.課程英文名稱);
+            $("#course_name").html(
+              info.課程中文名稱 + "&nbsp;&nbsp;" + info.課程英文名稱
+            );
             $("#credit").text(info.學分數);
             $("#time").text(time);
             $("#classroom").text(classroom.join(" / "));
@@ -386,7 +387,6 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
           });
 
           if (callback) callback();
-          else storeSliceTime(all_time, "from_school");
         }
       }
     }

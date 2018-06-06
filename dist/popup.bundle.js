@@ -111,9 +111,12 @@
 	
 	var _select = __webpack_require__(290);
 	
+	var _conflict = __webpack_require__(14);
+	
 	window._crypto = null;
 	
 	(0, _drift.initDrift)();
+	
 	
 	// import {
 	//   getRecommendPage,
@@ -161,6 +164,7 @@
 	  position: "bottom left",
 	  on: "click"
 	});
+	
 	$("#submit").on("click", function () {
 	  chrome.storage.local.get("cart", function (items) {
 	    var get_course_id = $(".course_info.scrolling.content").attr("id");
@@ -180,6 +184,11 @@
 	    };
 	
 	    if (items.cart != undefined) {
+	      if (items.cart.hasOwnProperty(get_course_id)) {
+	        $("#already_in_cart").modal("show");
+	        return;
+	      }
+	
 	      Object.assign(temp, items.cart);
 	      temp[get_course_id] = data;
 	
@@ -200,14 +209,15 @@
 	        });
 	      });
 	    }
+	    $("#submit_to_list").modal("show");
 	  });
-	  $("#submit_to_list").modal("show");
 	});
 	$("#delete").on("click", function () {
 	  chrome.storage.local.get("cart", function (items) {
 	    var get_course_id = $(".course_info.scrolling.content").attr("id");
 	    var temp = {};
 	    Object.assign(temp, items.cart);
+	    (0, _conflict.removeTimeOfCourse)(temp[get_course_id].time);
 	    delete temp[get_course_id];
 	
 	    chrome.storage.local.remove("cart", function () {
@@ -334,8 +344,7 @@
 	  }
 	});
 	$(".ui.modal").modal({
-	  inverted: true,
-	  duration: 350
+	  inverted: true
 	});
 	$(".ui.course_type.popup").on("click", ".item", function () {
 	  (0, _search.dependOnType)($(this).text());
@@ -608,6 +617,8 @@
 	  return new_course_no;
 	}
 	
+	var all_time = ["M1", "M2", "M3", "M4", "Mn", "M5", "M6", "M7", "M8", "M9", "Ma", "Mb", "Mc", "T1", "T2", "T3", "T4", "Tn", "T5", "T6", "T7", "T8", "T9", "Ta", "Tb", "Tc", "W1", "W2", "W3", "W4", "Wn", "W5", "W6", "W7", "W8", "W9", "Wa", "Wb", "Wc", "R1", "R2", "R3", "R4", "Rn", "R5", "R6", "R7", "R8", "R9", "Ra", "Rb", "Rc", "F1", "F2", "F3", "F4", "Fn", "F5", "F6", "F7", "F8", "F9", "Fa", "Fb", "Fc", "S1", "S2", "S3", "S4", "Sn", "S5", "S6", "S7", "S8", "S9", "Sa", "Sb", "Sc"];
+	
 	exports.getUrlVars = getUrlVars;
 	exports.courseAddSpace = courseAddSpace;
 	exports.translateTopic = translateTopic;
@@ -616,6 +627,7 @@
 	exports.oldyear_to_newyear = oldyear_to_newyear;
 	exports.sort_weekday = sort_weekday;
 	exports.addSpace_course_no = addSpace_course_no;
+	exports.all_time = all_time;
 
 /***/ }),
 /* 7 */
@@ -633,8 +645,6 @@
 	var _search = __webpack_require__(13);
 	
 	var _helper = __webpack_require__(6);
-	
-	var _conflict = __webpack_require__(14);
 	
 	var iconv = __webpack_require__(266);
 	var request = __webpack_require__(15);
@@ -917,7 +927,7 @@
 	          }
 	        });
 	
-	        if (callback) callback();else (0, _conflict.storeSliceTime)(all_time, "from_school");
+	        if (callback) callback();
 	      }
 	    }
 	  });
@@ -3434,25 +3444,36 @@
 
 /***/ }),
 /* 14 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	function storeSliceTime(slice_time, source) {
+	exports.removeTimeOfCourse = exports.checkConflict = exports.storeSliceTime = undefined;
+	
+	var _helper = __webpack_require__(6);
+	
+	var old_time = [];
+	function subtractArray(target_time) {
+	  var slice_time = [];
+	  for (var each in target_time) {
+	    var index = old_time.indexOf(target_time[each]);
+	    if (index == -1) slice_time.push(target_time[each]);else old_time.splice(index, 1);
+	  }
+	  return slice_time;
+	}
+	
+	function storeSliceTime(target_time) {
+	  var slice_time = subtractArray(target_time);
+	  old_time = target_time;
 	  chrome.storage.local.get("time", function (items) {
 	    var temp = {};
-	    var data = {};
-	    var text;
-	    if (source == "from_school") text = "校務資訊系統";else text = "等待送出清單";
-	    for (var each_time in slice_time) {
-	      data[slice_time[each_time]] = text;
-	    }if (items.time != undefined) {
+	    if (items.time != undefined) {
 	      Object.assign(temp, items.time);
-	      for (var each_data in data) {
-	        temp[each_data] = text;
+	      for (var each in slice_time) {
+	        temp[slice_time[each]]++;
 	      }chrome.storage.local.remove("time", function () {
 	        chrome.storage.local.set({ time: temp }, function () {
 	          chrome.storage.local.get("time", function (items) {
@@ -3461,8 +3482,10 @@
 	        });
 	      });
 	    } else {
-	      for (var each_data in data) {
-	        temp[each_data] = data[each_data];
+	      for (var _each in _helper.all_time) {
+	        temp[_helper.all_time[_each]] = 0;
+	      }for (var _each2 in slice_time) {
+	        temp[slice_time[_each2]]++;
 	      }chrome.storage.local.set({ time: temp }, function () {
 	        chrome.storage.local.get("time", function (items) {
 	          // console.log(items);
@@ -3472,13 +3495,12 @@
 	  });
 	}
 	
-	// FIXME: 移除課程，沒有把對應的時間拿掉
 	function checkConflict(time_array, callback) {
 	  chrome.storage.local.get("time", function (items) {
 	    var conflict = false;
 	    if (items.time != undefined) {
 	      for (var each in time_array) {
-	        if (items.time[time_array[each]] != undefined) conflict = true;
+	        if (items.time[time_array[each]] != 0 && time_array[each] != "無") conflict = true;
 	      }
 	      if (conflict) {
 	        var negative = "class=\"error\"";
@@ -3491,8 +3513,25 @@
 	  });
 	}
 	
+	function removeTimeOfCourse(time_array, callback) {
+	  chrome.storage.local.get("time", function (items) {
+	    var temp = {};
+	    Object.assign(temp, items.time);
+	    for (var each in time_array) {
+	      temp[time_array[each]]--;
+	    }chrome.storage.local.remove("time", function () {
+	      chrome.storage.local.set({ time: temp }, function () {
+	        chrome.storage.local.get("time", function (items) {
+	          // console.log(items);
+	        });
+	      });
+	    });
+	  });
+	}
+	
 	exports.storeSliceTime = storeSliceTime;
 	exports.checkConflict = checkConflict;
+	exports.removeTimeOfCourse = removeTimeOfCourse;
 
 /***/ }),
 /* 15 */
@@ -52373,7 +52412,7 @@
 	    var parse_table = $.parseHTML(_helper.course_table);
 	    $(parse_table).attr("id", "cart");
 	
-	    var all_time = [];
+	    var target_time = [];
 	    var count = 0;
 	    $("#course_order_list").empty();
 	    $("#course_order_list").attr("course_num", count);
@@ -52391,7 +52430,7 @@
 	          for (var each in items.cart[key].time) {
 	            var each_time = items.cart[key].time[each];
 	            slice_time.push(each_time);
-	            all_time.push(each_time);
+	            target_time.push(each_time);
 	          }
 	
 	          for (var _each in slice_time) {
@@ -52400,7 +52439,7 @@
 	        }
 	      }
 	    }
-	    (0, _conflict.storeSliceTime)(all_time, "from_cart");
+	    (0, _conflict.storeSliceTime)(target_time);
 	    $("#cart").replaceWith(parse_table);
 	    $("#cart > tr").on("click", "td", function () {
 	      $("#multiple_class_list").empty();
@@ -52895,7 +52934,6 @@
 	  callback();
 	}
 	
-	// TODO: 尚未做志願序的參數傳遞
 	function submitToNTHU(acix) {
 	  chrome.storage.local.get("cart", function (items) {
 	    if (items.cart != undefined) {

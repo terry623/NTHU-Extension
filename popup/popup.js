@@ -12,6 +12,8 @@ import {
 import { getCart } from "./cart";
 import { getCurrentStateOfNTHU } from "./server";
 import { submitToNTHU, storeOrderToStorage } from "./select";
+import { removeTimeOfCourse } from "./conflict";
+
 // import {
 //   getRecommendPage,
 //   toStorage,
@@ -63,6 +65,7 @@ $(".course_type.browse").popup({
   position: "bottom left",
   on: "click"
 });
+
 $("#submit").on("click", function() {
   chrome.storage.local.get("cart", function(items) {
     let get_course_id = $(".course_info.scrolling.content").attr("id");
@@ -89,6 +92,11 @@ $("#submit").on("click", function() {
     };
 
     if (items.cart != undefined) {
+      if (items.cart.hasOwnProperty(get_course_id)) {
+        $("#already_in_cart").modal("show");
+        return;
+      }
+
       Object.assign(temp, items.cart);
       temp[get_course_id] = data;
 
@@ -109,14 +117,15 @@ $("#submit").on("click", function() {
         });
       });
     }
+    $("#submit_to_list").modal("show");
   });
-  $("#submit_to_list").modal("show");
 });
 $("#delete").on("click", function() {
   chrome.storage.local.get("cart", function(items) {
     var get_course_id = $(".course_info.scrolling.content").attr("id");
     var temp = {};
     Object.assign(temp, items.cart);
+    removeTimeOfCourse(temp[get_course_id].time);
     delete temp[get_course_id];
 
     chrome.storage.local.remove("cart", function() {
@@ -258,8 +267,7 @@ $(".ui.secondary.menu").on("click", ".item", function() {
   }
 });
 $(".ui.modal").modal({
-  inverted: true,
-  duration: 350
+  inverted: true
 });
 $(".ui.course_type.popup").on("click", ".item", function() {
   dependOnType($(this).text());

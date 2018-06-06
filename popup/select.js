@@ -144,7 +144,6 @@ function showCourseModal(callback) {
   callback();
 }
 
-// TODO: 尚未做志願序的參數傳遞
 function submitToNTHU(acix) {
   chrome.storage.local.get("cart", function(items) {
     if (items.cart != undefined) {
