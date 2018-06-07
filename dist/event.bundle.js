@@ -93,6 +93,24 @@
 	    url: urlPattern
 	  });
 	});
+	
+	console.log("In Event JS");
+	chrome.webRequest.onBeforeSendHeaders.addListener(function (details) {
+	  console.log("details");
+	  for (var i = 0; i < details.requestHeaders.length; ++i) {
+	    console.log(details.requestHeaders[i].name);
+	    if (details.requestHeaders[i].name === "User-Agent") {
+	      details.requestHeaders.splice(i, 1);
+	      break;
+	    }
+	  }
+	  return { requestHeaders: details.requestHeaders };
+	}, { urls: ["<all_urls>"] }, ["blocking", "requestHeaders"]);
+	
+	chrome.webRequest.onBeforeRequest.addListener(function (details) {
+	  console.log(details);
+	  return { cancel: details.url.indexOf("://www.evil.com/") != -1 };
+	}, { urls: ["<all_urls>"] }, ["blocking", "requestBody"]);
 
 /***/ })
 /******/ ]);

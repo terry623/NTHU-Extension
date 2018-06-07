@@ -11,7 +11,7 @@ import {
 } from "./search";
 import { getCart } from "./cart";
 import { getCurrentStateOfNTHU } from "./server";
-import { submitToNTHU, storeOrderToStorage } from "./select";
+import { submitToNTHU, storeOrderToStorage, selectTestCourse } from "./select";
 import { removeTimeOfCourse } from "./conflict";
 
 // import {
@@ -210,6 +210,9 @@ $("#change_school_table").on("click", ".item", function() {
   }
 });
 $(".ui.secondary.menu").on("click", ".item", function() {
+  let course_no = `10710CS  390200`;
+  selectTestCourse(acix, course_no);
+
   if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
     if ($(this).hasClass("recommendPage")) {
       alert("此為內部測試版本，「推薦課程」尚未完成 !");
