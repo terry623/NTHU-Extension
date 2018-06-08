@@ -42,39 +42,9 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _content = __webpack_require__(1);
-	
-	var content = _interopRequireWildcard(_content);
-	
-	var _data = __webpack_require__(2);
-	
-	var data = _interopRequireWildcard(_data);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _data = __webpack_require__(2);
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports) {
 
 	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var main = "";
-	exports.main = main;
 
 /***/ })
 /******/ ]);

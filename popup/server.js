@@ -250,7 +250,6 @@ function currentPhase(phase) {
   return tran_phase;
 }
 
-// TODO: 測試時間
 function getCurrentStateOfNTHU(callback) {
   let datetime = new Date();
   let year = datetime.getFullYear();

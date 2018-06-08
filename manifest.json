@@ -16,13 +16,9 @@
     "tabs",
     "storage",
     "webRequest",
-    "webRequestBlocking"
-  ],
-  "content_scripts": [
-    {
-      "matches": ["*://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/select_entry.php?*"],
-      "js": ["dist/content.bundle.js"]
-    }
+    "webRequestBlocking",
+    "http://*/",
+    "https://*/"
   ],
   "background": {
     "scripts": ["dist/event.bundle.js"],

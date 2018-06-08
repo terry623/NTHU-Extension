@@ -1,6 +1,4 @@
 import { getCart } from "./cart";
-var iconv = require("iconv-lite");
-var request = require("request");
 var correct_list = [];
 var wrong_list = [];
 
@@ -13,34 +11,29 @@ function serialize(obj) {
   return str.join("&");
 }
 
-// // Correct
-// ACIXSTORE=ms2ni64uj4fce4q254p8e9etk3&toChk=&new_dept=CS&new_class=CS++104BA+&chks=%A5%B2%BF%EF%AD%D7&aspr=&ckey=10710CS++390200&code=CS++&div=EECS&real=CD0158&cred=1&ctime=+&num=+&glimit=+&type=&pre=Y&range=+&chkbtn=add
-// // Wrong
-// ACIXSTORE=ms2ni64uj4fce4q254p8e9etk3&toChk=&new_dept=  &new_class=          &chks=                  &aspr=&ckey=10710CS++330500&code=    &div=    &real=      &cred= &ctime= &num= &glimit= &type=&pre= &range= &chkbtn=add
-
-function selectTestCourse(acix, course_no) {
-  course_no = course_no.replace(/ /g, "+");
-  let url =
-    `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713005.php?ACIXSTORE=` +
-    acix;
+// TODO: 必須進入選課系統，且格式都需相符(改成像人數一樣，去搜尋把資料抓回來)
+function selectTestCourse(acix) {
+  let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
   let form = {
     ACIXSTORE: acix,
     toChk: "",
     new_dept: "",
     new_class: "",
     chks: "",
+    // 通識要的志願序
     aspr: "",
-    ckey: course_no,
-    code: "",
-    div: "",
-    real: "CD0158",
-    cred: "0",
-    ctime: "",
-    num: "",
-    glimit: "",
+    // 後面的值都為必須
+    ckey: "10710CS  337100",
+    code: "CS  ",
+    div: "EECS",
+    real: "WW0014",
+    cred: "3",
+    ctime: "T7T8R7<br>",
+    num: "80",
+    glimit: " ",
     type: "",
     pre: "",
-    range: "",
+    range: " ",
     chkbtn: "add"
   };
 
@@ -50,6 +43,7 @@ function selectTestCourse(acix, course_no) {
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
     }),
     credentials: "include",
+    redirect: "follow",
     body: serialize(form)
   })
     .then(res => res.arrayBuffer())
@@ -66,45 +60,41 @@ function selectTestCourse(acix, course_no) {
 }
 
 function selectEachCourse(acix, course_no, callback) {
-  course_no = course_no.replace(/ /g, "+");
-
   // 預排選課
-  // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php`;
-  // let form = {
-  //   ACIXSTORE: acix,
-  //   toChk: "",
-  //   new_dept: "",
-  //   new_class: "",
-  //   keyword: "",
-  //   chks: "",
-  //   ckey: course_no,
-  //   chkbtn: "add"
-  // };
-
-  // 正式選課
-  let url =
-    `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713005.php?ACIXSTORE=` +
-    acix;
+  let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php`;
   let form = {
     ACIXSTORE: acix,
     toChk: "",
     new_dept: "",
     new_class: "",
+    keyword: "",
     chks: "",
-    aspr: "",
     ckey: course_no,
-    code: "",
-    div: "",
-    real: "xxx",
-    cred: "0",
-    ctime: "",
-    num: "",
-    glimit: "",
-    type: "",
-    pre: "",
-    range: "",
     chkbtn: "add"
   };
+
+  // 正式選課
+  // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+  // let form = {
+  //   ACIXSTORE: acix,
+  //   toChk: "",
+  //   new_dept: "++",
+  //   new_class: "++++++++++",
+  //   chks: "++++++++++++++++++",
+  //   aspr: "",
+  //   ckey: "10710CS  337100",
+  //   code: "CS  ",
+  //   div: "EECS",
+  //   real: "WW0014",
+  //   cred: "3",
+  //   ctime: "T7T8R7<br>",
+  //   num: "80",
+  //   glimit: " ",
+  //   type: "",
+  //   pre: "",
+  //   range: " ",
+  //   chkbtn: "add"
+  // };
 
   fetch(url, {
     method: "POST",
@@ -263,27 +253,3 @@ function storeOrderToStorage(course_id_group, callback) {
 }
 
 export { submitToNTHU, storeOrderToStorage, selectTestCourse };
-
-// // chrome extension
-// POST /ccxp/COURSE/JH/7/7.1/7.1.3/JH713005.php?ACIXSTORE=b4fn20hilh1pk9qlesdpj4ufi7 HTTP/1.1
-// Host: www.ccxp.nthu.edu.tw
-// Connection: keep-alive
-// Content-Length: 219
-// Origin: null
-// User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.79 Safari/537.36
-// content-type: application/x-www-form-urlencoded; charset=utf-8
-// Accept:
-
-// // NTHU
-// POST /ccxp/COURSE/JH/7/7.1/7.1.3/JH713005.php?ACIXSTORE=b4fn20hilh1pk9qlesdpj4ufi7 HTTP/1.1
-// Host: www.ccxp.nthu.edu.tw
-// Connection: keep-alive
-// Content-Length: 219
-// Cache-Control: max-age=0
-// Origin: https://www.ccxp.nthu.edu.tw
-// Upgrade-Insecure-Requests: 1
-// Content-Type: application/x-www-form-urlencoded
-// User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.79 Safari/537.36
-// Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
-// Referer: https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php?ACIXSTORE=b4fn20hilh1pk9qlesdpj4ufi7
-

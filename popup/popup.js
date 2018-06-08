@@ -1,6 +1,4 @@
 window._crypto = null;
-import { initDrift } from "./drift";
-initDrift();
 import { getUrlVars } from "./helper";
 import { getUserName, getResultCourse, getCourseInfo } from "./api";
 import {
@@ -13,7 +11,6 @@ import { getCart } from "./cart";
 import { getCurrentStateOfNTHU } from "./server";
 import { submitToNTHU, storeOrderToStorage, selectTestCourse } from "./select";
 import { removeTimeOfCourse } from "./conflict";
-
 // import {
 //   getRecommendPage,
 //   toStorage,
@@ -36,14 +33,38 @@ $(document).ready(function() {
       acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
       stu_no = getUrlVars(tabs[0].url)["hint"];
 
+      $("#home_loading").addClass("active");
       getUserName(acix, function() {
-        $(".content_item.homePage").show();
         getCurrentStateOfNTHU(function(phase) {
+          $(".content_item.homePage").show();
+          $("#home_loading").removeClass("active");
           if (phase != undefined)
             getResultCourse(acix, stu_no, phase, year, semester);
           else $("#change_phase").addClass("disabled");
           getCart(acix);
           // getGrade(acix, stu_no);
+
+          chrome.webRequest.onBeforeSendHeaders.addListener(
+            function(details) {
+              console.log(details);
+              var headers = details.requestHeaders;
+              var blockingResponse = {};
+              headers.push({
+                name: "Referer",
+                value:
+                  "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php?ACIXSTORE=" +
+                  acix
+              });
+              blockingResponse.requestHeaders = headers;
+              return blockingResponse;
+            },
+            {
+              urls: [
+                "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php"
+              ]
+            },
+            ["requestHeaders", "blocking"]
+          );
         });
       });
     }
@@ -210,18 +231,14 @@ $("#change_school_table").on("click", ".item", function() {
   }
 });
 $(".ui.secondary.menu").on("click", ".item", function() {
-  let course_no = `10710CS  390200`;
-  selectTestCourse(acix, course_no);
+  // FIXME: 暫時測試
+  selectTestCourse(acix);
 
   if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
     if ($(this).hasClass("recommendPage")) {
       alert("此為內部測試版本，「推薦課程」尚未完成 !");
       return;
     }
-    drift.on("ready", function(api, payload) {
-      api.sidebar.close();
-      api.widget.hide();
-    });
     $(this)
       .addClass("active")
       .siblings(".item")
@@ -233,9 +250,6 @@ $(".ui.secondary.menu").on("click", ".item", function() {
 
     if ($(this).hasClass("homePage")) {
       t.not(".homePage").hide();
-      drift.on("ready", function(api, payload) {
-        api.widget.show();
-      });
     } else if ($(this).hasClass("searchPage")) {
       t.not(".searchPage").hide();
     } else if ($(this).hasClass("choosePage")) {

@@ -1,6 +1,6 @@
 //指定比對的url：不允許片段表達式
 //例如： *://*.google.com.tw/* 作為查詢字串不被接受因為host是一個片段表達式
-var urlPattern = "*://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/select_entry.php?*";
+var urlPattern = "*://www.ccxp.nthu.edu.tw/ccxp/*";
 
 //利用 tabs.query api 查找畫面上的所有tab
 function queryTabsAndShowPageActions(queryObject) {
@@ -31,29 +31,3 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     url: urlPattern
   });
 });
-
-console.log("In Event JS");
-chrome.webRequest.onBeforeSendHeaders.addListener(
-  function(details) {
-    console.log("details");
-    for (var i = 0; i < details.requestHeaders.length; ++i) {
-      console.log(details.requestHeaders[i].name);
-      if (details.requestHeaders[i].name === "User-Agent") {
-        details.requestHeaders.splice(i, 1);
-        break;
-      }
-    }
-    return { requestHeaders: details.requestHeaders };
-  },
-  { urls: ["<all_urls>"] },
-  ["blocking", "requestHeaders"]
-);
-
-chrome.webRequest.onBeforeRequest.addListener(
-  function(details) {
-    console.log(details);
-    return { cancel: details.url.indexOf("://www.evil.com/") != -1 };
-  },
-  { urls: ["<all_urls>"] },
-  ["blocking", "requestBody"]
-);

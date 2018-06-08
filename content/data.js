@@ -1,2 +1,0 @@
-const main = ``;
-export { main };
