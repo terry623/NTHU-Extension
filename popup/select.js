@@ -1,4 +1,5 @@
 import { getCart } from "./cart";
+import { SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG } from "constants";
 var correct_list = [];
 var wrong_list = [];
 
@@ -11,32 +12,17 @@ function serialize(obj) {
   return str.join("&");
 }
 
-// TODO: 必須進入選課系統，且格式都需相符(改成像人數一樣，去搜尋把資料抓回來)
-function selectTestCourse(acix) {
-  let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+function getCourseFormInfo(acix, course_no, callback) {
+  let patt = /[A-Za-z]+/;
+  let target = course_no.match(patt);
+
+  let url =
+    "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php";
   let form = {
     ACIXSTORE: acix,
-    toChk: "",
-    new_dept: "",
-    new_class: "",
-    chks: "",
-    // 通識要的志願序
-    aspr: "",
-    // 後面的值都為必須
-    ckey: "10710CS  337100",
-    code: "CS  ",
-    div: "EECS",
-    real: "WW0014",
-    cred: "3",
-    ctime: "T7T8R7<br>",
-    num: "80",
-    glimit: " ",
-    type: "",
-    pre: "",
-    range: " ",
-    chkbtn: "add"
+    toChk: 1,
+    new_dept: target[0]
   };
-
   fetch(url, {
     method: "POST",
     headers: new Headers({
@@ -50,92 +36,117 @@ function selectTestCourse(acix) {
     .then(data => {
       let temp = document.createElement("div");
       let decode_data = new TextDecoder("big5").decode(data);
-      decode_data = decode_data.replace(
-        `<img src="templates/pic1.gif" width="351" height="30">`,
-        ``
-      );
-      temp.innerHTML = decode_data;
-      console.log.apply(console, $(temp));
-    });
-}
-
-function selectEachCourse(acix, course_no, callback) {
-  // 預排選課
-  let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php`;
-  let form = {
-    ACIXSTORE: acix,
-    toChk: "",
-    new_dept: "",
-    new_class: "",
-    keyword: "",
-    chks: "",
-    ckey: course_no,
-    chkbtn: "add"
-  };
-
-  // 正式選課
-  // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
-  // let form = {
-  //   ACIXSTORE: acix,
-  //   toChk: "",
-  //   new_dept: "++",
-  //   new_class: "++++++++++",
-  //   chks: "++++++++++++++++++",
-  //   aspr: "",
-  //   ckey: "10710CS  337100",
-  //   code: "CS  ",
-  //   div: "EECS",
-  //   real: "WW0014",
-  //   cred: "3",
-  //   ctime: "T7T8R7<br>",
-  //   num: "80",
-  //   glimit: " ",
-  //   type: "",
-  //   pre: "",
-  //   range: " ",
-  //   chkbtn: "add"
-  // };
-
-  fetch(url, {
-    method: "POST",
-    headers: new Headers({
-      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
-    }),
-    credentials: "include",
-    body: serialize(form)
-  })
-    .then(res => res.arrayBuffer())
-    .then(data => {
-      let temp = document.createElement("div");
-      let decode_data = new TextDecoder("big5").decode(data);
-      decode_data = decode_data.replace(
-        `<img src="templates/pic1.gif" width="351" height="30">`,
-        ``
-      );
       temp.innerHTML = decode_data;
       // console.log.apply(console, $(temp));
+
       if (
         $(temp)
           .text()
           .indexOf("session is interrupted!") >= 0
       ) {
         $("#session_alert").modal("show");
-      } else if (
-        $(temp)
-          .text()
-          .indexOf("alert") >= 0
-      ) {
-        let origin = $("script", temp)
-          .first()
-          .text();
-        let message = origin.split("'")[1];
-        let isSuccess = false;
-        callback(isSuccess, message);
       } else {
-        let isSuccess = true;
-        callback(isSuccess);
+        let found = $("#T1 > tbody > tr", temp).filter(function() {
+          return $("td:nth-child(2) > div", this).text() == course_no;
+        });
+
+        let input;
+        if ($("td:nth-child(1) > div > input.btn2", found).length > 0)
+          input = $("td:nth-child(1) > div > input.btn2", found);
+        else input = $("td:nth-child(1) > div > input", found);
+        let input_array = $(input)
+          .attr("onclick")
+          .split(";");
+        let check = input_array[1].split("'");
+        let form = {
+          aspr: "",
+          ckey: check[1],
+          code: check[3],
+          div: check[5],
+          real: check[7],
+          cred: check[9],
+          ctime: check[11],
+          num: check[13],
+          glimit: check[15],
+          type: check[17],
+          pre: check[19],
+          range: check[21]
+        };
+        console.log.apply(console, $(input));
+        console.log(form);
+        callback(form);
       }
     });
+}
+
+function selectEachCourse(acix, course_no, callback) {
+  
+  // FIXME: 有時候系統 refresh 的速度不固定
+  getCourseFormInfo(acix, course_no, function(r_form) {
+    let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+    let form = {
+      ACIXSTORE: acix,
+      toChk: "",
+      new_dept: "",
+      new_class: "",
+      chks: "",
+      aspr: r_form.aspr,
+      ckey: r_form.ckey,
+      code: r_form.code,
+      div: r_form.div,
+      real: r_form.real,
+      cred: r_form.cred,
+      ctime: r_form.ctime,
+      num: r_form.num,
+      glimit: r_form.glimit,
+      type: r_form.type,
+      pre: r_form.pre,
+      range: r_form.range,
+      chkbtn: "add"
+    };
+
+    fetch(url, {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+      }),
+      credentials: "include",
+      redirect: "follow",
+      body: serialize(form)
+    })
+      .then(res => res.arrayBuffer())
+      .then(data => {
+        let temp = document.createElement("div");
+        let decode_data = new TextDecoder("big5").decode(data);
+        decode_data = decode_data.replace(
+          `<img src="templates/pic1.gif" width="351" height="30">`,
+          ``
+        );
+        temp.innerHTML = decode_data;
+        console.log.apply(console, $(temp));
+        if (
+          $(temp)
+            .text()
+            .indexOf("session is interrupted!") >= 0
+        ) {
+          $("#session_alert").modal("show");
+        } else if (
+          $(temp)
+            .text()
+            .indexOf("alert") >= 0
+        ) {
+          let origin = $("script", temp)
+            .first()
+            .text();
+          let message = origin.split("'")[1];
+          let isSuccess = false;
+          callback(isSuccess, message);
+        } else {
+          let isSuccess = true;
+          callback(isSuccess);
+        }
+      });
+  });
 }
 
 function selectAllCourse(acix, cart, callback) {
@@ -252,4 +263,4 @@ function storeOrderToStorage(course_id_group, callback) {
   });
 }
 
-export { submitToNTHU, storeOrderToStorage, selectTestCourse };
+export { submitToNTHU, storeOrderToStorage };

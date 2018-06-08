@@ -9,7 +9,7 @@ import {
 } from "./search";
 import { getCart } from "./cart";
 import { getCurrentStateOfNTHU } from "./server";
-import { submitToNTHU, storeOrderToStorage, selectTestCourse } from "./select";
+import { submitToNTHU, storeOrderToStorage } from "./select";
 import { removeTimeOfCourse } from "./conflict";
 // import {
 //   getRecommendPage,
@@ -231,9 +231,6 @@ $("#change_school_table").on("click", ".item", function() {
   }
 });
 $(".ui.secondary.menu").on("click", ".item", function() {
-  // FIXME: 暫時測試
-  selectTestCourse(acix);
-
   if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
     if ($(this).hasClass("recommendPage")) {
       alert("此為內部測試版本，「推薦課程」尚未完成 !");
