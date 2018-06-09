@@ -156,13 +156,13 @@
 	  });
 	});
 	
-	chrome.storage.local.clear(function () {
-	  console.log("Clear Local Data");
-	  var error = chrome.runtime.lastError;
-	  if (error) {
-	    console.error(error);
-	  }
-	});
+	// chrome.storage.local.clear(function() {
+	//   console.log("Clear Local Data");
+	//   var error = chrome.runtime.lastError;
+	//   if (error) {
+	//     console.error(error);
+	//   }
+	// });
 	
 	$(".ui.accordion").accordion();
 	$(".ui.dropdown").dropdown();
@@ -53353,6 +53353,7 @@
 	
 	var correct_list = [];
 	var wrong_list = [];
+	var course_no_list = [];
 	
 	function serialize(obj) {
 	  var str = [];
@@ -53465,8 +53466,10 @@
 	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
 	        $("#session_alert").modal("show");
 	      } else if ($(temp).text().indexOf("alert") >= 0) {
-	        // FIXME: 它的 Alert 不一定放在第一個
-	        var origin = $("script", temp).first().text();
+	        var origin = $("script:contains('alert')", temp).first().text();
+	        // console.log.apply(console, $(origin));
+	        console.log(origin);
+	
 	        var message = origin.split("'")[1];
 	        var success_in_random = "加選此科目僅列入亂數處理!";
 	        if (message.indexOf(success_in_random) >= 0) {
@@ -53484,25 +53487,30 @@
 	  });
 	}
 	
-	// FIXME: 若一次多個課程以上，Session 會被擋
-	function selectAllCourse(acix, cart, callback) {
+	function callSelectEachCourse(acix, course_num, count, callback) {
+	  if (count > course_num) return;
+	  var course_no = course_no_list[count - 1];
+	  $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
+	  selectEachCourse(acix, course_no, function (isSuccess, message) {
+	    if (isSuccess == true) correct_list.push({ course_no: course_no, message: message });else wrong_list.push({ course_no: course_no, message: message });
+	
+	    callback(count);
+	    count++;
+	    callSelectEachCourse(acix, course_num, count, callback);
+	  });
+	}
+	
+	function selectAllCourse(acix, course_num, cart, callback) {
 	  var count = 1;
 	  correct_list = [];
 	  wrong_list = [];
-	
-	  var _loop = function _loop(key) {
-	    var course_no = cart[key].course_no;
-	    selectEachCourse(acix, course_no, function (isSuccess, message) {
-	      if (isSuccess == true) correct_list.push({ course_no: course_no, message: message });else wrong_list.push({ course_no: course_no, message: message });
-	
-	      callback(count);
-	      count++;
-	    });
-	  };
+	  course_no_list = [];
 	
 	  for (var key in cart) {
-	    _loop(key);
+	    var course_no = cart[key].course_no;
+	    course_no_list.push(course_no);
 	  }
+	  callSelectEachCourse(acix, course_num, count, callback);
 	}
 	
 	function findIdFromObject(obj, course_no) {
@@ -53518,6 +53526,7 @@
 	  return id;
 	}
 	
+	// TODO: 也要把在 time 中對應的移除，不然就直接重新抓 time 就好
 	function removeSuccessSelectCourse(acix, callback) {
 	  chrome.storage.local.get("cart", function (items) {
 	    var temp = {};
@@ -53540,17 +53549,24 @@
 	
 	function showCourseModal(callback) {
 	  $("#select_course_status").empty();
+	  var patt = /[^A-Za-z\\]+/;
 	  if (correct_list.length != 0) {
 	    $("#select_course_status").append("<div class=\"item\">\u6210\u529F\uFF1A</div>");
 	    for (var each in correct_list) {
-	      var content = "<div class=\"item\">" + correct_list[each].course_no + " ( " + correct_list[each].message + " )" + "</div>";
+	      var message = correct_list[each].message.match(patt);
+	      console.log(correct_list[each].message);
+	      console.log(message);
+	      var content = "<div class=\"item\">" + correct_list[each].course_no + " ( " + message + " )" + "</div>";
 	      $("#select_course_status").append(content);
 	    }
 	  }
 	  if (wrong_list.length != 0) {
 	    $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");
 	    for (var _each in wrong_list) {
-	      var _content = "<div class=\"item\">" + wrong_list[_each].course_no + " ( " + wrong_list[_each].message + " )" + "</div>";
+	      var _message = wrong_list[_each].message.match(patt);
+	      console.log(wrong_list[_each].message);
+	      console.log(_message);
+	      var _content = "<div class=\"item\">" + wrong_list[_each].course_no + " ( " + _message + " )" + "</div>";
 	      $("#select_course_status").append(_content);
 	    }
 	  }
@@ -53562,7 +53578,7 @@
 	  chrome.storage.local.get("cart", function (items) {
 	    if (items.cart != undefined) {
 	      var course_num = Object.keys(items.cart).length;
-	      selectAllCourse(acix, items.cart, function (count) {
+	      selectAllCourse(acix, course_num, items.cart, function (count) {
 	        if (count == course_num) {
 	          console.log("Finish Select All Course !");
 	          removeSuccessSelectCourse(acix, function () {

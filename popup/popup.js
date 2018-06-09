@@ -71,13 +71,13 @@ $(document).ready(function() {
   );
 });
 
-chrome.storage.local.clear(function() {
-  console.log("Clear Local Data");
-  var error = chrome.runtime.lastError;
-  if (error) {
-    console.error(error);
-  }
-});
+// chrome.storage.local.clear(function() {
+//   console.log("Clear Local Data");
+//   var error = chrome.runtime.lastError;
+//   if (error) {
+//     console.error(error);
+//   }
+// });
 
 $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();

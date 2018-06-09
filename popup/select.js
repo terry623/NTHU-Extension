@@ -1,6 +1,7 @@
 import { getCart } from "./cart";
 var correct_list = [];
 var wrong_list = [];
+var course_no_list = [];
 
 function serialize(obj) {
   let str = [];
@@ -133,10 +134,12 @@ function selectEachCourse(acix, course_no, callback) {
             .text()
             .indexOf("alert") >= 0
         ) {
-          // FIXME: 它的 Alert 不一定放在第一個
-          let origin = $("script", temp)
+          let origin = $("script:contains('alert')", temp)
             .first()
             .text();
+          // console.log.apply(console, $(origin));
+          console.log(origin);
+
           let message = origin.split("'")[1];
           let success_in_random = "加選此科目僅列入亂數處理!";
           if (message.indexOf(success_in_random) >= 0) {
@@ -154,21 +157,31 @@ function selectEachCourse(acix, course_no, callback) {
   });
 }
 
-// FIXME: 若一次多個課程以上，Session 會被擋
-function selectAllCourse(acix, cart, callback) {
+function callSelectEachCourse(acix, course_num, count, callback) {
+  if (count > course_num) return;
+  let course_no = course_no_list[count - 1];
+  $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
+  selectEachCourse(acix, course_no, function(isSuccess, message) {
+    if (isSuccess == true) correct_list.push({ course_no, message });
+    else wrong_list.push({ course_no, message });
+
+    callback(count);
+    count++;
+    callSelectEachCourse(acix, course_num, count, callback);
+  });
+}
+
+function selectAllCourse(acix, course_num, cart, callback) {
   let count = 1;
   correct_list = [];
   wrong_list = [];
+  course_no_list = [];
+
   for (let key in cart) {
     let course_no = cart[key].course_no;
-    selectEachCourse(acix, course_no, function(isSuccess, message) {
-      if (isSuccess == true) correct_list.push({ course_no, message });
-      else wrong_list.push({ course_no, message });
-
-      callback(count);
-      count++;
-    });
+    course_no_list.push(course_no);
   }
+  callSelectEachCourse(acix, course_num, count, callback);
 }
 
 function findIdFromObject(obj, course_no) {
@@ -184,6 +197,7 @@ function findIdFromObject(obj, course_no) {
   return id;
 }
 
+// TODO: 也要把在 time 中對應的移除，不然就直接重新抓 time 就好
 function removeSuccessSelectCourse(acix, callback) {
   chrome.storage.local.get("cart", function(items) {
     let temp = {};
@@ -206,14 +220,18 @@ function removeSuccessSelectCourse(acix, callback) {
 
 function showCourseModal(callback) {
   $("#select_course_status").empty();
+  let patt = /[^A-Za-z\\]+/;
   if (correct_list.length != 0) {
     $("#select_course_status").append(`<div class="item">成功：</div>`);
     for (let each in correct_list) {
+      let message = correct_list[each].message.match(patt);
+      console.log(correct_list[each].message);
+      console.log(message);
       let content =
         `<div class="item">` +
         correct_list[each].course_no +
         ` ( ` +
-        correct_list[each].message +
+        message +
         ` )` +
         `</div>`;
       $("#select_course_status").append(content);
@@ -222,11 +240,14 @@ function showCourseModal(callback) {
   if (wrong_list.length != 0) {
     $("#select_course_status").append(`<div class="item">失敗：</div>`);
     for (let each in wrong_list) {
+      let message = wrong_list[each].message.match(patt);
+      console.log(wrong_list[each].message);
+      console.log(message);
       let content =
         `<div class="item">` +
         wrong_list[each].course_no +
         ` ( ` +
-        wrong_list[each].message +
+        message +
         ` )` +
         `</div>`;
       $("#select_course_status").append(content);
@@ -239,8 +260,8 @@ function showCourseModal(callback) {
 function submitToNTHU(acix) {
   chrome.storage.local.get("cart", function(items) {
     if (items.cart != undefined) {
-      let course_num = Object.keys(items.cart).length;
-      selectAllCourse(acix, items.cart, function(count) {
+      const course_num = Object.keys(items.cart).length;
+      selectAllCourse(acix, course_num, items.cart, function(count) {
         if (count == course_num) {
           console.log("Finish Select All Course !");
           removeSuccessSelectCourse(acix, function() {
