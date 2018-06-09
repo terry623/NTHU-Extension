@@ -38,9 +38,9 @@ $(document).ready(function() {
         getCurrentStateOfNTHU(function(phase) {
           $(".content_item.homePage").show();
           $("#home_loading").removeClass("active");
-          if (phase != undefined)
+          if (phase != undefined) {
             getResultCourse(acix, stu_no, phase, year, semester);
-          else $("#change_phase").addClass("disabled");
+          } else $("#change_phase").addClass("disabled");
           getCart(acix);
           // getGrade(acix, stu_no);
 
@@ -200,7 +200,7 @@ $("#search_page_change").on("click", ".page.item", function() {
 });
 $("#change_phase").dropdown({
   on: "click",
-  action: function(text, value, element) {
+  action: function(text, value) {
     getResultCourse(acix, stu_no, value, year, semester, function() {
       $("#course_result_loading").removeClass("active");
     });
@@ -251,6 +251,8 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       t.not(".searchPage").hide();
     } else if ($(this).hasClass("choosePage")) {
       t.not(".choosePage").hide();
+
+      // TODO: 要能夠 Refresh 校務資訊系統的課表
       $("#change_school_table").show();
     } else if ($(this).hasClass("recommendPage")) {
       // t.not(".recommendPage").hide();

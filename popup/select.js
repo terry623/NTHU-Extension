@@ -1,5 +1,4 @@
 import { getCart } from "./cart";
-import { SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG } from "constants";
 var correct_list = [];
 var wrong_list = [];
 
@@ -80,8 +79,7 @@ function getCourseFormInfo(acix, course_no, callback) {
 }
 
 function selectEachCourse(acix, course_no, callback) {
-  
-  // FIXME: 有時候系統 refresh 的速度不固定
+  console.log(course_no);
   getCourseFormInfo(acix, course_no, function(r_form) {
     let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
     let form = {
@@ -135,20 +133,28 @@ function selectEachCourse(acix, course_no, callback) {
             .text()
             .indexOf("alert") >= 0
         ) {
+          // FIXME: 它的 Alert 不一定放在第一個
           let origin = $("script", temp)
             .first()
             .text();
           let message = origin.split("'")[1];
-          let isSuccess = false;
-          callback(isSuccess, message);
+          let success_in_random = "加選此科目僅列入亂數處理!";
+          if (message.indexOf(success_in_random) >= 0) {
+            let isSuccess = true;
+            callback(isSuccess, success_in_random);
+          } else {
+            let isSuccess = false;
+            callback(isSuccess, message);
+          }
         } else {
           let isSuccess = true;
-          callback(isSuccess);
+          callback(isSuccess, "無任何警告訊息");
         }
       });
   });
 }
 
+// FIXME: 若一次多個課程以上，Session 會被擋
 function selectAllCourse(acix, cart, callback) {
   let count = 1;
   correct_list = [];
@@ -156,10 +162,9 @@ function selectAllCourse(acix, cart, callback) {
   for (let key in cart) {
     let course_no = cart[key].course_no;
     selectEachCourse(acix, course_no, function(isSuccess, message) {
-      if (isSuccess == true) correct_list.push(course_no);
-      else {
-        wrong_list.push({ course_no, message });
-      }
+      if (isSuccess == true) correct_list.push({ course_no, message });
+      else wrong_list.push({ course_no, message });
+
       callback(count);
       count++;
     });
@@ -183,8 +188,8 @@ function removeSuccessSelectCourse(acix, callback) {
   chrome.storage.local.get("cart", function(items) {
     let temp = {};
     Object.assign(temp, items.cart);
-    for (let no in correct_list) {
-      let course_id = findIdFromObject(temp, correct_list[no]);
+    for (let each in correct_list) {
+      let course_id = findIdFromObject(temp, correct_list[each].course_no);
       delete temp[course_id];
     }
     chrome.storage.local.remove("cart", function() {
@@ -201,6 +206,19 @@ function removeSuccessSelectCourse(acix, callback) {
 
 function showCourseModal(callback) {
   $("#select_course_status").empty();
+  if (correct_list.length != 0) {
+    $("#select_course_status").append(`<div class="item">成功：</div>`);
+    for (let each in correct_list) {
+      let content =
+        `<div class="item">` +
+        correct_list[each].course_no +
+        ` ( ` +
+        correct_list[each].message +
+        ` )` +
+        `</div>`;
+      $("#select_course_status").append(content);
+    }
+  }
   if (wrong_list.length != 0) {
     $("#select_course_status").append(`<div class="item">失敗：</div>`);
     for (let each in wrong_list) {
@@ -213,10 +231,6 @@ function showCourseModal(callback) {
         `</div>`;
       $("#select_course_status").append(content);
     }
-  } else {
-    $("#select_course_status").append(
-      `<div class="item">全數選課成功&nbsp;&nbsp;!&nbsp;&nbsp;請至校務資訊系統再次確認</div>`
-    );
   }
   $("#select_state").modal("show");
   callback();
