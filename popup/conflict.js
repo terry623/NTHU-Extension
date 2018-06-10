@@ -22,7 +22,7 @@ function storeSliceTime(target_time) {
       chrome.storage.local.remove("time", function() {
         chrome.storage.local.set({ time: temp }, function() {
           chrome.storage.local.get("time", function(items) {
-            // console.log(items);
+            console.log(items);
           });
         });
       });
@@ -31,7 +31,7 @@ function storeSliceTime(target_time) {
       for (let each in slice_time) temp[slice_time[each]]++;
       chrome.storage.local.set({ time: temp }, function() {
         chrome.storage.local.get("time", function(items) {
-          // console.log(items);
+          console.log(items);
         });
       });
     }
@@ -56,7 +56,7 @@ function checkConflict(time_array, callback) {
   });
 }
 
-function removeTimeOfCourse(time_array, callback) {
+function removeTimeOfCourse(time_array) {
   chrome.storage.local.get("time", function(items) {
     let temp = {};
     Object.assign(temp, items.time);

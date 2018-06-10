@@ -3421,7 +3421,7 @@
 	      }chrome.storage.local.remove("time", function () {
 	        chrome.storage.local.set({ time: temp }, function () {
 	          chrome.storage.local.get("time", function (items) {
-	            // console.log(items);
+	            console.log(items);
 	          });
 	        });
 	      });
@@ -3432,7 +3432,7 @@
 	        temp[slice_time[_each2]]++;
 	      }chrome.storage.local.set({ time: temp }, function () {
 	        chrome.storage.local.get("time", function (items) {
-	          // console.log(items);
+	          console.log(items);
 	        });
 	      });
 	    }
@@ -3457,7 +3457,7 @@
 	  });
 	}
 	
-	function removeTimeOfCourse(time_array, callback) {
+	function removeTimeOfCourse(time_array) {
 	  chrome.storage.local.get("time", function (items) {
 	    var temp = {};
 	    Object.assign(temp, items.time);
@@ -53348,6 +53348,8 @@
 	
 	var _cart = __webpack_require__(287);
 	
+	var _conflict = __webpack_require__(11);
+	
 	var correct_list = [];
 	var wrong_list = [];
 	var course_list = [];
@@ -53541,6 +53543,7 @@
 	    Object.assign(temp, items.cart);
 	    for (var each in correct_list) {
 	      var course_id = findIdFromObject(temp, correct_list[each].course_no);
+	      (0, _conflict.removeTimeOfCourse)(temp[course_id].time);
 	      delete temp[course_id];
 	    }
 	    chrome.storage.local.remove("cart", function () {

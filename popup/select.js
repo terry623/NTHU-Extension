@@ -1,4 +1,6 @@
 import { getCart } from "./cart";
+import { removeTimeOfCourse } from "./conflict";
+
 var correct_list = [];
 var wrong_list = [];
 var course_list = [];
@@ -218,6 +220,7 @@ function removeSuccessSelectCourse(acix, callback) {
     Object.assign(temp, items.cart);
     for (let each in correct_list) {
       let course_id = findIdFromObject(temp, correct_list[each].course_no);
+      removeTimeOfCourse(temp[course_id].time);
       delete temp[course_id];
     }
     chrome.storage.local.remove("cart", function() {
