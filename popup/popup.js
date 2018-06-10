@@ -46,7 +46,6 @@ $(document).ready(function() {
 
           chrome.webRequest.onBeforeSendHeaders.addListener(
             function(details) {
-              console.log("\n");
               console.log(details);
               var headers = details.requestHeaders;
               var blockingResponse = {};
@@ -72,13 +71,13 @@ $(document).ready(function() {
   );
 });
 
-// chrome.storage.local.clear(function() {
-//   console.log("Clear Local Data");
-//   var error = chrome.runtime.lastError;
-//   if (error) {
-//     console.error(error);
-//   }
-// });
+chrome.storage.local.clear(function() {
+  console.log("Clear Local Data");
+  var error = chrome.runtime.lastError;
+  if (error) {
+    console.error(error);
+  }
+});
 
 $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
@@ -95,7 +94,7 @@ $("#submit").on("click", function() {
     let time_array = $("#time")
       .text()
       .split(",");
-    let order = -1;
+    let order = "-1";
 
     if (
       $("#GE_type").text() != "" ||
@@ -347,6 +346,10 @@ $("#cart_submit").on("click", function() {
   }
 });
 $("#send_to_nthu").on("click", function() {
+  let isSelect = $("#course_order_list > div > .number")
+    .first()
+    .text();
+  if (isSelect == 0) return;
   $("#course_order").modal("hide");
   $("#send_to_nthu_loading").addClass("active");
   let course_id_group = [];
@@ -355,7 +358,6 @@ $("#send_to_nthu").on("click", function() {
     let order = $(this).text();
     course_id_group.push({ course_id, order });
   });
-
   storeOrderToStorage(course_id_group, function() {
     submitToNTHU(acix);
   });

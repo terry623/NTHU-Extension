@@ -139,7 +139,6 @@
 	        // getGrade(acix, stu_no);
 	
 	        chrome.webRequest.onBeforeSendHeaders.addListener(function (details) {
-	          console.log("\n");
 	          console.log(details);
 	          var headers = details.requestHeaders;
 	          var blockingResponse = {};
@@ -157,13 +156,13 @@
 	  });
 	});
 	
-	// chrome.storage.local.clear(function() {
-	//   console.log("Clear Local Data");
-	//   var error = chrome.runtime.lastError;
-	//   if (error) {
-	//     console.error(error);
-	//   }
-	// });
+	chrome.storage.local.clear(function () {
+	  console.log("Clear Local Data");
+	  var error = chrome.runtime.lastError;
+	  if (error) {
+	    console.error(error);
+	  }
+	});
 	
 	$(".ui.accordion").accordion();
 	$(".ui.dropdown").dropdown();
@@ -178,7 +177,7 @@
 	    var get_course_id = $(".course_info.scrolling.content").attr("id");
 	    var temp = {};
 	    var time_array = $("#time").text().split(",");
-	    var order = -1;
+	    var order = "-1";
 	
 	    if ($("#GE_type").text() != "" || $("#no").text().includes("PE")) {
 	      order = 0;
@@ -394,6 +393,8 @@
 	  }
 	});
 	$("#send_to_nthu").on("click", function () {
+	  var isSelect = $("#course_order_list > div > .number").first().text();
+	  if (isSelect == 0) return;
 	  $("#course_order").modal("hide");
 	  $("#send_to_nthu_loading").addClass("active");
 	  var course_id_group = [];
@@ -402,7 +403,6 @@
 	    var order = $(this).text();
 	    course_id_group.push({ course_id: course_id, order: order });
 	  });
-	
 	  (0, _select.storeOrderToStorage)(course_id_group, function () {
 	    (0, _select.submitToNTHU)(acix);
 	  });
@@ -3237,13 +3237,10 @@
 	  var search_topic = (0, _helper.translateTopic)(topic);
 	
 	  if (other_keyword == "NoNeedToChoose") {
-	    console.log("search_topic:", search_topic);
-	    console.log("keyword:", keyword);
+	    console.log("search_topic:", search_topic, ",keyword:", keyword);
 	    searchOnlyKeyword(search_topic, keyword, callback);
 	  } else {
-	    console.log("search_topic:", search_topic);
-	    console.log("keyword:", keyword);
-	    console.log("other_keyword:", other_keyword);
+	    console.log("search_topic:", search_topic, ",keyword:", keyword, ",other_keyword:", other_keyword);
 	    if (search_topic == "時間") searchTime(search_topic, keyword, other_keyword, callback);else searchDoubleKeyword(search_topic, keyword, other_keyword, callback);
 	  }
 	}
@@ -53353,7 +53350,7 @@
 	
 	var correct_list = [];
 	var wrong_list = [];
-	var course_no_list = [];
+	var course_list = [];
 	
 	function serialize(obj) {
 	  var str = [];
@@ -53364,6 +53361,7 @@
 	  }return str.join("&");
 	}
 	
+	// FIXME: 體育有分 PE、PE1、PE3 等
 	function getCourseFormInfo(acix, course_no, callback) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt);
@@ -53423,7 +53421,10 @@
 	  });
 	}
 	
-	function selectEachCourse(acix, course_no, callback) {
+	function selectEachCourse(acix, course_no_order, callback) {
+	  var course_no = course_no_order.course_no;
+	  var aspr = course_no_order.order;
+	  if (aspr == "-1") aspr = "";
 	  getCourseFormInfo(acix, course_no, function (r_form) {
 	    var url = "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php";
 	    var form = {
@@ -53432,7 +53433,7 @@
 	      new_dept: "",
 	      new_class: "",
 	      chks: "",
-	      aspr: r_form.aspr,
+	      aspr: aspr,
 	      ckey: r_form.ckey,
 	      code: r_form.code,
 	      div: r_form.div,
@@ -53463,20 +53464,18 @@
 	      decode_data = decode_data.replace("<img src=\"templates/pic1.gif\" width=\"351\" height=\"30\">", "");
 	      temp.innerHTML = decode_data;
 	
-	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
+	      var alert = "無任何警告訊息";
+	      if ($(temp).text().indexOf("session is interrupted!") >= 0 || $(temp).text().indexOf("Time longer than permitted!") >= 0) {
 	        $("#session_alert").modal("show");
+	        $("#send_to_nthu_loading").removeClass("active");
 	      } else if ($(temp).text().indexOf("alert") >= 0) {
-	        var origin = $("script:contains('alert')", temp).first().text();
-	        console.log(course_no);
-	        console.log.apply(console, $(temp));
-	        console.log(form);
-	        console.log(origin);
+	        alert = $("script:contains('alert')", temp).first().text();
 	
-	        var message = origin.split("'")[1];
+	        var message = alert.split("'")[1];
 	        var success_in_random = "加選此科目僅列入亂數處理!";
 	        if (message.indexOf(success_in_random) >= 0) {
 	          var isSuccess = true;
-	          callback(isSuccess, success_in_random);
+	          callback(isSuccess, message);
 	        } else {
 	          var _isSuccess = false;
 	          callback(_isSuccess, message);
@@ -53485,15 +53484,21 @@
 	        var _isSuccess2 = true;
 	        callback(_isSuccess2, "無任何警告訊息");
 	      }
+	      console.log(course_no);
+	      console.log.apply(console, $(temp));
+	      console.log(form);
+	      console.log(alert);
+	      console.log("\n");
 	    });
 	  });
 	}
 	
 	function callSelectEachCourse(acix, course_num, count, callback) {
 	  if (count > course_num) return;
-	  var course_no = course_no_list[count - 1];
+	  var course_no_order = course_list[count - 1];
+	  var course_no = course_no_order.course_no;
 	  $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
-	  selectEachCourse(acix, course_no, function (isSuccess, message) {
+	  selectEachCourse(acix, course_no_order, function (isSuccess, message) {
 	    if (isSuccess == true) correct_list.push({ course_no: course_no, message: message });else wrong_list.push({ course_no: course_no, message: message });
 	
 	    callback(count);
@@ -53506,11 +53511,12 @@
 	  var count = 1;
 	  correct_list = [];
 	  wrong_list = [];
-	  course_no_list = [];
+	  course_list = [];
 	
 	  for (var key in cart) {
 	    var course_no = cart[key].course_no;
-	    course_no_list.push(course_no);
+	    var order = cart[key].order;
+	    course_list.push({ course_no: course_no, order: order });
 	  }
 	  callSelectEachCourse(acix, course_num, count, callback);
 	}
@@ -53582,7 +53588,6 @@
 	      var course_num = Object.keys(items.cart).length;
 	      selectAllCourse(acix, course_num, items.cart, function (count) {
 	        if (count == course_num) {
-	          console.log("Finish Select All Course !");
 	          chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
 	            chrome.tabs.reload(tabs[0].id);
 	            removeSuccessSelectCourse(acix, function () {

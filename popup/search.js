@@ -146,13 +146,17 @@ function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
   let search_topic = translateTopic(topic);
 
   if (other_keyword == "NoNeedToChoose") {
-    console.log("search_topic:", search_topic);
-    console.log("keyword:", keyword);
+    console.log("search_topic:", search_topic, ",keyword:", keyword);
     searchOnlyKeyword(search_topic, keyword, callback);
   } else {
-    console.log("search_topic:", search_topic);
-    console.log("keyword:", keyword);
-    console.log("other_keyword:", other_keyword);
+    console.log(
+      "search_topic:",
+      search_topic,
+      ",keyword:",
+      keyword,
+      ",other_keyword:",
+      other_keyword
+    );
     if (search_topic == "時間")
       searchTime(search_topic, keyword, other_keyword, callback);
     else searchDoubleKeyword(search_topic, keyword, other_keyword, callback);

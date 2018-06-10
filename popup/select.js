@@ -1,7 +1,7 @@
 import { getCart } from "./cart";
 var correct_list = [];
 var wrong_list = [];
-var course_no_list = [];
+var course_list = [];
 
 function serialize(obj) {
   let str = [];
@@ -12,6 +12,7 @@ function serialize(obj) {
   return str.join("&");
 }
 
+// FIXME: 體育有分 PE、PE1、PE3 等
 function getCourseFormInfo(acix, course_no, callback) {
   let patt = /[A-Za-z]+/;
   let target = course_no.match(patt);
@@ -80,7 +81,10 @@ function getCourseFormInfo(acix, course_no, callback) {
     });
 }
 
-function selectEachCourse(acix, course_no, callback) {
+function selectEachCourse(acix, course_no_order, callback) {
+  let course_no = course_no_order.course_no;
+  let aspr = course_no_order.order;
+  if (aspr == "-1") aspr = "";
   getCourseFormInfo(acix, course_no, function(r_form) {
     let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
     let form = {
@@ -89,7 +93,7 @@ function selectEachCourse(acix, course_no, callback) {
       new_dept: "",
       new_class: "",
       chks: "",
-      aspr: r_form.aspr,
+      aspr: aspr,
       ckey: r_form.ckey,
       code: r_form.code,
       div: r_form.div,
@@ -123,30 +127,31 @@ function selectEachCourse(acix, course_no, callback) {
         );
         temp.innerHTML = decode_data;
 
+        let alert = "無任何警告訊息";
         if (
           $(temp)
             .text()
-            .indexOf("session is interrupted!") >= 0
+            .indexOf("session is interrupted!") >= 0 ||
+          $(temp)
+            .text()
+            .indexOf("Time longer than permitted!") >= 0
         ) {
           $("#session_alert").modal("show");
+          $("#send_to_nthu_loading").removeClass("active");
         } else if (
           $(temp)
             .text()
             .indexOf("alert") >= 0
         ) {
-          let origin = $("script:contains('alert')", temp)
+          alert = $("script:contains('alert')", temp)
             .first()
             .text();
-          console.log(course_no);
-          console.log.apply(console, $(temp));
-          console.log(form);
-          console.log(origin);
 
-          let message = origin.split("'")[1];
+          let message = alert.split("'")[1];
           let success_in_random = "加選此科目僅列入亂數處理!";
           if (message.indexOf(success_in_random) >= 0) {
             let isSuccess = true;
-            callback(isSuccess, success_in_random);
+            callback(isSuccess, message);
           } else {
             let isSuccess = false;
             callback(isSuccess, message);
@@ -155,15 +160,21 @@ function selectEachCourse(acix, course_no, callback) {
           let isSuccess = true;
           callback(isSuccess, "無任何警告訊息");
         }
+        console.log(course_no);
+        console.log.apply(console, $(temp));
+        console.log(form);
+        console.log(alert);
+        console.log("\n");
       });
   });
 }
 
 function callSelectEachCourse(acix, course_num, count, callback) {
   if (count > course_num) return;
-  let course_no = course_no_list[count - 1];
+  let course_no_order = course_list[count - 1];
+  let course_no = course_no_order.course_no;
   $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
-  selectEachCourse(acix, course_no, function(isSuccess, message) {
+  selectEachCourse(acix, course_no_order, function(isSuccess, message) {
     if (isSuccess == true) correct_list.push({ course_no, message });
     else wrong_list.push({ course_no, message });
 
@@ -177,11 +188,12 @@ function selectAllCourse(acix, course_num, cart, callback) {
   let count = 1;
   correct_list = [];
   wrong_list = [];
-  course_no_list = [];
+  course_list = [];
 
   for (let key in cart) {
     let course_no = cart[key].course_no;
-    course_no_list.push(course_no);
+    let order = cart[key].order;
+    course_list.push({ course_no, order });
   }
   callSelectEachCourse(acix, course_num, count, callback);
 }
@@ -265,7 +277,6 @@ function submitToNTHU(acix) {
       const course_num = Object.keys(items.cart).length;
       selectAllCourse(acix, course_num, items.cart, function(count) {
         if (count == course_num) {
-          console.log("Finish Select All Course !");
           chrome.tabs.query(
             { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
             function(tabs) {
