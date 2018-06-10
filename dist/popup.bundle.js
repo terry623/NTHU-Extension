@@ -139,6 +139,7 @@
 	        // getGrade(acix, stu_no);
 	
 	        chrome.webRequest.onBeforeSendHeaders.addListener(function (details) {
+	          console.log("\n");
 	          console.log(details);
 	          var headers = details.requestHeaders;
 	          var blockingResponse = {};
@@ -315,7 +316,6 @@
 	    } else if ($(this).hasClass("choosePage")) {
 	      t.not(".choosePage").hide();
 	
-	      // TODO: 要能夠 Refresh 校務資訊系統的課表
 	      $("#change_school_table").show();
 	    } else if ($(this).hasClass("recommendPage")) {
 	      // t.not(".recommendPage").hide();
@@ -53399,6 +53399,7 @@
 	
 	      var input = void 0;
 	      if ($("td:nth-child(1) > div > input.btn2", found).length > 0) input = $("td:nth-child(1) > div > input.btn2", found);else input = $("td:nth-child(1) > div > input", found);
+	
 	      var input_array = $(input).attr("onclick").split(";");
 	      var check = input_array[1].split("'");
 	      var _form = {
@@ -53415,15 +53416,14 @@
 	        pre: check[19],
 	        range: check[21]
 	      };
-	      console.log.apply(console, $(input));
-	      console.log(_form);
+	      // console.log.apply(console, $(input));
+	      // console.log(form);
 	      callback(_form);
 	    }
 	  });
 	}
 	
 	function selectEachCourse(acix, course_no, callback) {
-	  console.log(course_no);
 	  getCourseFormInfo(acix, course_no, function (r_form) {
 	    var url = "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php";
 	    var form = {
@@ -53462,12 +53462,14 @@
 	      var decode_data = new TextDecoder("big5").decode(data);
 	      decode_data = decode_data.replace("<img src=\"templates/pic1.gif\" width=\"351\" height=\"30\">", "");
 	      temp.innerHTML = decode_data;
-	      console.log.apply(console, $(temp));
+	
 	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
 	        $("#session_alert").modal("show");
 	      } else if ($(temp).text().indexOf("alert") >= 0) {
 	        var origin = $("script:contains('alert')", temp).first().text();
-	        // console.log.apply(console, $(origin));
+	        console.log(course_no);
+	        console.log.apply(console, $(temp));
+	        console.log(form);
 	        console.log(origin);
 	
 	        var message = origin.split("'")[1];
@@ -53554,8 +53556,8 @@
 	    $("#select_course_status").append("<div class=\"item\">\u6210\u529F\uFF1A</div>");
 	    for (var each in correct_list) {
 	      var message = correct_list[each].message.match(patt);
-	      console.log(correct_list[each].message);
-	      console.log(message);
+	      // console.log(correct_list[each].message);
+	      // console.log(message);
 	      var content = "<div class=\"item\">" + correct_list[each].course_no + " ( " + message + " )" + "</div>";
 	      $("#select_course_status").append(content);
 	    }
@@ -53564,8 +53566,8 @@
 	    $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");
 	    for (var _each in wrong_list) {
 	      var _message = wrong_list[_each].message.match(patt);
-	      console.log(wrong_list[_each].message);
-	      console.log(_message);
+	      // console.log(wrong_list[each].message);
+	      // console.log(message);
 	      var _content = "<div class=\"item\">" + wrong_list[_each].course_no + " ( " + _message + " )" + "</div>";
 	      $("#select_course_status").append(_content);
 	    }
@@ -53581,9 +53583,12 @@
 	      selectAllCourse(acix, course_num, items.cart, function (count) {
 	        if (count == course_num) {
 	          console.log("Finish Select All Course !");
-	          removeSuccessSelectCourse(acix, function () {
-	            showCourseModal(function () {
-	              $("#send_to_nthu_loading").removeClass("active");
+	          chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
+	            chrome.tabs.reload(tabs[0].id);
+	            removeSuccessSelectCourse(acix, function () {
+	              showCourseModal(function () {
+	                $("#send_to_nthu_loading").removeClass("active");
+	              });
 	            });
 	          });
 	        }

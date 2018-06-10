@@ -54,6 +54,7 @@ function getCourseFormInfo(acix, course_no, callback) {
         if ($("td:nth-child(1) > div > input.btn2", found).length > 0)
           input = $("td:nth-child(1) > div > input.btn2", found);
         else input = $("td:nth-child(1) > div > input", found);
+
         let input_array = $(input)
           .attr("onclick")
           .split(";");
@@ -72,15 +73,14 @@ function getCourseFormInfo(acix, course_no, callback) {
           pre: check[19],
           range: check[21]
         };
-        console.log.apply(console, $(input));
-        console.log(form);
+        // console.log.apply(console, $(input));
+        // console.log(form);
         callback(form);
       }
     });
 }
 
 function selectEachCourse(acix, course_no, callback) {
-  console.log(course_no);
   getCourseFormInfo(acix, course_no, function(r_form) {
     let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
     let form = {
@@ -122,7 +122,7 @@ function selectEachCourse(acix, course_no, callback) {
           ``
         );
         temp.innerHTML = decode_data;
-        console.log.apply(console, $(temp));
+
         if (
           $(temp)
             .text()
@@ -137,7 +137,9 @@ function selectEachCourse(acix, course_no, callback) {
           let origin = $("script:contains('alert')", temp)
             .first()
             .text();
-          // console.log.apply(console, $(origin));
+          console.log(course_no);
+          console.log.apply(console, $(temp));
+          console.log(form);
           console.log(origin);
 
           let message = origin.split("'")[1];
@@ -225,8 +227,8 @@ function showCourseModal(callback) {
     $("#select_course_status").append(`<div class="item">成功：</div>`);
     for (let each in correct_list) {
       let message = correct_list[each].message.match(patt);
-      console.log(correct_list[each].message);
-      console.log(message);
+      // console.log(correct_list[each].message);
+      // console.log(message);
       let content =
         `<div class="item">` +
         correct_list[each].course_no +
@@ -241,8 +243,8 @@ function showCourseModal(callback) {
     $("#select_course_status").append(`<div class="item">失敗：</div>`);
     for (let each in wrong_list) {
       let message = wrong_list[each].message.match(patt);
-      console.log(wrong_list[each].message);
-      console.log(message);
+      // console.log(wrong_list[each].message);
+      // console.log(message);
       let content =
         `<div class="item">` +
         wrong_list[each].course_no +
@@ -264,11 +266,17 @@ function submitToNTHU(acix) {
       selectAllCourse(acix, course_num, items.cart, function(count) {
         if (count == course_num) {
           console.log("Finish Select All Course !");
-          removeSuccessSelectCourse(acix, function() {
-            showCourseModal(function() {
-              $("#send_to_nthu_loading").removeClass("active");
-            });
-          });
+          chrome.tabs.query(
+            { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
+            function(tabs) {
+              chrome.tabs.reload(tabs[0].id);
+              removeSuccessSelectCourse(acix, function() {
+                showCourseModal(function() {
+                  $("#send_to_nthu_loading").removeClass("active");
+                });
+              });
+            }
+          );
         }
       });
     } else {

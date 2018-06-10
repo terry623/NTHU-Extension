@@ -46,6 +46,7 @@ $(document).ready(function() {
 
           chrome.webRequest.onBeforeSendHeaders.addListener(
             function(details) {
+              console.log("\n");
               console.log(details);
               var headers = details.requestHeaders;
               var blockingResponse = {};
@@ -252,7 +253,6 @@ $(".ui.secondary.menu").on("click", ".item", function() {
     } else if ($(this).hasClass("choosePage")) {
       t.not(".choosePage").hide();
 
-      // TODO: 要能夠 Refresh 校務資訊系統的課表
       $("#change_school_table").show();
     } else if ($(this).hasClass("recommendPage")) {
       // t.not(".recommendPage").hide();
