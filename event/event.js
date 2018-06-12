@@ -1,8 +1,10 @@
 //指定比對的url：不允許片段表達式
 //例如： *://*.google.com.tw/* 作為查詢字串不被接受因為host是一個片段表達式
-// var urlPattern = "*://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php";
-var urlPattern =
-  "*://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php?*";
+
+// FIXME: 選取正確的網址
+// var urlPattern =
+//   "*://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php?*";
+var urlPattern = "*://www.ccxp.nthu.edu.tw/ccxp/*";
 
 //利用 tabs.query api 查找畫面上的所有tab
 function queryTabsAndShowPageActions(queryObject) {

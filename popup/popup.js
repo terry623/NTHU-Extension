@@ -10,7 +10,7 @@ import {
 import { getCart } from "./cart";
 import { getCurrentStateOfNTHU } from "./server";
 import { submitToNTHU, storeOrderToStorage } from "./select";
-import { removeTimeOfCourse } from "./conflict";
+import { removeTimeOfCourse, clearAllTime } from "./conflict";
 // import {
 //   getRecommendPage,
 //   toStorage,
@@ -32,17 +32,18 @@ $(document).ready(function() {
     function(tabs) {
       acix = getUrlVars(tabs[0].url)["ACIXSTORE"];
       stu_no = getUrlVars(tabs[0].url)["hint"];
+      clearAllTime();
 
       $("#home_loading").addClass("active");
-      getUserName(acix, function() {
+      getUserName(function() {
         getCurrentStateOfNTHU(function(phase) {
           $(".content_item.homePage").show();
           $("#home_loading").removeClass("active");
           if (phase != undefined) {
-            getResultCourse(acix, stu_no, phase, year, semester);
+            getResultCourse(stu_no, phase, year, semester);
           } else $("#change_phase").addClass("disabled");
-          getCart(acix);
-          // getGrade(acix, stu_no);
+          getCart();
+          // getGrade(stu_no);
 
           chrome.webRequest.onBeforeSendHeaders.addListener(
             function(details) {
@@ -71,13 +72,13 @@ $(document).ready(function() {
   );
 });
 
-chrome.storage.local.clear(function() {
-  console.log("Clear Local Data");
-  var error = chrome.runtime.lastError;
-  if (error) {
-    console.error(error);
-  }
-});
+// chrome.storage.local.clear(function() {
+//   console.log("Clear Local Data");
+//   var error = chrome.runtime.lastError;
+//   if (error) {
+//     console.error(error);
+//   }
+// });
 
 $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
@@ -125,7 +126,7 @@ $("#submit").on("click", function() {
         chrome.storage.local.set({ cart: temp }, function() {
           chrome.storage.local.get("cart", function(items) {
             // console.log(items);
-            getCart(acix);
+            getCart();
           });
         });
       });
@@ -134,7 +135,7 @@ $("#submit").on("click", function() {
       chrome.storage.local.set({ cart: temp }, function() {
         chrome.storage.local.get("cart", function(items) {
           // console.log(items);
-          getCart(acix);
+          getCart();
         });
       });
     }
@@ -153,7 +154,7 @@ $("#delete").on("click", function() {
       chrome.storage.local.set({ cart: temp }, function() {
         chrome.storage.local.get("cart", function(items) {
           // console.log(items);
-          getCart(acix);
+          getCart();
         });
       });
     });
@@ -165,7 +166,6 @@ $("#search_result_body").on("click", "tr", function() {
   let course_from_click = $("td:nth-child(1)", this).text();
   let course_id = $(this).attr("id");
   getCourseInfo(
-    acix,
     course_from_click,
     course_id,
     function() {
@@ -179,11 +179,11 @@ $("#search_result_body").on("click", "tr", function() {
 });
 $("#keyword").keypress(function(e) {
   if (e.which == 13) {
-    clickToSearch(acix);
+    clickToSearch();
   }
 });
 $("#clicktosearch").on("click", function() {
-  clickToSearch(acix);
+  clickToSearch();
 });
 $("#search_page_change").on("click", ".page.item", function() {
   $(this)
@@ -201,7 +201,7 @@ $("#search_page_change").on("click", ".page.item", function() {
 $("#change_phase").dropdown({
   on: "click",
   action: function(text, value) {
-    getResultCourse(acix, stu_no, value, year, semester, function() {
+    getResultCourse(stu_no, value, year, semester, function() {
       $("#course_result_loading").removeClass("active");
     });
     $("#change_phase").dropdown("set text", text);
@@ -258,12 +258,12 @@ $(".ui.secondary.menu").on("click", ".item", function() {
       // before_hits_group.length = 0;
       // compare_group.length = 0;
       // let content_group = [];
-      // getRecommendPage(acix, function() {
+      // getRecommendPage(function() {
       //   if (
       //     before_hits_group.length ==
       //     num_of_old_course * num_of_each_similar
       //   ) {
-      //     toStorage(acix, function(content, count, compare_value) {
+      //     toStorage(function(content, count, compare_value) {
       //       content_group.push({ content, compare_value });
       //       if (count == num_of_old_course * num_of_each_similar - 1) {
       //         content_group.sort(function(a, b) {
@@ -295,7 +295,6 @@ $("#multiple_class_list").on("click", ".item", function() {
   let course_no = $(this).attr("course_no");
   let id = $(this).attr("id");
   getCourseInfo(
-    acix,
     course_no,
     id,
     function() {
@@ -311,7 +310,6 @@ $("#multiple_class_bySingle").on("click", ".item", function() {
   searchBySingleCourseNo(course_no, function(hits) {
     storeCourseInfo(hits, function() {
       getCourseInfo(
-        acix,
         course_no,
         hits[0]._id,
         function() {
@@ -342,7 +340,7 @@ $("#cart_submit").on("click", function() {
     $("#course_order").modal("show");
   } else {
     $("#send_to_nthu_loading").addClass("active");
-    submitToNTHU(acix);
+    submitToNTHU();
   }
 });
 $("#send_to_nthu").on("click", function() {
@@ -359,14 +357,13 @@ $("#send_to_nthu").on("click", function() {
     course_id_group.push({ course_id, order });
   });
   storeOrderToStorage(course_id_group, function() {
-    submitToNTHU(acix);
+    submitToNTHU();
   });
 });
 // $("#recommend_list").on("click", ".item", function() {
 //   let course_no = $(this).attr("course_no");
 //   let id = $(this).attr("id");
 //   getCourseInfo(
-//     acix,
 //     course_no,
 //     id,
 //     function() {
@@ -378,3 +375,5 @@ $("#send_to_nthu").on("click", function() {
 //     false
 //   );
 // });
+
+export { acix };

@@ -4,8 +4,9 @@ import { transform } from "./pdf2html";
 // import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourseNo, storeCourseInfo } from "./search";
 import { course_table, removeLongCourseName, sort_weekday } from "./helper";
+import { acix } from "./popup";
 
-function getUserName(acix, callback) {
+function getUserName(callback) {
   request(
     {
       url:
@@ -39,7 +40,7 @@ function getUserName(acix, callback) {
   );
 }
 
-function getPopulation(acix, course_no, fresh_num) {
+function getPopulation(course_no, fresh_num) {
   let patt = /[A-Za-z]+/;
   let target = course_no.match(patt);
   $(".fetch_people").text("Loading");
@@ -114,7 +115,7 @@ function getPopulation(acix, course_no, fresh_num) {
   );
 }
 
-function getCourseInfo(acix, course_no, id, callback, from_multiple) {
+function getCourseInfo(course_no, id, callback, from_multiple) {
   if (course_no == undefined) return;
   if (!from_multiple) $("#course_info_loading").addClass("active");
   request(
@@ -176,7 +177,7 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
             sort_weekday(time);
             let classroom = info.教室;
             if (classroom.length == 0) classroom.push("無");
-            getPopulation(acix, course_no, info.新生保留人數);
+            getPopulation(course_no, info.新生保留人數);
             $(".course_info.scrolling.content").attr("id", id);
 
             let teacher = [];
@@ -245,7 +246,7 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
   );
 }
 
-// function getCourseDescription(acix, course_no, callback) {
+// function getCourseDescription(course_no, callback) {
 //   if (course_no == undefined) return;
 //   request(
 //     {
@@ -281,7 +282,7 @@ function getCourseInfo(acix, course_no, id, callback, from_multiple) {
 //   );
 // }
 
-function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
+function getResultCourse(stu_no, phaseNo, year, term, callback) {
   if (callback) $("#course_result_loading").addClass("active");
   request.post(
     {
@@ -372,7 +373,6 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
               searchBySingleCourseNo(course_no, function(hits) {
                 storeCourseInfo(hits, function() {
                   getCourseInfo(
-                    acix,
                     course_no,
                     hits[0]._id,
                     function() {
@@ -393,7 +393,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
   );
 }
 
-// function getGrade(acix, stu_no) {
+// function getGrade(stu_no) {
 //   request(
 //     {
 //       url:
@@ -436,7 +436,7 @@ function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
 //               }
 //             }
 //           });
-//           calculateUserGrade(acix, stu_no, userGrade);
+//           calculateUserGrade(stu_no, userGrade);
 //         }
 //       }
 //     }

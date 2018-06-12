@@ -1,5 +1,6 @@
 import { getCart } from "./cart";
 import { removeTimeOfCourse } from "./conflict";
+import { acix } from "./popup";
 
 var correct_list = [];
 var wrong_list = [];
@@ -15,7 +16,7 @@ function serialize(obj) {
 }
 
 // FIXME: 體育有分 PE、PE1、PE3 等
-function getCourseFormInfo(acix, course_no, callback) {
+function getCourseFormInfo(course_no, callback) {
   let patt = /[A-Za-z]+/;
   let target = course_no.match(patt);
 
@@ -53,42 +54,63 @@ function getCourseFormInfo(acix, course_no, callback) {
           return $("td:nth-child(2) > div", this).text() == course_no;
         });
 
-        let input;
+        let input, form;
         if ($("td:nth-child(1) > div > input.btn2", found).length > 0)
           input = $("td:nth-child(1) > div > input.btn2", found);
         else input = $("td:nth-child(1) > div > input", found);
 
-        let input_array = $(input)
-          .attr("onclick")
-          .split(";");
-        let check = input_array[1].split("'");
-        let form = {
-          aspr: "",
-          ckey: check[1],
-          code: check[3],
-          div: check[5],
-          real: check[7],
-          cred: check[9],
-          ctime: check[11],
-          num: check[13],
-          glimit: check[15],
-          type: check[17],
-          pre: check[19],
-          range: check[21]
-        };
-        // console.log.apply(console, $(input));
-        // console.log(form);
+        if ($(input).length != 0) {
+          // 正式選課
+          let input_array = $(input)
+            .attr("onclick")
+            .split(";");
+          let check = input_array[1].split("'");
+          form = {
+            aspr: "",
+            ckey: check[1],
+            code: check[3],
+            div: check[5],
+            real: check[7],
+            cred: check[9],
+            ctime: check[11],
+            num: check[13],
+            glimit: check[15],
+            type: check[17],
+            pre: check[19],
+            range: check[21]
+          };
+        } else {
+          // 預排系統
+          form = {
+            aspr: "",
+            ckey: course_no,
+            code: "",
+            div: "",
+            real: "",
+            cred: "",
+            ctime: "",
+            num: "",
+            glimit: "",
+            type: "",
+            pre: "",
+            range: ""
+          };
+        }
         callback(form);
       }
     });
 }
 
-function selectEachCourse(acix, course_no_order, callback) {
+function selectEachCourse(course_no_order, callback) {
   let course_no = course_no_order.course_no;
   let aspr = course_no_order.order;
   if (aspr == "-1") aspr = "";
-  getCourseFormInfo(acix, course_no, function(r_form) {
-    let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+  getCourseFormInfo(course_no, function(r_form) {
+    // 正式選課
+    // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+    // 預排系統
+    let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php`;
+
     let form = {
       ACIXSTORE: acix,
       toChk: "",
@@ -128,6 +150,7 @@ function selectEachCourse(acix, course_no_order, callback) {
           ``
         );
         temp.innerHTML = decode_data;
+        console.log.apply(console, $(temp));
 
         let alert = "無任何警告訊息";
         if (
@@ -171,22 +194,22 @@ function selectEachCourse(acix, course_no_order, callback) {
   });
 }
 
-function callSelectEachCourse(acix, course_num, count, callback) {
+function callSelectEachCourse(course_num, count, callback) {
   if (count > course_num) return;
   let course_no_order = course_list[count - 1];
   let course_no = course_no_order.course_no;
   $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
-  selectEachCourse(acix, course_no_order, function(isSuccess, message) {
+  selectEachCourse(course_no_order, function(isSuccess, message) {
     if (isSuccess == true) correct_list.push({ course_no, message });
     else wrong_list.push({ course_no, message });
 
     callback(count);
     count++;
-    callSelectEachCourse(acix, course_num, count, callback);
+    callSelectEachCourse(course_num, count, callback);
   });
 }
 
-function selectAllCourse(acix, course_num, cart, callback) {
+function selectAllCourse(course_num, cart, callback) {
   let count = 1;
   correct_list = [];
   wrong_list = [];
@@ -197,7 +220,7 @@ function selectAllCourse(acix, course_num, cart, callback) {
     let order = cart[key].order;
     course_list.push({ course_no, order });
   }
-  callSelectEachCourse(acix, course_num, count, callback);
+  callSelectEachCourse(course_num, count, callback);
 }
 
 function findIdFromObject(obj, course_no) {
@@ -213,8 +236,7 @@ function findIdFromObject(obj, course_no) {
   return id;
 }
 
-// TODO: 也要把在 time 中對應的移除，不然就直接重新抓 time 就好
-function removeSuccessSelectCourse(acix, callback) {
+function removeSuccessSelectCourse(callback) {
   chrome.storage.local.get("cart", function(items) {
     let temp = {};
     Object.assign(temp, items.cart);
@@ -227,7 +249,7 @@ function removeSuccessSelectCourse(acix, callback) {
       chrome.storage.local.set({ cart: temp }, function() {
         chrome.storage.local.get("cart", function(items) {
           // console.log(items);
-          getCart(acix);
+          getCart();
           callback();
         });
       });
@@ -274,17 +296,18 @@ function showCourseModal(callback) {
   callback();
 }
 
-function submitToNTHU(acix) {
+function submitToNTHU() {
   chrome.storage.local.get("cart", function(items) {
     if (items.cart != undefined) {
       const course_num = Object.keys(items.cart).length;
-      selectAllCourse(acix, course_num, items.cart, function(count) {
+      selectAllCourse(course_num, items.cart, function(count) {
         if (count == course_num) {
           chrome.tabs.query(
             { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
             function(tabs) {
+              // FIXME: 正式選課時要註解
               chrome.tabs.reload(tabs[0].id);
-              removeSuccessSelectCourse(acix, function() {
+              removeSuccessSelectCourse(function() {
                 showCourseModal(function() {
                   $("#send_to_nthu_loading").removeClass("active");
                 });

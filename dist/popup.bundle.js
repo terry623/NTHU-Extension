@@ -91,6 +91,11 @@
 
 	"use strict";
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.acix = undefined;
+	
 	var _helper = __webpack_require__(3);
 	
 	var _api = __webpack_require__(4);
@@ -124,19 +129,20 @@
 	$(document).ready(function () {
 	  $(".content_item").hide();
 	  chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
-	    acix = (0, _helper.getUrlVars)(tabs[0].url)["ACIXSTORE"];
+	    exports.acix = acix = (0, _helper.getUrlVars)(tabs[0].url)["ACIXSTORE"];
 	    stu_no = (0, _helper.getUrlVars)(tabs[0].url)["hint"];
+	    (0, _conflict.clearAllTime)();
 	
 	    $("#home_loading").addClass("active");
-	    (0, _api.getUserName)(acix, function () {
+	    (0, _api.getUserName)(function () {
 	      (0, _server.getCurrentStateOfNTHU)(function (phase) {
 	        $(".content_item.homePage").show();
 	        $("#home_loading").removeClass("active");
 	        if (phase != undefined) {
-	          (0, _api.getResultCourse)(acix, stu_no, phase, year, semester);
+	          (0, _api.getResultCourse)(stu_no, phase, year, semester);
 	        } else $("#change_phase").addClass("disabled");
-	        (0, _cart.getCart)(acix);
-	        // getGrade(acix, stu_no);
+	        (0, _cart.getCart)();
+	        // getGrade(stu_no);
 	
 	        chrome.webRequest.onBeforeSendHeaders.addListener(function (details) {
 	          console.log(details);
@@ -156,13 +162,13 @@
 	  });
 	});
 	
-	chrome.storage.local.clear(function () {
-	  console.log("Clear Local Data");
-	  var error = chrome.runtime.lastError;
-	  if (error) {
-	    console.error(error);
-	  }
-	});
+	// chrome.storage.local.clear(function() {
+	//   console.log("Clear Local Data");
+	//   var error = chrome.runtime.lastError;
+	//   if (error) {
+	//     console.error(error);
+	//   }
+	// });
 	
 	$(".ui.accordion").accordion();
 	$(".ui.dropdown").dropdown();
@@ -203,7 +209,7 @@
 	        chrome.storage.local.set({ cart: temp }, function () {
 	          chrome.storage.local.get("cart", function (items) {
 	            // console.log(items);
-	            (0, _cart.getCart)(acix);
+	            (0, _cart.getCart)();
 	          });
 	        });
 	      });
@@ -212,7 +218,7 @@
 	      chrome.storage.local.set({ cart: temp }, function () {
 	        chrome.storage.local.get("cart", function (items) {
 	          // console.log(items);
-	          (0, _cart.getCart)(acix);
+	          (0, _cart.getCart)();
 	        });
 	      });
 	    }
@@ -231,7 +237,7 @@
 	      chrome.storage.local.set({ cart: temp }, function () {
 	        chrome.storage.local.get("cart", function (items) {
 	          // console.log(items);
-	          (0, _cart.getCart)(acix);
+	          (0, _cart.getCart)();
 	        });
 	      });
 	    });
@@ -242,7 +248,7 @@
 	  $(this).css("cursor", "pointer");
 	  var course_from_click = $("td:nth-child(1)", this).text();
 	  var course_id = $(this).attr("id");
-	  (0, _api.getCourseInfo)(acix, course_from_click, course_id, function () {
+	  (0, _api.getCourseInfo)(course_from_click, course_id, function () {
 	    $(".course_action").hide();
 	    $("#submit").show();
 	    $("#back").show();
@@ -251,11 +257,11 @@
 	});
 	$("#keyword").keypress(function (e) {
 	  if (e.which == 13) {
-	    (0, _search.clickToSearch)(acix);
+	    (0, _search.clickToSearch)();
 	  }
 	});
 	$("#clicktosearch").on("click", function () {
-	  (0, _search.clickToSearch)(acix);
+	  (0, _search.clickToSearch)();
 	});
 	$("#search_page_change").on("click", ".page.item", function () {
 	  $(this).addClass("active").siblings(".item").removeClass("active");
@@ -267,7 +273,7 @@
 	$("#change_phase").dropdown({
 	  on: "click",
 	  action: function action(text, value) {
-	    (0, _api.getResultCourse)(acix, stu_no, value, year, semester, function () {
+	    (0, _api.getResultCourse)(stu_no, value, year, semester, function () {
 	      $("#course_result_loading").removeClass("active");
 	    });
 	    $("#change_phase").dropdown("set text", text);
@@ -321,12 +327,12 @@
 	      // before_hits_group.length = 0;
 	      // compare_group.length = 0;
 	      // let content_group = [];
-	      // getRecommendPage(acix, function() {
+	      // getRecommendPage(function() {
 	      //   if (
 	      //     before_hits_group.length ==
 	      //     num_of_old_course * num_of_each_similar
 	      //   ) {
-	      //     toStorage(acix, function(content, count, compare_value) {
+	      //     toStorage(function(content, count, compare_value) {
 	      //       content_group.push({ content, compare_value });
 	      //       if (count == num_of_old_course * num_of_each_similar - 1) {
 	      //         content_group.sort(function(a, b) {
@@ -357,7 +363,7 @@
 	$("#multiple_class_list").on("click", ".item", function () {
 	  var course_no = $(this).attr("course_no");
 	  var id = $(this).attr("id");
-	  (0, _api.getCourseInfo)(acix, course_no, id, function () {
+	  (0, _api.getCourseInfo)(course_no, id, function () {
 	    $(".course_action").hide();
 	    $("#delete").show();
 	    $("#back").show();
@@ -367,7 +373,7 @@
 	  var course_no = $(this).attr("course_no");
 	  (0, _search.searchBySingleCourseNo)(course_no, function (hits) {
 	    (0, _search.storeCourseInfo)(hits, function () {
-	      (0, _api.getCourseInfo)(acix, course_no, hits[0]._id, function () {
+	      (0, _api.getCourseInfo)(course_no, hits[0]._id, function () {
 	        $(".course_action").hide();
 	      }, true);
 	    });
@@ -389,7 +395,7 @@
 	    $("#course_order").modal("show");
 	  } else {
 	    $("#send_to_nthu_loading").addClass("active");
-	    (0, _select.submitToNTHU)(acix);
+	    (0, _select.submitToNTHU)();
 	  }
 	});
 	$("#send_to_nthu").on("click", function () {
@@ -404,14 +410,13 @@
 	    course_id_group.push({ course_id: course_id, order: order });
 	  });
 	  (0, _select.storeOrderToStorage)(course_id_group, function () {
-	    (0, _select.submitToNTHU)(acix);
+	    (0, _select.submitToNTHU)();
 	  });
 	});
 	// $("#recommend_list").on("click", ".item", function() {
 	//   let course_no = $(this).attr("course_no");
 	//   let id = $(this).attr("id");
 	//   getCourseInfo(
-	//     acix,
 	//     course_no,
 	//     id,
 	//     function() {
@@ -423,6 +428,8 @@
 	//     false
 	//   );
 	// });
+	
+	exports.acix = acix;
 
 /***/ }),
 /* 3 */
@@ -593,14 +600,16 @@
 	
 	var _helper = __webpack_require__(3);
 	
+	var _popup = __webpack_require__(2);
+	
 	var iconv = __webpack_require__(266);
 	var request = __webpack_require__(12);
 	// import { calculateUserGrade, getSimilarities } from "./server";
 	
 	
-	function getUserName(acix, callback) {
+	function getUserName(callback) {
 	  request({
-	    url: "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/4/4.19/JH4j002.php?ACIXSTORE=" + acix,
+	    url: "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/4/4.19/JH4j002.php?ACIXSTORE=" + _popup.acix,
 	    encoding: null
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
@@ -620,7 +629,7 @@
 	  });
 	}
 	
-	function getPopulation(acix, course_no, fresh_num) {
+	function getPopulation(course_no, fresh_num) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt);
 	  $(".fetch_people").text("Loading");
@@ -628,7 +637,7 @@
 	  request.post({
 	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.7/JH727002.php",
 	    form: {
-	      ACIXSTORE: acix,
+	      ACIXSTORE: _popup.acix,
 	      select: target[0],
 	      act: "1",
 	      Submit: "確定 go"
@@ -677,11 +686,11 @@
 	  });
 	}
 	
-	function getCourseInfo(acix, course_no, id, callback, from_multiple) {
+	function getCourseInfo(course_no, id, callback, from_multiple) {
 	  if (course_no == undefined) return;
 	  if (!from_multiple) $("#course_info_loading").addClass("active");
 	  request({
-	    url: "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=" + acix + "&c_key=" + course_no,
+	    url: "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=" + _popup.acix + "&c_key=" + course_no,
 	    encoding: null
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
@@ -720,7 +729,7 @@
 	          (0, _helper.sort_weekday)(time);
 	          var classroom = info.教室;
 	          if (classroom.length == 0) classroom.push("無");
-	          getPopulation(acix, course_no, info.新生保留人數);
+	          getPopulation(course_no, info.新生保留人數);
 	          $(".course_info.scrolling.content").attr("id", id);
 	
 	          var teacher = [];
@@ -754,7 +763,7 @@
 	            var ran = Math.floor(Math.random() * 100 + 1);
 	            var pdf_path = "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
 	            $("#pdf_page").html("<div id=\"pdf_render\" align=\"right\" style=\"display:none;\">\n                        <button id=\"prev\" class=\"tiny ui basic button\">\n                            <i class=\"angle left icon\"></i>\n                        </button>\n                        <button id=\"next\" class=\"tiny ui basic button\">\n                            <i class=\"angle right icon\"></i>\n                        </button>\n                        &nbsp; &nbsp;\n                        <span>Page:\n                            <span id=\"page_num\" ></span> /\n                            <span id=\"page_count\"></span>\n                        </span>\n                    </div>\n                    <canvas id=\"the-canvas\" />\n                    ");
-	            (0, _pdf2html.transform)(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
+	            (0, _pdf2html.transform)(pdf_path + course_no + ".pdf?ACIXSTORE=" + _popup.acix);
 	          } else $("#syllabus").html(syllabus.html());
 	
 	          for (var i = 0; i < $("#class_accordion > div").length / 2; i++) {
@@ -767,7 +776,7 @@
 	  });
 	}
 	
-	// function getCourseDescription(acix, course_no, callback) {
+	// function getCourseDescription(course_no, callback) {
 	//   if (course_no == undefined) return;
 	//   request(
 	//     {
@@ -803,12 +812,12 @@
 	//   );
 	// }
 	
-	function getResultCourse(acix, stu_no, phaseNo, year, term, callback) {
+	function getResultCourse(stu_no, phaseNo, year, term, callback) {
 	  if (callback) $("#course_result_loading").addClass("active");
 	  request.post({
 	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.9/JH729002.php",
 	    form: {
-	      ACIXSTORE: acix,
+	      ACIXSTORE: _popup.acix,
 	      stu_no: stu_no,
 	      phaseNo: phaseNo,
 	      year: year,
@@ -865,7 +874,7 @@
 	            var course_no = $("a", this).attr("course_no");
 	            (0, _search.searchBySingleCourseNo)(course_no, function (hits) {
 	              (0, _search.storeCourseInfo)(hits, function () {
-	                getCourseInfo(acix, course_no, hits[0]._id, function () {
+	                getCourseInfo(course_no, hits[0]._id, function () {
 	                  $(".course_action").hide();
 	                  $("#course_info_loading").removeClass("active");
 	                }, false);
@@ -880,7 +889,7 @@
 	  });
 	}
 	
-	// function getGrade(acix, stu_no) {
+	// function getGrade(stu_no) {
 	//   request(
 	//     {
 	//       url:
@@ -923,7 +932,7 @@
 	//               }
 	//             }
 	//           });
-	//           calculateUserGrade(acix, stu_no, userGrade);
+	//           calculateUserGrade(stu_no, userGrade);
 	//         }
 	//       }
 	//     }
@@ -3087,6 +3096,7 @@
 	  queueRenderPage(pageNum);
 	}
 	
+	// FIXME: 橫的 PDF 會壞掉，例如機器學習
 	function transform(url) {
 	  /**
 	   * Asynchronously downloads PDF.
@@ -3118,8 +3128,6 @@
 	  value: true
 	});
 	exports.baseURL = exports.dependOnType = exports.searchByID_Group = exports.storeCourseInfo = exports.searchBySingleCourseNo = exports.clickToSearch = undefined;
-	
-	var _api = __webpack_require__(4);
 	
 	var _helper = __webpack_require__(3);
 	
@@ -3231,7 +3239,7 @@
 	  });
 	}
 	
-	function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
+	function searchByKeyword(keyword, other_keyword, topic, callback) {
 	  $("#search_result_body").empty();
 	  $("#search_loading").addClass("active");
 	  var search_topic = (0, _helper.translateTopic)(topic);
@@ -3344,7 +3352,7 @@
 	  if (topic == "上課時間") $("#time_select_entry").show();else if (topic == "通識對象") $("#ge_people_entry").show();else if (topic == "通識類別") $("#ge_type_select_entry").show();else if (topic == "系必選修") $("#dept_entry").show();else if (topic == "學分學程") $("#program_entry").show();else if (topic == "第一二專長") $("#skill_entry").show();else $("#main_other_entry").show();
 	}
 	
-	function clickToSearch(acix) {
+	function clickToSearch() {
 	  var topic = $("#topic_name").text();
 	  var keyword = $("#keyword").val();
 	  var other_keyword = "NoNeedToChoose";
@@ -3371,7 +3379,7 @@
 	      return;
 	    }
 	  }
-	  searchByKeyword(acix, keyword, other_keyword, topic, function () {
+	  searchByKeyword(keyword, other_keyword, topic, function () {
 	    $("#search_loading").removeClass("active");
 	    $("#search_result_page").show();
 	  });
@@ -3395,7 +3403,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.removeTimeOfCourse = exports.checkConflict = exports.storeSliceTime = undefined;
+	exports.clearAllTime = exports.removeTimeOfCourse = exports.checkConflict = exports.storeSliceTime = undefined;
 	
 	var _helper = __webpack_require__(3);
 	
@@ -3473,9 +3481,14 @@
 	  });
 	}
 	
+	function clearAllTime() {
+	  chrome.storage.local.remove("time", function () {});
+	}
+	
 	exports.storeSliceTime = storeSliceTime;
 	exports.checkConflict = checkConflict;
 	exports.removeTimeOfCourse = removeTimeOfCourse;
+	exports.clearAllTime = clearAllTime;
 
 /***/ }),
 /* 12 */
@@ -8540,7 +8553,7 @@
 /* 34 */
 /***/ (function(module, exports) {
 
-	module.exports = {"_args":[["tough-cookie@2.3.4","D:\\SideProject\\nthu-extension"]],"_from":"tough-cookie@2.3.4","_id":"tough-cookie@2.3.4","_inBundle":false,"_integrity":"sha512-TZ6TTfI5NtZnuyy/Kecv+CnoROnyXn2DN97LontgQpCwsX2XyLYCC0ENhYkehSOwAp8rTQKc/NUIF7BkQ5rKLA==","_location":"/tough-cookie","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"tough-cookie@2.3.4","name":"tough-cookie","escapedName":"tough-cookie","rawSpec":"2.3.4","saveSpec":null,"fetchSpec":"2.3.4"},"_requiredBy":["/request"],"_resolved":"https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.4.tgz","_spec":"2.3.4","_where":"D:\\SideProject\\nthu-extension","author":{"name":"Jeremy Stashewsky","email":"jstashewsky@salesforce.com"},"bugs":{"url":"https://github.com/salesforce/tough-cookie/issues"},"contributors":[{"name":"Alexander Savin"},{"name":"Ian Livingstone"},{"name":"Ivan Nikulin"},{"name":"Lalit Kapoor"},{"name":"Sam Thompson"},{"name":"Sebastian Mayr"}],"dependencies":{"punycode":"^1.4.1"},"description":"RFC6265 Cookies and Cookie Jar for node.js","devDependencies":{"async":"^1.4.2","string.prototype.repeat":"^0.2.0","vows":"^0.8.1"},"engines":{"node":">=0.8"},"files":["lib"],"homepage":"https://github.com/salesforce/tough-cookie","keywords":["HTTP","cookie","cookies","set-cookie","cookiejar","jar","RFC6265","RFC2965"],"license":"BSD-3-Clause","main":"./lib/cookie","name":"tough-cookie","repository":{"type":"git","url":"git://github.com/salesforce/tough-cookie.git"},"scripts":{"suffixup":"curl -o public_suffix_list.dat https://publicsuffix.org/list/public_suffix_list.dat && ./generate-pubsuffix.js","test":"vows test/*_test.js"},"version":"2.3.4"}
+	module.exports = {"_from":"tough-cookie@~2.3.3","_id":"tough-cookie@2.3.4","_inBundle":false,"_integrity":"sha512-TZ6TTfI5NtZnuyy/Kecv+CnoROnyXn2DN97LontgQpCwsX2XyLYCC0ENhYkehSOwAp8rTQKc/NUIF7BkQ5rKLA==","_location":"/tough-cookie","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"tough-cookie@~2.3.3","name":"tough-cookie","escapedName":"tough-cookie","rawSpec":"~2.3.3","saveSpec":null,"fetchSpec":"~2.3.3"},"_requiredBy":["/request"],"_resolved":"https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.4.tgz","_shasum":"ec60cee38ac675063ffc97a5c18970578ee83655","_spec":"tough-cookie@~2.3.3","_where":"D:\\SideProject\\nthu-extension\\node_modules\\request","author":{"name":"Jeremy Stashewsky","email":"jstashewsky@salesforce.com"},"bugs":{"url":"https://github.com/salesforce/tough-cookie/issues"},"bundleDependencies":false,"contributors":[{"name":"Alexander Savin"},{"name":"Ian Livingstone"},{"name":"Ivan Nikulin"},{"name":"Lalit Kapoor"},{"name":"Sam Thompson"},{"name":"Sebastian Mayr"}],"dependencies":{"punycode":"^1.4.1"},"deprecated":false,"description":"RFC6265 Cookies and Cookie Jar for node.js","devDependencies":{"async":"^1.4.2","string.prototype.repeat":"^0.2.0","vows":"^0.8.1"},"engines":{"node":">=0.8"},"files":["lib"],"homepage":"https://github.com/salesforce/tough-cookie","keywords":["HTTP","cookie","cookies","set-cookie","cookiejar","jar","RFC6265","RFC2965"],"license":"BSD-3-Clause","main":"./lib/cookie","name":"tough-cookie","repository":{"type":"git","url":"git://github.com/salesforce/tough-cookie.git"},"scripts":{"suffixup":"curl -o public_suffix_list.dat https://publicsuffix.org/list/public_suffix_list.dat && ./generate-pubsuffix.js","test":"vows test/*_test.js"},"version":"2.3.4"}
 
 /***/ }),
 /* 35 */
@@ -52946,7 +52959,7 @@
 	
 	var _conflict = __webpack_require__(11);
 	
-	function getCart(acix) {
+	function getCart() {
 	  chrome.storage.local.get("cart", function (items) {
 	    var parse_table = $.parseHTML(_helper.course_table);
 	    $(parse_table).attr("id", "cart");
@@ -52991,7 +53004,7 @@
 	      } else {
 	        var course_no = $("a", this).attr("course_no");
 	        var id = $("a", this).attr("id");
-	        (0, _api.getCourseInfo)(acix, course_no, id, function () {
+	        (0, _api.getCourseInfo)(course_no, id, function () {
 	          $(".course_action").hide();
 	          $("#delete").show();
 	          $("#back").show();
@@ -53027,11 +53040,13 @@
 	
 	var _search = __webpack_require__(10);
 	
-	var iconv = __webpack_require__(266);
+	// var iconv = require("iconv-lite");
 	var request = __webpack_require__(12);
 	
+	// import { acix } from "./popup";
 	
-	// function calculateUserGrade(acix, stu_no, userGrade) {
+	
+	// function calculateUserGrade(stu_no, userGrade) {
 	//   var all_pr = {};
 	//   for (let course_no in userGrade) {
 	//     let grade = userGrade[course_no];
@@ -53051,7 +53066,7 @@
 	//       NotYet: 12,
 	//       All: 13
 	//     };
-	//     getGradeDistribution(acix, course_no, function(distribution) {
+	//     getGradeDistribution(course_no, function(distribution) {
 	//       var user_grade_people = 0;
 	//       for (let i = 0; i <= translateMap[grade]; i++)
 	//         user_grade_people += distribution[i];
@@ -53088,7 +53103,7 @@
 	//   }
 	// }
 	
-	// function getGradeDistribution(acix, course_no, callback) {
+	// function getGradeDistribution(course_no, callback) {
 	//   request(
 	//     {
 	//       url:
@@ -53240,7 +53255,7 @@
 	      break;
 	    case 2:
 	      tran_phase = "100P";
-	      default_text = "第 1 次選課亂數結果";
+	      default_text = "第 1 次選課結束(已亂數處理)";
 	      break;
 	    case 4:
 	      tran_phase = "101";
@@ -53248,7 +53263,7 @@
 	      break;
 	    case 5:
 	      tran_phase = "101P";
-	      default_text = "第 2 次選課 log 記錄";
+	      default_text = "第 2 次選課結束(已亂數處理)";
 	      break;
 	    case 7:
 	      tran_phase = "200";
@@ -53276,6 +53291,7 @@
 	  return tran_phase;
 	}
 	
+	// FIXME: 在選課的最後一天，就開始倒數下一次選課剩幾天，且亂數結果的按鈕也秀出來了
 	function getCurrentStateOfNTHU(callback) {
 	  var datetime = new Date();
 	  var year = datetime.getFullYear();
@@ -53350,6 +53366,8 @@
 	
 	var _conflict = __webpack_require__(11);
 	
+	var _popup = __webpack_require__(2);
+	
 	var correct_list = [];
 	var wrong_list = [];
 	var course_list = [];
@@ -53364,13 +53382,13 @@
 	}
 	
 	// FIXME: 體育有分 PE、PE1、PE3 等
-	function getCourseFormInfo(acix, course_no, callback) {
+	function getCourseFormInfo(course_no, callback) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt);
 	
 	  var url = "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php";
 	  var form = {
-	    ACIXSTORE: acix,
+	    ACIXSTORE: _popup.acix,
 	    toChk: 1,
 	    new_dept: target[0]
 	  };
@@ -53397,40 +53415,62 @@
 	        return $("td:nth-child(2) > div", this).text() == course_no;
 	      });
 	
-	      var input = void 0;
+	      var input = void 0,
+	          _form = void 0;
 	      if ($("td:nth-child(1) > div > input.btn2", found).length > 0) input = $("td:nth-child(1) > div > input.btn2", found);else input = $("td:nth-child(1) > div > input", found);
 	
-	      var input_array = $(input).attr("onclick").split(";");
-	      var check = input_array[1].split("'");
-	      var _form = {
-	        aspr: "",
-	        ckey: check[1],
-	        code: check[3],
-	        div: check[5],
-	        real: check[7],
-	        cred: check[9],
-	        ctime: check[11],
-	        num: check[13],
-	        glimit: check[15],
-	        type: check[17],
-	        pre: check[19],
-	        range: check[21]
-	      };
-	      // console.log.apply(console, $(input));
-	      // console.log(form);
+	      if ($(input).length != 0) {
+	        // 正式選課
+	        var input_array = $(input).attr("onclick").split(";");
+	        var check = input_array[1].split("'");
+	        _form = {
+	          aspr: "",
+	          ckey: check[1],
+	          code: check[3],
+	          div: check[5],
+	          real: check[7],
+	          cred: check[9],
+	          ctime: check[11],
+	          num: check[13],
+	          glimit: check[15],
+	          type: check[17],
+	          pre: check[19],
+	          range: check[21]
+	        };
+	      } else {
+	        // 預排系統
+	        _form = {
+	          aspr: "",
+	          ckey: course_no,
+	          code: "",
+	          div: "",
+	          real: "",
+	          cred: "",
+	          ctime: "",
+	          num: "",
+	          glimit: "",
+	          type: "",
+	          pre: "",
+	          range: ""
+	        };
+	      }
 	      callback(_form);
 	    }
 	  });
 	}
 	
-	function selectEachCourse(acix, course_no_order, callback) {
+	function selectEachCourse(course_no_order, callback) {
 	  var course_no = course_no_order.course_no;
 	  var aspr = course_no_order.order;
 	  if (aspr == "-1") aspr = "";
-	  getCourseFormInfo(acix, course_no, function (r_form) {
-	    var url = "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php";
+	  getCourseFormInfo(course_no, function (r_form) {
+	    // 正式選課
+	    // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+	    // 預排系統
+	    var url = "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php";
+	
 	    var form = {
-	      ACIXSTORE: acix,
+	      ACIXSTORE: _popup.acix,
 	      toChk: "",
 	      new_dept: "",
 	      new_class: "",
@@ -53465,6 +53505,7 @@
 	      var decode_data = new TextDecoder("big5").decode(data);
 	      decode_data = decode_data.replace("<img src=\"templates/pic1.gif\" width=\"351\" height=\"30\">", "");
 	      temp.innerHTML = decode_data;
+	      console.log.apply(console, $(temp));
 	
 	      var alert = "無任何警告訊息";
 	      if ($(temp).text().indexOf("session is interrupted!") >= 0 || $(temp).text().indexOf("Time longer than permitted!") >= 0) {
@@ -53495,21 +53536,21 @@
 	  });
 	}
 	
-	function callSelectEachCourse(acix, course_num, count, callback) {
+	function callSelectEachCourse(course_num, count, callback) {
 	  if (count > course_num) return;
 	  var course_no_order = course_list[count - 1];
 	  var course_no = course_no_order.course_no;
 	  $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
-	  selectEachCourse(acix, course_no_order, function (isSuccess, message) {
+	  selectEachCourse(course_no_order, function (isSuccess, message) {
 	    if (isSuccess == true) correct_list.push({ course_no: course_no, message: message });else wrong_list.push({ course_no: course_no, message: message });
 	
 	    callback(count);
 	    count++;
-	    callSelectEachCourse(acix, course_num, count, callback);
+	    callSelectEachCourse(course_num, count, callback);
 	  });
 	}
 	
-	function selectAllCourse(acix, course_num, cart, callback) {
+	function selectAllCourse(course_num, cart, callback) {
 	  var count = 1;
 	  correct_list = [];
 	  wrong_list = [];
@@ -53520,7 +53561,7 @@
 	    var order = cart[key].order;
 	    course_list.push({ course_no: course_no, order: order });
 	  }
-	  callSelectEachCourse(acix, course_num, count, callback);
+	  callSelectEachCourse(course_num, count, callback);
 	}
 	
 	function findIdFromObject(obj, course_no) {
@@ -53536,8 +53577,7 @@
 	  return id;
 	}
 	
-	// TODO: 也要把在 time 中對應的移除，不然就直接重新抓 time 就好
-	function removeSuccessSelectCourse(acix, callback) {
+	function removeSuccessSelectCourse(callback) {
 	  chrome.storage.local.get("cart", function (items) {
 	    var temp = {};
 	    Object.assign(temp, items.cart);
@@ -53550,7 +53590,7 @@
 	      chrome.storage.local.set({ cart: temp }, function () {
 	        chrome.storage.local.get("cart", function (items) {
 	          // console.log(items);
-	          (0, _cart.getCart)(acix);
+	          (0, _cart.getCart)();
 	          callback();
 	        });
 	      });
@@ -53585,15 +53625,16 @@
 	  callback();
 	}
 	
-	function submitToNTHU(acix) {
+	function submitToNTHU() {
 	  chrome.storage.local.get("cart", function (items) {
 	    if (items.cart != undefined) {
 	      var course_num = Object.keys(items.cart).length;
-	      selectAllCourse(acix, course_num, items.cart, function (count) {
+	      selectAllCourse(course_num, items.cart, function (count) {
 	        if (count == course_num) {
 	          chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
+	            // FIXME: 正式選課時要註解
 	            chrome.tabs.reload(tabs[0].id);
-	            removeSuccessSelectCourse(acix, function () {
+	            removeSuccessSelectCourse(function () {
 	              showCourseModal(function () {
 	                $("#send_to_nthu_loading").removeClass("active");
 	              });

@@ -43,7 +43,8 @@ function checkConflict(time_array, callback) {
     let conflict = false;
     if (items.time != undefined) {
       for (let each in time_array) {
-        if (items.time[time_array[each]] != 0 && time_array[each]!="無") conflict = true;
+        if (items.time[time_array[each]] != 0 && time_array[each] != "無")
+          conflict = true;
       }
       if (conflict) {
         const negative = `class="error"`;
@@ -72,4 +73,8 @@ function removeTimeOfCourse(time_array) {
   });
 }
 
-export { storeSliceTime, checkConflict, removeTimeOfCourse };
+function clearAllTime() {
+  chrome.storage.local.remove("time", function() {});
+}
+
+export { storeSliceTime, checkConflict, removeTimeOfCourse, clearAllTime };

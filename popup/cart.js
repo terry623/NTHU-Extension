@@ -2,7 +2,7 @@ import { getCourseInfo } from "./api";
 import { course_table } from "./helper";
 import { storeSliceTime } from "./conflict";
 
-function getCart(acix) {
+function getCart() {
   chrome.storage.local.get("cart", function(items) {
     let parse_table = $.parseHTML(course_table);
     $(parse_table).attr("id", "cart");
@@ -70,7 +70,6 @@ function getCart(acix) {
         let course_no = $("a", this).attr("course_no");
         let id = $("a", this).attr("id");
         getCourseInfo(
-          acix,
           course_no,
           id,
           function() {

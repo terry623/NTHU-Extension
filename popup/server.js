@@ -1,8 +1,10 @@
-var iconv = require("iconv-lite");
+// var iconv = require("iconv-lite");
 var request = require("request");
 import { baseURL } from "./search";
+// import { acix } from "./popup";
 
-// function calculateUserGrade(acix, stu_no, userGrade) {
+
+// function calculateUserGrade(stu_no, userGrade) {
 //   var all_pr = {};
 //   for (let course_no in userGrade) {
 //     let grade = userGrade[course_no];
@@ -22,7 +24,7 @@ import { baseURL } from "./search";
 //       NotYet: 12,
 //       All: 13
 //     };
-//     getGradeDistribution(acix, course_no, function(distribution) {
+//     getGradeDistribution(course_no, function(distribution) {
 //       var user_grade_people = 0;
 //       for (let i = 0; i <= translateMap[grade]; i++)
 //         user_grade_people += distribution[i];
@@ -59,7 +61,7 @@ import { baseURL } from "./search";
 //   }
 // }
 
-// function getGradeDistribution(acix, course_no, callback) {
+// function getGradeDistribution(course_no, callback) {
 //   request(
 //     {
 //       url:
@@ -214,7 +216,7 @@ function currentPhase(phase) {
       break;
     case 2:
       tran_phase = "100P";
-      default_text = "第 1 次選課亂數結果";
+      default_text = "第 1 次選課結束(已亂數處理)";
       break;
     case 4:
       tran_phase = "101";
@@ -222,7 +224,7 @@ function currentPhase(phase) {
       break;
     case 5:
       tran_phase = "101P";
-      default_text = "第 2 次選課 log 記錄";
+      default_text = "第 2 次選課結束(已亂數處理)";
       break;
     case 7:
       tran_phase = "200";
@@ -250,6 +252,7 @@ function currentPhase(phase) {
   return tran_phase;
 }
 
+// FIXME: 在選課的最後一天，就開始倒數下一次選課剩幾天，且亂數結果的按鈕也秀出來了
 function getCurrentStateOfNTHU(callback) {
   let datetime = new Date();
   let year = datetime.getFullYear();

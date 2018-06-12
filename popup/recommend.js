@@ -44,7 +44,7 @@
 //   return arr;
 // }
 
-// function getRecommendPage(acix, callback) {
+// function getRecommendPage(callback) {
 //   $("#recommend_loading").addClass("active");
 //   $("#recommend_list").empty();
 //   chrome.storage.local.get("pr", function(items) {
@@ -88,7 +88,7 @@
 //   });
 // }
 
-// function toStorage(acix, callback) {
+// function toStorage(callback) {
 //   // console.log("before_hits_group");
 //   // console.log(before_hits_group);
 //   var hits_group = [];
@@ -109,7 +109,7 @@
 //       let id = hits_group[count]._id;
 //       let source = hits_group[count]._source;
 //       let course_no = source.科號;
-//       getCourseDescription(acix, course_no, function(description) {
+//       getCourseDescription(course_no, function(description) {
 //         let match = compare_group.find(function(item) {
 //           return item.other_id == id;
 //         });

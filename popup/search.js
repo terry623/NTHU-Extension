@@ -1,4 +1,3 @@
-import { getCourseInfo } from "./api";
 import { translateTopic, sort_weekday, addSpace_course_no } from "./helper";
 import { checkConflict } from "./conflict";
 var request = require("request");
@@ -140,7 +139,7 @@ function searchTime(search_topic, keyword, time_group, callback) {
   );
 }
 
-function searchByKeyword(acix, keyword, other_keyword, topic, callback) {
+function searchByKeyword(keyword, other_keyword, topic, callback) {
   $("#search_result_body").empty();
   $("#search_loading").addClass("active");
   let search_topic = translateTopic(topic);
@@ -273,7 +272,7 @@ function dependOnType(topic) {
   else $("#main_other_entry").show();
 }
 
-function clickToSearch(acix) {
+function clickToSearch() {
   let topic = $("#topic_name").text();
   let keyword = $("#keyword").val();
   let other_keyword = "NoNeedToChoose";
@@ -300,7 +299,7 @@ function clickToSearch(acix) {
       return;
     }
   }
-  searchByKeyword(acix, keyword, other_keyword, topic, function() {
+  searchByKeyword(keyword, other_keyword, topic, function() {
     $("#search_loading").removeClass("active");
     $("#search_result_page").show();
   });

@@ -88,6 +88,7 @@ function onNextPage() {
   queueRenderPage(pageNum);
 }
 
+// FIXME: 橫的 PDF 會壞掉，例如機器學習
 function transform(url) {
   /**
    * Asynchronously downloads PDF.
