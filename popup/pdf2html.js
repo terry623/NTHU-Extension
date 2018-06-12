@@ -17,15 +17,15 @@ var pdfDoc = null,
   canvas,
   ctx;
 
-/**
- * Get page info from document, resize canvas accordingly, and render page.
- * @param num Page number.
- */
 function renderPage(num) {
   pageRendering = true;
   // Using promise to fetch the page
   pdfDoc.getPage(num).then(function(page) {
     var viewport = page.getViewport(scale);
+    if (viewport.width > viewport.height) {
+      scale = 0.69;
+      viewport = page.getViewport(scale);
+    }
     canvas.height = viewport.height;
     canvas.width = viewport.width;
     // canvas.height = 707.844;
@@ -88,7 +88,6 @@ function onNextPage() {
   queueRenderPage(pageNum);
 }
 
-// FIXME: 橫的 PDF 會壞掉，例如機器學習
 function transform(url) {
   /**
    * Asynchronously downloads PDF.

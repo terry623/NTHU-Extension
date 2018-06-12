@@ -3025,15 +3025,15 @@
 	    canvas,
 	    ctx;
 	
-	/**
-	 * Get page info from document, resize canvas accordingly, and render page.
-	 * @param num Page number.
-	 */
 	function renderPage(num) {
 	  pageRendering = true;
 	  // Using promise to fetch the page
 	  pdfDoc.getPage(num).then(function (page) {
 	    var viewport = page.getViewport(scale);
+	    if (viewport.width > viewport.height) {
+	      scale = 0.69;
+	      viewport = page.getViewport(scale);
+	    }
 	    canvas.height = viewport.height;
 	    canvas.width = viewport.width;
 	    // canvas.height = 707.844;
@@ -3096,7 +3096,6 @@
 	  queueRenderPage(pageNum);
 	}
 	
-	// FIXME: 橫的 PDF 會壞掉，例如機器學習
 	function transform(url) {
 	  /**
 	   * Asynchronously downloads PDF.
@@ -53045,7 +53044,6 @@
 	
 	// import { acix } from "./popup";
 	
-	
 	// function calculateUserGrade(stu_no, userGrade) {
 	//   var all_pr = {};
 	//   for (let course_no in userGrade) {
@@ -53291,7 +53289,6 @@
 	  return tran_phase;
 	}
 	
-	// FIXME: 在選課的最後一天，就開始倒數下一次選課剩幾天，且亂數結果的按鈕也秀出來了
 	function getCurrentStateOfNTHU(callback) {
 	  var datetime = new Date();
 	  var year = datetime.getFullYear();
@@ -53463,11 +53460,15 @@
 	  var course_no = course_no_order.course_no;
 	  var aspr = course_no_order.order;
 	  if (aspr == "-1") aspr = "";
+	
 	  getCourseFormInfo(course_no, function (r_form) {
-	    // 正式選課
-	    // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+	    // TODO: 選擇要正式選課還是預排系統
 	    // 預排系統
 	    var url = "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php";
+	    var needReload = false;
+	    // 正式選課
+	    // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+	    // let needReload = true;
 	
 	    var form = {
 	      ACIXSTORE: _popup.acix,
@@ -53518,10 +53519,10 @@
 	        var success_in_random = "加選此科目僅列入亂數處理!";
 	        if (message.indexOf(success_in_random) >= 0) {
 	          var isSuccess = true;
-	          callback(isSuccess, message);
+	          callback(isSuccess, message, needReload);
 	        } else {
 	          var _isSuccess = false;
-	          callback(_isSuccess, message);
+	          callback(_isSuccess, message, needReload);
 	        }
 	      } else {
 	        var _isSuccess2 = true;
@@ -53541,10 +53542,10 @@
 	  var course_no_order = course_list[count - 1];
 	  var course_no = course_no_order.course_no;
 	  $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
-	  selectEachCourse(course_no_order, function (isSuccess, message) {
+	  selectEachCourse(course_no_order, function (isSuccess, message, needReload) {
 	    if (isSuccess == true) correct_list.push({ course_no: course_no, message: message });else wrong_list.push({ course_no: course_no, message: message });
 	
-	    callback(count);
+	    callback(count, needReload);
 	    count++;
 	    callSelectEachCourse(course_num, count, callback);
 	  });
@@ -53629,11 +53630,10 @@
 	  chrome.storage.local.get("cart", function (items) {
 	    if (items.cart != undefined) {
 	      var course_num = Object.keys(items.cart).length;
-	      selectAllCourse(course_num, items.cart, function (count) {
+	      selectAllCourse(course_num, items.cart, function (count, needReload) {
 	        if (count == course_num) {
 	          chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
-	            // FIXME: 正式選課時要註解
-	            chrome.tabs.reload(tabs[0].id);
+	            if (needReload == true) chrome.tabs.reload(tabs[0].id);
 	            removeSuccessSelectCourse(function () {
 	              showCourseModal(function () {
 	                $("#send_to_nthu_loading").removeClass("active");

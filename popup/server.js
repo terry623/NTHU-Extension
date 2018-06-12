@@ -3,7 +3,6 @@ var request = require("request");
 import { baseURL } from "./search";
 // import { acix } from "./popup";
 
-
 // function calculateUserGrade(stu_no, userGrade) {
 //   var all_pr = {};
 //   for (let course_no in userGrade) {
@@ -252,7 +251,6 @@ function currentPhase(phase) {
   return tran_phase;
 }
 
-// FIXME: 在選課的最後一天，就開始倒數下一次選課剩幾天，且亂數結果的按鈕也秀出來了
 function getCurrentStateOfNTHU(callback) {
   let datetime = new Date();
   let year = datetime.getFullYear();

@@ -105,11 +105,15 @@ function selectEachCourse(course_no_order, callback) {
   let course_no = course_no_order.course_no;
   let aspr = course_no_order.order;
   if (aspr == "-1") aspr = "";
+
   getCourseFormInfo(course_no, function(r_form) {
-    // 正式選課
-    // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+    // TODO: 選擇要正式選課還是預排系統
     // 預排系統
     let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php`;
+    let needReload = false;
+    // 正式選課
+    // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+    // let needReload = true;
 
     let form = {
       ACIXSTORE: acix,
@@ -176,10 +180,10 @@ function selectEachCourse(course_no_order, callback) {
           let success_in_random = "加選此科目僅列入亂數處理!";
           if (message.indexOf(success_in_random) >= 0) {
             let isSuccess = true;
-            callback(isSuccess, message);
+            callback(isSuccess, message, needReload);
           } else {
             let isSuccess = false;
-            callback(isSuccess, message);
+            callback(isSuccess, message, needReload);
           }
         } else {
           let isSuccess = true;
@@ -199,11 +203,11 @@ function callSelectEachCourse(course_num, count, callback) {
   let course_no_order = course_list[count - 1];
   let course_no = course_no_order.course_no;
   $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
-  selectEachCourse(course_no_order, function(isSuccess, message) {
+  selectEachCourse(course_no_order, function(isSuccess, message, needReload) {
     if (isSuccess == true) correct_list.push({ course_no, message });
     else wrong_list.push({ course_no, message });
 
-    callback(count);
+    callback(count, needReload);
     count++;
     callSelectEachCourse(course_num, count, callback);
   });
@@ -300,13 +304,12 @@ function submitToNTHU() {
   chrome.storage.local.get("cart", function(items) {
     if (items.cart != undefined) {
       const course_num = Object.keys(items.cart).length;
-      selectAllCourse(course_num, items.cart, function(count) {
+      selectAllCourse(course_num, items.cart, function(count, needReload) {
         if (count == course_num) {
           chrome.tabs.query(
             { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
             function(tabs) {
-              // FIXME: 正式選課時要註解
-              chrome.tabs.reload(tabs[0].id);
+              if (needReload == true) chrome.tabs.reload(tabs[0].id);
               removeSuccessSelectCourse(function() {
                 showCourseModal(function() {
                   $("#send_to_nthu_loading").removeClass("active");
