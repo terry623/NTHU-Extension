@@ -1,5 +1,10 @@
 import { translateTopic, sort_weekday, addSpace_course_no } from "./helper";
 import { checkConflict } from "./conflict";
+import { search_result_num } from "./popup";
+import { getCart } from "./cart";
+import { removeTimeOfCourse } from "./conflict";
+import { getCourseInfo } from "./api";
+
 var request = require("request");
 const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
 // const baseURL = `http://192.168.99.100/api/`;
@@ -307,11 +312,132 @@ function clickToSearch() {
   $("#search_page_change > a:nth-child(2)").addClass("active");
 }
 
+$(".course_type.browse").popup({
+  popup: $(".ui.course_type.popup"),
+  position: "bottom left",
+  on: "click"
+});
+$(".ui.course_type.popup").on("click", ".item", function() {
+  dependOnType($(this).text());
+  $("#keyword").val("");
+  $("#topic_name").text($(this).text());
+  $(".ui.course_type.popup").popup("hide all");
+  $(".other_entry_dropdown").dropdown("show");
+});
+$("#submit").on("click", function() {
+  chrome.storage.local.get("cart", function(items) {
+    let get_course_id = $(".course_info.scrolling.content").attr("id");
+    let temp = {};
+    let time_array = $("#time")
+      .text()
+      .split(",");
+    let order = "-1";
+
+    if (
+      $("#GE_type").text() != "" ||
+      $("#no")
+        .text()
+        .includes("PE")
+    ) {
+      order = 0;
+    }
+
+    let data = {
+      course_no: $("#no").text(),
+      course_name: $("#course_name").text(),
+      time: time_array,
+      order: order
+    };
+
+    if (items.cart != undefined) {
+      if (items.cart.hasOwnProperty(get_course_id)) {
+        $("#already_in_cart").modal("show");
+        return;
+      }
+
+      Object.assign(temp, items.cart);
+      temp[get_course_id] = data;
+
+      chrome.storage.local.remove("cart", function() {
+        chrome.storage.local.set({ cart: temp }, function() {
+          chrome.storage.local.get("cart", function(items) {
+            // console.log(items);
+            getCart();
+          });
+        });
+      });
+    } else {
+      temp[get_course_id] = data;
+      chrome.storage.local.set({ cart: temp }, function() {
+        chrome.storage.local.get("cart", function(items) {
+          // console.log(items);
+          getCart();
+        });
+      });
+    }
+    $("#submit_to_list").modal("show");
+  });
+});
+$("#delete").on("click", function() {
+  chrome.storage.local.get("cart", function(items) {
+    var get_course_id = $(".course_info.scrolling.content").attr("id");
+    var temp = {};
+    Object.assign(temp, items.cart);
+    removeTimeOfCourse(temp[get_course_id].time);
+    delete temp[get_course_id];
+
+    chrome.storage.local.remove("cart", function() {
+      chrome.storage.local.set({ cart: temp }, function() {
+        chrome.storage.local.get("cart", function(items) {
+          // console.log(items);
+          getCart();
+        });
+      });
+    });
+    $("#delete_course_msg").modal("show");
+  });
+});
+$("#search_result_body").on("click", "tr", function() {
+  $(this).css("cursor", "pointer");
+  let course_from_click = $("td:nth-child(1)", this).text();
+  let course_id = $(this).attr("id");
+  getCourseInfo(
+    course_from_click,
+    course_id,
+    function() {
+      $(".course_action").hide();
+      $("#submit").show();
+      $("#back").show();
+      $("#course_info_loading").removeClass("active");
+    },
+    false
+  );
+});
+$("#keyword").keypress(function(e) {
+  if (e.which == 13) {
+    clickToSearch();
+  }
+});
+$("#clicktosearch").on("click", function() {
+  clickToSearch();
+});
+$("#search_page_change").on("click", ".page.item", function() {
+  $(this)
+    .addClass("active")
+    .siblings(".item")
+    .removeClass("active");
+  let start = (parseInt($(this).text()) - 1) * search_result_num;
+  $("#search_result_body  > tr")
+    .show()
+    .filter(function(index) {
+      return index < start || index >= start + search_result_num;
+    })
+    .hide();
+});
+
 export {
-  clickToSearch,
   searchBySingleCourseNo,
   storeCourseInfo,
   searchByID_Group,
-  dependOnType,
   baseURL
 };

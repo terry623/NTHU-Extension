@@ -346,4 +346,22 @@ function storeOrderToStorage(course_id_group, callback) {
   });
 }
 
-export { submitToNTHU, storeOrderToStorage };
+$("#send_to_nthu").on("click", function() {
+  let isSelect = $("#course_order_list > div > .number")
+    .first()
+    .text();
+  if (isSelect == 0) return;
+  $("#course_order").modal("hide");
+  $("#send_to_nthu_loading").addClass("active");
+  let course_id_group = [];
+  $("#course_order_list > div > .number").each(function() {
+    let course_id = $(this).attr("id");
+    let order = $(this).text();
+    course_id_group.push({ course_id, order });
+  });
+  storeOrderToStorage(course_id_group, function() {
+    submitToNTHU();
+  });
+});
+
+export { submitToNTHU };

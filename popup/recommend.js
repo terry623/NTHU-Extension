@@ -146,6 +146,22 @@
 //   });
 // }
 
+// $("#recommend_list").on("click", ".item", function() {
+//   let course_no = $(this).attr("course_no");
+//   let id = $(this).attr("id");
+//   getCourseInfo(
+//     course_no,
+//     id,
+//     function() {
+//       $(".course_action").hide();
+//       $("#submit").show();
+//       $("#back").show();
+//       $("#course_info_loading").removeClass("active");
+//     },
+//     false
+//   );
+// });
+
 // export {
 //   getRecommendPage,
 //   toStorage,

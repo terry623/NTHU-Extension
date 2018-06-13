@@ -1,6 +1,8 @@
-import { getCourseInfo } from "./api";
+import { getCourseInfo, getResultCourse } from "./api";
 import { course_table } from "./helper";
 import { storeSliceTime } from "./conflict";
+import { searchBySingleCourseNo, storeCourseInfo } from "./search";
+import { submitToNTHU } from "./select";
 
 function getCart() {
   chrome.storage.local.get("cart", function(items) {
@@ -106,5 +108,79 @@ function course_order_list(id, item, count) {
   }
   return count;
 }
+
+$("#change_school_table").on("click", ".item", function() {
+  if (!$(this).hasClass("dropdown")) {
+    let t = $(".ui.compact.table");
+    t.show();
+
+    if ($(this).hasClass("tab1")) {
+      t.not(".tab1").hide();
+      $("#cart_submit").hide();
+      $("#left_pointing_to_school").hide();
+      $("#change_phase").show();
+      $("#change_phase_text").show();
+      $("#change_phase_icon").show();
+    } else if ($(this).hasClass("tab2")) {
+      t.not(".tab2").hide();
+      $("#cart_submit").show();
+      $("#left_pointing_to_school").show();
+      $("#change_phase").hide();
+      $("#change_phase_text").hide();
+      $("#change_phase_icon").hide();
+    }
+  }
+});
+$("#multiple_class_list").on("click", ".item", function() {
+  let course_no = $(this).attr("course_no");
+  let id = $(this).attr("id");
+  getCourseInfo(
+    course_no,
+    id,
+    function() {
+      $(".course_action").hide();
+      $("#delete").show();
+      $("#back").show();
+    },
+    true
+  );
+});
+$("#multiple_class_bySingle").on("click", ".item", function() {
+  let course_no = $(this).attr("course_no");
+  searchBySingleCourseNo(course_no, function(hits) {
+    storeCourseInfo(hits, function() {
+      getCourseInfo(
+        course_no,
+        hits[0]._id,
+        function() {
+          $(".course_action").hide();
+        },
+        true
+      );
+    });
+  });
+});
+$("#cart_submit").on("click", function() {
+  // alert("此為內部測試版本，選完課請到「預排系統」查看 !");
+  let childNum = $("#course_order_list").attr("course_num");
+  if (childNum > 0) {
+    let list = document.getElementById("course_order_list");
+    Sortable.create(list, {
+      onUpdate: function(evt) {
+        $("#course_order_list > div > .number").each(function() {
+          $(this).text(
+            $(this)
+              .parent()
+              .index() + 1
+          );
+        });
+      }
+    });
+    $("#course_order").modal("show");
+  } else {
+    $("#send_to_nthu_loading").addClass("active");
+    submitToNTHU();
+  }
+});
 
 export { getCart };

@@ -283,6 +283,7 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
 // }
 
 function getResultCourse(stu_no, phaseNo, year, term, callback) {
+  console.log(stu_no, phaseNo, year, term);
   if (callback) $("#course_result_loading").addClass("active");
   request.post(
     {
@@ -370,6 +371,7 @@ function getResultCourse(stu_no, phaseNo, year, term, callback) {
               $("#multiple_class_bySingle").modal("show");
             } else {
               let course_no = $("a", this).attr("course_no");
+              $("#course_info_loading").addClass("active")
               searchBySingleCourseNo(course_no, function(hits) {
                 storeCourseInfo(hits, function() {
                   getCourseInfo(
