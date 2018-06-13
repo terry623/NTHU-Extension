@@ -61,9 +61,6 @@
 	//指定比對的url：不允許片段表達式
 	//例如： *://*.google.com.tw/* 作為查詢字串不被接受因為host是一個片段表達式
 	
-	// TODO: 選取要在哪個網址下開啟擴充功能
-	// var urlPattern =
-	//   "*://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php?*";
 	var urlPattern = "*://www.ccxp.nthu.edu.tw/ccxp/*";
 	
 	//利用 tabs.query api 查找畫面上的所有tab

@@ -282,6 +282,7 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
 //   );
 // }
 
+// TODO: 要加重新整理
 function getResultCourse(stu_no, phaseNo, year, term, callback) {
   if (callback) $("#course_result_loading").addClass("active");
   request.post(

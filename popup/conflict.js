@@ -40,6 +40,7 @@ function storeSliceTime(target_time) {
 
 function checkConflict(time_array, callback) {
   chrome.storage.local.get("time", function(items) {
+    if (time_array == "empty") callback();
     let conflict = false;
     if (items.time != undefined) {
       for (let each in time_array) {
@@ -73,6 +74,7 @@ function removeTimeOfCourse(time_array) {
   });
 }
 
+// TODO: 改成存 Variable，這樣也不能每次清
 function clearAllTime() {
   chrome.storage.local.remove("time", function() {});
 }

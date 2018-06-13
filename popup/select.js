@@ -15,17 +15,21 @@ function serialize(obj) {
   return str.join("&");
 }
 
-// FIXME: 體育有分 PE、PE1、PE3 等
 function getCourseFormInfo(course_no, callback) {
   let patt = /[A-Za-z]+/;
-  let target = course_no.match(patt);
+  let target = course_no.match(patt)[0];
+  if (target == "PE") {
+    let patt2 = /[0-9]+/g;
+    let pe_type = course_no.match(patt2)[1].substring(0, 1);
+    if (pe_type == "1" || pe_type == "3") target += pe_type;
+  }
 
   let url =
     "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php";
   let form = {
     ACIXSTORE: acix,
     toChk: 1,
-    new_dept: target[0]
+    new_dept: target
   };
   fetch(url, {
     method: "POST",
@@ -107,13 +111,12 @@ function selectEachCourse(course_no_order, callback) {
   if (aspr == "-1") aspr = "";
 
   getCourseFormInfo(course_no, function(r_form) {
-    // TODO: 選擇要正式選課還是預排系統
     // 預排系統
-    let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php`;
-    let needReload = false;
+    // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php`;
+    // let needReload = false;
     // 正式選課
-    // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
-    // let needReload = true;
+    let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
+    let needReload = true;
 
     let form = {
       ACIXSTORE: acix,
@@ -298,7 +301,11 @@ function showCourseModal(callback) {
 
 function submitToNTHU() {
   chrome.storage.local.get("cart", function(items) {
-    if (items.cart != undefined) {
+    if (items.cart == undefined) {
+      $("#send_to_nthu_loading").removeClass("active");
+      return;
+    }
+    if (Object.keys(items.cart).length != 0) {
       const course_num = Object.keys(items.cart).length;
       selectAllCourse(course_num, items.cart, function(count, needReload) {
         if (count == course_num) {
@@ -343,21 +350,32 @@ function storeOrderToStorage(course_id_group, callback) {
 }
 
 $("#send_to_nthu").on("click", function() {
-  let isSelect = $("#course_order_list > div > .number")
-    .first()
-    .text();
-  if (isSelect == 0) return;
-  $("#course_order").modal("hide");
-  $("#send_to_nthu_loading").addClass("active");
-  let course_id_group = [];
-  $("#course_order_list > div > .number").each(function() {
-    let course_id = $(this).attr("id");
-    let order = $(this).text();
-    course_id_group.push({ course_id, order });
-  });
-  storeOrderToStorage(course_id_group, function() {
-    submitToNTHU();
-  });
+  chrome.tabs.query(
+    { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
+    function(tabs) {
+      let select_url =
+        "www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php";
+      if (tabs[0].url.includes(select_url) == false)
+        $("#not_in_select_url").modal("show");
+      else {
+        let isSelect = $("#course_order_list > div > .number")
+          .first()
+          .text();
+        if (isSelect == 0) return;
+        $("#course_order").modal("hide");
+        $("#send_to_nthu_loading").addClass("active");
+        let course_id_group = [];
+        $("#course_order_list > div > .number").each(function() {
+          let course_id = $(this).attr("id");
+          let order = $(this).text();
+          course_id_group.push({ course_id, order });
+        });
+        storeOrderToStorage(course_id_group, function() {
+          submitToNTHU();
+        });
+      }
+    }
+  );
 });
 
 export { submitToNTHU };

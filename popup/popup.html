@@ -34,10 +34,10 @@
     </div>
     <div id="session_alert" class="ui mini modal">
         <div class="header">
-            已過期
+            系統錯誤
         </div>
         <div class="content">
-            <p>請重新登入校務資訊系統</p>
+            <p>請登入或重新登入校務資訊系統</p>
         </div>
         <div class="actions">
             <div class="small ui basic cancel button">關閉</div>
@@ -169,6 +169,17 @@
                 </div>
                 <div class="content">
                     <p>清單中已經有此課程&nbsp;!</p>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">關閉</div>
+                </div>
+            </div>
+            <div id="find_nothing" class="ui mini modal">
+                <div class="header">
+                    查無資料
+                </div>
+                <div class="content">
+                    <p>試試看別的關鍵字吧&nbsp;!</p>
                 </div>
                 <div class="actions">
                     <div class="small ui basic cancel button">關閉</div>
@@ -1135,6 +1146,18 @@
                 </div>
                 <div class="content">
                     <p>已將這門課從清單中移除</p>
+                </div>
+                <div class="actions">
+                    <div class="small ui basic cancel button">返回</div>
+                </div>
+            </div>
+            <div id="not_in_select_url" class="ui mini modal">
+                <div class="header">
+                    系統錯誤&nbsp;!
+                </div>
+                <div class="content">
+                    <p>你必須先進入校務資訊系統中的</p>
+                    <p>選課頁面，才能使用此功能</p>
                 </div>
                 <div class="actions">
                     <div class="small ui basic cancel button">返回</div>

@@ -268,16 +268,19 @@ function sort_weekday(time_array) {
 }
 
 function addSpace_course_no(course_no) {
-  let head_patt = /[0-9]+[A-Za-z]+/g;
-  let head = course_no.match(head_patt)[0];
-  let tail_patt = /[0-9]+/g;
-  let tail = course_no.match(tail_patt)[1];
-  let space_shoule = 15 - head.length - tail.length;
-
-  let space = "";
-  for (let i = 0; i < space_shoule; i++) space = space.concat(" ");
-  let new_course_no = head.concat(space).concat(tail);
-  return new_course_no;
+  let check_patt = /[0-9]+[A-Za-z]+\s*[0-9]+/g;
+  if (course_no.match(check_patt) == null) return course_no;
+  else {
+    let head_patt = /[0-9]+[A-Za-z]+/g;
+    let head = course_no.match(head_patt)[0];
+    let tail_patt = /[0-9]+/g;
+    let tail = course_no.match(tail_patt)[1];
+    let space_shoule = 15 - head.length - tail.length;
+    let space = "";
+    for (let i = 0; i < space_shoule; i++) space = space.concat(" ");
+    let new_course_no = head.concat(space).concat(tail);
+    return new_course_no;
+  }
 }
 
 const all_time = [

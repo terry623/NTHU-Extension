@@ -31,52 +31,78 @@ function renderSearchResult(hits, callback) {
   $("#search_page_change").append(change_page);
 
   storeCourseInfo(hits);
-  for (let each_course in hits) {
-    let id = hits[each_course]._id;
-    let source = hits[each_course]._source;
+  if (hits.length == 0) $("#find_nothing").modal("show");
+  else {
+    let copy_hits = [];
+    Object.assign(copy_hits, hits);
+    let all_should_row = Math.ceil(copy_hits.length / 10.0) * 10;
+    let fill_empty_num = all_should_row - copy_hits.length;
+    for (let i = fill_empty_num; i > 0; i--) copy_hits.push("empty");
 
-    let time = source.時間;
-    if (time.length == 0) time.push("無");
-    sort_weekday(time);
-    let classroom = source.教室;
-    if (classroom.length == 0) classroom.push("無");
-
-    checkConflict(time, function(negative) {
-      let row =
-        `<tr ` +
-        negative +
-        ` id="` +
-        id +
-        `">
-      <td>` +
-        source.科號 +
-        `</td>
-          <td>` +
-        source.課程中文名稱 +
-        `</td>
-        <td>` +
-        time +
-        `</td>
-        <td>` +
-        classroom.join("<br/>") +
-        `</td>
-        <td>`;
-
+    for (let each_course in copy_hits) {
+      let row;
+      let id, source, time, classroom;
       let teacher = [];
-      for (let each_teacher in source.教師)
-        teacher.push(source.教師[each_teacher].split("\t")[0]);
-      teacher.splice(-1, 1);
-      row += teacher.join("<br>") + `</td></tr>`;
-      $("#search_result_body").append(row);
-      $("#search_result_body > tr")
-        .filter(function(index) {
-          return index >= 10;
-        })
-        .hide();
-      $("#search_result_body > tr").hover(function() {
-        $(this).css("cursor", "pointer");
+      let isEmpty = false;
+      if (copy_hits[each_course] == "empty") {
+        row = `<tr class="empty_row">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td></tr>`;
+        time = "empty";
+        isEmpty = true;
+      } else {
+        id = copy_hits[each_course]._id;
+        source = copy_hits[each_course]._source;
+
+        time = source.時間;
+        if (time.length == 0) time.push("無");
+        sort_weekday(time);
+
+        classroom = source.教室;
+        if (classroom.length == 0) classroom.push("無");
+
+        for (let each_teacher in source.教師)
+          teacher.push(source.教師[each_teacher].split("\t")[0]);
+        teacher.splice(-1, 1);
+      }
+      checkConflict(time, function(negative) {
+        if (isEmpty == false) {
+          row =
+            `<tr ` +
+            negative +
+            ` id="` +
+            id +
+            `">
+          <td>` +
+            source.科號 +
+            `</td>
+            <td>` +
+            source.課程中文名稱 +
+            `</td>
+          <td>` +
+            time +
+            `</td>
+          <td>` +
+            classroom.join("<br/>") +
+            `</td>
+          <td>`;
+          row += teacher.join("<br>") + `</td></tr>`;
+        }
+
+        $("#search_result_body").append(row);
+        $("#search_result_body > tr")
+          .filter(function(index) {
+            return index >= 10;
+          })
+          .hide();
+        $("#search_result_body > tr").hover(function() {
+          if (!$(this).hasClass("empty_row")) $(this).css("cursor", "pointer");
+        });
       });
-    });
+    }
   }
   callback();
 }
@@ -148,6 +174,7 @@ function searchByKeyword(keyword, other_keyword, topic, callback) {
   $("#search_result_body").empty();
   $("#search_loading").addClass("active");
   let search_topic = translateTopic(topic);
+  if (search_topic == "科號") keyword = addSpace_course_no(keyword);
 
   if (other_keyword == "NoNeedToChoose") {
     console.log("search_topic:", search_topic, ",keyword:", keyword);
@@ -398,20 +425,21 @@ $("#delete").on("click", function() {
   });
 });
 $("#search_result_body").on("click", "tr", function() {
-  $(this).css("cursor", "pointer");
-  let course_from_click = $("td:nth-child(1)", this).text();
-  let course_id = $(this).attr("id");
-  getCourseInfo(
-    course_from_click,
-    course_id,
-    function() {
-      $(".course_action").hide();
-      $("#submit").show();
-      $("#back").show();
-      $("#course_info_loading").removeClass("active");
-    },
-    false
-  );
+  if (!$(this).hasClass("empty_row")) {
+    let course_from_click = $("td:nth-child(1)", this).text();
+    let course_id = $(this).attr("id");
+    getCourseInfo(
+      course_from_click,
+      course_id,
+      function() {
+        $(".course_action").hide();
+        $("#submit").show();
+        $("#back").show();
+        $("#course_info_loading").removeClass("active");
+      },
+      false
+    );
+  }
 });
 $("#keyword").keypress(function(e) {
   if (e.which == 13) {
@@ -435,9 +463,4 @@ $("#search_page_change").on("click", ".page.item", function() {
     .hide();
 });
 
-export {
-  searchBySingleCourseNo,
-  storeCourseInfo,
-  searchByID_Group,
-  baseURL
-};
+export { searchBySingleCourseNo, storeCourseInfo, searchByID_Group, baseURL };
