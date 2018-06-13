@@ -283,7 +283,6 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
 // }
 
 function getResultCourse(stu_no, phaseNo, year, term, callback) {
-  console.log(stu_no, phaseNo, year, term);
   if (callback) $("#course_result_loading").addClass("active");
   request.post(
     {

@@ -31,7 +31,7 @@ function storeSliceTime(target_time) {
       for (let each in slice_time) temp[slice_time[each]]++;
       chrome.storage.local.set({ time: temp }, function() {
         chrome.storage.local.get("time", function(items) {
-          console.log(items);
+          // console.log(items);
         });
       });
     }

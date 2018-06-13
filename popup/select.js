@@ -154,7 +154,7 @@ function selectEachCourse(course_no_order, callback) {
           ``
         );
         temp.innerHTML = decode_data;
-        console.log.apply(console, $(temp));
+        // console.log.apply(console, $(temp));
 
         let alert = "無任何警告訊息";
         if (
@@ -268,8 +268,6 @@ function showCourseModal(callback) {
     $("#select_course_status").append(`<div class="item">成功：</div>`);
     for (let each in correct_list) {
       let message = correct_list[each].message.match(patt);
-      // console.log(correct_list[each].message);
-      // console.log(message);
       let content =
         `<div class="item">` +
         correct_list[each].course_no +
@@ -284,8 +282,6 @@ function showCourseModal(callback) {
     $("#select_course_status").append(`<div class="item">失敗：</div>`);
     for (let each in wrong_list) {
       let message = wrong_list[each].message.match(patt);
-      // console.log(wrong_list[each].message);
-      // console.log(message);
       let content =
         `<div class="item">` +
         wrong_list[each].course_no +

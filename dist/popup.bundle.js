@@ -617,7 +617,6 @@
 	// }
 	
 	function getResultCourse(stu_no, phaseNo, year, term, callback) {
-	  console.log(stu_no, phaseNo, year, term);
 	  if (callback) $("#course_result_loading").addClass("active");
 	  request.post({
 	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.9/JH729002.php",
@@ -3354,7 +3353,7 @@
 	        temp[slice_time[_each2]]++;
 	      }chrome.storage.local.set({ time: temp }, function () {
 	        chrome.storage.local.get("time", function (items) {
-	          console.log(items);
+	          // console.log(items);
 	        });
 	      });
 	    }
@@ -3457,6 +3456,7 @@
 	        }
 	      }
 	    }
+	    if ($("#course_order_list").attr("course_num") == 1) $("#course_order_list > div > .number").text("1");
 	    (0, _conflict.storeSliceTime)(target_time);
 	    $("#cart").replaceWith(parse_table);
 	    $("#cart > tr").on("click", "td", function () {
@@ -3482,8 +3482,9 @@
 	}
 	
 	function course_order_list(id, item, count) {
+	  var patt = /[^A-Za-z\\]+/;
 	  if (item.order > -1) {
-	    var content = "<div course_no=\"" + item.course_no + "\" class=\"item\">\n    <div id=\"" + id + "\" class=\"number right floated content\">0</div>\n    <div class=\"content\">\n    <div class=\"description\">" + item.course_name.split(" ")[0] + "</div>\n    </div>\n    </div>";
+	    var content = "<div course_no=\"" + item.course_no + "\" class=\"item\">\n    <div id=\"" + id + "\" class=\"number right floated content\">0</div>\n    <div class=\"content\">\n    <div class=\"description\">" + item.course_name.match(patt) + "</div>\n    </div>\n    </div>";
 	    $("#course_order_list").append(content);
 	    count++;
 	    $("#course_order_list").attr("course_num", count);
@@ -3538,7 +3539,7 @@
 	  if (childNum > 0) {
 	    var list = document.getElementById("course_order_list");
 	    Sortable.create(list, {
-	      onUpdate: function onUpdate(evt) {
+	      onUpdate: function onUpdate() {
 	        $("#course_order_list > div > .number").each(function () {
 	          $(this).text($(this).parent().index() + 1);
 	        });
@@ -3711,7 +3712,7 @@
 	      var decode_data = new TextDecoder("big5").decode(data);
 	      decode_data = decode_data.replace("<img src=\"templates/pic1.gif\" width=\"351\" height=\"30\">", "");
 	      temp.innerHTML = decode_data;
-	      console.log.apply(console, $(temp));
+	      // console.log.apply(console, $(temp));
 	
 	      var alert = "無任何警告訊息";
 	      if ($(temp).text().indexOf("session is interrupted!") >= 0 || $(temp).text().indexOf("Time longer than permitted!") >= 0) {
@@ -3811,8 +3812,6 @@
 	    $("#select_course_status").append("<div class=\"item\">\u6210\u529F\uFF1A</div>");
 	    for (var each in correct_list) {
 	      var message = correct_list[each].message.match(patt);
-	      // console.log(correct_list[each].message);
-	      // console.log(message);
 	      var content = "<div class=\"item\">" + correct_list[each].course_no + " ( " + message + " )" + "</div>";
 	      $("#select_course_status").append(content);
 	    }
@@ -3821,8 +3820,6 @@
 	    $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");
 	    for (var _each in wrong_list) {
 	      var _message = wrong_list[_each].message.match(patt);
-	      // console.log(wrong_list[each].message);
-	      // console.log(message);
 	      var _content = "<div class=\"item\">" + wrong_list[_each].course_no + " ( " + _message + " )" + "</div>";
 	      $("#select_course_status").append(_content);
 	    }

@@ -47,6 +47,8 @@ function getCart() {
         }
       }
     }
+    if ($("#course_order_list").attr("course_num") == 1)
+      $("#course_order_list > div > .number").text("1");
     storeSliceTime(target_time);
     $("#cart").replaceWith(parse_table);
     $("#cart > tr").on("click", "td", function() {
@@ -88,6 +90,7 @@ function getCart() {
 }
 
 function course_order_list(id, item, count) {
+  let patt = /[^A-Za-z\\]+/;
   if (item.order > -1) {
     let content =
       `<div course_no="` +
@@ -98,7 +101,7 @@ function course_order_list(id, item, count) {
       `" class="number right floated content">0</div>
     <div class="content">
     <div class="description">` +
-      item.course_name.split(" ")[0] +
+      item.course_name.match(patt) +
       `</div>
     </div>
     </div>`;
@@ -166,7 +169,7 @@ $("#cart_submit").on("click", function() {
   if (childNum > 0) {
     let list = document.getElementById("course_order_list");
     Sortable.create(list, {
-      onUpdate: function(evt) {
+      onUpdate: function() {
         $("#course_order_list > div > .number").each(function() {
           $(this).text(
             $(this)
