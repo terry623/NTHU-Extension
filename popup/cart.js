@@ -28,7 +28,7 @@ function getCart() {
           name +
           `</a>`;
 
-        if (items.cart[key].time.length == 1) {
+        if (items.cart[key].time == "無") {
           $(parse_table)
             .find(".none")
             .append(content);

@@ -384,6 +384,7 @@
 	var all_time = ["M1", "M2", "M3", "M4", "Mn", "M5", "M6", "M7", "M8", "M9", "Ma", "Mb", "Mc", "T1", "T2", "T3", "T4", "Tn", "T5", "T6", "T7", "T8", "T9", "Ta", "Tb", "Tc", "W1", "W2", "W3", "W4", "Wn", "W5", "W6", "W7", "W8", "W9", "Wa", "Wb", "Wc", "R1", "R2", "R3", "R4", "Rn", "R5", "R6", "R7", "R8", "R9", "Ra", "Rb", "Rc", "F1", "F2", "F3", "F4", "Fn", "F5", "F6", "F7", "F8", "F9", "Fa", "Fb", "Fc", "S1", "S2", "S3", "S4", "Sn", "S5", "S6", "S7", "S8", "S9", "Sa", "Sb", "Sc"];
 	
 	function miniMessageAlert(header, content_1, content_2) {
+	  console.log("Who call:", header);
 	  $("#mini_alert_header").text(header);
 	  if (content_2) {
 	    $("#mini_alert_content").html("<p>" + content_1 + "</p><p>" + content_2 + "</p>");
@@ -3485,7 +3486,7 @@
 	        name = name.match(/\S+/)[0];
 	        var content = "<a href=\"#do_not_jump\" id=\"" + key + "\" course_no=\"" + items.cart[key].course_no + "\">" + name + "</a>";
 	
-	        if (items.cart[key].time.length == 1) {
+	        if (items.cart[key].time == "無") {
 	          $(parse_table).find(".none").append(content);
 	        } else {
 	          var slice_time = [];

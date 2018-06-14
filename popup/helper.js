@@ -364,6 +364,7 @@ const all_time = [
 ];
 
 function miniMessageAlert(header, content_1, content_2) {
+  console.log("Who call:", header);
   $("#mini_alert_header").text(header);
   if (content_2) {
     $("#mini_alert_content").html(
