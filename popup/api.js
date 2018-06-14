@@ -4,7 +4,7 @@ import { transform } from "./pdf2html";
 // import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourseNo, storeCourseInfo } from "./search";
 import { course_table, removeLongCourseName, sort_weekday } from "./helper";
-import { acix } from "./popup";
+import { acix, stu_no, year, semester } from "./popup";
 
 function getUserName(callback) {
   request(
@@ -211,7 +211,6 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
             $("#syllabus").empty();
 
             if (find_file.length > 0) {
-              let ran = Math.floor(Math.random() * 100 + 1);
               let pdf_path =
                 "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
               $("#pdf_page").html(
@@ -282,8 +281,8 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
 //   );
 // }
 
-// TODO: 要加重新整理
-function getResultCourse(stu_no, phaseNo, year, term, callback) {
+// TODO: Send to NTHU 完，要重新整理
+function getResultCourse(phaseNo, callback) {
   if (callback) $("#course_result_loading").addClass("active");
   request.post(
     {
@@ -294,7 +293,7 @@ function getResultCourse(stu_no, phaseNo, year, term, callback) {
         stu_no: stu_no,
         phaseNo: phaseNo,
         year: year,
-        term: term
+        term: semester
       },
       encoding: null
     },
@@ -371,7 +370,7 @@ function getResultCourse(stu_no, phaseNo, year, term, callback) {
               $("#multiple_class_bySingle").modal("show");
             } else {
               let course_no = $("a", this).attr("course_no");
-              $("#course_info_loading").addClass("active")
+              $("#course_info_loading").addClass("active");
               searchBySingleCourseNo(course_no, function(hits) {
                 storeCourseInfo(hits, function() {
                   getCourseInfo(

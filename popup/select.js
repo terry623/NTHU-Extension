@@ -1,6 +1,7 @@
 import { getCart } from "./cart";
 import { removeTimeOfCourse } from "./conflict";
-import { acix } from "./popup";
+import { acix, current_phase } from "./popup";
+import { getResultCourse } from "./api";
 
 var correct_list = [];
 var wrong_list = [];
@@ -316,6 +317,7 @@ function submitToNTHU() {
               removeSuccessSelectCourse(function() {
                 showCourseModal(function() {
                   $("#send_to_nthu_loading").removeClass("active");
+                  getResultCourse(current_phase);
                 });
               });
             }

@@ -16,7 +16,7 @@ import { clearAllTime } from "./conflict";
 const year = "107";
 const semester = "10";
 const search_result_num = 10;
-let acix, stu_no;
+let acix, stu_no, current_phase;
 
 $(document).ready(function() {
   $(".content_item").hide();
@@ -33,16 +33,16 @@ $(document).ready(function() {
           $(".content_item.homePage").show();
           $("#home_loading").removeClass("active");
           if (phase != undefined) {
-            getResultCourse(stu_no, phase, year, semester);
+            current_phase = phase;
+            getResultCourse(phase);
           } else $("#change_phase").addClass("disabled");
           getCart();
           // getGrade(stu_no);
 
           chrome.webRequest.onBeforeSendHeaders.addListener(
             function(details) {
-              console.log(details);
-              var headers = details.requestHeaders;
-              var blockingResponse = {};
+              let headers = details.requestHeaders;
+              let blockingResponse = {};
               headers.push({
                 name: "Referer",
                 value:
@@ -65,21 +65,21 @@ $(document).ready(function() {
   );
 });
 
-chrome.storage.local.clear(function() {
-  console.log("Clear Local Data");
-  var error = chrome.runtime.lastError;
-  if (error) {
-    console.error(error);
-  }
-});
+// chrome.storage.local.clear(function() {
+//   console.log("Clear Local Data");
+//   let error = chrome.runtime.lastError;
+//   if (error) {
+//     console.error(error);
+//   }
+// });
 
 $(".ui.accordion").accordion();
 $(".ui.dropdown").dropdown();
 $("#change_phase").dropdown({
   on: "click",
   action: function(text, value) {
-    console.log("Click change phase");
-    getResultCourse(stu_no, value, year, semester, function() {
+    current_phase = value;
+    getResultCourse(value, function() {
       $("#course_result_loading").removeClass("active");
     });
     $("#change_phase").dropdown("set text", text);
@@ -141,4 +141,4 @@ $(".ui.secondary.menu").on("click", ".item", function() {
   }
 });
 
-export { acix, search_result_num };
+export { acix, stu_no, year, semester, current_phase, search_result_num };

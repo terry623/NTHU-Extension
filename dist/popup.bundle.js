@@ -94,7 +94,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.search_result_num = exports.acix = undefined;
+	exports.search_result_num = exports.current_phase = exports.semester = exports.year = exports.stu_no = exports.acix = undefined;
 	
 	var _helper = __webpack_require__(3);
 	
@@ -121,13 +121,14 @@
 	var semester = "10";
 	var search_result_num = 10;
 	var acix = void 0,
-	    stu_no = void 0;
+	    stu_no = void 0,
+	    current_phase = void 0;
 	
 	$(document).ready(function () {
 	  $(".content_item").hide();
 	  chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
 	    exports.acix = acix = (0, _helper.getUrlVars)(tabs[0].url)["ACIXSTORE"];
-	    stu_no = (0, _helper.getUrlVars)(tabs[0].url)["hint"];
+	    exports.stu_no = stu_no = (0, _helper.getUrlVars)(tabs[0].url)["hint"];
 	    (0, _conflict.clearAllTime)();
 	
 	    $("#home_loading").addClass("active");
@@ -136,13 +137,13 @@
 	        $(".content_item.homePage").show();
 	        $("#home_loading").removeClass("active");
 	        if (phase != undefined) {
-	          (0, _api.getResultCourse)(stu_no, phase, year, semester);
+	          exports.current_phase = current_phase = phase;
+	          (0, _api.getResultCourse)(phase);
 	        } else $("#change_phase").addClass("disabled");
 	        (0, _cart.getCart)();
 	        // getGrade(stu_no);
 	
 	        chrome.webRequest.onBeforeSendHeaders.addListener(function (details) {
-	          console.log(details);
 	          var headers = details.requestHeaders;
 	          var blockingResponse = {};
 	          headers.push({
@@ -159,21 +160,21 @@
 	  });
 	});
 	
-	chrome.storage.local.clear(function () {
-	  console.log("Clear Local Data");
-	  var error = chrome.runtime.lastError;
-	  if (error) {
-	    console.error(error);
-	  }
-	});
+	// chrome.storage.local.clear(function() {
+	//   console.log("Clear Local Data");
+	//   let error = chrome.runtime.lastError;
+	//   if (error) {
+	//     console.error(error);
+	//   }
+	// });
 	
 	$(".ui.accordion").accordion();
 	$(".ui.dropdown").dropdown();
 	$("#change_phase").dropdown({
 	  on: "click",
 	  action: function action(text, value) {
-	    console.log("Click change phase");
-	    (0, _api.getResultCourse)(stu_no, value, year, semester, function () {
+	    exports.current_phase = current_phase = value;
+	    (0, _api.getResultCourse)(value, function () {
 	      $("#course_result_loading").removeClass("active");
 	    });
 	    $("#change_phase").dropdown("set text", text);
@@ -233,6 +234,10 @@
 	});
 	
 	exports.acix = acix;
+	exports.stu_no = stu_no;
+	exports.year = year;
+	exports.semester = semester;
+	exports.current_phase = current_phase;
 	exports.search_result_num = search_result_num;
 
 /***/ }),
@@ -260,7 +265,6 @@
 	
 	function courseAddSpace(course_no) {
 	  var myRe = /[0-9]+[A-Za-z]+/g;
-	  var myArray = myRe.exec(course_no);
 	  var output = [course_no.slice(0, myRe.lastIndex), course_no.slice(myRe.lastIndex)].join(" ");
 	  return output;
 	}
@@ -566,7 +570,6 @@
 	          $("#syllabus").empty();
 	
 	          if (find_file.length > 0) {
-	            var ran = Math.floor(Math.random() * 100 + 1);
 	            var pdf_path = "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
 	            $("#pdf_page").html("<div id=\"pdf_render\" align=\"right\" style=\"display:none;\">\n                        <button id=\"prev\" class=\"tiny ui basic button\">\n                            <i class=\"angle left icon\"></i>\n                        </button>\n                        <button id=\"next\" class=\"tiny ui basic button\">\n                            <i class=\"angle right icon\"></i>\n                        </button>\n                        &nbsp; &nbsp;\n                        <span>Page:\n                            <span id=\"page_num\" ></span> /\n                            <span id=\"page_count\"></span>\n                        </span>\n                    </div>\n                    <canvas id=\"the-canvas\" />\n                    ");
 	            (0, _pdf2html.transform)(pdf_path + course_no + ".pdf?ACIXSTORE=" + _popup.acix);
@@ -618,17 +621,17 @@
 	//   );
 	// }
 	
-	// TODO: 要加重新整理
-	function getResultCourse(stu_no, phaseNo, year, term, callback) {
+	// TODO: Send to NTHU 完，要重新整理
+	function getResultCourse(phaseNo, callback) {
 	  if (callback) $("#course_result_loading").addClass("active");
 	  request.post({
 	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.9/JH729002.php",
 	    form: {
 	      ACIXSTORE: _popup.acix,
-	      stu_no: stu_no,
+	      stu_no: _popup.stu_no,
 	      phaseNo: phaseNo,
-	      year: year,
-	      term: term
+	      year: _popup.year,
+	      term: _popup.semester
 	    },
 	    encoding: null
 	  }, function (err, response, body) {
@@ -3601,6 +3604,8 @@
 	
 	var _popup = __webpack_require__(2);
 	
+	var _api = __webpack_require__(4);
+	
 	var correct_list = [];
 	var wrong_list = [];
 	var course_list = [];
@@ -3876,6 +3881,7 @@
 	            removeSuccessSelectCourse(function () {
 	              showCourseModal(function () {
 	                $("#send_to_nthu_loading").removeClass("active");
+	                (0, _api.getResultCourse)(_popup.current_phase);
 	              });
 	            });
 	          });
@@ -8994,7 +9000,7 @@
 /* 36 */
 /***/ (function(module, exports) {
 
-	module.exports = {"_from":"tough-cookie@~2.3.3","_id":"tough-cookie@2.3.4","_inBundle":false,"_integrity":"sha512-TZ6TTfI5NtZnuyy/Kecv+CnoROnyXn2DN97LontgQpCwsX2XyLYCC0ENhYkehSOwAp8rTQKc/NUIF7BkQ5rKLA==","_location":"/tough-cookie","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"tough-cookie@~2.3.3","name":"tough-cookie","escapedName":"tough-cookie","rawSpec":"~2.3.3","saveSpec":null,"fetchSpec":"~2.3.3"},"_requiredBy":["/request"],"_resolved":"https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.4.tgz","_shasum":"ec60cee38ac675063ffc97a5c18970578ee83655","_spec":"tough-cookie@~2.3.3","_where":"D:\\SideProject\\nthu-extension\\node_modules\\request","author":{"name":"Jeremy Stashewsky","email":"jstashewsky@salesforce.com"},"bugs":{"url":"https://github.com/salesforce/tough-cookie/issues"},"bundleDependencies":false,"contributors":[{"name":"Alexander Savin"},{"name":"Ian Livingstone"},{"name":"Ivan Nikulin"},{"name":"Lalit Kapoor"},{"name":"Sam Thompson"},{"name":"Sebastian Mayr"}],"dependencies":{"punycode":"^1.4.1"},"deprecated":false,"description":"RFC6265 Cookies and Cookie Jar for node.js","devDependencies":{"async":"^1.4.2","string.prototype.repeat":"^0.2.0","vows":"^0.8.1"},"engines":{"node":">=0.8"},"files":["lib"],"homepage":"https://github.com/salesforce/tough-cookie","keywords":["HTTP","cookie","cookies","set-cookie","cookiejar","jar","RFC6265","RFC2965"],"license":"BSD-3-Clause","main":"./lib/cookie","name":"tough-cookie","repository":{"type":"git","url":"git://github.com/salesforce/tough-cookie.git"},"scripts":{"suffixup":"curl -o public_suffix_list.dat https://publicsuffix.org/list/public_suffix_list.dat && ./generate-pubsuffix.js","test":"vows test/*_test.js"},"version":"2.3.4"}
+	module.exports = {"_args":[["tough-cookie@2.3.4","D:\\SideProject\\nthu-extension"]],"_from":"tough-cookie@2.3.4","_id":"tough-cookie@2.3.4","_inBundle":false,"_integrity":"sha512-TZ6TTfI5NtZnuyy/Kecv+CnoROnyXn2DN97LontgQpCwsX2XyLYCC0ENhYkehSOwAp8rTQKc/NUIF7BkQ5rKLA==","_location":"/tough-cookie","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"tough-cookie@2.3.4","name":"tough-cookie","escapedName":"tough-cookie","rawSpec":"2.3.4","saveSpec":null,"fetchSpec":"2.3.4"},"_requiredBy":["/request"],"_resolved":"https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.4.tgz","_spec":"2.3.4","_where":"D:\\SideProject\\nthu-extension","author":{"name":"Jeremy Stashewsky","email":"jstashewsky@salesforce.com"},"bugs":{"url":"https://github.com/salesforce/tough-cookie/issues"},"contributors":[{"name":"Alexander Savin"},{"name":"Ian Livingstone"},{"name":"Ivan Nikulin"},{"name":"Lalit Kapoor"},{"name":"Sam Thompson"},{"name":"Sebastian Mayr"}],"dependencies":{"punycode":"^1.4.1"},"description":"RFC6265 Cookies and Cookie Jar for node.js","devDependencies":{"async":"^1.4.2","string.prototype.repeat":"^0.2.0","vows":"^0.8.1"},"engines":{"node":">=0.8"},"files":["lib"],"homepage":"https://github.com/salesforce/tough-cookie","keywords":["HTTP","cookie","cookies","set-cookie","cookiejar","jar","RFC6265","RFC2965"],"license":"BSD-3-Clause","main":"./lib/cookie","name":"tough-cookie","repository":{"type":"git","url":"git://github.com/salesforce/tough-cookie.git"},"scripts":{"suffixup":"curl -o public_suffix_list.dat https://publicsuffix.org/list/public_suffix_list.dat && ./generate-pubsuffix.js","test":"vows test/*_test.js"},"version":"2.3.4"}
 
 /***/ }),
 /* 37 */

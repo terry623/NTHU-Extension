@@ -1,4 +1,4 @@
-import { getCourseInfo, getResultCourse } from "./api";
+import { getCourseInfo } from "./api";
 import { course_table } from "./helper";
 import { storeSliceTime } from "./conflict";
 import { searchBySingleCourseNo, storeCourseInfo } from "./search";
