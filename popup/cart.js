@@ -18,6 +18,7 @@ function getCart() {
         count = course_order_list(key, items.cart[key], count);
         let patt = /[^A-Za-z0-9_]+/;
         let name = items.cart[key].course_name.match(patt)[0];
+        name = name.match(/\S+/)[0];
         let content =
           `<a href="#do_not_jump" id="` +
           key +
@@ -80,7 +81,7 @@ function getCart() {
             $(".course_action").hide();
             $("#delete").show();
             $("#back").show();
-            $("#course_info_loading").removeClass("active");
+            $("#loading").removeClass("active");
           },
           false
         );

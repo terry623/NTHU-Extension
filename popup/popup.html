@@ -14,31 +14,20 @@
 </head>
 
 <body>
-    <div id="course_info_loading" class="ui inverted dimmer">
+    <div id="loading" class="ui inverted dimmer">
         <div class="ui loader"></div>
     </div>
-    <div id="search_loading" class="ui inverted dimmer">
-        <div class="ui loader"></div>
-    </div>
-    <div id="course_result_loading" class="ui inverted dimmer">
-        <div class="ui loader"></div>
-    </div>
-    <!-- <div id="recommend_loading" class="ui inverted dimmer">
-        <div class="ui loader"></div>
-    </div> -->
     <div id="send_to_nthu_loading" class="ui inverted dimmer">
         <div id="nthu_loading_text" class="ui text loader"></div>
     </div>
     <div id="home_loading" class="ui inverted dimmer">
         <div class="ui text loader">L O A D I N G</div>
     </div>
-    <!-- TODO: 把 mini modal 改成統一 function 傳訊息進去 -->
-    <div id="session_alert" class="ui mini modal">
-        <div class="header">
-            系統錯誤
+
+    <div id="mini_alert" class="ui mini modal">
+        <div id="mini_alert_header" class="header">
         </div>
-        <div class="content">
-            <p>請登入或重新登入校務資訊系統</p>
+        <div id="mini_alert_content" class="content">
         </div>
         <div class="actions">
             <div class="small ui basic cancel button">關閉</div>
@@ -142,50 +131,6 @@
         </div>
 
         <div class="content_item searchPage">
-            <div id="search_alert_keyword_empty" class="ui mini modal">
-                <div class="header">
-                    搜尋錯誤
-                </div>
-                <div class="content">
-                    <p>你的關鍵字沒輸入&nbsp;!</p>
-                </div>
-                <div class="actions">
-                    <div class="small ui basic cancel button">關閉</div>
-                </div>
-            </div>
-            <div id="search_alert_otherkeyword_empty" class="ui mini modal">
-                <div class="header">
-                    搜尋錯誤
-                </div>
-                <div class="content">
-                    <p>你沒有選擇進階輸入&nbsp;!</p>
-                </div>
-                <div class="actions">
-                    <div class="small ui basic cancel button">關閉</div>
-                </div>
-            </div>
-            <div id="already_in_cart" class="ui mini modal">
-                <div class="header">
-                    無法加入
-                </div>
-                <div class="content">
-                    <p>清單中已經有此課程&nbsp;!</p>
-                </div>
-                <div class="actions">
-                    <div class="small ui basic cancel button">關閉</div>
-                </div>
-            </div>
-            <div id="find_nothing" class="ui mini modal">
-                <div class="header">
-                    查無資料
-                </div>
-                <div class="content">
-                    <p>試試看別的關鍵字吧&nbsp;!</p>
-                </div>
-                <div class="actions">
-                    <div class="small ui basic cancel button">關閉</div>
-                </div>
-            </div>
             <form id="search_entry" class="ui form">
                 <div class="field">
                     <div id="search_entry_first" class="ui fluid left action right icon input search_entry_item">
@@ -1127,41 +1072,6 @@
                     </tfoot>
                 </table>
                 <div class="actions">
-                </div>
-            </div>
-            <div id="submit_to_list" class="ui mini modal">
-                <div class="header">
-                    成功送出至清單&nbsp;!
-                </div>
-                <div class="content">
-                    <p>注意，要到課表頁面按送出</p>
-                    <p>校務資訊系統才會真正選到課</p>
-                </div>
-                <div class="actions">
-                    <div class="small ui basic cancel button">關閉</div>
-                </div>
-            </div>
-            <div id="delete_course_msg" class="ui mini modal">
-                <div class="header">
-                    成功刪除此課程&nbsp;!
-                </div>
-                <div class="content">
-                    <p>已將這門課從清單中移除</p>
-                </div>
-                <div class="actions">
-                    <div class="small ui basic cancel button">返回</div>
-                </div>
-            </div>
-            <div id="not_in_select_url" class="ui mini modal">
-                <div class="header">
-                    系統錯誤&nbsp;!
-                </div>
-                <div class="content">
-                    <p>你必須先進入校務資訊系統中的</p>
-                    <p>選課頁面，才能使用此功能</p>
-                </div>
-                <div class="actions">
-                    <div class="small ui basic cancel button">返回</div>
                 </div>
             </div>
             <div class="ui fullscreen course_info modal">

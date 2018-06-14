@@ -2,6 +2,7 @@ import { getCart } from "./cart";
 import { removeTimeOfCourse } from "./conflict";
 import { acix, current_phase } from "./popup";
 import { getResultCourse } from "./api";
+import { miniMessageAlert } from "./helper";
 
 var correct_list = [];
 var wrong_list = [];
@@ -53,7 +54,7 @@ function getCourseFormInfo(course_no, callback) {
           .text()
           .indexOf("session is interrupted!") >= 0
       ) {
-        $("#session_alert").modal("show");
+        miniMessageAlert("系統錯誤", "請登入或重新登入校務資訊系統");
       } else {
         let found = $("#T1 > tbody > tr", temp).filter(function() {
           return $("td:nth-child(2) > div", this).text() == course_no;
@@ -169,7 +170,7 @@ function selectEachCourse(course_no_order, callback) {
             .text()
             .indexOf("Time longer than permitted!") >= 0
         ) {
-          $("#session_alert").modal("show");
+          miniMessageAlert("系統錯誤", "請登入或重新登入校務資訊系統");
           $("#send_to_nthu_loading").removeClass("active");
         } else if (
           $(temp)
@@ -358,7 +359,11 @@ $("#send_to_nthu").on("click", function() {
       let select_url =
         "www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php";
       if (tabs[0].url.includes(select_url) == false)
-        $("#not_in_select_url").modal("show");
+        miniMessageAlert(
+          "系統錯誤",
+          "你必須先進入校務資訊系統中的",
+          "選課頁面，才能使用此功能"
+        );
       else {
         let isSelect = $("#course_order_list > div > .number")
           .first()

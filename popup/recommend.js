@@ -156,7 +156,7 @@
 //       $(".course_action").hide();
 //       $("#submit").show();
 //       $("#back").show();
-//       $("#course_info_loading").removeClass("active");
+//       $("#loading").removeClass("active");
 //     },
 //     false
 //   );

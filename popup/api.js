@@ -3,7 +3,12 @@ var request = require("request");
 import { transform } from "./pdf2html";
 // import { calculateUserGrade, getSimilarities } from "./server";
 import { searchBySingleCourseNo, storeCourseInfo } from "./search";
-import { course_table, removeLongCourseName, sort_weekday } from "./helper";
+import {
+  course_table,
+  removeLongCourseName,
+  sort_weekday,
+  miniMessageAlert
+} from "./helper";
 import { acix, stu_no, year, semester } from "./popup";
 
 function getUserName(callback) {
@@ -25,7 +30,7 @@ function getUserName(callback) {
             .text()
             .indexOf("session is interrupted!") >= 0
         ) {
-          $("#session_alert").modal("show");
+          miniMessageAlert("系統錯誤", "請登入或重新登入校務資訊系統");
         } else {
           let found = $(
             "div > form > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(4)",
@@ -76,7 +81,7 @@ function getPopulation(course_no, fresh_num) {
             .text()
             .indexOf("session is interrupted!") >= 0
         ) {
-          $("#session_alert").modal("show");
+          miniMessageAlert("系統錯誤", "請登入或重新登入校務資訊系統");
         } else {
           let found = $(
             "div > form > table.sortable > tbody > tr",
@@ -117,7 +122,7 @@ function getPopulation(course_no, fresh_num) {
 
 function getCourseInfo(course_no, id, callback, from_multiple) {
   if (course_no == undefined) return;
-  if (!from_multiple) $("#course_info_loading").addClass("active");
+  if (!from_multiple) $("#loading").addClass("active");
   request(
     {
       url:
@@ -139,7 +144,7 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
             .text()
             .indexOf("session is interrupted!") >= 0
         ) {
-          $("#session_alert").modal("show");
+          miniMessageAlert("系統錯誤", "請登入或重新登入校務資訊系統");
         } else {
           chrome.storage.local.get("course", function(items) {
             // getSimilarities(id, function(info) {
@@ -281,9 +286,8 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
 //   );
 // }
 
-// TODO: Send to NTHU 完，要重新整理
 function getResultCourse(phaseNo, callback) {
-  if (callback) $("#course_result_loading").addClass("active");
+  if (callback) $("#loading").addClass("active");
   request.post(
     {
       url:
@@ -308,7 +312,7 @@ function getResultCourse(phaseNo, callback) {
             .text()
             .indexOf("session is interrupted!") >= 0
         ) {
-          $("#session_alert").modal("show");
+          miniMessageAlert("系統錯誤", "請登入或重新登入校務資訊系統");
         } else {
           let table = $("form > table:nth-child(3)", temp);
 
@@ -370,7 +374,7 @@ function getResultCourse(phaseNo, callback) {
               $("#multiple_class_bySingle").modal("show");
             } else {
               let course_no = $("a", this).attr("course_no");
-              $("#course_info_loading").addClass("active");
+              $("#loading").addClass("active");
               searchBySingleCourseNo(course_no, function(hits) {
                 storeCourseInfo(hits, function() {
                   getCourseInfo(
@@ -378,7 +382,7 @@ function getResultCourse(phaseNo, callback) {
                     hits[0]._id,
                     function() {
                       $(".course_action").hide();
-                      $("#course_info_loading").removeClass("active");
+                      $("#loading").removeClass("active");
                     },
                     false
                   );

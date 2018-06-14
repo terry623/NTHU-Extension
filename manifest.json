@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "NTHU Course 正式選課測試版",
   "description": "幫助清大學生找到適合自己的課程",
-  "version": "2.2",
+  "version": "2.3",
   "page_action": {
     "default_title": "開始選課",
     "default_icon": "static/icon.png",

@@ -1,4 +1,9 @@
-import { translateTopic, sort_weekday, addSpace_course_no } from "./helper";
+import {
+  translateTopic,
+  sort_weekday,
+  addSpace_course_no,
+  miniMessageAlert
+} from "./helper";
 import { checkConflict } from "./conflict";
 import { search_result_num } from "./popup";
 import { getCart } from "./cart";
@@ -31,7 +36,7 @@ function renderSearchResult(hits, callback) {
   $("#search_page_change").append(change_page);
 
   storeCourseInfo(hits);
-  if (hits.length == 0) $("#find_nothing").modal("show");
+  if (hits.length == 0) miniMessageAlert("查無資料", "試試看別的關鍵字吧!");
   else {
     let copy_hits = [];
     Object.assign(copy_hits, hits);
@@ -172,7 +177,7 @@ function searchTime(search_topic, keyword, time_group, callback) {
 
 function searchByKeyword(keyword, other_keyword, topic, callback) {
   $("#search_result_body").empty();
-  $("#search_loading").addClass("active");
+  $("#loading").addClass("active");
   let search_topic = translateTopic(topic);
   if (search_topic == "科號") keyword = addSpace_course_no(keyword);
 
@@ -294,7 +299,12 @@ function searchByID_Group(id_group, callback) {
 
 function dependOnType(topic) {
   $(".other_entry").hide();
-  $(".ui.dropdown.search_entry_item").dropdown("clear");
+  $(".ui.dropdown.search_entry_item")
+    .dropdown("clear")
+    .dropdown({
+      fullTextSearch: "exact"
+    });
+  $(".ui.dropdown.search_entry_item");
   if (topic == "上課時間") $("#time_select_entry").show();
   else if (topic == "通識對象") $("#ge_people_entry").show();
   else if (topic == "通識類別") $("#ge_type_select_entry").show();
@@ -323,16 +333,16 @@ function clickToSearch() {
   }
 
   if (other_keyword == "") {
-    $("#search_alert_otherkeyword_empty").modal("show");
+    miniMessageAlert("搜尋錯誤", "你沒有選擇進階輸入!");
     return;
   } else if (other_keyword == "NoNeedToChoose") {
     if ($("#keyword").val() == "") {
-      $("#search_alert_keyword_empty").modal("show");
+      miniMessageAlert("搜尋錯誤", "你的關鍵字沒輸入!");
       return;
     }
   }
   searchByKeyword(keyword, other_keyword, topic, function() {
-    $("#search_loading").removeClass("active");
+    $("#loading").removeClass("active");
     $("#search_result_page").show();
   });
   $("#search_page_change > a").removeClass("active");
@@ -378,7 +388,7 @@ $("#submit").on("click", function() {
 
     if (items.cart != undefined) {
       if (items.cart.hasOwnProperty(get_course_id)) {
-        $("#already_in_cart").modal("show");
+        miniMessageAlert("無法加入", "清單中已經有此課程!");
         return;
       }
 
@@ -402,7 +412,11 @@ $("#submit").on("click", function() {
         });
       });
     }
-    $("#submit_to_list").modal("show");
+    miniMessageAlert(
+      "成功送出至清單",
+      "注意，要到課表頁面按送出",
+      "校務資訊系統才會真正選到課"
+    );
   });
 });
 $("#delete").on("click", function() {
@@ -421,7 +435,7 @@ $("#delete").on("click", function() {
         });
       });
     });
-    $("#delete_course_msg").modal("show");
+    miniMessageAlert("成功刪除此課程", "已將這門課從清單中移除");
   });
 });
 $("#search_result_body").on("click", "tr", function() {
@@ -435,7 +449,7 @@ $("#search_result_body").on("click", "tr", function() {
         $(".course_action").hide();
         $("#submit").show();
         $("#back").show();
-        $("#course_info_loading").removeClass("active");
+        $("#loading").removeClass("active");
       },
       false
     );

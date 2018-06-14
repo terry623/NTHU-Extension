@@ -80,7 +80,7 @@ $("#change_phase").dropdown({
   action: function(text, value) {
     current_phase = value;
     getResultCourse(value, function() {
-      $("#course_result_loading").removeClass("active");
+      $("#loading").removeClass("active");
     });
     $("#change_phase").dropdown("set text", text);
     $("#change_phase").dropdown("hide");
@@ -140,5 +140,6 @@ $(".ui.secondary.menu").on("click", ".item", function() {
     }
   }
 });
+
 
 export { acix, stu_no, year, semester, current_phase, search_result_num };
