@@ -112,7 +112,7 @@ function selectEachCourse(course_no_order, callback) {
   let aspr = course_no_order.order;
   if (aspr == "-1") aspr = "";
 
-  getCourseFormInfo(course_no, function(r_form) {
+  getCourseFormInfo(course_no, r_form => {
     // 預排系統
     // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php`;
     // let needReload = false;
@@ -208,7 +208,7 @@ function callSelectEachCourse(course_num, count, callback) {
   let course_no_order = course_list[count - 1];
   let course_no = course_no_order.course_no;
   $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
-  selectEachCourse(course_no_order, function(isSuccess, message, needReload) {
+  selectEachCourse(course_no_order, (isSuccess, message, needReload) => {
     if (isSuccess == true) correct_list.push({ course_no, message });
     else wrong_list.push({ course_no, message });
 
@@ -245,82 +245,86 @@ function findIdFromObject(obj, course_no) {
   return id;
 }
 
-function removeSuccessSelectCourse(callback) {
-  chrome.storage.local.get("cart", function(items) {
-    let temp = {};
-    Object.assign(temp, items.cart);
-    for (let each in correct_list) {
-      let course_id = findIdFromObject(temp, correct_list[each].course_no);
-      removeTimeOfCourse(temp[course_id].time);
-      delete temp[course_id];
-    }
-    chrome.storage.local.remove("cart", function() {
-      chrome.storage.local.set({ cart: temp }, function() {
-        chrome.storage.local.get("cart", function(items) {
-          // console.log(items);
-          getCart();
-          callback();
+const removeSuccessSelectCourse = () =>
+  new Promise(resolve => {
+    chrome.storage.local.get("cart", items => {
+      let temp = {};
+      Object.assign(temp, items.cart);
+      for (let each in correct_list) {
+        let course_id = findIdFromObject(temp, correct_list[each].course_no);
+        removeTimeOfCourse(temp[course_id].time);
+        delete temp[course_id];
+      }
+      chrome.storage.local.remove("cart", () => {
+        chrome.storage.local.set({ cart: temp }, () => {
+          chrome.storage.local.get("cart", items => {
+            // console.log(items);
+            getCart();
+            resolve();
+          });
         });
       });
     });
   });
-}
 
-function showCourseModal(callback) {
-  $("#select_course_status").empty();
-  let patt = /[^A-Za-z\\]+/;
-  if (correct_list.length != 0) {
-    $("#select_course_status").append(`<div class="item">成功：</div>`);
-    for (let each in correct_list) {
-      let message = correct_list[each].message.match(patt);
-      let content =
-        `<div class="item">` +
-        correct_list[each].course_no +
-        ` ( ` +
-        message +
-        ` )` +
-        `</div>`;
-      $("#select_course_status").append(content);
+const showCourseModal = () =>
+  new Promise(resolve => {
+    $("#select_course_status").empty();
+    let patt = /[^A-Za-z\\]+/;
+    if (correct_list.length != 0) {
+      $("#select_course_status").append(`<div class="item">成功：</div>`);
+      for (let each in correct_list) {
+        let message = correct_list[each].message.match(patt);
+        let content =
+          `<div class="item">` +
+          correct_list[each].course_no +
+          ` ( ` +
+          message +
+          ` )` +
+          `</div>`;
+        $("#select_course_status").append(content);
+      }
     }
-  }
-  if (wrong_list.length != 0) {
-    $("#select_course_status").append(`<div class="item">失敗：</div>`);
-    for (let each in wrong_list) {
-      let message = wrong_list[each].message.match(patt);
-      let content =
-        `<div class="item">` +
-        wrong_list[each].course_no +
-        ` ( ` +
-        message +
-        ` )` +
-        `</div>`;
-      $("#select_course_status").append(content);
+    if (wrong_list.length != 0) {
+      $("#select_course_status").append(`<div class="item">失敗：</div>`);
+      for (let each in wrong_list) {
+        let message = wrong_list[each].message.match(patt);
+        let content =
+          `<div class="item">` +
+          wrong_list[each].course_no +
+          ` ( ` +
+          message +
+          ` )` +
+          `</div>`;
+        $("#select_course_status").append(content);
+      }
     }
-  }
-  $("#select_state").modal("show");
-  callback();
+    $("#select_state").modal("show");
+    resolve();
+  });
+
+async function finishSelectCourse(current_phase) {
+  await removeSuccessSelectCourse();
+  await showCourseModal();
+  $("#send_to_nthu_loading").removeClass("active");
+  getResultCourse(current_phase);
 }
 
 function submitToNTHU() {
-  chrome.storage.local.get("cart", function(items) {
+  chrome.storage.local.get("cart", items => {
     if (items.cart == undefined) {
       $("#send_to_nthu_loading").removeClass("active");
       return;
     }
     if (Object.keys(items.cart).length != 0) {
       const course_num = Object.keys(items.cart).length;
-      selectAllCourse(course_num, items.cart, function(count, needReload) {
+      selectAllCourse(course_num, items.cart, (count, needReload) => {
         if (count == course_num) {
           chrome.tabs.query(
             { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
-            function(tabs) {
+            tabs => {
               if (needReload == true) chrome.tabs.reload(tabs[0].id);
-              removeSuccessSelectCourse(function() {
-                showCourseModal(function() {
-                  $("#send_to_nthu_loading").removeClass("active");
-                  getResultCourse(current_phase);
-                });
-              });
+              finishSelectCourse(current_phase);
             }
           );
         }
@@ -332,7 +336,7 @@ function submitToNTHU() {
 }
 
 function storeOrderToStorage(course_id_group, callback) {
-  chrome.storage.local.get("cart", function(items) {
+  chrome.storage.local.get("cart", items => {
     let temp = {};
     Object.assign(temp, items.cart);
     for (let each in course_id_group) {
@@ -341,9 +345,9 @@ function storeOrderToStorage(course_id_group, callback) {
       temp[id].order = order;
     }
 
-    chrome.storage.local.remove("cart", function() {
-      chrome.storage.local.set({ cart: temp }, function() {
-        chrome.storage.local.get("cart", function(items) {
+    chrome.storage.local.remove("cart", () => {
+      chrome.storage.local.set({ cart: temp }, () => {
+        chrome.storage.local.get("cart", items => {
           // console.log(items);
           callback();
         });
@@ -355,7 +359,7 @@ function storeOrderToStorage(course_id_group, callback) {
 $("#send_to_nthu").on("click", function() {
   chrome.tabs.query(
     { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
-    function(tabs) {
+    tabs => {
       let select_url =
         "www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php";
       if (tabs[0].url.includes(select_url) == false)
@@ -377,7 +381,7 @@ $("#send_to_nthu").on("click", function() {
           let order = $(this).text();
           course_id_group.push({ course_id, order });
         });
-        storeOrderToStorage(course_id_group, function() {
+        storeOrderToStorage(course_id_group, () => {
           submitToNTHU();
         });
       }

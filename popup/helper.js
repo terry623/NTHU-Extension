@@ -150,10 +150,10 @@ const course_table = `<tbody>
     </tbody>`;
 
 function getUrlVars(url) {
-  var vars = [];
-  var hash;
-  var hashes = url.slice(url.indexOf("?") + 1).split("&");
-  for (var i = 0; i < hashes.length; i++) {
+  let vars = [];
+  let hash;
+  let hashes = url.slice(url.indexOf("?") + 1).split("&");
+  for (let i = 0; i < hashes.length; i++) {
     hash = hashes[i].split("=");
     vars.push(hash[0]);
     vars[hash[0]] = hash[1];
@@ -162,8 +162,8 @@ function getUrlVars(url) {
 }
 
 function courseAddSpace(course_no) {
-  var myRe = /[0-9]+[A-Za-z]+/g;
-  var output = [
+  let myRe = /[0-9]+[A-Za-z]+/g;
+  let output = [
     course_no.slice(0, myRe.lastIndex),
     course_no.slice(myRe.lastIndex)
   ].join(" ");
@@ -171,7 +171,7 @@ function courseAddSpace(course_no) {
 }
 
 function translateTopic(topic) {
-  var result;
+  let result;
   switch (topic) {
     case "科號":
       result = "科號";
@@ -214,7 +214,7 @@ function translateTopic(topic) {
 }
 
 function removeLongCourseName(course_name) {
-  var after;
+  let after;
   after = course_name.replace("全民國防教育軍事訓練--", "");
   return after;
 }
@@ -249,12 +249,12 @@ function trans(slice) {
 }
 
 function sort_weekday(time_array) {
-  time_array.sort(function(a, b) {
+  time_array.sort((a, b) => {
     const weekday = ["M", "T", "W", "R", "F", "S"];
-    let week_a = weekday.findIndex(function(element) {
+    let week_a = weekday.findIndex(element => {
       return element == a.slice(0, 1);
     });
-    let week_b = weekday.findIndex(function(element) {
+    let week_b = weekday.findIndex(element => {
       return element == b.slice(0, 1);
     });
     if (week_a == week_b) {
@@ -364,7 +364,6 @@ const all_time = [
 ];
 
 function miniMessageAlert(header, content_1, content_2) {
-  console.log("Who call:", header);
   $("#mini_alert_header").text(header);
   if (content_2) {
     $("#mini_alert_content").html(

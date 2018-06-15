@@ -14,14 +14,14 @@ function subtractArray(target_time) {
 function storeSliceTime(target_time) {
   let slice_time = subtractArray(target_time);
   old_time = target_time;
-  chrome.storage.local.get("time", function(items) {
+  chrome.storage.local.get("time", items => {
     let temp = {};
     if (items.time != undefined) {
       Object.assign(temp, items.time);
       for (let each in slice_time) temp[slice_time[each]]++;
-      chrome.storage.local.remove("time", function() {
-        chrome.storage.local.set({ time: temp }, function() {
-          chrome.storage.local.get("time", function(items) {
+      chrome.storage.local.remove("time", () => {
+        chrome.storage.local.set({ time: temp }, () => {
+          chrome.storage.local.get("time", items => {
             console.log(items);
           });
         });
@@ -29,8 +29,8 @@ function storeSliceTime(target_time) {
     } else {
       for (let each in all_time) temp[all_time[each]] = 0;
       for (let each in slice_time) temp[slice_time[each]]++;
-      chrome.storage.local.set({ time: temp }, function() {
-        chrome.storage.local.get("time", function(items) {
+      chrome.storage.local.set({ time: temp }, () => {
+        chrome.storage.local.get("time", items => {
           // console.log(items);
         });
       });
@@ -39,7 +39,7 @@ function storeSliceTime(target_time) {
 }
 
 function checkConflict(time_array, callback) {
-  chrome.storage.local.get("time", function(items) {
+  chrome.storage.local.get("time", items => {
     if (time_array == "empty") callback();
     let conflict = false;
     if (items.time != undefined) {
@@ -59,14 +59,14 @@ function checkConflict(time_array, callback) {
 }
 
 function removeTimeOfCourse(time_array) {
-  chrome.storage.local.get("time", function(items) {
+  chrome.storage.local.get("time", items => {
     let temp = {};
     Object.assign(temp, items.time);
     for (let each in time_array) temp[time_array[each]]--;
 
-    chrome.storage.local.remove("time", function() {
-      chrome.storage.local.set({ time: temp }, function() {
-        chrome.storage.local.get("time", function(items) {
+    chrome.storage.local.remove("time", () => {
+      chrome.storage.local.set({ time: temp }, () => {
+        chrome.storage.local.get("time", items => {
           // console.log(items);
         });
       });
@@ -74,9 +74,9 @@ function removeTimeOfCourse(time_array) {
   });
 }
 
-// TODO: 改成存 Variable，這樣也不能每次清
+// TODO: 改成存 Variable，這樣也不用每次清
 function clearAllTime() {
-  chrome.storage.local.remove("time", function() {});
+  chrome.storage.local.remove("time");
 }
 
 export { storeSliceTime, checkConflict, removeTimeOfCourse, clearAllTime };

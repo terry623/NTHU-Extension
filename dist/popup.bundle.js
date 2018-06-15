@@ -9043,13 +9043,13 @@
 	  });
 	});
 	
-	chrome.storage.local.clear(function () {
-	  console.log("Clear Local Data");
-	  var error = chrome.runtime.lastError;
-	  if (error) {
-	    console.error(error);
-	  }
-	});
+	// chrome.storage.local.clear(() => {
+	//   console.log("Clear Local Data");
+	//   let error = chrome.runtime.lastError;
+	//   if (error) {
+	//     console.error(error);
+	//   }
+	// });
 	
 	$(".ui.accordion").accordion();
 	$(".ui.dropdown").dropdown();
@@ -9136,7 +9136,7 @@
 	
 	function getUrlVars(url) {
 	  var vars = [];
-	  var hash;
+	  var hash = void 0;
 	  var hashes = url.slice(url.indexOf("?") + 1).split("&");
 	  for (var i = 0; i < hashes.length; i++) {
 	    hash = hashes[i].split("=");
@@ -9153,7 +9153,7 @@
 	}
 	
 	function translateTopic(topic) {
-	  var result;
+	  var result = void 0;
 	  switch (topic) {
 	    case "科號":
 	      result = "科號";
@@ -9196,7 +9196,7 @@
 	}
 	
 	function removeLongCourseName(course_name) {
-	  var after;
+	  var after = void 0;
 	  after = course_name.replace("全民國防教育軍事訓練--", "");
 	  return after;
 	}
@@ -9267,7 +9267,6 @@
 	var all_time = ["M1", "M2", "M3", "M4", "Mn", "M5", "M6", "M7", "M8", "M9", "Ma", "Mb", "Mc", "T1", "T2", "T3", "T4", "Tn", "T5", "T6", "T7", "T8", "T9", "Ta", "Tb", "Tc", "W1", "W2", "W3", "W4", "Wn", "W5", "W6", "W7", "W8", "W9", "Wa", "Wb", "Wc", "R1", "R2", "R3", "R4", "Rn", "R5", "R6", "R7", "R8", "R9", "Ra", "Rb", "Rc", "F1", "F2", "F3", "F4", "Fn", "F5", "F6", "F7", "F8", "F9", "Fa", "Fb", "Fc", "S1", "S2", "S3", "S4", "Sn", "S5", "S6", "S7", "S8", "S9", "Sa", "Sb", "Sc"];
 	
 	function miniMessageAlert(header, content_1, content_2) {
-	  console.log("Who call:", header);
 	  $("#mini_alert_header").text(header);
 	  if (content_2) {
 	    $("#mini_alert_content").html("<p>" + content_1 + "</p><p>" + content_2 + "</p>");
@@ -12348,9 +12347,9 @@
 	  });
 	}
 	
-	// TODO: 改成存 Variable，這樣也不能每次清
+	// TODO: 改成存 Variable，這樣也不用每次清
 	function clearAllTime() {
-	  chrome.storage.local.remove("time", function () {});
+	  chrome.storage.local.remove("time");
 	}
 	
 	exports.storeSliceTime = storeSliceTime;
@@ -12446,6 +12445,7 @@
 	  return count;
 	}
 	
+	// FIXME: 要改一下，寫成同個 class 藏起來
 	$("#change_school_table").on("click", ".item", function () {
 	  if (!$(this).hasClass("dropdown")) {
 	    var t = $(".ui.compact.table");
@@ -12513,6 +12513,36 @@
 	});
 	exports.submitToNTHU = undefined;
 	
+	var finishSelectCourse = function () {
+	  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(current_phase) {
+	    return regeneratorRuntime.wrap(function _callee$(_context) {
+	      while (1) {
+	        switch (_context.prev = _context.next) {
+	          case 0:
+	            _context.next = 2;
+	            return removeSuccessSelectCourse();
+	
+	          case 2:
+	            _context.next = 4;
+	            return showCourseModal();
+	
+	          case 4:
+	            $("#send_to_nthu_loading").removeClass("active");
+	            (0, _api.getResultCourse)(current_phase);
+	
+	          case 6:
+	          case "end":
+	            return _context.stop();
+	        }
+	      }
+	    }, _callee, this);
+	  }));
+	
+	  return function finishSelectCourse(_x) {
+	    return _ref.apply(this, arguments);
+	  };
+	}();
+	
 	var _cart = __webpack_require__(338);
 	
 	var _conflict = __webpack_require__(337);
@@ -12522,6 +12552,8 @@
 	var _api = __webpack_require__(330);
 	
 	var _helper = __webpack_require__(329);
+	
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 	
 	var correct_list = [];
 	var wrong_list = [];
@@ -12739,49 +12771,53 @@
 	  return id;
 	}
 	
-	function removeSuccessSelectCourse(callback) {
-	  chrome.storage.local.get("cart", function (items) {
-	    var temp = {};
-	    Object.assign(temp, items.cart);
-	    for (var each in correct_list) {
-	      var course_id = findIdFromObject(temp, correct_list[each].course_no);
-	      (0, _conflict.removeTimeOfCourse)(temp[course_id].time);
-	      delete temp[course_id];
-	    }
-	    chrome.storage.local.remove("cart", function () {
-	      chrome.storage.local.set({ cart: temp }, function () {
-	        chrome.storage.local.get("cart", function (items) {
-	          // console.log(items);
-	          (0, _cart.getCart)();
-	          callback();
+	var removeSuccessSelectCourse = function removeSuccessSelectCourse() {
+	  return new Promise(function (resolve) {
+	    chrome.storage.local.get("cart", function (items) {
+	      var temp = {};
+	      Object.assign(temp, items.cart);
+	      for (var each in correct_list) {
+	        var course_id = findIdFromObject(temp, correct_list[each].course_no);
+	        (0, _conflict.removeTimeOfCourse)(temp[course_id].time);
+	        delete temp[course_id];
+	      }
+	      chrome.storage.local.remove("cart", function () {
+	        chrome.storage.local.set({ cart: temp }, function () {
+	          chrome.storage.local.get("cart", function (items) {
+	            // console.log(items);
+	            (0, _cart.getCart)();
+	            resolve();
+	          });
 	        });
 	      });
 	    });
 	  });
-	}
+	};
 	
-	function showCourseModal(callback) {
-	  $("#select_course_status").empty();
-	  var patt = /[^A-Za-z\\]+/;
-	  if (correct_list.length != 0) {
-	    $("#select_course_status").append("<div class=\"item\">\u6210\u529F\uFF1A</div>");
-	    for (var each in correct_list) {
-	      var message = correct_list[each].message.match(patt);
-	      var content = "<div class=\"item\">" + correct_list[each].course_no + " ( " + message + " )" + "</div>";
-	      $("#select_course_status").append(content);
+	var showCourseModal = function showCourseModal() {
+	  return new Promise(function (resolve) {
+	    $("#select_course_status").empty();
+	    var patt = /[^A-Za-z\\]+/;
+	    if (correct_list.length != 0) {
+	      $("#select_course_status").append("<div class=\"item\">\u6210\u529F\uFF1A</div>");
+	      for (var each in correct_list) {
+	        var message = correct_list[each].message.match(patt);
+	        var content = "<div class=\"item\">" + correct_list[each].course_no + " ( " + message + " )" + "</div>";
+	        $("#select_course_status").append(content);
+	      }
 	    }
-	  }
-	  if (wrong_list.length != 0) {
-	    $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");
-	    for (var _each in wrong_list) {
-	      var _message = wrong_list[_each].message.match(patt);
-	      var _content = "<div class=\"item\">" + wrong_list[_each].course_no + " ( " + _message + " )" + "</div>";
-	      $("#select_course_status").append(_content);
+	    if (wrong_list.length != 0) {
+	      $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");
+	      for (var _each in wrong_list) {
+	        var _message = wrong_list[_each].message.match(patt);
+	        var _content = "<div class=\"item\">" + wrong_list[_each].course_no + " ( " + _message + " )" + "</div>";
+	        $("#select_course_status").append(_content);
+	      }
 	    }
-	  }
-	  $("#select_state").modal("show");
-	  callback();
-	}
+	    $("#select_state").modal("show");
+	    resolve();
+	  });
+	};
 	
 	function submitToNTHU() {
 	  chrome.storage.local.get("cart", function (items) {
@@ -12795,12 +12831,7 @@
 	        if (count == course_num) {
 	          chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
 	            if (needReload == true) chrome.tabs.reload(tabs[0].id);
-	            removeSuccessSelectCourse(function () {
-	              showCourseModal(function () {
-	                $("#send_to_nthu_loading").removeClass("active");
-	                (0, _api.getResultCourse)(_popup.current_phase);
-	              });
-	            });
+	            finishSelectCourse(_popup.current_phase);
 	          });
 	        }
 	      });
@@ -62524,8 +62555,8 @@
 	  //  300  加退選 log 記錄
 	  //  300P 加退選結束(已處理)
 	  //  400  停修 log 記錄
-	  var tran_phase;
-	  var default_text;
+	  var tran_phase = void 0;
+	  var default_text = void 0;
 	  switch (phase) {
 	    case 1:
 	      tran_phase = "100";

@@ -73,7 +73,7 @@ function renderSearchResult(hits, callback) {
           teacher.push(source.教師[each_teacher].split("\t")[0]);
         teacher.splice(-1, 1);
       }
-      checkConflict(time, function(negative) {
+      checkConflict(time, negative => {
         if (isEmpty == false) {
           row =
             `<tr ` +
@@ -121,7 +121,7 @@ function searchOnlyKeyword(search_topic, keyword, callback) {
         keyword: keyword
       }
     },
-    function(err, response, body) {
+    (err, response, body) => {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
@@ -142,7 +142,7 @@ function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
         other_keyword: other_keyword
       }
     },
-    function(err, response, body) {
+    (err, response, body) => {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
@@ -164,7 +164,7 @@ function searchTime(search_topic, keyword, time_group, callback) {
         time_group: JSON.stringify(time_group)
       }
     },
-    function(err, response, body) {
+    (err, response, body) => {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
@@ -290,7 +290,7 @@ function searchByID_Group(id_group, callback) {
         id_2: id_group[2].other_id
       }
     },
-    function(err, response, body) {
+    (err, response, body) => {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
@@ -344,7 +344,7 @@ function clickToSearch() {
       return;
     }
   }
-  searchByKeyword(keyword, other_keyword, topic, function() {
+  searchByKeyword(keyword, other_keyword, topic, () => {
     $("#loading").removeClass("active");
     $("#search_result_page").show();
   });
@@ -365,7 +365,7 @@ $(".ui.course_type.popup").on("click", ".item", function() {
   $(".other_entry_dropdown").dropdown("show");
 });
 $("#submit").on("click", function() {
-  chrome.storage.local.get("cart", function(items) {
+  chrome.storage.local.get("cart", items => {
     let get_course_id = $(".course_info.scrolling.content").attr("id");
     let temp = {};
     let time_array = $("#time")
@@ -398,9 +398,9 @@ $("#submit").on("click", function() {
       Object.assign(temp, items.cart);
       temp[get_course_id] = data;
 
-      chrome.storage.local.remove("cart", function() {
-        chrome.storage.local.set({ cart: temp }, function() {
-          chrome.storage.local.get("cart", function(items) {
+      chrome.storage.local.remove("cart", () => {
+        chrome.storage.local.set({ cart: temp }, () => {
+          chrome.storage.local.get("cart", items => {
             // console.log(items);
             getCart();
           });
@@ -408,8 +408,8 @@ $("#submit").on("click", function() {
       });
     } else {
       temp[get_course_id] = data;
-      chrome.storage.local.set({ cart: temp }, function() {
-        chrome.storage.local.get("cart", function(items) {
+      chrome.storage.local.set({ cart: temp }, () => {
+        chrome.storage.local.get("cart", items => {
           // console.log(items);
           getCart();
         });
@@ -423,16 +423,16 @@ $("#submit").on("click", function() {
   });
 });
 $("#delete").on("click", function() {
-  chrome.storage.local.get("cart", function(items) {
-    var get_course_id = $(".course_info.scrolling.content").attr("id");
-    var temp = {};
+  chrome.storage.local.get("cart", items => {
+    let get_course_id = $(".course_info.scrolling.content").attr("id");
+    let temp = {};
     Object.assign(temp, items.cart);
     removeTimeOfCourse(temp[get_course_id].time);
     delete temp[get_course_id];
 
-    chrome.storage.local.remove("cart", function() {
-      chrome.storage.local.set({ cart: temp }, function() {
-        chrome.storage.local.get("cart", function(items) {
+    chrome.storage.local.remove("cart", () => {
+      chrome.storage.local.set({ cart: temp }, () => {
+        chrome.storage.local.get("cart", items => {
           // console.log(items);
           getCart();
         });
@@ -448,7 +448,7 @@ $("#search_result_body").on("click", "tr", function() {
     getCourseInfo(
       course_from_click,
       course_id,
-      function() {
+      () => {
         $(".course_action").hide();
         $("#submit").show();
         $("#back").show();

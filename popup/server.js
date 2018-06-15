@@ -206,8 +206,8 @@ function currentPhase(phase) {
   //  300  加退選 log 記錄
   //  300P 加退選結束(已處理)
   //  400  停修 log 記錄
-  var tran_phase;
-  var default_text;
+  let tran_phase;
+  let default_text;
   switch (phase) {
     case 1:
       tran_phase = "100";
@@ -269,7 +269,7 @@ const getCurrentStateOfNTHU = () =>
           "&day=" +
           day
       },
-      function(err, response, body) {
+      (err, response, body) => {
         if (!err && response.statusCode == 200) {
           let info = JSON.parse(body);
           let phase = parseInt(info.currentPhase);

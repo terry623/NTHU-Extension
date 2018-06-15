@@ -4,7 +4,7 @@ import { storeSliceTime } from "./conflict";
 import { submitToNTHU } from "./select";
 
 function getCart() {
-  chrome.storage.local.get("cart", function(items) {
+  chrome.storage.local.get("cart", items => {
     let parse_table = $.parseHTML(course_table);
     $(parse_table).attr("id", "cart");
 
@@ -76,7 +76,7 @@ function getCart() {
         getCourseInfo(
           course_no,
           id,
-          function() {
+          () => {
             $(".course_action").hide();
             $("#delete").show();
             $("#back").show();
@@ -112,6 +112,7 @@ function course_order_list(id, item, count) {
   return count;
 }
 
+// FIXME: 要改一下，寫成同個 class 藏起來
 $("#change_school_table").on("click", ".item", function() {
   if (!$(this).hasClass("dropdown")) {
     let t = $(".ui.compact.table");
@@ -140,7 +141,7 @@ $("#multiple_class_list").on("click", ".item", function() {
   getCourseInfo(
     course_no,
     id,
-    function() {
+    () => {
       $(".course_action").hide();
       $("#delete").show();
       $("#back").show();
