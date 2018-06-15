@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import * as popup from "./popup";
 import * as select from "./select";
 import * as conflict from "./conflict";

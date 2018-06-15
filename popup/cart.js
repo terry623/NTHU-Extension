@@ -1,7 +1,6 @@
-import { getCourseInfo } from "./api";
+import { getCourseInfo, searchByNo_store_getCourseInfo } from "./api";
 import { course_table } from "./helper";
 import { storeSliceTime } from "./conflict";
-import { searchBySingleCourseNo, storeCourseInfo } from "./search";
 import { submitToNTHU } from "./select";
 
 function getCart() {
@@ -151,18 +150,7 @@ $("#multiple_class_list").on("click", ".item", function() {
 });
 $("#multiple_class_bySingle").on("click", ".item", function() {
   let course_no = $(this).attr("course_no");
-  searchBySingleCourseNo(course_no, function(hits) {
-    storeCourseInfo(hits, function() {
-      getCourseInfo(
-        course_no,
-        hits[0]._id,
-        function() {
-          $(".course_action").hide();
-        },
-        true
-      );
-    });
-  });
+  searchByNo_store_getCourseInfo(course_no);
 });
 $("#cart_submit").on("click", function() {
   // alert("此為內部測試版本，選完課請到「預排系統」查看 !");

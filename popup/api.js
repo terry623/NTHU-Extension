@@ -11,7 +11,7 @@ import {
 } from "./helper";
 import { acix, stu_no, year, semester } from "./popup";
 
-function getUserName(callback) {
+function renderUserName() {
   request(
     {
       url:
@@ -19,7 +19,7 @@ function getUserName(callback) {
         acix,
       encoding: null
     },
-    function(err, response, body) {
+    (err, response, body) => {
       if (!err && response.statusCode == 200) {
         let str = iconv.decode(new Buffer(body), "big5");
         let temp = document.createElement("div");
@@ -38,7 +38,6 @@ function getUserName(callback) {
           );
           let welcome = "你選到好課了嗎，" + found.text() + " ?";
           $("#user").prepend(welcome);
-          callback();
         }
       }
     }
@@ -66,7 +65,7 @@ function getPopulation(course_no, fresh_num) {
       encoding: null,
       method: "POST"
     },
-    function(err, response, body) {
+    (err, response, body) => {
       if (!err && response.statusCode == 200) {
         let str = iconv.decode(new Buffer(body), "big5");
         str = str.replace(
@@ -86,17 +85,12 @@ function getPopulation(course_no, fresh_num) {
           let found = $(
             "div > form > table.sortable > tbody > tr",
             temp
-          ).filter(function(index) {
+          ).filter(function() {
             return $("td:nth-child(1) > div", this).text() == course_no;
           });
 
-          if ($(found).length == 0) {
-            $("#size_limit").text("None");
-            $("#current_number").text("None");
-            $("#remain").text("None");
-            $("#be_random").text("None");
-            $("#fresh_num").text("None");
-          } else {
+          if ($(found).length == 0) $(".fetch_people").text("None");
+          else {
             if (target[0] == "GE" || target[0] == "GEC") {
               $("#size_limit").text($("td:nth-child(6) > div", found).text());
               $("#current_number").text(
@@ -132,7 +126,7 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
         course_no,
       encoding: null
     },
-    function(err, response, body) {
+    (err, response, body) => {
       if (!err && response.statusCode == 200) {
         let str = iconv.decode(new Buffer(body), "big5");
         let temp = document.createElement("div");
@@ -146,7 +140,7 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
         ) {
           miniMessageAlert("系統錯誤", "請登入或重新登入校務資訊系統");
         } else {
-          chrome.storage.local.get("course", function(items) {
+          chrome.storage.local.get("course", items => {
             // getSimilarities(id, function(info) {
             //   $("#similar").empty();
             //   for (var each in info) {
@@ -163,7 +157,6 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
             // });
 
             let info = items.course[id];
-
             let description = $(
               "div > table:nth-child(4) > tbody > tr:nth-child(2) > td",
               temp
@@ -286,6 +279,21 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
 //   );
 // }
 
+async function searchByNo_store_getCourseInfo(course_no) {
+  let hits = await searchBySingleCourseNo(course_no);
+  await storeCourseInfo(hits);
+  let id = hits[0]._id;
+  getCourseInfo(
+    course_no,
+    id,
+    () => {
+      $(".course_action").hide();
+      $("#loading").removeClass("active");
+    },
+    false
+  );
+}
+
 function getResultCourse(phaseNo, callback) {
   if (callback) $("#loading").addClass("active");
   request.post(
@@ -301,7 +309,7 @@ function getResultCourse(phaseNo, callback) {
       },
       encoding: null
     },
-    function(err, response, body) {
+    (err, response, body) => {
       if (!err && response.statusCode == 200) {
         let str = iconv.decode(new Buffer(body), "big5");
         let temp = document.createElement("div");
@@ -315,7 +323,6 @@ function getResultCourse(phaseNo, callback) {
           miniMessageAlert("系統錯誤", "請登入或重新登入校務資訊系統");
         } else {
           let table = $("form > table:nth-child(3)", temp);
-
           let parse_table = $.parseHTML(course_table);
           $(parse_table).attr("id", "course_result_from_nthu");
 
@@ -375,19 +382,7 @@ function getResultCourse(phaseNo, callback) {
             } else {
               let course_no = $("a", this).attr("course_no");
               $("#loading").addClass("active");
-              searchBySingleCourseNo(course_no, function(hits) {
-                storeCourseInfo(hits, function() {
-                  getCourseInfo(
-                    course_no,
-                    hits[0]._id,
-                    function() {
-                      $(".course_action").hide();
-                      $("#loading").removeClass("active");
-                    },
-                    false
-                  );
-                });
-              });
+              searchByNo_store_getCourseInfo(course_no);
             }
           });
 
@@ -449,9 +444,10 @@ function getResultCourse(phaseNo, callback) {
 // }
 
 export {
-  getUserName,
+  renderUserName,
   getCourseInfo,
-  getResultCourse
+  getResultCourse,
+  searchByNo_store_getCourseInfo
   // getGrade,
   // getCourseDescription
 };
