@@ -18,14 +18,8 @@ function getCart() {
         let patt = /[^A-Za-z0-9_]+/;
         let name = items.cart[key].course_name.match(patt)[0];
         name = name.match(/\S+/)[0];
-        let content =
-          `<a href="#do_not_jump" id="` +
-          key +
-          `" course_no="` +
-          items.cart[key].course_no +
-          `">` +
-          name +
-          `</a>`;
+        let course_no = items.cart[key].course_no;
+        let content = `<a href="#do_not_jump" id="${key}" course_no="${course_no}">${name}</a>`;
 
         if (items.cart[key].time == "無") {
           $(parse_table)
@@ -55,18 +49,14 @@ function getCart() {
       $("#multiple_class_list").empty();
       if ($(this).children().length > 1) {
         $("a", this).each(function() {
-          let content =
-            `<div id="` +
-            $(this).attr("id") +
-            `" course_no="` +
-            $(this).attr("course_no") +
-            `" class="item">
+          let id = $(this).attr("id");
+          let course_no = $(this).attr("course_no");
+          let text = $(this).text();
+          let content = `<div id="${id}" course_no="${course_no}" class="item">
             <div class="content">
-            <div class="description">` +
-            $(this).text() +
-            `</div>
+              <div class="description">${text}</div>
             </div>
-            </div>`;
+          </div>`;
           $("#multiple_class_list").append(content);
         });
         $("#multiple_class").modal("show");
@@ -92,18 +82,13 @@ function getCart() {
 function course_order_list(id, item, count) {
   let patt = /[^A-Za-z\\]+/;
   if (item.order > -1) {
-    let content =
-      `<div course_no="` +
-      item.course_no +
-      `" class="item">
-    <div id="` +
-      id +
-      `" class="number right floated content">0</div>
-    <div class="content">
-    <div class="description">` +
-      item.course_name.match(patt) +
-      `</div>
-    </div>
+    let course_no = item.course_no;
+    let name = item.course_name.match(patt);
+    let content = `<div course_no="${course_no}" class="item">
+      <div id="${id}" class="number right floated content">0</div>
+      <div class="content">
+        <div class="description">${name}</div>
+      </div>
     </div>`;
     $("#course_order_list").append(content);
     count++;

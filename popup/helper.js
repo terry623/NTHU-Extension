@@ -150,15 +150,15 @@ const course_table = `<tbody>
     </tbody>`;
 
 function getUrlVars(url) {
-  let vars = [];
+  let values = [];
   let hash;
   let hashes = url.slice(url.indexOf("?") + 1).split("&");
   for (let i = 0; i < hashes.length; i++) {
     hash = hashes[i].split("=");
-    vars.push(hash[0]);
-    vars[hash[0]] = hash[1];
+    values.push(hash[0]);
+    values[hash[0]] = hash[1];
   }
-  return vars;
+  return values;
 }
 
 function courseAddSpace(course_no) {
@@ -270,13 +270,11 @@ function addSpace_course_no(course_no) {
   let check_patt = /[0-9]+[A-Za-z]+\s*[0-9]+/g;
   if (course_no.match(check_patt) == null) return course_no;
   else {
-    let head_patt = /[0-9]+[A-Za-z]+/g;
-    let head = course_no.match(head_patt)[0];
-    let tail_patt = /[0-9]+/g;
-    let tail = course_no.match(tail_patt)[1];
-    let space_shoule = 15 - head.length - tail.length;
+    let head = course_no.match(/[0-9]+[A-Za-z]+/g)[0];
+    let tail = course_no.match(/[0-9]+/g)[1];
+    let remain = 15 - head.length - tail.length;
     let space = "";
-    for (let i = 0; i < space_shoule; i++) space = space.concat(" ");
+    for (let i = 0; i < remain; i++) space = space.concat(" ");
     let new_course_no = head.concat(space).concat(tail);
     return new_course_no;
   }
@@ -366,10 +364,8 @@ const all_time = [
 function miniMessageAlert(header, content_1, content_2) {
   $("#mini_alert_header").text(header);
   if (content_2) {
-    $("#mini_alert_content").html(
-      "<p>" + content_1 + "</p><p>" + content_2 + "</p>"
-    );
-  } else $("#mini_alert_content").html("<p>" + content_1 + "</p>");
+    $("#mini_alert_content").html(`<p>${content_1}</p><p>${content_2}</p>`);
+  } else $("#mini_alert_content").html(`<p>${content_1}</p>`);
   $("#mini_alert").modal("show");
 }
 

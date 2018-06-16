@@ -21,17 +21,13 @@ function renderSearchResult(hits, callback) {
   for (let i = 1; i < all_page; i++) {
     let page_num = i + 1;
     page_num_content = page_num_content.concat(
-      `<a class="page item">` + page_num + `</a>`
+      `<a class="page item">${page_num}</a>`
     );
   }
-  let change_page =
-    `<a class="icon item">
-    <i class="left chevron icon"></i></a>
-    <a class="page active item">1</a>` +
-    page_num_content +
-    `<a class="icon item">
-      <i class="right chevron icon"></i>
-    </a>`;
+  let change_page = `<a class="icon item"><i class="left chevron icon"></i></a>
+  <a class="page active item">1</a>${page_num_content}
+  <a class="icon item"><i class="right chevron icon"></i></a>`;
+
   $("#search_page_change").empty();
   $("#search_page_change").append(change_page);
   storeCourseInfo(hits);
@@ -75,24 +71,11 @@ function renderSearchResult(hits, callback) {
       }
       checkConflict(time, negative => {
         if (isEmpty == false) {
-          row =
-            `<tr ` +
-            negative +
-            ` id="` +
-            id +
-            `">
-          <td>` +
-            source.科號 +
-            `</td>
-            <td>` +
-            source.課程中文名稱 +
-            `</td>
-          <td>` +
-            time +
-            `</td>
-          <td>` +
-            classroom.join("<br/>") +
-            `</td>
+          row = `<tr ${negative} id="${id}">
+          <td>${source.科號}</td>
+          <td>${source.課程中文名稱}</td>
+          <td>${time}</td>
+          <td>${classroom.join("<br/>")}</td>
           <td>`;
           row += teacher.join("<br>") + `</td></tr>`;
         }
@@ -115,7 +98,7 @@ function renderSearchResult(hits, callback) {
 function searchOnlyKeyword(search_topic, keyword, callback) {
   request.post(
     {
-      url: baseURL + "searchOnlyKeyword",
+      url: `${baseURL}searchOnlyKeyword`,
       form: {
         search_topic: search_topic,
         keyword: keyword
@@ -125,7 +108,6 @@ function searchOnlyKeyword(search_topic, keyword, callback) {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
-        // console.log(hits);
         renderSearchResult(hits, callback);
       }
     }
@@ -135,18 +117,17 @@ function searchOnlyKeyword(search_topic, keyword, callback) {
 function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
   request.post(
     {
-      url: baseURL + "searchDoubleKeyword",
+      url: `${baseURL}searchDoubleKeyword`,
       form: {
-        search_topic: search_topic,
-        keyword: keyword,
-        other_keyword: other_keyword
+        search_topic,
+        keyword,
+        other_keyword
       }
     },
     (err, response, body) => {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
-        // console.log(hits);
         renderSearchResult(hits, callback);
       }
     }
@@ -157,7 +138,7 @@ function searchTime(search_topic, keyword, time_group, callback) {
   console.log(time_group);
   request.post(
     {
-      url: baseURL + "searchTime",
+      url: `${baseURL}searchTime`,
       form: {
         search_topic: search_topic,
         keyword: keyword,
@@ -168,7 +149,6 @@ function searchTime(search_topic, keyword, time_group, callback) {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
         let hits = resp.hits.hits;
-        // console.log(hits);
         renderSearchResult(hits, callback);
       }
     }
@@ -182,16 +162,11 @@ function searchByKeyword(keyword, other_keyword, topic, callback) {
   if (search_topic == "科號") keyword = addSpace_course_no(keyword);
 
   if (other_keyword == "NoNeedToChoose") {
-    console.log("search_topic:", search_topic, ",keyword:", keyword);
+    console.log(`search_topic:${search_topic},keyword:${keyword}`);
     searchOnlyKeyword(search_topic, keyword, callback);
   } else {
     console.log(
-      "search_topic:",
-      search_topic,
-      ",keyword:",
-      keyword,
-      ",other_keyword:",
-      other_keyword
+      `search_topic:${search_topic},keyword:${keyword},other_keyword:${other_keyword}`
     );
     if (search_topic == "時間")
       searchTime(search_topic, keyword, other_keyword, callback);
@@ -200,13 +175,14 @@ function searchByKeyword(keyword, other_keyword, topic, callback) {
 }
 
 const storeCourseInfo = hits => {
-  return new Promise(function(resolve) {
+  return new Promise(resolve => {
     chrome.storage.local.get("course", items => {
       let temp = {};
       let data = {};
       for (let each_course in hits) {
         let each = hits[each_course];
         let source = each._source;
+        // TODO: 用 ES6
         data[each._id] = {
           不可加簽說明: source.不可加簽說明,
           人限: source.人限,
@@ -265,7 +241,7 @@ const searchBySingleCourseNo = course_no =>
     let new_course_no = addSpace_course_no(course_no);
     request.post(
       {
-        url: baseURL + "searchBySingleCourseNo",
+        url: `${baseURL}searchBySingleCourseNo`,
         form: {
           course_no: new_course_no
         }
@@ -283,7 +259,7 @@ const searchBySingleCourseNo = course_no =>
 function searchByID_Group(id_group, callback) {
   request.post(
     {
-      url: baseURL + "searchByID_Group",
+      url: `${baseURL}searchByID_Group`,
       form: {
         id_0: id_group[0].other_id,
         id_1: id_group[1].other_id,

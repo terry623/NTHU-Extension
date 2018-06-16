@@ -5,9 +5,9 @@ var urlPattern = "*://www.ccxp.nthu.edu.tw/ccxp/*";
 
 //利用 tabs.query api 查找畫面上的所有tab
 function queryTabsAndShowPageActions(queryObject) {
-  chrome.tabs.query(queryObject, function(tabs) {
+  chrome.tabs.query(queryObject, tabs => {
     if (tabs && tabs.length > 0) {
-      for (var i = 0; i < tabs.length; i++) {
+      for (let i = 0; i < tabs.length; i++) {
         //在加載完畢的tab上，使用chrome.pageAction.show 啟用按鈕
         if (tabs[i].status === "complete") chrome.pageAction.show(tabs[i].id);
       }
@@ -16,7 +16,7 @@ function queryTabsAndShowPageActions(queryObject) {
 }
 
 //第一次的初始化：extension初次載入時
-chrome.runtime.onInstalled.addListener(function() {
+chrome.runtime.onInstalled.addListener(() => {
   queryTabsAndShowPageActions({
     active: false,
     currentWindow: true,
@@ -25,7 +25,7 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 //每次tab有變動，檢查現在這個current tab是否在指定的 url pattern底下
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+chrome.tabs.onUpdated.addListener(() => {
   queryTabsAndShowPageActions({
     active: true,
     currentWindow: true,

@@ -259,15 +259,7 @@ const getCurrentStateOfNTHU = () =>
     let day = datetime.getDate();
     request(
       {
-        url:
-          baseURL +
-          "getCurrentStateOfNTHU?" +
-          "year=" +
-          year +
-          "&month=" +
-          month +
-          "&day=" +
-          day
+        url: `${baseURL}getCurrentStateOfNTHU?year=${year}&month=${month}&day=${day}`
       },
       (err, response, body) => {
         if (!err && response.statusCode == 200) {
@@ -275,7 +267,7 @@ const getCurrentStateOfNTHU = () =>
           let phase = parseInt(info.currentPhase);
           let tran_phase = currentPhase(phase);
           let countDown = parseInt(info.countDown);
-          $("#count_down").text(countDown + " days");
+          $("#count_down").text(`${countDown} days`);
 
           //  加退選之後日期都沒考慮
           //  1  第 1 次選課 log 記錄

@@ -25,16 +25,14 @@ function addListener() {
       let blockingResponse = {};
       headers.push({
         name: "Referer",
-        value:
-          "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php?ACIXSTORE=" +
-          acix
+        value: `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php?ACIXSTORE=${acix}`
       });
       blockingResponse.requestHeaders = headers;
       return blockingResponse;
     },
     {
       urls: [
-        "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php"
+        `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`
       ]
     },
     ["requestHeaders", "blocking"]
@@ -109,13 +107,10 @@ $(".ui.secondary.menu").on("click", ".item", function() {
     t.show();
     $("#change_school_table").hide();
 
-    if ($(this).hasClass("homePage")) {
-      t.not(".homePage").hide();
-    } else if ($(this).hasClass("searchPage")) {
-      t.not(".searchPage").hide();
-    } else if ($(this).hasClass("choosePage")) {
+    if ($(this).hasClass("homePage")) t.not(".homePage").hide();
+    else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();
+    else if ($(this).hasClass("choosePage")) {
       t.not(".choosePage").hide();
-
       $("#change_school_table").show();
     } else if ($(this).hasClass("recommendPage")) {
       // t.not(".recommendPage").hide();

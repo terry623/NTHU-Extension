@@ -85,7 +85,7 @@
 	});
 	
 	//每次tab有變動，檢查現在這個current tab是否在指定的 url pattern底下
-	chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+	chrome.tabs.onUpdated.addListener(function () {
 	  queryTabsAndShowPageActions({
 	    active: true,
 	    currentWindow: true,

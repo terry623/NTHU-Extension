@@ -10,10 +10,7 @@ var course_list = [];
 
 function serialize(obj) {
   let str = [];
-  for (let p in obj)
-    if (obj.hasOwnProperty(p)) {
-      str.push(p + "=" + obj[p]);
-    }
+  for (let p in obj) if (obj.hasOwnProperty(p)) str.push(`${p}=${obj[p]}`);
   return str.join("&");
 }
 
@@ -120,6 +117,7 @@ function selectEachCourse(course_no_order, callback) {
     let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`;
     let needReload = true;
 
+    // TODO: 用 ES6
     let form = {
       ACIXSTORE: acix,
       toChk: "",
@@ -207,7 +205,7 @@ function callSelectEachCourse(course_num, count, callback) {
   if (count > course_num) return;
   let course_no_order = course_list[count - 1];
   let course_no = course_no_order.course_no;
-  $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
+  $("#nthu_loading_text").html(`正 在 選 課 中<br/><br/>${course_no}`);
   selectEachCourse(course_no_order, (isSuccess, message, needReload) => {
     if (isSuccess == true) correct_list.push({ course_no, message });
     else wrong_list.push({ course_no, message });
@@ -274,28 +272,18 @@ const showCourseModal = () =>
     if (correct_list.length != 0) {
       $("#select_course_status").append(`<div class="item">成功：</div>`);
       for (let each in correct_list) {
+        let course_no = correct_list[each].course_no;
         let message = correct_list[each].message.match(patt);
-        let content =
-          `<div class="item">` +
-          correct_list[each].course_no +
-          ` ( ` +
-          message +
-          ` )` +
-          `</div>`;
+        let content = `<div class="item">${course_no} ( ${message} )</div>`;
         $("#select_course_status").append(content);
       }
     }
     if (wrong_list.length != 0) {
       $("#select_course_status").append(`<div class="item">失敗：</div>`);
       for (let each in wrong_list) {
+        let course_no = wrong_list[each].course_no;
         let message = wrong_list[each].message.match(patt);
-        let content =
-          `<div class="item">` +
-          wrong_list[each].course_no +
-          ` ( ` +
-          message +
-          ` )` +
-          `</div>`;
+        let content = `<div class="item">${course_no} ( ${message} )</div>`;
         $("#select_course_status").append(content);
       }
     }

@@ -9079,13 +9079,8 @@
 	    t.show();
 	    $("#change_school_table").hide();
 	
-	    if ($(this).hasClass("homePage")) {
-	      t.not(".homePage").hide();
-	    } else if ($(this).hasClass("searchPage")) {
-	      t.not(".searchPage").hide();
-	    } else if ($(this).hasClass("choosePage")) {
+	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();else if ($(this).hasClass("choosePage")) {
 	      t.not(".choosePage").hide();
-	
 	      $("#change_school_table").show();
 	    } else if ($(this).hasClass("recommendPage")) {
 	      // t.not(".recommendPage").hide();
@@ -9135,15 +9130,15 @@
 	var course_table = "<tbody>\n    <tr class=\"\">\n        <td>\n            <div>08:00 - 08:50</div>\n        </td>\n        <td class=\"M1 selectable\"> </td>\n        <td class=\"T1 selectable\"> </td>\n        <td class=\"W1 selectable\"> </td>\n        <td class=\"R1 selectable\"> </td>\n        <td class=\"F1 selectable\"> </td>\n        <td class=\"S1 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>09:00 - 09:50</div>\n        </td>\n        <td class=\"M2 selectable\"> </td>\n        <td class=\"T2 selectable\"> </td>\n        <td class=\"W2 selectable\"> </td>\n        <td class=\"R2 selectable\"> </td>\n        <td class=\"F2 selectable\"> </td>\n        <td class=\"S2 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>10:10 - 11:00</div>\n        </td>\n        <td class=\"M3 selectable\"> </td>\n        <td class=\"T3 selectable\"> </td>\n        <td class=\"W3 selectable\"> </td>\n        <td class=\"R3 selectable\"> </td>\n        <td class=\"F3 selectable\"> </td>\n        <td class=\"S3 selectable\"> </td>\n        </tr>\n    <tr class=\"\">\n        <td>\n            <div>11:10 - 12:00</div>\n        </td>\n        <td class=\"M4 selectable\"> </td>\n        <td class=\"T4 selectable\"> </td>\n        <td class=\"W4 selectable\"> </td>\n        <td class=\"R4 selectable\"> </td>\n        <td class=\"F4 selectable\"> </td>\n        <td class=\"S4 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>12:10 - 13:00</div>\n        </td>\n        <td class=\"Mn selectable\"> </td>\n        <td class=\"Tn selectable\"> </td>\n        <td class=\"Wn selectable\"> </td>\n        <td class=\"Rn selectable\"> </td>\n        <td class=\"Fn selectable\"> </td>\n        <td class=\"Sn selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>13:20 - 14:10</div>\n        </td>\n        <td class=\"M5 selectable\"> </td>\n        <td class=\"T5 selectable\"> </td>\n        <td class=\"W5 selectable\"> </td>\n        <td class=\"R5 selectable\"> </td>\n        <td class=\"F5 selectable\"> </td>\n        <td class=\"S5 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>14:20 - 15:10</div>\n        </td>\n        <td class=\"M6 selectable\"> </td>\n        <td class=\"T6 selectable\"> </td>\n        <td class=\"W6 selectable\"> </td>\n        <td class=\"R6 selectable\"> </td>\n        <td class=\"F6 selectable\"> </td>\n        <td class=\"S6 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>15:30 - 16:20</div>\n        </td>\n        <td class=\"M7 selectable\"> </td>\n        <td class=\"T7 selectable\"> </td>\n        <td class=\"W7 selectable\"> </td>\n        <td class=\"R7 selectable\"> </td>\n        <td class=\"F7 selectable\"> </td>\n        <td class=\"S7 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>16:30 - 17:20</div>\n        </td>\n        <td class=\"M8 selectable\"> </td>\n        <td class=\"T8 selectable\"> </td>\n        <td class=\"W8 selectable\"> </td>\n        <td class=\"R8 selectable\"> </td>\n        <td class=\"F8 selectable\"> </td>\n        <td class=\"S8 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>17:30 - 18:20</div>\n        </td>\n        <td class=\"M9 selectable\"> </td>\n        <td class=\"T9 selectable\"> </td>\n        <td class=\"W9 selectable\"> </td>\n        <td class=\"R9 selectable\"> </td>\n        <td class=\"F9 selectable\"> </td>\n        <td class=\"S9 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>18:30 - 19:20</div>\n        </td>\n        <td class=\"Ma selectable\"> </td>\n        <td class=\"Ta selectable\"> </td>\n        <td class=\"Wa selectable\"> </td>\n        <td class=\"Ra selectable\"> </td>\n        <td class=\"Fa selectable\"> </td>\n        <td class=\"Sa selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>19:30 - 20:20</div>\n        </td>\n        <td class=\"Mb selectable\"> </td>\n        <td class=\"Tb selectable\"> </td>\n        <td class=\"Wb selectable\"> </td>\n        <td class=\"Rb selectable\"> </td>\n        <td class=\"Fb selectable\"> </td>\n        <td class=\"Sb selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>20:30 - 21:20</div>\n        </td>\n        <td class=\"Mc selectable\"> </td>\n        <td class=\"Tc selectable\"> </td>\n        <td class=\"Wc selectable\"> </td>\n        <td class=\"Rc selectable\"> </td>\n        <td class=\"Fc selectable\"> </td>\n        <td class=\"Sc selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n        <td class=\"none selectable\" colspan=\"6\">\n        </td>\n    </tr>\n    </tbody>";
 	
 	function getUrlVars(url) {
-	  var vars = [];
+	  var values = [];
 	  var hash = void 0;
 	  var hashes = url.slice(url.indexOf("?") + 1).split("&");
 	  for (var i = 0; i < hashes.length; i++) {
 	    hash = hashes[i].split("=");
-	    vars.push(hash[0]);
-	    vars[hash[0]] = hash[1];
+	    values.push(hash[0]);
+	    values[hash[0]] = hash[1];
 	  }
-	  return vars;
+	  return values;
 	}
 	
 	function courseAddSpace(course_no) {
@@ -9251,13 +9246,11 @@
 	function addSpace_course_no(course_no) {
 	  var check_patt = /[0-9]+[A-Za-z]+\s*[0-9]+/g;
 	  if (course_no.match(check_patt) == null) return course_no;else {
-	    var head_patt = /[0-9]+[A-Za-z]+/g;
-	    var head = course_no.match(head_patt)[0];
-	    var tail_patt = /[0-9]+/g;
-	    var tail = course_no.match(tail_patt)[1];
-	    var space_shoule = 15 - head.length - tail.length;
+	    var head = course_no.match(/[0-9]+[A-Za-z]+/g)[0];
+	    var tail = course_no.match(/[0-9]+/g)[1];
+	    var remain = 15 - head.length - tail.length;
 	    var space = "";
-	    for (var i = 0; i < space_shoule; i++) {
+	    for (var i = 0; i < remain; i++) {
 	      space = space.concat(" ");
 	    }var new_course_no = head.concat(space).concat(tail);
 	    return new_course_no;
@@ -9397,7 +9390,7 @@
 	        (0, _helper.miniMessageAlert)("系統錯誤", "請登入或重新登入校務資訊系統");
 	      } else {
 	        var found = $("div > form > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(4)", temp);
-	        var welcome = "你選到好課了嗎，" + found.text() + " ?";
+	        var welcome = "\u4F60\u9078\u5230\u597D\u8AB2\u4E86\u55CE\uFF0C" + found.text() + " ?";
 	        $("#user").prepend(welcome);
 	      }
 	    }
@@ -9466,7 +9459,6 @@
 	      var str = iconv.decode(new Buffer(body), "big5");
 	      var temp = document.createElement("div");
 	      temp.innerHTML = str;
-	      // console.log.apply(console, $(temp));
 	
 	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
 	        (0, _helper.miniMessageAlert)("系統錯誤", "請登入或重新登入校務資訊系統");
@@ -9529,8 +9521,8 @@
 	
 	          if (find_file.length > 0) {
 	            var pdf_path = "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
-	            $("#pdf_page").html("<div id=\"pdf_render\" align=\"right\" style=\"display:none;\">\n                        <button id=\"prev\" class=\"tiny ui basic button\">\n                            <i class=\"angle left icon\"></i>\n                        </button>\n                        <button id=\"next\" class=\"tiny ui basic button\">\n                            <i class=\"angle right icon\"></i>\n                        </button>\n                        &nbsp; &nbsp;\n                        <span>Page:\n                            <span id=\"page_num\" ></span> /\n                            <span id=\"page_count\"></span>\n                        </span>\n                    </div>\n                    <canvas id=\"the-canvas\" />\n                    ");
-	            (0, _pdf2html.transform)(pdf_path + course_no + ".pdf?ACIXSTORE=" + _popup.acix);
+	            $("#pdf_page").html("<div id=\"pdf_render\" align=\"right\" style=\"display:none;\">\n                    <button id=\"prev\" class=\"tiny ui basic button\">\n                        <i class=\"angle left icon\"></i>\n                    </button>\n                    <button id=\"next\" class=\"tiny ui basic button\">\n                        <i class=\"angle right icon\"></i>\n                    </button>\n                    &nbsp; &nbsp;\n                    <span>Page:\n                        <span id=\"page_num\" ></span> /\n                        <span id=\"page_count\"></span>\n                    </span>\n                </div>\n                <canvas id=\"the-canvas\" />\n                ");
+	            (0, _pdf2html.transform)("" + pdf_path + course_no + ".pdf?ACIXSTORE=" + _popup.acix);
 	          } else $("#syllabus").html(syllabus.html());
 	
 	          for (var i = 0; i < $("#class_accordion > div").length / 2; i++) {
@@ -9596,7 +9588,9 @@
 	          $("#multiple_class_list_bySingle").empty();
 	          if ($(this).children().length > 1) {
 	            $("a", this).each(function () {
-	              var content = "<div" + " course_no=\"" + $(this).attr("course_no") + "\" class=\"item\">\n                  <div class=\"content\">\n                  <div class=\"description\">" + $(this).text() + "</div>\n                  </div>\n                  </div>";
+	              var course_no = $(this).attr("course_no");
+	              var text = $(this).text();
+	              var content = "<div course_no=\"" + course_no + "\" class=\"item\">\n                  <div class=\"content\">\n                    <div class=\"description\">" + text + "</div>\n                  </div>\n                </div>";
 	              $("#multiple_class_list_bySingle").append(content);
 	            });
 	            $("#multiple_class_bySingle").modal("show");
@@ -11792,20 +11786,15 @@
 	 * finised. Otherwise, executes rendering immediately.
 	 */
 	function queueRenderPage(num) {
-	  if (pageRendering) {
-	    pageNumPending = num;
-	  } else {
-	    renderPage(num);
-	  }
+	  if (pageRendering) pageNumPending = num;else renderPage(num);
 	}
 	
 	/**
 	 * Displays previous page.
 	 */
 	function onPrevPage() {
-	  if (pageNum <= 1) {
-	    return;
-	  }
+	  if (pageNum <= 1) return;
+	
 	  pageNum--;
 	  queueRenderPage(pageNum);
 	}
@@ -11814,9 +11803,7 @@
 	 * Displays next page.
 	 */
 	function onNextPage() {
-	  if (pageNum >= pdfDoc.numPages) {
-	    return;
-	  }
+	  if (pageNum >= pdfDoc.numPages) return;
 	  pageNum++;
 	  queueRenderPage(pageNum);
 	}
@@ -11875,7 +11862,8 @@
 	    var page_num = i + 1;
 	    page_num_content = page_num_content.concat("<a class=\"page item\">" + page_num + "</a>");
 	  }
-	  var change_page = "<a class=\"icon item\">\n    <i class=\"left chevron icon\"></i></a>\n    <a class=\"page active item\">1</a>" + page_num_content + "<a class=\"icon item\">\n      <i class=\"right chevron icon\"></i>\n    </a>";
+	  var change_page = "<a class=\"icon item\"><i class=\"left chevron icon\"></i></a>\n  <a class=\"page active item\">1</a>" + page_num_content + "\n  <a class=\"icon item\"><i class=\"right chevron icon\"></i></a>";
+	
 	  $("#search_page_change").empty();
 	  $("#search_page_change").append(change_page);
 	  storeCourseInfo(hits);
@@ -11917,7 +11905,7 @@
 	      }
 	      (0, _conflict.checkConflict)(time, function (negative) {
 	        if (isEmpty == false) {
-	          row = "<tr " + negative + " id=\"" + id + "\">\n          <td>" + source.科號 + "</td>\n            <td>" + source.課程中文名稱 + "</td>\n          <td>" + time + "</td>\n          <td>" + classroom.join("<br/>") + "</td>\n          <td>";
+	          row = "<tr " + negative + " id=\"" + id + "\">\n          <td>" + source.科號 + "</td>\n          <td>" + source.課程中文名稱 + "</td>\n          <td>" + time + "</td>\n          <td>" + classroom.join("<br/>") + "</td>\n          <td>";
 	          row += teacher.join("<br>") + "</td></tr>";
 	        }
 	
@@ -11949,7 +11937,6 @@
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
 	      var hits = resp.hits.hits;
-	      // console.log(hits);
 	      renderSearchResult(hits, callback);
 	    }
 	  });
@@ -11967,7 +11954,6 @@
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
 	      var hits = resp.hits.hits;
-	      // console.log(hits);
 	      renderSearchResult(hits, callback);
 	    }
 	  });
@@ -11986,7 +11972,6 @@
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
 	      var hits = resp.hits.hits;
-	      // console.log(hits);
 	      renderSearchResult(hits, callback);
 	    }
 	  });
@@ -11999,10 +11984,10 @@
 	  if (search_topic == "科號") keyword = (0, _helper.addSpace_course_no)(keyword);
 	
 	  if (other_keyword == "NoNeedToChoose") {
-	    console.log("search_topic:", search_topic, ",keyword:", keyword);
+	    console.log("search_topic:" + search_topic + ",keyword:" + keyword);
 	    searchOnlyKeyword(search_topic, keyword, callback);
 	  } else {
-	    console.log("search_topic:", search_topic, ",keyword:", keyword, ",other_keyword:", other_keyword);
+	    console.log("search_topic:" + search_topic + ",keyword:" + keyword + ",other_keyword:" + other_keyword);
 	    if (search_topic == "時間") searchTime(search_topic, keyword, other_keyword, callback);else searchDoubleKeyword(search_topic, keyword, other_keyword, callback);
 	  }
 	}
@@ -12015,6 +12000,7 @@
 	      for (var each_course in hits) {
 	        var each = hits[each_course];
 	        var _source = each._source;
+	        // TODO: 用 ES6
 	        data[each._id] = {
 	          不可加簽說明: _source.不可加簽說明,
 	          人限: _source.人限,
@@ -12391,7 +12377,8 @@
 	        var patt = /[^A-Za-z0-9_]+/;
 	        var name = items.cart[key].course_name.match(patt)[0];
 	        name = name.match(/\S+/)[0];
-	        var content = "<a href=\"#do_not_jump\" id=\"" + key + "\" course_no=\"" + items.cart[key].course_no + "\">" + name + "</a>";
+	        var course_no = items.cart[key].course_no;
+	        var content = "<a href=\"#do_not_jump\" id=\"" + key + "\" course_no=\"" + course_no + "\">" + name + "</a>";
 	
 	        if (items.cart[key].time == "無") {
 	          $(parse_table).find(".none").append(content);
@@ -12416,14 +12403,17 @@
 	      $("#multiple_class_list").empty();
 	      if ($(this).children().length > 1) {
 	        $("a", this).each(function () {
-	          var content = "<div id=\"" + $(this).attr("id") + "\" course_no=\"" + $(this).attr("course_no") + "\" class=\"item\">\n            <div class=\"content\">\n            <div class=\"description\">" + $(this).text() + "</div>\n            </div>\n            </div>";
+	          var id = $(this).attr("id");
+	          var course_no = $(this).attr("course_no");
+	          var text = $(this).text();
+	          var content = "<div id=\"" + id + "\" course_no=\"" + course_no + "\" class=\"item\">\n            <div class=\"content\">\n              <div class=\"description\">" + text + "</div>\n            </div>\n          </div>";
 	          $("#multiple_class_list").append(content);
 	        });
 	        $("#multiple_class").modal("show");
 	      } else {
-	        var course_no = $("a", this).attr("course_no");
+	        var _course_no = $("a", this).attr("course_no");
 	        var id = $("a", this).attr("id");
-	        (0, _api.getCourseInfo)(course_no, id, function () {
+	        (0, _api.getCourseInfo)(_course_no, id, function () {
 	          $(".course_action").hide();
 	          $("#delete").show();
 	          $("#back").show();
@@ -12437,7 +12427,9 @@
 	function course_order_list(id, item, count) {
 	  var patt = /[^A-Za-z\\]+/;
 	  if (item.order > -1) {
-	    var content = "<div course_no=\"" + item.course_no + "\" class=\"item\">\n    <div id=\"" + id + "\" class=\"number right floated content\">0</div>\n    <div class=\"content\">\n    <div class=\"description\">" + item.course_name.match(patt) + "</div>\n    </div>\n    </div>";
+	    var course_no = item.course_no;
+	    var name = item.course_name.match(patt);
+	    var content = "<div course_no=\"" + course_no + "\" class=\"item\">\n      <div id=\"" + id + "\" class=\"number right floated content\">0</div>\n      <div class=\"content\">\n        <div class=\"description\">" + name + "</div>\n      </div>\n    </div>";
 	    $("#course_order_list").append(content);
 	    count++;
 	    $("#course_order_list").attr("course_num", count);
@@ -12562,9 +12554,7 @@
 	function serialize(obj) {
 	  var str = [];
 	  for (var p in obj) {
-	    if (obj.hasOwnProperty(p)) {
-	      str.push(p + "=" + obj[p]);
-	    }
+	    if (obj.hasOwnProperty(p)) str.push(p + "=" + obj[p]);
 	  }return str.join("&");
 	}
 	
@@ -12663,6 +12653,7 @@
 	    var url = "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php";
 	    var needReload = true;
 	
+	    // TODO: 用 ES6
 	    var form = {
 	      ACIXSTORE: _popup.acix,
 	      toChk: "",
@@ -12734,7 +12725,7 @@
 	  if (count > course_num) return;
 	  var course_no_order = course_list[count - 1];
 	  var course_no = course_no_order.course_no;
-	  $("#nthu_loading_text").html("正 在 選 課 中<br/><br/>" + course_no);
+	  $("#nthu_loading_text").html("\u6B63 \u5728 \u9078 \u8AB2 \u4E2D<br/><br/>" + course_no);
 	  selectEachCourse(course_no_order, function (isSuccess, message, needReload) {
 	    if (isSuccess == true) correct_list.push({ course_no: course_no, message: message });else wrong_list.push({ course_no: course_no, message: message });
 	
@@ -12801,16 +12792,18 @@
 	    if (correct_list.length != 0) {
 	      $("#select_course_status").append("<div class=\"item\">\u6210\u529F\uFF1A</div>");
 	      for (var each in correct_list) {
+	        var course_no = correct_list[each].course_no;
 	        var message = correct_list[each].message.match(patt);
-	        var content = "<div class=\"item\">" + correct_list[each].course_no + " ( " + message + " )" + "</div>";
+	        var content = "<div class=\"item\">" + course_no + " ( " + message + " )</div>";
 	        $("#select_course_status").append(content);
 	      }
 	    }
 	    if (wrong_list.length != 0) {
 	      $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");
 	      for (var _each in wrong_list) {
+	        var _course_no = wrong_list[_each].course_no;
 	        var _message = wrong_list[_each].message.match(patt);
-	        var _content = "<div class=\"item\">" + wrong_list[_each].course_no + " ( " + _message + " )" + "</div>";
+	        var _content = "<div class=\"item\">" + _course_no + " ( " + _message + " )</div>";
 	        $("#select_course_status").append(_content);
 	      }
 	    }
@@ -62607,7 +62600,7 @@
 	    var month = datetime.getMonth() + 1;
 	    var day = datetime.getDate();
 	    request({
-	      url: _search.baseURL + "getCurrentStateOfNTHU?" + "year=" + year + "&month=" + month + "&day=" + day
+	      url: _search.baseURL + "getCurrentStateOfNTHU?year=" + year + "&month=" + month + "&day=" + day
 	    }, function (err, response, body) {
 	      if (!err && response.statusCode == 200) {
 	        var info = JSON.parse(body);

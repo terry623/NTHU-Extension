@@ -14,9 +14,7 @@ import { acix, stu_no, year, semester } from "./popup";
 function renderUserName() {
   request(
     {
-      url:
-        "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/4/4.19/JH4j002.php?ACIXSTORE=" +
-        acix,
+      url: `https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/4/4.19/JH4j002.php?ACIXSTORE=${acix}`,
       encoding: null
     },
     (err, response, body) => {
@@ -36,7 +34,7 @@ function renderUserName() {
             "div > form > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(4)",
             temp
           );
-          let welcome = "你選到好課了嗎，" + found.text() + " ?";
+          let welcome = `你選到好課了嗎，${found.text()} ?`;
           $("#user").prepend(welcome);
         }
       }
@@ -119,11 +117,7 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
   if (!from_multiple) $("#loading").addClass("active");
   request(
     {
-      url:
-        "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=" +
-        acix +
-        "&c_key=" +
-        course_no,
+      url: `https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=${acix}&c_key=${course_no}`,
       encoding: null
     },
     (err, response, body) => {
@@ -131,7 +125,6 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
         let str = iconv.decode(new Buffer(body), "big5");
         let temp = document.createElement("div");
         temp.innerHTML = str;
-        // console.log.apply(console, $(temp));
 
         if (
           $(temp)
@@ -187,7 +180,7 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
 
             $("#no").text(info.科號);
             $("#course_name").html(
-              info.課程中文名稱 + "&nbsp;&nbsp;" + info.課程英文名稱
+              `${info.課程中文名稱}&nbsp;&nbsp;${info.課程英文名稱}`
             );
             $("#credit").text(info.學分數);
             $("#time").text(time);
@@ -213,22 +206,22 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
                 "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
               $("#pdf_page").html(
                 `<div id="pdf_render" align="right" style="display:none;">
-                        <button id="prev" class="tiny ui basic button">
-                            <i class="angle left icon"></i>
-                        </button>
-                        <button id="next" class="tiny ui basic button">
-                            <i class="angle right icon"></i>
-                        </button>
-                        &nbsp; &nbsp;
-                        <span>Page:
-                            <span id="page_num" ></span> /
-                            <span id="page_count"></span>
-                        </span>
-                    </div>
-                    <canvas id="the-canvas" />
-                    `
+                    <button id="prev" class="tiny ui basic button">
+                        <i class="angle left icon"></i>
+                    </button>
+                    <button id="next" class="tiny ui basic button">
+                        <i class="angle right icon"></i>
+                    </button>
+                    &nbsp; &nbsp;
+                    <span>Page:
+                        <span id="page_num" ></span> /
+                        <span id="page_count"></span>
+                    </span>
+                </div>
+                <canvas id="the-canvas" />
+                `
               );
-              transform(pdf_path + course_no + ".pdf?ACIXSTORE=" + acix);
+              transform(`${pdf_path}${course_no}.pdf?ACIXSTORE=${acix}`);
             } else $("#syllabus").html(syllabus.html());
 
             for (let i = 0; i < $("#class_accordion > div").length / 2; i++)
@@ -335,12 +328,7 @@ function getResultCourse(phaseNo, callback) {
                 .split(/[A-Za-z]+/)[0];
               course_name = removeLongCourseName(course_name);
               let time = $("td:nth-child(4)", this).text();
-              let content =
-                `<a course_no="` +
-                course_no +
-                `" href="#do_not_jump">` +
-                course_name +
-                `</a>`;
+              let content = `<a course_no="${course_no}" href="#do_not_jump">${course_name}</a>`;
               if (time.length == 1) {
                 $(parse_table)
                   .find(".none")
@@ -365,17 +353,13 @@ function getResultCourse(phaseNo, callback) {
             $("#multiple_class_list_bySingle").empty();
             if ($(this).children().length > 1) {
               $("a", this).each(function() {
-                let content =
-                  `<div` +
-                  ` course_no="` +
-                  $(this).attr("course_no") +
-                  `" class="item">
+                let course_no = $(this).attr("course_no");
+                let text = $(this).text();
+                let content = `<div course_no="${course_no}" class="item">
                   <div class="content">
-                  <div class="description">` +
-                  $(this).text() +
-                  `</div>
+                    <div class="description">${text}</div>
                   </div>
-                  </div>`;
+                </div>`;
                 $("#multiple_class_list_bySingle").append(content);
               });
               $("#multiple_class_bySingle").modal("show");
