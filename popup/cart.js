@@ -27,15 +27,14 @@ function getCart() {
             .append(content);
         } else {
           let slice_time = [];
-          for (let each in items.cart[key].time) {
-            let each_time = items.cart[key].time[each];
+          for (let each_time of items.cart[key].time) {
             slice_time.push(each_time);
             target_time.push(each_time);
           }
 
-          for (let each in slice_time) {
+          for (let each_time of slice_time) {
             $(parse_table)
-              .find("." + slice_time[each])
+              .find("." + each_time)
               .append(content);
           }
         }

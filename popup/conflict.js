@@ -3,9 +3,9 @@ import { all_time } from "./helper";
 var old_time = [];
 function subtractArray(target_time) {
   let slice_time = [];
-  for (let each in target_time) {
-    let index = old_time.indexOf(target_time[each]);
-    if (index == -1) slice_time.push(target_time[each]);
+  for (let each of target_time) {
+    let index = old_time.indexOf(each);
+    if (index == -1) slice_time.push(each);
     else old_time.splice(index, 1);
   }
   return slice_time;
@@ -18,7 +18,7 @@ function storeSliceTime(target_time) {
     let temp = {};
     if (items.time != undefined) {
       Object.assign(temp, items.time);
-      for (let each in slice_time) temp[slice_time[each]]++;
+      for (let each of slice_time) temp[each]++;
       chrome.storage.local.remove("time", () => {
         chrome.storage.local.set({ time: temp }, () => {
           chrome.storage.local.get("time", items => {
@@ -27,8 +27,8 @@ function storeSliceTime(target_time) {
         });
       });
     } else {
-      for (let each in all_time) temp[all_time[each]] = 0;
-      for (let each in slice_time) temp[slice_time[each]]++;
+      for (let each of all_time) temp[each] = 0;
+      for (let each of slice_time) temp[each]++;
       chrome.storage.local.set({ time: temp }, () => {
         chrome.storage.local.get("time", items => {
           // console.log(items);
@@ -43,9 +43,8 @@ function checkConflict(time_array, callback) {
     if (time_array == "empty") callback();
     let conflict = false;
     if (items.time != undefined) {
-      for (let each in time_array) {
-        if (items.time[time_array[each]] != 0 && time_array[each] != "無")
-          conflict = true;
+      for (let each of time_array) {
+        if (items.time[each] != 0 && each != "無") conflict = true;
       }
       if (conflict) {
         const negative = `class="error"`;
@@ -62,7 +61,7 @@ function removeTimeOfCourse(time_array) {
   chrome.storage.local.get("time", items => {
     let temp = {};
     Object.assign(temp, items.time);
-    for (let each in time_array) temp[time_array[each]]--;
+    for (let each of time_array) temp[each]--;
 
     chrome.storage.local.remove("time", () => {
       chrome.storage.local.set({ time: temp }, () => {

@@ -9493,9 +9493,32 @@
 	          $(".course_info.scrolling.content").attr("id", id);
 	
 	          var teacher = [];
-	          for (var each in info.教師) {
-	            teacher.push(info.教師[each].split("\t")[0]);
-	          }teacher.splice(-1, 1);
+	          var _iteratorNormalCompletion = true;
+	          var _didIteratorError = false;
+	          var _iteratorError = undefined;
+	
+	          try {
+	            for (var _iterator = info.教師[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	              var each = _step.value;
+	
+	              teacher.push(each.split("\t")[0]);
+	            }
+	          } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
+	          } finally {
+	            try {
+	              if (!_iteratorNormalCompletion && _iterator.return) {
+	                _iterator.return();
+	              }
+	            } finally {
+	              if (_didIteratorError) {
+	                throw _iteratorError;
+	              }
+	            }
+	          }
+	
+	          teacher.splice(-1, 1);
 	          if (teacher.length == 0) $("#teacher").text("None");else $("#teacher").text(teacher.join(" / "));
 	
 	          $("#no").text(info.科號);
@@ -11875,52 +11898,95 @@
 	    var fill_empty_num = all_should_row - copy_hits.length;
 	    for (var _i = fill_empty_num; _i > 0; _i--) {
 	      copy_hits.push("empty");
-	    }
-	    var _loop = function _loop(each_course) {
-	      var row = void 0;
-	      var id = void 0,
-	          source = void 0,
-	          time = void 0,
-	          classroom = void 0;
-	      var teacher = [];
-	      var isEmpty = false;
-	      if (copy_hits[each_course] == "empty") {
-	        row = "<tr class=\"empty_row\">\n          <td></td>\n          <td></td>\n          <td></td>\n          <td></td>\n          <td></td></tr>";
-	        time = "empty";
-	        isEmpty = true;
-	      } else {
-	        id = copy_hits[each_course]._id;
-	        source = copy_hits[each_course]._source;
+	    }var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
 	
-	        time = source.時間;
-	        if (time.length == 0) time.push("無");
-	        (0, _helper.sort_weekday)(time);
+	    try {
+	      var _loop = function _loop() {
+	        var each = _step.value;
 	
-	        classroom = source.教室;
-	        if (classroom.length == 0) classroom.push("無");
+	        var row = void 0;
+	        var id = void 0,
+	            source = void 0,
+	            time = void 0,
+	            classroom = void 0;
+	        var teacher = [];
+	        var isEmpty = false;
+	        if (each == "empty") {
+	          row = "<tr class=\"empty_row\">\n          <td></td>\n          <td></td>\n          <td></td>\n          <td></td>\n          <td></td></tr>";
+	          time = "empty";
+	          isEmpty = true;
+	        } else {
+	          id = each._id;
+	          source = each._source;
 	
-	        for (var each_teacher in source.教師) {
-	          teacher.push(source.教師[each_teacher].split("\t")[0]);
-	        }teacher.splice(-1, 1);
-	      }
-	      (0, _conflict.checkConflict)(time, function (negative) {
-	        if (isEmpty == false) {
-	          row = "<tr " + negative + " id=\"" + id + "\">\n          <td>" + source.科號 + "</td>\n          <td>" + source.課程中文名稱 + "</td>\n          <td>" + time + "</td>\n          <td>" + classroom.join("<br/>") + "</td>\n          <td>";
-	          row += teacher.join("<br>") + "</td></tr>";
+	          time = source.時間;
+	          if (time.length == 0) time.push("無");
+	          (0, _helper.sort_weekday)(time);
+	
+	          classroom = source.教室;
+	          if (classroom.length == 0) classroom.push("無");
+	
+	          var _iteratorNormalCompletion2 = true;
+	          var _didIteratorError2 = false;
+	          var _iteratorError2 = undefined;
+	
+	          try {
+	            for (var _iterator2 = source.教師[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	              var each_teacher = _step2.value;
+	
+	              teacher.push(each_teacher.split("\t")[0]);
+	            }
+	          } catch (err) {
+	            _didIteratorError2 = true;
+	            _iteratorError2 = err;
+	          } finally {
+	            try {
+	              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                _iterator2.return();
+	              }
+	            } finally {
+	              if (_didIteratorError2) {
+	                throw _iteratorError2;
+	              }
+	            }
+	          }
+	
+	          teacher.splice(-1, 1);
 	        }
+	        (0, _conflict.checkConflict)(time, function (negative) {
+	          if (isEmpty == false) {
+	            row = "<tr " + negative + " id=\"" + id + "\">\n          <td>" + source.科號 + "</td>\n          <td>" + source.課程中文名稱 + "</td>\n          <td>" + time + "</td>\n          <td>" + classroom.join("<br/>") + "</td>\n          <td>";
+	            row += teacher.join("<br>") + "</td></tr>";
+	          }
 	
-	        $("#search_result_body").append(row);
-	        $("#search_result_body > tr").filter(function (index) {
-	          return index >= 10;
-	        }).hide();
-	        $("#search_result_body > tr").hover(function () {
-	          if (!$(this).hasClass("empty_row")) $(this).css("cursor", "pointer");
+	          $("#search_result_body").append(row);
+	          $("#search_result_body > tr").filter(function (index) {
+	            return index >= 10;
+	          }).hide();
+	          $("#search_result_body > tr").hover(function () {
+	            if (!$(this).hasClass("empty_row")) $(this).css("cursor", "pointer");
+	          });
 	        });
-	      });
-	    };
+	      };
 	
-	    for (var each_course in copy_hits) {
-	      _loop(each_course);
+	      for (var _iterator = copy_hits[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        _loop();
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
 	    }
 	  }
 	  callback();
@@ -11997,33 +12063,52 @@
 	    chrome.storage.local.get("course", function (items) {
 	      var temp = {};
 	      var data = {};
-	      for (var each_course in hits) {
-	        var each = hits[each_course];
-	        var _source = each._source;
-	        // TODO: 用 ES6
-	        data[each._id] = {
-	          不可加簽說明: _source.不可加簽說明,
-	          人限: _source.人限,
-	          備註: _source.備註,
-	          學分數: _source.學分數,
-	          授課語言: _source.授課語言,
-	          擋修說明: _source.擋修說明,
-	          新生保留人數: _source.新生保留人數,
-	          科號: _source.科號,
-	          課程中文名稱: _source.課程中文名稱,
-	          課程英文名稱: _source.課程英文名稱,
-	          課程限制說明: _source.課程限制說明,
-	          通識對象: _source.通識對象,
-	          通識類別: _source.通識類別,
-	          開課代碼: _source.開課代碼,
-	          教師: _source.教師,
-	          教室: _source.教室,
-	          時間: _source.時間,
-	          學程: _source.學程,
-	          必選修: _source.必選修,
-	          第一二專長: _source.第一二專長,
-	          相似課程: []
-	        };
+	      var _iteratorNormalCompletion3 = true;
+	      var _didIteratorError3 = false;
+	      var _iteratorError3 = undefined;
+	
+	      try {
+	        for (var _iterator3 = hits[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	          var _each = _step3.value;
+	
+	          var _source = _each._source;
+	          data[_each._id] = {
+	            不可加簽說明: _source.不可加簽說明,
+	            人限: _source.人限,
+	            備註: _source.備註,
+	            學分數: _source.學分數,
+	            授課語言: _source.授課語言,
+	            擋修說明: _source.擋修說明,
+	            新生保留人數: _source.新生保留人數,
+	            科號: _source.科號,
+	            課程中文名稱: _source.課程中文名稱,
+	            課程英文名稱: _source.課程英文名稱,
+	            課程限制說明: _source.課程限制說明,
+	            通識對象: _source.通識對象,
+	            通識類別: _source.通識類別,
+	            開課代碼: _source.開課代碼,
+	            教師: _source.教師,
+	            教室: _source.教室,
+	            時間: _source.時間,
+	            學程: _source.學程,
+	            必選修: _source.必選修,
+	            第一二專長: _source.第一二專長,
+	            相似課程: []
+	          };
+	        }
+	      } catch (err) {
+	        _didIteratorError3 = true;
+	        _iteratorError3 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	            _iterator3.return();
+	          }
+	        } finally {
+	          if (_didIteratorError3) {
+	            throw _iteratorError3;
+	          }
+	        }
 	      }
 	
 	      if (items.course != undefined) {
@@ -12261,10 +12346,32 @@
 	var old_time = [];
 	function subtractArray(target_time) {
 	  var slice_time = [];
-	  for (var each in target_time) {
-	    var index = old_time.indexOf(target_time[each]);
-	    if (index == -1) slice_time.push(target_time[each]);else old_time.splice(index, 1);
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+	
+	  try {
+	    for (var _iterator = target_time[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var each = _step.value;
+	
+	      var index = old_time.indexOf(each);
+	      if (index == -1) slice_time.push(each);else old_time.splice(index, 1);
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator.return) {
+	        _iterator.return();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
 	  }
+	
 	  return slice_time;
 	}
 	
@@ -12275,9 +12382,31 @@
 	    var temp = {};
 	    if (items.time != undefined) {
 	      Object.assign(temp, items.time);
-	      for (var each in slice_time) {
-	        temp[slice_time[each]]++;
-	      }chrome.storage.local.remove("time", function () {
+	      var _iteratorNormalCompletion2 = true;
+	      var _didIteratorError2 = false;
+	      var _iteratorError2 = undefined;
+	
+	      try {
+	        for (var _iterator2 = slice_time[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	          var each = _step2.value;
+	          temp[each]++;
+	        }
+	      } catch (err) {
+	        _didIteratorError2 = true;
+	        _iteratorError2 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	            _iterator2.return();
+	          }
+	        } finally {
+	          if (_didIteratorError2) {
+	            throw _iteratorError2;
+	          }
+	        }
+	      }
+	
+	      chrome.storage.local.remove("time", function () {
 	        chrome.storage.local.set({ time: temp }, function () {
 	          chrome.storage.local.get("time", function (items) {
 	            console.log(items);
@@ -12285,11 +12414,55 @@
 	        });
 	      });
 	    } else {
-	      for (var _each in _helper.all_time) {
-	        temp[_helper.all_time[_each]] = 0;
-	      }for (var _each2 in slice_time) {
-	        temp[slice_time[_each2]]++;
-	      }chrome.storage.local.set({ time: temp }, function () {
+	      var _iteratorNormalCompletion3 = true;
+	      var _didIteratorError3 = false;
+	      var _iteratorError3 = undefined;
+	
+	      try {
+	        for (var _iterator3 = _helper.all_time[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	          var _each = _step3.value;
+	          temp[_each] = 0;
+	        }
+	      } catch (err) {
+	        _didIteratorError3 = true;
+	        _iteratorError3 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	            _iterator3.return();
+	          }
+	        } finally {
+	          if (_didIteratorError3) {
+	            throw _iteratorError3;
+	          }
+	        }
+	      }
+	
+	      var _iteratorNormalCompletion4 = true;
+	      var _didIteratorError4 = false;
+	      var _iteratorError4 = undefined;
+	
+	      try {
+	        for (var _iterator4 = slice_time[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	          var _each2 = _step4.value;
+	          temp[_each2]++;
+	        }
+	      } catch (err) {
+	        _didIteratorError4 = true;
+	        _iteratorError4 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	            _iterator4.return();
+	          }
+	        } finally {
+	          if (_didIteratorError4) {
+	            throw _iteratorError4;
+	          }
+	        }
+	      }
+	
+	      chrome.storage.local.set({ time: temp }, function () {
 	        chrome.storage.local.get("time", function (items) {
 	          // console.log(items);
 	        });
@@ -12303,9 +12476,31 @@
 	    if (time_array == "empty") callback();
 	    var conflict = false;
 	    if (items.time != undefined) {
-	      for (var each in time_array) {
-	        if (items.time[time_array[each]] != 0 && time_array[each] != "無") conflict = true;
+	      var _iteratorNormalCompletion5 = true;
+	      var _didIteratorError5 = false;
+	      var _iteratorError5 = undefined;
+	
+	      try {
+	        for (var _iterator5 = time_array[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	          var each = _step5.value;
+	
+	          if (items.time[each] != 0 && each != "無") conflict = true;
+	        }
+	      } catch (err) {
+	        _didIteratorError5 = true;
+	        _iteratorError5 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion5 && _iterator5.return) {
+	            _iterator5.return();
+	          }
+	        } finally {
+	          if (_didIteratorError5) {
+	            throw _iteratorError5;
+	          }
+	        }
 	      }
+	
 	      if (conflict) {
 	        var negative = "class=\"error\"";
 	        callback(negative);
@@ -12321,9 +12516,31 @@
 	  chrome.storage.local.get("time", function (items) {
 	    var temp = {};
 	    Object.assign(temp, items.time);
-	    for (var each in time_array) {
-	      temp[time_array[each]]--;
-	    }chrome.storage.local.remove("time", function () {
+	    var _iteratorNormalCompletion6 = true;
+	    var _didIteratorError6 = false;
+	    var _iteratorError6 = undefined;
+	
+	    try {
+	      for (var _iterator6 = time_array[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+	        var each = _step6.value;
+	        temp[each]--;
+	      }
+	    } catch (err) {
+	      _didIteratorError6 = true;
+	      _iteratorError6 = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion6 && _iterator6.return) {
+	          _iterator6.return();
+	        }
+	      } finally {
+	        if (_didIteratorError6) {
+	          throw _iteratorError6;
+	        }
+	      }
+	    }
+	
+	    chrome.storage.local.remove("time", function () {
 	      chrome.storage.local.set({ time: temp }, function () {
 	        chrome.storage.local.get("time", function (items) {
 	          // console.log(items);
@@ -12384,14 +12601,55 @@
 	          $(parse_table).find(".none").append(content);
 	        } else {
 	          var slice_time = [];
-	          for (var each in items.cart[key].time) {
-	            var each_time = items.cart[key].time[each];
-	            slice_time.push(each_time);
-	            target_time.push(each_time);
+	          var _iteratorNormalCompletion = true;
+	          var _didIteratorError = false;
+	          var _iteratorError = undefined;
+	
+	          try {
+	            for (var _iterator = items.cart[key].time[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	              var each_time = _step.value;
+	
+	              slice_time.push(each_time);
+	              target_time.push(each_time);
+	            }
+	          } catch (err) {
+	            _didIteratorError = true;
+	            _iteratorError = err;
+	          } finally {
+	            try {
+	              if (!_iteratorNormalCompletion && _iterator.return) {
+	                _iterator.return();
+	              }
+	            } finally {
+	              if (_didIteratorError) {
+	                throw _iteratorError;
+	              }
+	            }
 	          }
 	
-	          for (var _each in slice_time) {
-	            $(parse_table).find("." + slice_time[_each]).append(content);
+	          var _iteratorNormalCompletion2 = true;
+	          var _didIteratorError2 = false;
+	          var _iteratorError2 = undefined;
+	
+	          try {
+	            for (var _iterator2 = slice_time[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	              var _each_time = _step2.value;
+	
+	              $(parse_table).find("." + _each_time).append(content);
+	            }
+	          } catch (err) {
+	            _didIteratorError2 = true;
+	            _iteratorError2 = err;
+	          } finally {
+	            try {
+	              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                _iterator2.return();
+	              }
+	            } finally {
+	              if (_didIteratorError2) {
+	                throw _iteratorError2;
+	              }
+	            }
 	          }
 	        }
 	      }
@@ -12554,7 +12812,7 @@
 	function serialize(obj) {
 	  var str = [];
 	  for (var p in obj) {
-	    if (obj.hasOwnProperty(p)) str.push(p + "=" + obj[p]);
+	    str.push(p + "=" + obj[p]);
 	  }return str.join("&");
 	}
 	
@@ -12653,7 +12911,6 @@
 	    var url = "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php";
 	    var needReload = true;
 	
-	    // TODO: 用 ES6
 	    var form = {
 	      ACIXSTORE: _popup.acix,
 	      toChk: "",
@@ -12752,11 +13009,9 @@
 	function findIdFromObject(obj, course_no) {
 	  var id = null;
 	  for (var prop in obj) {
-	    if (obj.hasOwnProperty(prop)) {
-	      if (obj[prop].course_no == course_no) {
-	        id = prop;
-	        break;
-	      }
+	    if (obj[prop].course_no == course_no) {
+	      id = prop;
+	      break;
 	    }
 	  }
 	  return id;
@@ -12767,11 +13022,33 @@
 	    chrome.storage.local.get("cart", function (items) {
 	      var temp = {};
 	      Object.assign(temp, items.cart);
-	      for (var each in correct_list) {
-	        var course_id = findIdFromObject(temp, correct_list[each].course_no);
-	        (0, _conflict.removeTimeOfCourse)(temp[course_id].time);
-	        delete temp[course_id];
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+	
+	      try {
+	        for (var _iterator = correct_list[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var each = _step.value;
+	
+	          var course_id = findIdFromObject(temp, each.course_no);
+	          (0, _conflict.removeTimeOfCourse)(temp[course_id].time);
+	          delete temp[course_id];
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
 	      }
+	
 	      chrome.storage.local.remove("cart", function () {
 	        chrome.storage.local.set({ cart: temp }, function () {
 	          chrome.storage.local.get("cart", function (items) {
@@ -12791,20 +13068,62 @@
 	    var patt = /[^A-Za-z\\]+/;
 	    if (correct_list.length != 0) {
 	      $("#select_course_status").append("<div class=\"item\">\u6210\u529F\uFF1A</div>");
-	      for (var each in correct_list) {
-	        var course_no = correct_list[each].course_no;
-	        var message = correct_list[each].message.match(patt);
-	        var content = "<div class=\"item\">" + course_no + " ( " + message + " )</div>";
-	        $("#select_course_status").append(content);
+	      var _iteratorNormalCompletion2 = true;
+	      var _didIteratorError2 = false;
+	      var _iteratorError2 = undefined;
+	
+	      try {
+	        for (var _iterator2 = correct_list[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	          var each = _step2.value;
+	
+	          var course_no = each.course_no;
+	          var message = each.message.match(patt);
+	          var content = "<div class=\"item\">" + course_no + " ( " + message + " )</div>";
+	          $("#select_course_status").append(content);
+	        }
+	      } catch (err) {
+	        _didIteratorError2 = true;
+	        _iteratorError2 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	            _iterator2.return();
+	          }
+	        } finally {
+	          if (_didIteratorError2) {
+	            throw _iteratorError2;
+	          }
+	        }
 	      }
 	    }
 	    if (wrong_list.length != 0) {
 	      $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");
-	      for (var _each in wrong_list) {
-	        var _course_no = wrong_list[_each].course_no;
-	        var _message = wrong_list[_each].message.match(patt);
-	        var _content = "<div class=\"item\">" + _course_no + " ( " + _message + " )</div>";
-	        $("#select_course_status").append(_content);
+	      var _iteratorNormalCompletion3 = true;
+	      var _didIteratorError3 = false;
+	      var _iteratorError3 = undefined;
+	
+	      try {
+	        for (var _iterator3 = wrong_list[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	          var _each = _step3.value;
+	
+	          var _course_no = _each.course_no;
+	          var _message = _each.message.match(patt);
+	          var _content = "<div class=\"item\">" + _course_no + " ( " + _message + " )</div>";
+	          $("#select_course_status").append(_content);
+	        }
+	      } catch (err) {
+	        _didIteratorError3 = true;
+	        _iteratorError3 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	            _iterator3.return();
+	          }
+	        } finally {
+	          if (_didIteratorError3) {
+	            throw _iteratorError3;
+	          }
+	        }
 	      }
 	    }
 	    $("#select_state").modal("show");
@@ -12838,10 +13157,31 @@
 	  chrome.storage.local.get("cart", function (items) {
 	    var temp = {};
 	    Object.assign(temp, items.cart);
-	    for (var each in course_id_group) {
-	      var id = course_id_group[each].course_id;
-	      var order = course_id_group[each].order;
-	      temp[id].order = order;
+	    var _iteratorNormalCompletion4 = true;
+	    var _didIteratorError4 = false;
+	    var _iteratorError4 = undefined;
+	
+	    try {
+	      for (var _iterator4 = course_id_group[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	        var each = _step4.value;
+	
+	        var id = each.course_id;
+	        var order = each.order;
+	        temp[id].order = order;
+	      }
+	    } catch (err) {
+	      _didIteratorError4 = true;
+	      _iteratorError4 = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	          _iterator4.return();
+	        }
+	      } finally {
+	        if (_didIteratorError4) {
+	          throw _iteratorError4;
+	        }
+	      }
 	    }
 	
 	    chrome.storage.local.remove("cart", function () {

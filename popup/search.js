@@ -40,12 +40,12 @@ function renderSearchResult(hits, callback) {
     let fill_empty_num = all_should_row - copy_hits.length;
     for (let i = fill_empty_num; i > 0; i--) copy_hits.push("empty");
 
-    for (let each_course in copy_hits) {
+    for (let each of copy_hits) {
       let row;
       let id, source, time, classroom;
       let teacher = [];
       let isEmpty = false;
-      if (copy_hits[each_course] == "empty") {
+      if (each == "empty") {
         row = `<tr class="empty_row">
           <td></td>
           <td></td>
@@ -55,8 +55,8 @@ function renderSearchResult(hits, callback) {
         time = "empty";
         isEmpty = true;
       } else {
-        id = copy_hits[each_course]._id;
-        source = copy_hits[each_course]._source;
+        id = each._id;
+        source = each._source;
 
         time = source.時間;
         if (time.length == 0) time.push("無");
@@ -65,8 +65,8 @@ function renderSearchResult(hits, callback) {
         classroom = source.教室;
         if (classroom.length == 0) classroom.push("無");
 
-        for (let each_teacher in source.教師)
-          teacher.push(source.教師[each_teacher].split("\t")[0]);
+        for (let each_teacher of source.教師)
+          teacher.push(each_teacher.split("\t")[0]);
         teacher.splice(-1, 1);
       }
       checkConflict(time, negative => {
@@ -179,10 +179,8 @@ const storeCourseInfo = hits => {
     chrome.storage.local.get("course", items => {
       let temp = {};
       let data = {};
-      for (let each_course in hits) {
-        let each = hits[each_course];
+      for (let each of hits) {
         let source = each._source;
-        // TODO: 用 ES6
         data[each._id] = {
           不可加簽說明: source.不可加簽說明,
           人限: source.人限,

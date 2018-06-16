@@ -172,8 +172,8 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
             $(".course_info.scrolling.content").attr("id", id);
 
             let teacher = [];
-            for (let each in info.教師)
-              teacher.push(info.教師[each].split("\t")[0]);
+            for (let each of info.教師)
+              teacher.push(each.split("\t")[0]);
             teacher.splice(-1, 1);
             if (teacher.length == 0) $("#teacher").text("None");
             else $("#teacher").text(teacher.join(" / "));
