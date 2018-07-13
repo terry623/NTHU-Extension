@@ -1,7 +1,7 @@
 //指定比對的url：不允許片段表達式
 //例如： *://*.google.com.tw/* 作為查詢字串不被接受因為host是一個片段表達式
 
-var urlPattern = "*://www.ccxp.nthu.edu.tw/ccxp/*";
+var urlPattern = '*://www.ccxp.nthu.edu.tw/ccxp/*';
 
 //利用 tabs.query api 查找畫面上的所有tab
 function queryTabsAndShowPageActions(queryObject) {
@@ -9,7 +9,7 @@ function queryTabsAndShowPageActions(queryObject) {
     if (tabs && tabs.length > 0) {
       for (let i = 0; i < tabs.length; i++) {
         //在加載完畢的tab上，使用chrome.pageAction.show 啟用按鈕
-        if (tabs[i].status === "complete") chrome.pageAction.show(tabs[i].id);
+        if (tabs[i].status === 'complete') chrome.pageAction.show(tabs[i].id);
       }
     }
   });
@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(() => {
   queryTabsAndShowPageActions({
     active: false,
     currentWindow: true,
-    url: urlPattern
+    url: urlPattern,
   });
 });
 
@@ -29,6 +29,6 @@ chrome.tabs.onUpdated.addListener(() => {
   queryTabsAndShowPageActions({
     active: true,
     currentWindow: true,
-    url: urlPattern
+    url: urlPattern,
   });
 });

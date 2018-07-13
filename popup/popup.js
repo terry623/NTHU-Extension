@@ -1,9 +1,9 @@
 window._crypto = null;
-import { getUrlVars } from "./helper";
-import { renderUserName, getResultCourse } from "./api";
-import { getCart } from "./cart";
-import { getCurrentStateOfNTHU } from "./server";
-import { clearAllTime } from "./conflict";
+import { getUrlVars } from './helper';
+import { renderUserName, getResultCourse } from './api';
+import { getCart } from './cart';
+import { getCurrentStateOfNTHU } from './server';
+import { clearAllTime } from './conflict';
 // import {
 //   getRecommendPage,
 //   toStorage,
@@ -13,8 +13,8 @@ import { clearAllTime } from "./conflict";
 //   num_of_each_similar
 // } from "./recommend";
 
-const year = "107";
-const semester = "10";
+const year = '107';
+const semester = '10';
 const search_result_num = 10;
 let acix, stu_no, current_phase;
 
@@ -24,45 +24,45 @@ function addListener() {
       let headers = details.requestHeaders;
       let blockingResponse = {};
       headers.push({
-        name: "Referer",
-        value: `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php?ACIXSTORE=${acix}`
+        name: 'Referer',
+        value: `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php?ACIXSTORE=${acix}`,
       });
       blockingResponse.requestHeaders = headers;
       return blockingResponse;
     },
     {
       urls: [
-        `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`
-      ]
+        `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php`,
+      ],
     },
-    ["requestHeaders", "blocking"]
+    ['requestHeaders', 'blocking']
   );
 }
 
 async function initial_everything() {
-  $("#home_loading").addClass("active");
+  $('#home_loading').addClass('active');
   clearAllTime();
   addListener();
   renderUserName();
   let phase = await getCurrentStateOfNTHU();
-  $(".content_item.homePage").show();
-  $("#home_loading").removeClass("active");
+  $('.content_item.homePage').show();
+  $('#home_loading').removeClass('active');
   if (phase != undefined) {
     current_phase = phase;
     getResultCourse(phase);
-  } else $("#change_phase").addClass("disabled");
+  } else $('#change_phase').addClass('disabled');
   getCart();
   // getGrade(stu_no);
 }
 
 $(document).ready(() => {
-  $(".content_item").hide();
+  $('.content_item').hide();
   chrome.tabs.query(
     { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
     tabs => {
       let url = tabs[0].url;
-      acix = getUrlVars(url)["ACIXSTORE"];
-      stu_no = getUrlVars(url)["hint"];
+      acix = getUrlVars(url)['ACIXSTORE'];
+      stu_no = getUrlVars(url)['hint'];
       initial_everything();
     }
   );
@@ -76,43 +76,43 @@ $(document).ready(() => {
 //   }
 // });
 
-$(".ui.accordion").accordion();
-$(".ui.dropdown").dropdown();
-$("#change_phase").dropdown({
-  on: "click",
+$('.ui.accordion').accordion();
+$('.ui.dropdown').dropdown();
+$('#change_phase').dropdown({
+  on: 'click',
   action: function(text, value) {
     current_phase = value;
     getResultCourse(value, () => {
-      $("#loading").removeClass("active");
+      $('#loading').removeClass('active');
     });
-    $("#change_phase").dropdown("set text", text);
-    $("#change_phase").dropdown("hide");
-  }
+    $('#change_phase').dropdown('set text', text);
+    $('#change_phase').dropdown('hide');
+  },
 });
-$(".ui.modal").modal({
-  inverted: true
+$('.ui.modal').modal({
+  inverted: true,
 });
-$(".ui.secondary.menu").on("click", ".item", function() {
-  if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
-    if ($(this).hasClass("recommendPage")) {
-      alert("此為內部測試版本，「推薦課程」尚未完成 !");
+$('.ui.secondary.menu').on('click', '.item', function() {
+  if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
+    if ($(this).hasClass('recommendPage')) {
+      alert('此為內部測試版本，「推薦課程」尚未完成 !');
       return;
     }
     $(this)
-      .addClass("active")
-      .siblings(".item")
-      .removeClass("active");
+      .addClass('active')
+      .siblings('.item')
+      .removeClass('active');
 
-    let t = $(".content_item");
+    let t = $('.content_item');
     t.show();
-    $("#change_school_table").hide();
+    $('#change_school_table').hide();
 
-    if ($(this).hasClass("homePage")) t.not(".homePage").hide();
-    else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();
-    else if ($(this).hasClass("choosePage")) {
-      t.not(".choosePage").hide();
-      $("#change_school_table").show();
-    } else if ($(this).hasClass("recommendPage")) {
+    if ($(this).hasClass('homePage')) t.not('.homePage').hide();
+    else if ($(this).hasClass('searchPage')) t.not('.searchPage').hide();
+    else if ($(this).hasClass('choosePage')) {
+      t.not('.choosePage').hide();
+      $('#change_school_table').show();
+    } else if ($(this).hasClass('recommendPage')) {
       // t.not(".recommendPage").hide();
       // before_hits_group.length = 0;
       // compare_group.length = 0;

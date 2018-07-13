@@ -9397,6 +9397,7 @@
 	  });
 	}
 	
+	// FIXME: #size_limit 若有兩數字，例如 70/70，斜線後面便為新生保留人數。因此要把參數 fresh_num 拿掉。
 	function getPopulation(course_no, fresh_num) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt);
@@ -12695,7 +12696,6 @@
 	  return count;
 	}
 	
-	// FIXME: 要改一下，寫成同個 class 藏起來
 	$("#change_school_table").on("click", ".item", function () {
 	  if (!$(this).hasClass("dropdown")) {
 	    var t = $(".ui.compact.table");
@@ -12703,18 +12703,12 @@
 	
 	    if ($(this).hasClass("tab1")) {
 	      t.not(".tab1").hide();
-	      $("#cart_submit").hide();
-	      $("#left_pointing_to_school").hide();
-	      $("#change_phase").show();
-	      $("#change_phase_text").show();
-	      $("#change_phase_icon").show();
+	      $(".cart_part").hide();
+	      $(".phase_part").show();
 	    } else if ($(this).hasClass("tab2")) {
 	      t.not(".tab2").hide();
-	      $("#cart_submit").show();
-	      $("#left_pointing_to_school").show();
-	      $("#change_phase").hide();
-	      $("#change_phase_text").hide();
-	      $("#change_phase_icon").hide();
+	      $(".cart_part").show();
+	      $(".phase_part").hide();
 	    }
 	  }
 	});

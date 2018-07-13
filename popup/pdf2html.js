@@ -3,11 +3,11 @@
 // var url;
 
 // Loaded via <script> tag, create shortcut to access PDF.js exports.
-var pdfjsLib = window["pdfjs-dist/build/pdf"];
+var pdfjsLib = window['pdfjs-dist/build/pdf'];
 
 // The workerSrc property shall be specified.
 pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://mozilla.github.io/pdf.js/build/pdf.worker.js";
+  'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
 
 var pdfDoc = null,
   pageNum = 1,
@@ -34,13 +34,13 @@ function renderPage(num) {
     // Render PDF page into canvas context
     let renderContext = {
       canvasContext: ctx,
-      viewport: viewport
+      viewport: viewport,
     };
     let renderTask = page.render(renderContext);
 
     // Wait for rendering to finish
     renderTask.promise.then(() => {
-      $("#pdf_render").show();
+      $('#pdf_render').show();
       pageRendering = false;
       if (pageNumPending !== null) {
         // New page rendering is pending
@@ -51,7 +51,7 @@ function renderPage(num) {
   });
 
   // Update page counters
-  document.getElementById("page_num").textContent = num;
+  document.getElementById('page_num').textContent = num;
 }
 
 /**
@@ -86,20 +86,20 @@ function transform(url) {
   /**
    * Asynchronously downloads PDF.
    */
-  canvas = document.getElementById("the-canvas");
-  ctx = canvas.getContext("2d");
+  canvas = document.getElementById('the-canvas');
+  ctx = canvas.getContext('2d');
 
   (pdfDoc = null),
     (pageNum = 1),
     (pageRendering = false),
     (pageNumPending = null),
     (scale = 1.05),
-    document.getElementById("prev").addEventListener("click", onPrevPage);
-  document.getElementById("next").addEventListener("click", onNextPage);
+    document.getElementById('prev').addEventListener('click', onPrevPage);
+  document.getElementById('next').addEventListener('click', onNextPage);
 
   pdfjsLib.getDocument(url).then(function(pdfDoc_) {
     pdfDoc = pdfDoc_;
-    document.getElementById("page_count").textContent = pdfDoc.numPages;
+    document.getElementById('page_count').textContent = pdfDoc.numPages;
 
     // Initial/first page rendering
     renderPage(pageNum);

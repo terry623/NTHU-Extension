@@ -152,9 +152,9 @@ const course_table = `<tbody>
 function getUrlVars(url) {
   let values = [];
   let hash;
-  let hashes = url.slice(url.indexOf("?") + 1).split("&");
+  let hashes = url.slice(url.indexOf('?') + 1).split('&');
   for (let i = 0; i < hashes.length; i++) {
-    hash = hashes[i].split("=");
+    hash = hashes[i].split('=');
     values.push(hash[0]);
     values[hash[0]] = hash[1];
   }
@@ -165,49 +165,49 @@ function courseAddSpace(course_no) {
   let myRe = /[0-9]+[A-Za-z]+/g;
   let output = [
     course_no.slice(0, myRe.lastIndex),
-    course_no.slice(myRe.lastIndex)
-  ].join(" ");
+    course_no.slice(myRe.lastIndex),
+  ].join(' ');
   return output;
 }
 
 function translateTopic(topic) {
   let result;
   switch (topic) {
-    case "科號":
-      result = "科號";
+    case '科號':
+      result = '科號';
       break;
-    case "課程名稱":
-      result = "課程中文名稱";
+    case '課程名稱':
+      result = '課程中文名稱';
       break;
-    case "授課教師":
-      result = "教師";
+    case '授課教師':
+      result = '教師';
       break;
-    case "上課時間":
-      result = "時間";
+    case '上課時間':
+      result = '時間';
       break;
-    case "教室地點":
-      result = "教室";
+    case '教室地點':
+      result = '教室';
       break;
-    case "課程內容":
-      result = "課綱";
+    case '課程內容':
+      result = '課綱';
       break;
-    case "通識對象":
-      result = "通識對象";
+    case '通識對象':
+      result = '通識對象';
       break;
-    case "通識類別":
-      result = "通識類別";
+    case '通識類別':
+      result = '通識類別';
       break;
-    case "系必選修":
-      result = "必選修";
+    case '系必選修':
+      result = '必選修';
       break;
-    case "學分學程":
-      result = "學程";
+    case '學分學程':
+      result = '學程';
       break;
-    case "第一二專長":
-      result = "第一二專長";
+    case '第一二專長':
+      result = '第一二專長';
       break;
     default:
-      alert("Translate Topic Wrong !");
+      alert('Translate Topic Wrong !');
       break;
   }
   return result;
@@ -215,34 +215,34 @@ function translateTopic(topic) {
 
 function removeLongCourseName(course_name) {
   let after;
-  after = course_name.replace("全民國防教育軍事訓練--", "");
+  after = course_name.replace('全民國防教育軍事訓練--', '');
   return after;
 }
 
 function oldyear_to_newyear(course_no) {
-  course_no = course_no.replace("100", "107");
-  course_no = course_no.replace("101", "107");
-  course_no = course_no.replace("102", "107");
-  course_no = course_no.replace("103", "107");
-  course_no = course_no.replace("104", "107");
-  course_no = course_no.replace("105", "107");
-  course_no = course_no.replace("106", "107");
+  course_no = course_no.replace('100', '107');
+  course_no = course_no.replace('101', '107');
+  course_no = course_no.replace('102', '107');
+  course_no = course_no.replace('103', '107');
+  course_no = course_no.replace('104', '107');
+  course_no = course_no.replace('105', '107');
+  course_no = course_no.replace('106', '107');
   return course_no;
 }
 
 function trans(slice) {
   switch (slice) {
-    case "n":
-      slice = "4.5";
+    case 'n':
+      slice = '4.5';
       break;
-    case "a":
-      slice = "10";
+    case 'a':
+      slice = '10';
       break;
-    case "b":
-      slice = "11";
+    case 'b':
+      slice = '11';
       break;
-    case "c":
-      slice = "12";
+    case 'c':
+      slice = '12';
       break;
   }
   return slice;
@@ -250,7 +250,7 @@ function trans(slice) {
 
 function sort_weekday(time_array) {
   time_array.sort((a, b) => {
-    const weekday = ["M", "T", "W", "R", "F", "S"];
+    const weekday = ['M', 'T', 'W', 'R', 'F', 'S'];
     let week_a = weekday.findIndex(element => {
       return element == a.slice(0, 1);
     });
@@ -273,100 +273,100 @@ function addSpace_course_no(course_no) {
     let head = course_no.match(/[0-9]+[A-Za-z]+/g)[0];
     let tail = course_no.match(/[0-9]+/g)[1];
     let remain = 15 - head.length - tail.length;
-    let space = "";
-    for (let i = 0; i < remain; i++) space = space.concat(" ");
+    let space = '';
+    for (let i = 0; i < remain; i++) space = space.concat(' ');
     let new_course_no = head.concat(space).concat(tail);
     return new_course_no;
   }
 }
 
 const all_time = [
-  "M1",
-  "M2",
-  "M3",
-  "M4",
-  "Mn",
-  "M5",
-  "M6",
-  "M7",
-  "M8",
-  "M9",
-  "Ma",
-  "Mb",
-  "Mc",
-  "T1",
-  "T2",
-  "T3",
-  "T4",
-  "Tn",
-  "T5",
-  "T6",
-  "T7",
-  "T8",
-  "T9",
-  "Ta",
-  "Tb",
-  "Tc",
-  "W1",
-  "W2",
-  "W3",
-  "W4",
-  "Wn",
-  "W5",
-  "W6",
-  "W7",
-  "W8",
-  "W9",
-  "Wa",
-  "Wb",
-  "Wc",
-  "R1",
-  "R2",
-  "R3",
-  "R4",
-  "Rn",
-  "R5",
-  "R6",
-  "R7",
-  "R8",
-  "R9",
-  "Ra",
-  "Rb",
-  "Rc",
-  "F1",
-  "F2",
-  "F3",
-  "F4",
-  "Fn",
-  "F5",
-  "F6",
-  "F7",
-  "F8",
-  "F9",
-  "Fa",
-  "Fb",
-  "Fc",
-  "S1",
-  "S2",
-  "S3",
-  "S4",
-  "Sn",
-  "S5",
-  "S6",
-  "S7",
-  "S8",
-  "S9",
-  "Sa",
-  "Sb",
-  "Sc"
+  'M1',
+  'M2',
+  'M3',
+  'M4',
+  'Mn',
+  'M5',
+  'M6',
+  'M7',
+  'M8',
+  'M9',
+  'Ma',
+  'Mb',
+  'Mc',
+  'T1',
+  'T2',
+  'T3',
+  'T4',
+  'Tn',
+  'T5',
+  'T6',
+  'T7',
+  'T8',
+  'T9',
+  'Ta',
+  'Tb',
+  'Tc',
+  'W1',
+  'W2',
+  'W3',
+  'W4',
+  'Wn',
+  'W5',
+  'W6',
+  'W7',
+  'W8',
+  'W9',
+  'Wa',
+  'Wb',
+  'Wc',
+  'R1',
+  'R2',
+  'R3',
+  'R4',
+  'Rn',
+  'R5',
+  'R6',
+  'R7',
+  'R8',
+  'R9',
+  'Ra',
+  'Rb',
+  'Rc',
+  'F1',
+  'F2',
+  'F3',
+  'F4',
+  'Fn',
+  'F5',
+  'F6',
+  'F7',
+  'F8',
+  'F9',
+  'Fa',
+  'Fb',
+  'Fc',
+  'S1',
+  'S2',
+  'S3',
+  'S4',
+  'Sn',
+  'S5',
+  'S6',
+  'S7',
+  'S8',
+  'S9',
+  'Sa',
+  'Sb',
+  'Sc',
 ];
 
 function miniMessageAlert(header, content_1, content_2) {
-  $("#mini_alert_header").text(header);
+  $('#mini_alert_header').text(header);
   if (content_2) {
-    $("#mini_alert_content").html(`<p>${content_1}</p><p>${content_2}</p>`);
-  } else $("#mini_alert_content").html(`<p>${content_1}</p>`);
-  $("#mini_alert").modal("show");
+    $('#mini_alert_content').html(`<p>${content_1}</p><p>${content_2}</p>`);
+  } else $('#mini_alert_content').html(`<p>${content_1}</p>`);
+  $('#mini_alert').modal('show');
 }
 
 export {
@@ -379,5 +379,5 @@ export {
   sort_weekday,
   addSpace_course_no,
   all_time,
-  miniMessageAlert
+  miniMessageAlert,
 };

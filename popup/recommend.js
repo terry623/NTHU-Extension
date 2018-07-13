@@ -1,11 +1,11 @@
 // import {
 //   searchBySingleCourseNo,
 //   searchByID_Group,
-//   storeCourseInfo
-// } from "./search";
-// import { getSimilarities_forRecommend } from "./server";
-// import { oldyear_to_newyear } from "./helper";
-// import { getCourseDescription } from "./api";
+//   storeCourseInfo,
+// } from './search';
+// import { getSimilarities_forRecommend } from './server';
+// import { oldyear_to_newyear } from './helper';
+// import { getCourseDescription } from './api';
 // const num_of_old_course = 3;
 // const num_of_each_similar = 3;
 // var before_hits_group = [];
@@ -17,7 +17,7 @@
 //     if (obj.hasOwnProperty(prop) && obj[prop] < 1) {
 //       arr.push({
 //         key: prop,
-//         value: obj[prop]
+//         value: obj[prop],
 //       });
 //     }
 //   }
@@ -34,7 +34,7 @@
 //     if (obj.hasOwnProperty(prop)) {
 //       arr.push({
 //         key: sim.other,
-//         value: sim.percent * pr_value
+//         value: sim.percent * pr_value,
 //       });
 //     }
 //   }
@@ -45,9 +45,9 @@
 // }
 
 // function getRecommendPage(callback) {
-//   $("#recommend_loading").addClass("active");
-//   $("#recommend_list").empty();
-//   chrome.storage.local.get("pr", function(items) {
+//   $('#recommend_loading').addClass('active');
+//   $('#recommend_list').empty();
+//   chrome.storage.local.get('pr', function(items) {
 //     if (items.pr != undefined) {
 //       var sort_pr = sortObject(items.pr);
 //       for (
@@ -68,11 +68,11 @@
 //                 let compare_value = sort_pr_and_percent[each].value;
 //                 compare_group.push({
 //                   other_id,
-//                   compare_value
+//                   compare_value,
 //                 });
 //                 id_group.push({
 //                   other_id,
-//                   compare_value
+//                   compare_value,
 //                 });
 //               }
 //               searchByID_Group(id_group, function(hits) {
@@ -113,7 +113,7 @@
 //         let match = compare_group.find(function(item) {
 //           return item.other_id == id;
 //         });
-//         description = description.slice(0, 60).concat(" ．．．");
+//         description = description.slice(0, 60).concat(' ．．．');
 //         let content =
 //           `<div id="` +
 //           id +
@@ -146,17 +146,17 @@
 //   });
 // }
 
-// $("#recommend_list").on("click", ".item", function() {
-//   let course_no = $(this).attr("course_no");
-//   let id = $(this).attr("id");
+// $('#recommend_list').on('click', '.item', function() {
+//   let course_no = $(this).attr('course_no');
+//   let id = $(this).attr('id');
 //   getCourseInfo(
 //     course_no,
 //     id,
 //     function() {
-//       $(".course_action").hide();
-//       $("#submit").show();
-//       $("#back").show();
-//       $("#loading").removeClass("active");
+//       $('.course_action').hide();
+//       $('#submit').show();
+//       $('#back').show();
+//       $('#loading').removeClass('active');
 //     },
 //     false
 //   );
@@ -168,5 +168,5 @@
 //   before_hits_group,
 //   compare_group,
 //   num_of_old_course,
-//   num_of_each_similar
+//   num_of_each_similar,
 // };

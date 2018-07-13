@@ -1,1 +1,1 @@
-import * as event from "./event";
+import * as event from './event';
