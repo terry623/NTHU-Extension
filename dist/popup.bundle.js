@@ -8942,7 +8942,7 @@
 /* 328 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -8956,7 +8956,7 @@
 	      while (1) {
 	        switch (_context.prev = _context.next) {
 	          case 0:
-	            $("#home_loading").addClass("active");
+	            $('#home_loading').addClass('active');
 	            (0, _conflict.clearAllTime)();
 	            addListener();
 	            (0, _api.renderUserName)();
@@ -8966,17 +8966,17 @@
 	          case 6:
 	            phase = _context.sent;
 	
-	            $(".content_item.homePage").show();
-	            $("#home_loading").removeClass("active");
+	            $('.content_item.homePage').show();
+	            $('#home_loading').removeClass('active');
 	            if (phase != undefined) {
 	              exports.current_phase = current_phase = phase;
 	              (0, _api.getResultCourse)(phase);
-	            } else $("#change_phase").addClass("disabled");
+	            } else $('#change_phase').addClass('disabled');
 	            (0, _cart.getCart)();
 	            // getGrade(stu_no);
 	
 	          case 11:
-	          case "end":
+	          case 'end':
 	            return _context.stop();
 	        }
 	      }
@@ -9011,8 +9011,8 @@
 	//   num_of_each_similar
 	// } from "./recommend";
 	
-	var year = "107";
-	var semester = "10";
+	var year = '107';
+	var semester = '10';
 	var search_result_num = 10;
 	var acix = void 0,
 	    stu_no = void 0,
@@ -9023,22 +9023,22 @@
 	    var headers = details.requestHeaders;
 	    var blockingResponse = {};
 	    headers.push({
-	      name: "Referer",
-	      value: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php?ACIXSTORE=" + acix
+	      name: 'Referer',
+	      value: 'https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php?ACIXSTORE=' + acix
 	    });
 	    blockingResponse.requestHeaders = headers;
 	    return blockingResponse;
 	  }, {
-	    urls: ["https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php"]
-	  }, ["requestHeaders", "blocking"]);
+	    urls: ['https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php']
+	  }, ['requestHeaders', 'blocking']);
 	}
 	
 	$(document).ready(function () {
-	  $(".content_item").hide();
+	  $('.content_item').hide();
 	  chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
 	    var url = tabs[0].url;
-	    exports.acix = acix = (0, _helper.getUrlVars)(url)["ACIXSTORE"];
-	    exports.stu_no = stu_no = (0, _helper.getUrlVars)(url)["hint"];
+	    exports.acix = acix = (0, _helper.getUrlVars)(url)['ACIXSTORE'];
+	    exports.stu_no = stu_no = (0, _helper.getUrlVars)(url)['hint'];
 	    initial_everything();
 	  });
 	});
@@ -9051,38 +9051,38 @@
 	//   }
 	// });
 	
-	$(".ui.accordion").accordion();
-	$(".ui.dropdown").dropdown();
-	$("#change_phase").dropdown({
-	  on: "click",
+	$('.ui.accordion').accordion();
+	$('.ui.dropdown').dropdown();
+	$('#change_phase').dropdown({
+	  on: 'click',
 	  action: function action(text, value) {
 	    exports.current_phase = current_phase = value;
 	    (0, _api.getResultCourse)(value, function () {
-	      $("#loading").removeClass("active");
+	      $('#loading').removeClass('active');
 	    });
-	    $("#change_phase").dropdown("set text", text);
-	    $("#change_phase").dropdown("hide");
+	    $('#change_phase').dropdown('set text', text);
+	    $('#change_phase').dropdown('hide');
 	  }
 	});
-	$(".ui.modal").modal({
+	$('.ui.modal').modal({
 	  inverted: true
 	});
-	$(".ui.secondary.menu").on("click", ".item", function () {
-	  if (!$(this).hasClass("dropdown") && !$(this).is(".notActive")) {
-	    if ($(this).hasClass("recommendPage")) {
-	      alert("此為內部測試版本，「推薦課程」尚未完成 !");
+	$('.ui.secondary.menu').on('click', '.item', function () {
+	  if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
+	    if ($(this).hasClass('recommendPage')) {
+	      alert('此為內部測試版本，「推薦課程」尚未完成 !');
 	      return;
 	    }
-	    $(this).addClass("active").siblings(".item").removeClass("active");
+	    $(this).addClass('active').siblings('.item').removeClass('active');
 	
-	    var t = $(".content_item");
+	    var t = $('.content_item');
 	    t.show();
-	    $("#change_school_table").hide();
+	    $('#change_school_table').hide();
 	
-	    if ($(this).hasClass("homePage")) t.not(".homePage").hide();else if ($(this).hasClass("searchPage")) t.not(".searchPage").hide();else if ($(this).hasClass("choosePage")) {
-	      t.not(".choosePage").hide();
-	      $("#change_school_table").show();
-	    } else if ($(this).hasClass("recommendPage")) {
+	    if ($(this).hasClass('homePage')) t.not('.homePage').hide();else if ($(this).hasClass('searchPage')) t.not('.searchPage').hide();else if ($(this).hasClass('choosePage')) {
+	      t.not('.choosePage').hide();
+	      $('#change_school_table').show();
+	    } else if ($(this).hasClass('recommendPage')) {
 	      // t.not(".recommendPage").hide();
 	      // before_hits_group.length = 0;
 	      // compare_group.length = 0;
@@ -9122,19 +9122,19 @@
 /* 329 */
 /***/ (function(module, exports) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var course_table = "<tbody>\n    <tr class=\"\">\n        <td>\n            <div>08:00 - 08:50</div>\n        </td>\n        <td class=\"M1 selectable\"> </td>\n        <td class=\"T1 selectable\"> </td>\n        <td class=\"W1 selectable\"> </td>\n        <td class=\"R1 selectable\"> </td>\n        <td class=\"F1 selectable\"> </td>\n        <td class=\"S1 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>09:00 - 09:50</div>\n        </td>\n        <td class=\"M2 selectable\"> </td>\n        <td class=\"T2 selectable\"> </td>\n        <td class=\"W2 selectable\"> </td>\n        <td class=\"R2 selectable\"> </td>\n        <td class=\"F2 selectable\"> </td>\n        <td class=\"S2 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>10:10 - 11:00</div>\n        </td>\n        <td class=\"M3 selectable\"> </td>\n        <td class=\"T3 selectable\"> </td>\n        <td class=\"W3 selectable\"> </td>\n        <td class=\"R3 selectable\"> </td>\n        <td class=\"F3 selectable\"> </td>\n        <td class=\"S3 selectable\"> </td>\n        </tr>\n    <tr class=\"\">\n        <td>\n            <div>11:10 - 12:00</div>\n        </td>\n        <td class=\"M4 selectable\"> </td>\n        <td class=\"T4 selectable\"> </td>\n        <td class=\"W4 selectable\"> </td>\n        <td class=\"R4 selectable\"> </td>\n        <td class=\"F4 selectable\"> </td>\n        <td class=\"S4 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>12:10 - 13:00</div>\n        </td>\n        <td class=\"Mn selectable\"> </td>\n        <td class=\"Tn selectable\"> </td>\n        <td class=\"Wn selectable\"> </td>\n        <td class=\"Rn selectable\"> </td>\n        <td class=\"Fn selectable\"> </td>\n        <td class=\"Sn selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>13:20 - 14:10</div>\n        </td>\n        <td class=\"M5 selectable\"> </td>\n        <td class=\"T5 selectable\"> </td>\n        <td class=\"W5 selectable\"> </td>\n        <td class=\"R5 selectable\"> </td>\n        <td class=\"F5 selectable\"> </td>\n        <td class=\"S5 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>14:20 - 15:10</div>\n        </td>\n        <td class=\"M6 selectable\"> </td>\n        <td class=\"T6 selectable\"> </td>\n        <td class=\"W6 selectable\"> </td>\n        <td class=\"R6 selectable\"> </td>\n        <td class=\"F6 selectable\"> </td>\n        <td class=\"S6 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>15:30 - 16:20</div>\n        </td>\n        <td class=\"M7 selectable\"> </td>\n        <td class=\"T7 selectable\"> </td>\n        <td class=\"W7 selectable\"> </td>\n        <td class=\"R7 selectable\"> </td>\n        <td class=\"F7 selectable\"> </td>\n        <td class=\"S7 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>16:30 - 17:20</div>\n        </td>\n        <td class=\"M8 selectable\"> </td>\n        <td class=\"T8 selectable\"> </td>\n        <td class=\"W8 selectable\"> </td>\n        <td class=\"R8 selectable\"> </td>\n        <td class=\"F8 selectable\"> </td>\n        <td class=\"S8 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>17:30 - 18:20</div>\n        </td>\n        <td class=\"M9 selectable\"> </td>\n        <td class=\"T9 selectable\"> </td>\n        <td class=\"W9 selectable\"> </td>\n        <td class=\"R9 selectable\"> </td>\n        <td class=\"F9 selectable\"> </td>\n        <td class=\"S9 selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>18:30 - 19:20</div>\n        </td>\n        <td class=\"Ma selectable\"> </td>\n        <td class=\"Ta selectable\"> </td>\n        <td class=\"Wa selectable\"> </td>\n        <td class=\"Ra selectable\"> </td>\n        <td class=\"Fa selectable\"> </td>\n        <td class=\"Sa selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>19:30 - 20:20</div>\n        </td>\n        <td class=\"Mb selectable\"> </td>\n        <td class=\"Tb selectable\"> </td>\n        <td class=\"Wb selectable\"> </td>\n        <td class=\"Rb selectable\"> </td>\n        <td class=\"Fb selectable\"> </td>\n        <td class=\"Sb selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\n            <div>20:30 - 21:20</div>\n        </td>\n        <td class=\"Mc selectable\"> </td>\n        <td class=\"Tc selectable\"> </td>\n        <td class=\"Wc selectable\"> </td>\n        <td class=\"Rc selectable\"> </td>\n        <td class=\"Fc selectable\"> </td>\n        <td class=\"Sc selectable\"> </td>\n    </tr>\n    <tr class=\"\">\n        <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n        <td class=\"none selectable\" colspan=\"6\">\n        </td>\n    </tr>\n    </tbody>";
+	var course_table = '<tbody>\n    <tr class="">\n        <td>\n            <div>08:00 - 08:50</div>\n        </td>\n        <td class="M1 selectable"> </td>\n        <td class="T1 selectable"> </td>\n        <td class="W1 selectable"> </td>\n        <td class="R1 selectable"> </td>\n        <td class="F1 selectable"> </td>\n        <td class="S1 selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>09:00 - 09:50</div>\n        </td>\n        <td class="M2 selectable"> </td>\n        <td class="T2 selectable"> </td>\n        <td class="W2 selectable"> </td>\n        <td class="R2 selectable"> </td>\n        <td class="F2 selectable"> </td>\n        <td class="S2 selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>10:10 - 11:00</div>\n        </td>\n        <td class="M3 selectable"> </td>\n        <td class="T3 selectable"> </td>\n        <td class="W3 selectable"> </td>\n        <td class="R3 selectable"> </td>\n        <td class="F3 selectable"> </td>\n        <td class="S3 selectable"> </td>\n        </tr>\n    <tr class="">\n        <td>\n            <div>11:10 - 12:00</div>\n        </td>\n        <td class="M4 selectable"> </td>\n        <td class="T4 selectable"> </td>\n        <td class="W4 selectable"> </td>\n        <td class="R4 selectable"> </td>\n        <td class="F4 selectable"> </td>\n        <td class="S4 selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>12:10 - 13:00</div>\n        </td>\n        <td class="Mn selectable"> </td>\n        <td class="Tn selectable"> </td>\n        <td class="Wn selectable"> </td>\n        <td class="Rn selectable"> </td>\n        <td class="Fn selectable"> </td>\n        <td class="Sn selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>13:20 - 14:10</div>\n        </td>\n        <td class="M5 selectable"> </td>\n        <td class="T5 selectable"> </td>\n        <td class="W5 selectable"> </td>\n        <td class="R5 selectable"> </td>\n        <td class="F5 selectable"> </td>\n        <td class="S5 selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>14:20 - 15:10</div>\n        </td>\n        <td class="M6 selectable"> </td>\n        <td class="T6 selectable"> </td>\n        <td class="W6 selectable"> </td>\n        <td class="R6 selectable"> </td>\n        <td class="F6 selectable"> </td>\n        <td class="S6 selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>15:30 - 16:20</div>\n        </td>\n        <td class="M7 selectable"> </td>\n        <td class="T7 selectable"> </td>\n        <td class="W7 selectable"> </td>\n        <td class="R7 selectable"> </td>\n        <td class="F7 selectable"> </td>\n        <td class="S7 selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>16:30 - 17:20</div>\n        </td>\n        <td class="M8 selectable"> </td>\n        <td class="T8 selectable"> </td>\n        <td class="W8 selectable"> </td>\n        <td class="R8 selectable"> </td>\n        <td class="F8 selectable"> </td>\n        <td class="S8 selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>17:30 - 18:20</div>\n        </td>\n        <td class="M9 selectable"> </td>\n        <td class="T9 selectable"> </td>\n        <td class="W9 selectable"> </td>\n        <td class="R9 selectable"> </td>\n        <td class="F9 selectable"> </td>\n        <td class="S9 selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>18:30 - 19:20</div>\n        </td>\n        <td class="Ma selectable"> </td>\n        <td class="Ta selectable"> </td>\n        <td class="Wa selectable"> </td>\n        <td class="Ra selectable"> </td>\n        <td class="Fa selectable"> </td>\n        <td class="Sa selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>19:30 - 20:20</div>\n        </td>\n        <td class="Mb selectable"> </td>\n        <td class="Tb selectable"> </td>\n        <td class="Wb selectable"> </td>\n        <td class="Rb selectable"> </td>\n        <td class="Fb selectable"> </td>\n        <td class="Sb selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\n            <div>20:30 - 21:20</div>\n        </td>\n        <td class="Mc selectable"> </td>\n        <td class="Tc selectable"> </td>\n        <td class="Wc selectable"> </td>\n        <td class="Rc selectable"> </td>\n        <td class="Fc selectable"> </td>\n        <td class="Sc selectable"> </td>\n    </tr>\n    <tr class="">\n        <td>\u7121\u4E0A\u8AB2\u6642\u9593</td>\n        <td class="none selectable" colspan="6">\n        </td>\n    </tr>\n    </tbody>';
 	
 	function getUrlVars(url) {
 	  var values = [];
 	  var hash = void 0;
-	  var hashes = url.slice(url.indexOf("?") + 1).split("&");
+	  var hashes = url.slice(url.indexOf('?') + 1).split('&');
 	  for (var i = 0; i < hashes.length; i++) {
-	    hash = hashes[i].split("=");
+	    hash = hashes[i].split('=');
 	    values.push(hash[0]);
 	    values[hash[0]] = hash[1];
 	  }
@@ -9143,48 +9143,48 @@
 	
 	function courseAddSpace(course_no) {
 	  var myRe = /[0-9]+[A-Za-z]+/g;
-	  var output = [course_no.slice(0, myRe.lastIndex), course_no.slice(myRe.lastIndex)].join(" ");
+	  var output = [course_no.slice(0, myRe.lastIndex), course_no.slice(myRe.lastIndex)].join(' ');
 	  return output;
 	}
 	
 	function translateTopic(topic) {
 	  var result = void 0;
 	  switch (topic) {
-	    case "科號":
-	      result = "科號";
+	    case '科號':
+	      result = '科號';
 	      break;
-	    case "課程名稱":
-	      result = "課程中文名稱";
+	    case '課程名稱':
+	      result = '課程中文名稱';
 	      break;
-	    case "授課教師":
-	      result = "教師";
+	    case '授課教師':
+	      result = '教師';
 	      break;
-	    case "上課時間":
-	      result = "時間";
+	    case '上課時間':
+	      result = '時間';
 	      break;
-	    case "教室地點":
-	      result = "教室";
+	    case '教室地點':
+	      result = '教室';
 	      break;
-	    case "課程內容":
-	      result = "課綱";
+	    case '課程內容':
+	      result = '課綱';
 	      break;
-	    case "通識對象":
-	      result = "通識對象";
+	    case '通識對象':
+	      result = '通識對象';
 	      break;
-	    case "通識類別":
-	      result = "通識類別";
+	    case '通識類別':
+	      result = '通識類別';
 	      break;
-	    case "系必選修":
-	      result = "必選修";
+	    case '系必選修':
+	      result = '必選修';
 	      break;
-	    case "學分學程":
-	      result = "學程";
+	    case '學分學程':
+	      result = '學程';
 	      break;
-	    case "第一二專長":
-	      result = "第一二專長";
+	    case '第一二專長':
+	      result = '第一二專長';
 	      break;
 	    default:
-	      alert("Translate Topic Wrong !");
+	      alert('Translate Topic Wrong !');
 	      break;
 	  }
 	  return result;
@@ -9192,34 +9192,34 @@
 	
 	function removeLongCourseName(course_name) {
 	  var after = void 0;
-	  after = course_name.replace("全民國防教育軍事訓練--", "");
+	  after = course_name.replace('全民國防教育軍事訓練--', '');
 	  return after;
 	}
 	
 	function oldyear_to_newyear(course_no) {
-	  course_no = course_no.replace("100", "107");
-	  course_no = course_no.replace("101", "107");
-	  course_no = course_no.replace("102", "107");
-	  course_no = course_no.replace("103", "107");
-	  course_no = course_no.replace("104", "107");
-	  course_no = course_no.replace("105", "107");
-	  course_no = course_no.replace("106", "107");
+	  course_no = course_no.replace('100', '107');
+	  course_no = course_no.replace('101', '107');
+	  course_no = course_no.replace('102', '107');
+	  course_no = course_no.replace('103', '107');
+	  course_no = course_no.replace('104', '107');
+	  course_no = course_no.replace('105', '107');
+	  course_no = course_no.replace('106', '107');
 	  return course_no;
 	}
 	
 	function trans(slice) {
 	  switch (slice) {
-	    case "n":
-	      slice = "4.5";
+	    case 'n':
+	      slice = '4.5';
 	      break;
-	    case "a":
-	      slice = "10";
+	    case 'a':
+	      slice = '10';
 	      break;
-	    case "b":
-	      slice = "11";
+	    case 'b':
+	      slice = '11';
 	      break;
-	    case "c":
-	      slice = "12";
+	    case 'c':
+	      slice = '12';
 	      break;
 	  }
 	  return slice;
@@ -9227,7 +9227,7 @@
 	
 	function sort_weekday(time_array) {
 	  time_array.sort(function (a, b) {
-	    var weekday = ["M", "T", "W", "R", "F", "S"];
+	    var weekday = ['M', 'T', 'W', 'R', 'F', 'S'];
 	    var week_a = weekday.findIndex(function (element) {
 	      return element == a.slice(0, 1);
 	    });
@@ -9249,22 +9249,22 @@
 	    var head = course_no.match(/[0-9]+[A-Za-z]+/g)[0];
 	    var tail = course_no.match(/[0-9]+/g)[1];
 	    var remain = 15 - head.length - tail.length;
-	    var space = "";
+	    var space = '';
 	    for (var i = 0; i < remain; i++) {
-	      space = space.concat(" ");
+	      space = space.concat(' ');
 	    }var new_course_no = head.concat(space).concat(tail);
 	    return new_course_no;
 	  }
 	}
 	
-	var all_time = ["M1", "M2", "M3", "M4", "Mn", "M5", "M6", "M7", "M8", "M9", "Ma", "Mb", "Mc", "T1", "T2", "T3", "T4", "Tn", "T5", "T6", "T7", "T8", "T9", "Ta", "Tb", "Tc", "W1", "W2", "W3", "W4", "Wn", "W5", "W6", "W7", "W8", "W9", "Wa", "Wb", "Wc", "R1", "R2", "R3", "R4", "Rn", "R5", "R6", "R7", "R8", "R9", "Ra", "Rb", "Rc", "F1", "F2", "F3", "F4", "Fn", "F5", "F6", "F7", "F8", "F9", "Fa", "Fb", "Fc", "S1", "S2", "S3", "S4", "Sn", "S5", "S6", "S7", "S8", "S9", "Sa", "Sb", "Sc"];
+	var all_time = ['M1', 'M2', 'M3', 'M4', 'Mn', 'M5', 'M6', 'M7', 'M8', 'M9', 'Ma', 'Mb', 'Mc', 'T1', 'T2', 'T3', 'T4', 'Tn', 'T5', 'T6', 'T7', 'T8', 'T9', 'Ta', 'Tb', 'Tc', 'W1', 'W2', 'W3', 'W4', 'Wn', 'W5', 'W6', 'W7', 'W8', 'W9', 'Wa', 'Wb', 'Wc', 'R1', 'R2', 'R3', 'R4', 'Rn', 'R5', 'R6', 'R7', 'R8', 'R9', 'Ra', 'Rb', 'Rc', 'F1', 'F2', 'F3', 'F4', 'Fn', 'F5', 'F6', 'F7', 'F8', 'F9', 'Fa', 'Fb', 'Fc', 'S1', 'S2', 'S3', 'S4', 'Sn', 'S5', 'S6', 'S7', 'S8', 'S9', 'Sa', 'Sb', 'Sc'];
 	
 	function miniMessageAlert(header, content_1, content_2) {
-	  $("#mini_alert_header").text(header);
+	  $('#mini_alert_header').text(header);
 	  if (content_2) {
-	    $("#mini_alert_content").html("<p>" + content_1 + "</p><p>" + content_2 + "</p>");
-	  } else $("#mini_alert_content").html("<p>" + content_1 + "</p>");
-	  $("#mini_alert").modal("show");
+	    $('#mini_alert_content').html('<p>' + content_1 + '</p><p>' + content_2 + '</p>');
+	  } else $('#mini_alert_content').html('<p>' + content_1 + '</p>');
+	  $('#mini_alert').modal('show');
 	}
 	
 	exports.getUrlVars = getUrlVars;
@@ -9282,7 +9282,7 @@
 /* 330 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
+	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -9344,12 +9344,12 @@
 	            id = hits[0]._id;
 	
 	            getCourseInfo(course_no, id, function () {
-	              $(".course_action").hide();
-	              $("#loading").removeClass("active");
+	              $('.course_action').hide();
+	              $('#loading').removeClass('active');
 	            }, false);
 	
 	          case 7:
-	          case "end":
+	          case 'end':
 	            return _context.stop();
 	        }
 	      }
@@ -9378,20 +9378,20 @@
 	
 	function renderUserName() {
 	  request({
-	    url: "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/4/4.19/JH4j002.php?ACIXSTORE=" + _popup.acix,
+	    url: 'https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/4/4.19/JH4j002.php?ACIXSTORE=' + _popup.acix,
 	    encoding: null
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
-	      var str = iconv.decode(new Buffer(body), "big5");
-	      var temp = document.createElement("div");
+	      var str = iconv.decode(new Buffer(body), 'big5');
+	      var temp = document.createElement('div');
 	      temp.innerHTML = str;
 	
-	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
-	        (0, _helper.miniMessageAlert)("系統錯誤", "請登入或重新登入校務資訊系統");
+	      if ($(temp).text().indexOf('session is interrupted!') >= 0) {
+	        (0, _helper.miniMessageAlert)('系統錯誤', '請登入或重新登入校務資訊系統');
 	      } else {
-	        var found = $("div > form > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(4)", temp);
-	        var welcome = "\u4F60\u9078\u5230\u597D\u8AB2\u4E86\u55CE\uFF0C" + found.text() + " ?";
-	        $("#user").prepend(welcome);
+	        var found = $('div > form > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(4)', temp);
+	        var welcome = '\u4F60\u9078\u5230\u597D\u8AB2\u4E86\u55CE\uFF0C' + found.text() + ' ?';
+	        $('#user').prepend(welcome);
 	      }
 	    }
 	  });
@@ -9401,48 +9401,48 @@
 	function getPopulation(course_no, fresh_num) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt);
-	  $(".fetch_people").text("Loading");
+	  $('.fetch_people').text('Loading');
 	
 	  request.post({
-	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.7/JH727002.php",
+	    url: 'https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.7/JH727002.php',
 	    form: {
 	      ACIXSTORE: _popup.acix,
 	      select: target[0],
-	      act: "1",
-	      Submit: "確定 go"
+	      act: '1',
+	      Submit: '確定 go'
 	    },
 	    headers: {
-	      "Content-Type": "application/x-www-form-urlencoded"
+	      'Content-Type': 'application/x-www-form-urlencoded'
 	    },
 	    encoding: null,
-	    method: "POST"
+	    method: 'POST'
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
-	      var str = iconv.decode(new Buffer(body), "big5");
-	      str = str.replace("<img id='jh_loading' src='/style/JH/jh_loading.gif' style='position:fixed;'>", "");
-	      var temp = document.createElement("div");
+	      var str = iconv.decode(new Buffer(body), 'big5');
+	      str = str.replace("<img id='jh_loading' src='/style/JH/jh_loading.gif' style='position:fixed;'>", '');
+	      var temp = document.createElement('div');
 	      temp.innerHTML = str;
 	
-	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
-	        (0, _helper.miniMessageAlert)("系統錯誤", "請登入或重新登入校務資訊系統");
+	      if ($(temp).text().indexOf('session is interrupted!') >= 0) {
+	        (0, _helper.miniMessageAlert)('系統錯誤', '請登入或重新登入校務資訊系統');
 	      } else {
-	        var found = $("div > form > table.sortable > tbody > tr", temp).filter(function () {
-	          return $("td:nth-child(1) > div", this).text() == course_no;
+	        var found = $('div > form > table.sortable > tbody > tr', temp).filter(function () {
+	          return $('td:nth-child(1) > div', this).text() == course_no;
 	        });
 	
-	        if ($(found).length == 0) $(".fetch_people").text("None");else {
-	          if (target[0] == "GE" || target[0] == "GEC") {
-	            $("#size_limit").text($("td:nth-child(6) > div", found).text());
-	            $("#current_number").text($("td:nth-child(7) > div", found).text());
-	            $("#remain").text($("td:nth-child(8) > div", found).text());
-	            $("#be_random").text($("td:nth-child(9) > div", found).text());
+	        if ($(found).length == 0) $('.fetch_people').text('None');else {
+	          if (target[0] == 'GE' || target[0] == 'GEC') {
+	            $('#size_limit').text($('td:nth-child(6) > div', found).text());
+	            $('#current_number').text($('td:nth-child(7) > div', found).text());
+	            $('#remain').text($('td:nth-child(8) > div', found).text());
+	            $('#be_random').text($('td:nth-child(9) > div', found).text());
 	          } else {
-	            $("#size_limit").text($("td:nth-child(5) > div", found).text());
-	            $("#current_number").text($("td:nth-child(6) > div", found).text());
-	            $("#remain").text($("td:nth-child(7) > div", found).text());
-	            $("#be_random").text($("td:nth-child(8) > div", found).text());
+	            $('#size_limit').text($('td:nth-child(5) > div', found).text());
+	            $('#current_number').text($('td:nth-child(6) > div', found).text());
+	            $('#remain').text($('td:nth-child(7) > div', found).text());
+	            $('#be_random').text($('td:nth-child(8) > div', found).text());
 	          }
-	          $("#fresh_num").text(fresh_num);
+	          $('#fresh_num').text(fresh_num);
 	        }
 	      }
 	    }
@@ -9451,20 +9451,20 @@
 	
 	function getCourseInfo(course_no, id, callback, from_multiple) {
 	  if (course_no == undefined) return;
-	  if (!from_multiple) $("#loading").addClass("active");
+	  if (!from_multiple) $('#loading').addClass('active');
 	  request({
-	    url: "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=" + _popup.acix + "&c_key=" + course_no,
+	    url: 'https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/common/Syllabus/1.php?ACIXSTORE=' + _popup.acix + '&c_key=' + course_no,
 	    encoding: null
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
-	      var str = iconv.decode(new Buffer(body), "big5");
-	      var temp = document.createElement("div");
+	      var str = iconv.decode(new Buffer(body), 'big5');
+	      var temp = document.createElement('div');
 	      temp.innerHTML = str;
 	
-	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
-	        (0, _helper.miniMessageAlert)("系統錯誤", "請登入或重新登入校務資訊系統");
+	      if ($(temp).text().indexOf('session is interrupted!') >= 0) {
+	        (0, _helper.miniMessageAlert)('系統錯誤', '請登入或重新登入校務資訊系統');
 	      } else {
-	        chrome.storage.local.get("course", function (items) {
+	        chrome.storage.local.get('course', function (items) {
 	          // getSimilarities(id, function(info) {
 	          //   $("#similar").empty();
 	          //   for (var each in info) {
@@ -9481,17 +9481,17 @@
 	          // });
 	
 	          var info = items.course[id];
-	          var description = $("div > table:nth-child(4) > tbody > tr:nth-child(2) > td", temp);
-	          var syllabus = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td", temp);
-	          var find_file = $("div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a", temp);
+	          var description = $('div > table:nth-child(4) > tbody > tr:nth-child(2) > td', temp);
+	          var syllabus = $('div > table:nth-child(5) > tbody > tr:nth-child(2) > td', temp);
+	          var find_file = $('div > table:nth-child(5) > tbody > tr:nth-child(2) > td > div > font:nth-child(1) > a', temp);
 	
 	          var time = info.時間;
-	          if (time.length == 0) time.push("無");
+	          if (time.length == 0) time.push('無');
 	          (0, _helper.sort_weekday)(time);
 	          var classroom = info.教室;
-	          if (classroom.length == 0) classroom.push("無");
+	          if (classroom.length == 0) classroom.push('無');
 	          getPopulation(course_no, info.新生保留人數);
-	          $(".course_info.scrolling.content").attr("id", id);
+	          $('.course_info.scrolling.content').attr('id', id);
 	
 	          var teacher = [];
 	          var _iteratorNormalCompletion = true;
@@ -9501,8 +9501,7 @@
 	          try {
 	            for (var _iterator = info.教師[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	              var each = _step.value;
-	
-	              teacher.push(each.split("\t")[0]);
+	              teacher.push(each.split('\t')[0]);
 	            }
 	          } catch (err) {
 	            _didIteratorError = true;
@@ -9520,38 +9519,38 @@
 	          }
 	
 	          teacher.splice(-1, 1);
-	          if (teacher.length == 0) $("#teacher").text("None");else $("#teacher").text(teacher.join(" / "));
+	          if (teacher.length == 0) $('#teacher').text('None');else $('#teacher').text(teacher.join(' / '));
 	
-	          $("#no").text(info.科號);
-	          $("#course_name").html(info.課程中文名稱 + "&nbsp;&nbsp;" + info.課程英文名稱);
-	          $("#credit").text(info.學分數);
-	          $("#time").text(time);
-	          $("#classroom").text(classroom.join(" / "));
-	          $("#description").html(description.html());
+	          $('#no').text(info.科號);
+	          $('#course_name').html(info.課程中文名稱 + '&nbsp;&nbsp;' + info.課程英文名稱);
+	          $('#credit').text(info.學分數);
+	          $('#time').text(time);
+	          $('#classroom').text(classroom.join(' / '));
+	          $('#description').html(description.html());
 	
-	          $("#block_rule").html(info.擋修說明);
-	          $("#limit_rule").html(info.課程限制說明);
-	          $("#join_limit").html(info.不可加簽說明);
-	          $("#ps").html(info.備註);
-	          $("#GE_people").html(info.通識對象);
-	          $("#GE_type").html(info.通識類別);
+	          $('#block_rule').html(info.擋修說明);
+	          $('#limit_rule').html(info.課程限制說明);
+	          $('#join_limit').html(info.不可加簽說明);
+	          $('#ps').html(info.備註);
+	          $('#GE_people').html(info.通識對象);
+	          $('#GE_type').html(info.通識類別);
 	
-	          $("#must_choose").html(info.必選修.join("<br>"));
-	          $("#program").html(info.學程.join("<br>"));
-	          $("#skill").html(info.第一二專長.join("<br>"));
+	          $('#must_choose').html(info.必選修.join('<br>'));
+	          $('#program').html(info.學程.join('<br>'));
+	          $('#skill').html(info.第一二專長.join('<br>'));
 	
-	          $("#pdf_page").empty();
-	          $("#syllabus").empty();
+	          $('#pdf_page').empty();
+	          $('#syllabus').empty();
 	
 	          if (find_file.length > 0) {
-	            var pdf_path = "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/";
-	            $("#pdf_page").html("<div id=\"pdf_render\" align=\"right\" style=\"display:none;\">\n                    <button id=\"prev\" class=\"tiny ui basic button\">\n                        <i class=\"angle left icon\"></i>\n                    </button>\n                    <button id=\"next\" class=\"tiny ui basic button\">\n                        <i class=\"angle right icon\"></i>\n                    </button>\n                    &nbsp; &nbsp;\n                    <span>Page:\n                        <span id=\"page_num\" ></span> /\n                        <span id=\"page_count\"></span>\n                    </span>\n                </div>\n                <canvas id=\"the-canvas\" />\n                ");
-	            (0, _pdf2html.transform)("" + pdf_path + course_no + ".pdf?ACIXSTORE=" + _popup.acix);
-	          } else $("#syllabus").html(syllabus.html());
+	            var pdf_path = 'https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/output/6_6.1_6.1.12/';
+	            $('#pdf_page').html('<div id="pdf_render" align="right" style="display:none;">\n                    <button id="prev" class="tiny ui basic button">\n                        <i class="angle left icon"></i>\n                    </button>\n                    <button id="next" class="tiny ui basic button">\n                        <i class="angle right icon"></i>\n                    </button>\n                    &nbsp; &nbsp;\n                    <span>Page:\n                        <span id="page_num" ></span> /\n                        <span id="page_count"></span>\n                    </span>\n                </div>\n                <canvas id="the-canvas" />\n                ');
+	            (0, _pdf2html.transform)('' + pdf_path + course_no + '.pdf?ACIXSTORE=' + _popup.acix);
+	          } else $('#syllabus').html(syllabus.html());
 	
-	          for (var i = 0; i < $("#class_accordion > div").length / 2; i++) {
-	            $(".ui.accordion").accordion("close", i);
-	          }$(".course_info.modal").modal("show");
+	          for (var i = 0; i < $('#class_accordion > div').length / 2; i++) {
+	            $('.ui.accordion').accordion('close', i);
+	          }$('.course_info.modal').modal('show');
 	          callback();
 	        });
 	      }
@@ -9560,9 +9559,9 @@
 	}
 	
 	function getResultCourse(phaseNo, callback) {
-	  if (callback) $("#loading").addClass("active");
+	  if (callback) $('#loading').addClass('active');
 	  request.post({
-	    url: "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.9/JH729002.php",
+	    url: 'https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.2/7.2.9/JH729002.php',
 	    form: {
 	      ACIXSTORE: _popup.acix,
 	      stu_no: _popup.stu_no,
@@ -9573,27 +9572,27 @@
 	    encoding: null
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
-	      var str = iconv.decode(new Buffer(body), "big5");
-	      var temp = document.createElement("div");
+	      var str = iconv.decode(new Buffer(body), 'big5');
+	      var temp = document.createElement('div');
 	      temp.innerHTML = str;
 	
-	      if ($(temp).text().indexOf("session is interrupted!") >= 0) {
-	        (0, _helper.miniMessageAlert)("系統錯誤", "請登入或重新登入校務資訊系統");
+	      if ($(temp).text().indexOf('session is interrupted!') >= 0) {
+	        (0, _helper.miniMessageAlert)('系統錯誤', '請登入或重新登入校務資訊系統');
 	      } else {
-	        var table = $("form > table:nth-child(3)", temp);
+	        var table = $('form > table:nth-child(3)', temp);
 	        var parse_table = $.parseHTML(_helper.course_table);
-	        $(parse_table).attr("id", "course_result_from_nthu");
+	        $(parse_table).attr('id', 'course_result_from_nthu');
 	
 	        var all_time = [];
-	        $("tbody > tr", table).each(function () {
+	        $('tbody > tr', table).each(function () {
 	          if ($(this).index() > 0) {
-	            var course_no = $("td:nth-child(1)", this).text();
-	            var course_name = $("td:nth-child(2)", this).text().split(/[A-Za-z]+/)[0];
+	            var course_no = $('td:nth-child(1)', this).text();
+	            var course_name = $('td:nth-child(2)', this).text().split(/[A-Za-z]+/)[0];
 	            course_name = (0, _helper.removeLongCourseName)(course_name);
-	            var time = $("td:nth-child(4)", this).text();
-	            var content = "<a course_no=\"" + course_no + "\" href=\"#do_not_jump\">" + course_name + "</a>";
+	            var time = $('td:nth-child(4)', this).text();
+	            var content = '<a course_no="' + course_no + '" href="#do_not_jump">' + course_name + '</a>';
 	            if (time.length == 1) {
-	              $(parse_table).find(".none").append(content);
+	              $(parse_table).find('.none').append(content);
 	            } else {
 	              var slice_time = [];
 	              for (var i = 0, j = 0; i < time.length; i = i + 2, j++) {
@@ -9601,26 +9600,26 @@
 	                all_time.push(slice_time[j]);
 	              }
 	              for (var _i = 0; _i < slice_time.length; _i++) {
-	                $(parse_table).find("." + slice_time[_i]).append(content);
+	                $(parse_table).find('.' + slice_time[_i]).append(content);
 	              }
 	            }
 	          }
 	        });
-	        $("#course_result_from_nthu").replaceWith(parse_table);
-	        $("#course_result_from_nthu > tr").on("click", "td", function () {
-	          if (!$("a", this).attr("course_no")) return;
-	          $("#multiple_class_list_bySingle").empty();
+	        $('#course_result_from_nthu').replaceWith(parse_table);
+	        $('#course_result_from_nthu > tr').on('click', 'td', function () {
+	          if (!$('a', this).attr('course_no')) return;
+	          $('#multiple_class_list_bySingle').empty();
 	          if ($(this).children().length > 1) {
-	            $("a", this).each(function () {
-	              var course_no = $(this).attr("course_no");
+	            $('a', this).each(function () {
+	              var course_no = $(this).attr('course_no');
 	              var text = $(this).text();
-	              var content = "<div course_no=\"" + course_no + "\" class=\"item\">\n                  <div class=\"content\">\n                    <div class=\"description\">" + text + "</div>\n                  </div>\n                </div>";
-	              $("#multiple_class_list_bySingle").append(content);
+	              var content = '<div course_no="' + course_no + '" class="item">\n                  <div class="content">\n                    <div class="description">' + text + '</div>\n                  </div>\n                </div>';
+	              $('#multiple_class_list_bySingle').append(content);
 	            });
-	            $("#multiple_class_bySingle").modal("show");
+	            $('#multiple_class_bySingle').modal('show');
 	          } else {
-	            var course_no = $("a", this).attr("course_no");
-	            $("#loading").addClass("active");
+	            var course_no = $('a', this).attr('course_no');
+	            $('#loading').addClass('active');
 	            searchByNo_store_getCourseInfo(course_no);
 	          }
 	        });
@@ -11745,7 +11744,7 @@
 /* 335 */
 /***/ (function(module, exports) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -11755,10 +11754,10 @@
 	// var url;
 	
 	// Loaded via <script> tag, create shortcut to access PDF.js exports.
-	var pdfjsLib = window["pdfjs-dist/build/pdf"];
+	var pdfjsLib = window['pdfjs-dist/build/pdf'];
 	
 	// The workerSrc property shall be specified.
-	pdfjsLib.GlobalWorkerOptions.workerSrc = "https://mozilla.github.io/pdf.js/build/pdf.worker.js";
+	pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
 	
 	var pdfDoc = null,
 	    pageNum = 1,
@@ -11791,7 +11790,7 @@
 	
 	    // Wait for rendering to finish
 	    renderTask.promise.then(function () {
-	      $("#pdf_render").show();
+	      $('#pdf_render').show();
 	      pageRendering = false;
 	      if (pageNumPending !== null) {
 	        // New page rendering is pending
@@ -11802,7 +11801,7 @@
 	  });
 	
 	  // Update page counters
-	  document.getElementById("page_num").textContent = num;
+	  document.getElementById('page_num').textContent = num;
 	}
 	
 	/**
@@ -11836,15 +11835,15 @@
 	  /**
 	   * Asynchronously downloads PDF.
 	   */
-	  canvas = document.getElementById("the-canvas");
-	  ctx = canvas.getContext("2d");
+	  canvas = document.getElementById('the-canvas');
+	  ctx = canvas.getContext('2d');
 	
-	  pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null, scale = 1.05, document.getElementById("prev").addEventListener("click", onPrevPage);
-	  document.getElementById("next").addEventListener("click", onNextPage);
+	  pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null, scale = 1.05, document.getElementById('prev').addEventListener('click', onPrevPage);
+	  document.getElementById('next').addEventListener('click', onNextPage);
 	
 	  pdfjsLib.getDocument(url).then(function (pdfDoc_) {
 	    pdfDoc = pdfDoc_;
-	    document.getElementById("page_count").textContent = pdfDoc.numPages;
+	    document.getElementById('page_count').textContent = pdfDoc.numPages;
 	
 	    // Initial/first page rendering
 	    renderPage(pageNum);
@@ -11857,7 +11856,7 @@
 /* 336 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -11875,30 +11874,30 @@
 	var _api = __webpack_require__(330);
 	
 	var request = __webpack_require__(340);
-	var baseURL = "http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/";
-	// const baseURL = `http://192.168.99.100/api/`;
+	// const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
+	var baseURL = 'http://192.168.99.100/api/';
 	// const baseURL = `localhost:80/api/`;
 	
 	function renderSearchResult(hits, callback) {
-	  var page_num_content = "";
+	  var page_num_content = '';
 	  var all_page = Math.ceil(hits.length / 10.0);
 	  for (var i = 1; i < all_page; i++) {
 	    var page_num = i + 1;
-	    page_num_content = page_num_content.concat("<a class=\"page item\">" + page_num + "</a>");
+	    page_num_content = page_num_content.concat('<a class="page item">' + page_num + '</a>');
 	  }
-	  var change_page = "<a class=\"icon item\"><i class=\"left chevron icon\"></i></a>\n  <a class=\"page active item\">1</a>" + page_num_content + "\n  <a class=\"icon item\"><i class=\"right chevron icon\"></i></a>";
+	  var change_page = '<a class="icon item"><i class="left chevron icon"></i></a>\n  <a class="page active item">1</a>' + page_num_content + '\n  <a class="icon item"><i class="right chevron icon"></i></a>';
 	
-	  $("#search_page_change").empty();
-	  $("#search_page_change").append(change_page);
+	  $('#search_page_change').empty();
+	  $('#search_page_change').append(change_page);
 	  storeCourseInfo(hits);
 	
-	  if (hits.length == 0) (0, _helper.miniMessageAlert)("查無資料", "試試看別的關鍵字吧!");else {
+	  if (hits.length == 0) (0, _helper.miniMessageAlert)('查無資料', '試試看別的關鍵字吧!');else {
 	    var copy_hits = [];
 	    Object.assign(copy_hits, hits);
 	    var all_should_row = Math.ceil(copy_hits.length / 10.0) * 10;
 	    var fill_empty_num = all_should_row - copy_hits.length;
 	    for (var _i = fill_empty_num; _i > 0; _i--) {
-	      copy_hits.push("empty");
+	      copy_hits.push('empty');
 	    }var _iteratorNormalCompletion = true;
 	    var _didIteratorError = false;
 	    var _iteratorError = undefined;
@@ -11914,20 +11913,20 @@
 	            classroom = void 0;
 	        var teacher = [];
 	        var isEmpty = false;
-	        if (each == "empty") {
-	          row = "<tr class=\"empty_row\">\n          <td></td>\n          <td></td>\n          <td></td>\n          <td></td>\n          <td></td></tr>";
-	          time = "empty";
+	        if (each == 'empty') {
+	          row = '<tr class="empty_row">\n          <td></td>\n          <td></td>\n          <td></td>\n          <td></td>\n          <td></td></tr>';
+	          time = 'empty';
 	          isEmpty = true;
 	        } else {
 	          id = each._id;
 	          source = each._source;
 	
 	          time = source.時間;
-	          if (time.length == 0) time.push("無");
+	          if (time.length == 0) time.push('無');
 	          (0, _helper.sort_weekday)(time);
 	
 	          classroom = source.教室;
-	          if (classroom.length == 0) classroom.push("無");
+	          if (classroom.length == 0) classroom.push('無');
 	
 	          var _iteratorNormalCompletion2 = true;
 	          var _didIteratorError2 = false;
@@ -11937,7 +11936,7 @@
 	            for (var _iterator2 = source.教師[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	              var each_teacher = _step2.value;
 	
-	              teacher.push(each_teacher.split("\t")[0]);
+	              teacher.push(each_teacher.split('\t')[0]);
 	            }
 	          } catch (err) {
 	            _didIteratorError2 = true;
@@ -11958,16 +11957,16 @@
 	        }
 	        (0, _conflict.checkConflict)(time, function (negative) {
 	          if (isEmpty == false) {
-	            row = "<tr " + negative + " id=\"" + id + "\">\n          <td>" + source.科號 + "</td>\n          <td>" + source.課程中文名稱 + "</td>\n          <td>" + time + "</td>\n          <td>" + classroom.join("<br/>") + "</td>\n          <td>";
-	            row += teacher.join("<br>") + "</td></tr>";
+	            row = '<tr ' + negative + ' id="' + id + '">\n          <td>' + source.科號 + '</td>\n          <td>' + source.課程中文名稱 + '</td>\n          <td>' + time + '</td>\n          <td>' + classroom.join('<br/>') + '</td>\n          <td>';
+	            row += teacher.join('<br>') + '</td></tr>';
 	          }
 	
-	          $("#search_result_body").append(row);
-	          $("#search_result_body > tr").filter(function (index) {
+	          $('#search_result_body').append(row);
+	          $('#search_result_body > tr').filter(function (index) {
 	            return index >= 10;
 	          }).hide();
-	          $("#search_result_body > tr").hover(function () {
-	            if (!$(this).hasClass("empty_row")) $(this).css("cursor", "pointer");
+	          $('#search_result_body > tr').hover(function () {
+	            if (!$(this).hasClass('empty_row')) $(this).css('cursor', 'pointer');
 	          });
 	        });
 	      };
@@ -11995,7 +11994,7 @@
 	
 	function searchOnlyKeyword(search_topic, keyword, callback) {
 	  request.post({
-	    url: baseURL + "searchOnlyKeyword",
+	    url: baseURL + 'searchOnlyKeyword',
 	    form: {
 	      search_topic: search_topic,
 	      keyword: keyword
@@ -12011,7 +12010,7 @@
 	
 	function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
 	  request.post({
-	    url: baseURL + "searchDoubleKeyword",
+	    url: baseURL + 'searchDoubleKeyword',
 	    form: {
 	      search_topic: search_topic,
 	      keyword: keyword,
@@ -12029,7 +12028,7 @@
 	function searchTime(search_topic, keyword, time_group, callback) {
 	  console.log(time_group);
 	  request.post({
-	    url: baseURL + "searchTime",
+	    url: baseURL + 'searchTime',
 	    form: {
 	      search_topic: search_topic,
 	      keyword: keyword,
@@ -12045,23 +12044,23 @@
 	}
 	
 	function searchByKeyword(keyword, other_keyword, topic, callback) {
-	  $("#search_result_body").empty();
-	  $("#loading").addClass("active");
+	  $('#search_result_body').empty();
+	  $('#loading').addClass('active');
 	  var search_topic = (0, _helper.translateTopic)(topic);
-	  if (search_topic == "科號") keyword = (0, _helper.addSpace_course_no)(keyword);
+	  if (search_topic == '科號') keyword = (0, _helper.addSpace_course_no)(keyword);
 	
-	  if (other_keyword == "NoNeedToChoose") {
-	    console.log("search_topic:" + search_topic + ",keyword:" + keyword);
+	  if (other_keyword == 'NoNeedToChoose') {
+	    console.log('search_topic:' + search_topic + ',keyword:' + keyword);
 	    searchOnlyKeyword(search_topic, keyword, callback);
 	  } else {
-	    console.log("search_topic:" + search_topic + ",keyword:" + keyword + ",other_keyword:" + other_keyword);
-	    if (search_topic == "時間") searchTime(search_topic, keyword, other_keyword, callback);else searchDoubleKeyword(search_topic, keyword, other_keyword, callback);
+	    console.log('search_topic:' + search_topic + ',keyword:' + keyword + ',other_keyword:' + other_keyword);
+	    if (search_topic == '時間') searchTime(search_topic, keyword, other_keyword, callback);else searchDoubleKeyword(search_topic, keyword, other_keyword, callback);
 	  }
 	}
 	
 	var storeCourseInfo = function storeCourseInfo(hits) {
 	  return new Promise(function (resolve) {
-	    chrome.storage.local.get("course", function (items) {
+	    chrome.storage.local.get('course', function (items) {
 	      var temp = {};
 	      var data = {};
 	      var _iteratorNormalCompletion3 = true;
@@ -12119,9 +12118,9 @@
 	            temp[each_data] = data[each_data];
 	          }
 	        }
-	        chrome.storage.local.remove("course", function () {
+	        chrome.storage.local.remove('course', function () {
 	          chrome.storage.local.set({ course: temp }, function () {
-	            chrome.storage.local.get("course", function (items) {
+	            chrome.storage.local.get('course', function (items) {
 	              // console.log(items);
 	              if (resolve) resolve();
 	            });
@@ -12131,7 +12130,7 @@
 	        for (var _each_data in data) {
 	          temp[_each_data] = data[_each_data];
 	        }chrome.storage.local.set({ course: temp }, function () {
-	          chrome.storage.local.get("course", function (items) {
+	          chrome.storage.local.get('course', function (items) {
 	            // console.log(items);
 	            if (resolve) resolve();
 	          });
@@ -12145,7 +12144,7 @@
 	  return new Promise(function (resolve) {
 	    var new_course_no = (0, _helper.addSpace_course_no)(course_no);
 	    request.post({
-	      url: baseURL + "searchBySingleCourseNo",
+	      url: baseURL + 'searchBySingleCourseNo',
 	      form: {
 	        course_no: new_course_no
 	      }
@@ -12161,7 +12160,7 @@
 	
 	function searchByID_Group(id_group, callback) {
 	  request.post({
-	    url: baseURL + "searchByID_Group",
+	    url: baseURL + 'searchByID_Group',
 	    form: {
 	      id_0: id_group[0].other_id,
 	      id_1: id_group[1].other_id,
@@ -12177,91 +12176,91 @@
 	}
 	
 	function dependOnType(topic) {
-	  $(".other_entry").hide();
-	  $(".ui.dropdown.search_entry_item").dropdown("clear").dropdown({
-	    fullTextSearch: "exact"
+	  $('.other_entry').hide();
+	  $('.ui.dropdown.search_entry_item').dropdown('clear').dropdown({
+	    fullTextSearch: 'exact'
 	  });
-	  $(".ui.dropdown.search_entry_item");
-	  if (topic == "上課時間") $("#time_select_entry").show();else if (topic == "通識對象") $("#ge_people_entry").show();else if (topic == "通識類別") $("#ge_type_select_entry").show();else if (topic == "系必選修") $("#dept_entry").show();else if (topic == "學分學程") $("#program_entry").show();else if (topic == "第一二專長") $("#skill_entry").show();else $("#main_other_entry").show();
+	  $('.ui.dropdown.search_entry_item');
+	  if (topic == '上課時間') $('#time_select_entry').show();else if (topic == '通識對象') $('#ge_people_entry').show();else if (topic == '通識類別') $('#ge_type_select_entry').show();else if (topic == '系必選修') $('#dept_entry').show();else if (topic == '學分學程') $('#program_entry').show();else if (topic == '第一二專長') $('#skill_entry').show();else $('#main_other_entry').show();
 	}
 	
 	function clickToSearch() {
-	  var topic = $("#topic_name").text();
-	  var keyword = $("#keyword").val();
-	  var other_keyword = "NoNeedToChoose";
-	  if (topic == "上課時間") {
-	    other_keyword = $("#time_select_text").val();
-	  } else if (topic == "通識對象") {
-	    other_keyword = $("#ge_people_text").val();
-	  } else if (topic == "通識類別") {
-	    other_keyword = $("#ge_type_select_text").val();
-	  } else if (topic == "系必選修") {
-	    other_keyword = $("#dept_entry_text").val();
-	  } else if (topic == "學分學程") {
-	    other_keyword = $("#program_entry_text").val();
-	  } else if (topic == "第一二專長") {
-	    other_keyword = $("#skill_entry_text").val();
+	  var topic = $('#topic_name').text();
+	  var keyword = $('#keyword').val();
+	  var other_keyword = 'NoNeedToChoose';
+	  if (topic == '上課時間') {
+	    other_keyword = $('#time_select_text').val();
+	  } else if (topic == '通識對象') {
+	    other_keyword = $('#ge_people_text').val();
+	  } else if (topic == '通識類別') {
+	    other_keyword = $('#ge_type_select_text').val();
+	  } else if (topic == '系必選修') {
+	    other_keyword = $('#dept_entry_text').val();
+	  } else if (topic == '學分學程') {
+	    other_keyword = $('#program_entry_text').val();
+	  } else if (topic == '第一二專長') {
+	    other_keyword = $('#skill_entry_text').val();
 	  }
 	
-	  if (other_keyword == "") {
-	    (0, _helper.miniMessageAlert)("搜尋錯誤", "你沒有選擇進階輸入!");
+	  if (other_keyword == '') {
+	    (0, _helper.miniMessageAlert)('搜尋錯誤', '你沒有選擇進階輸入!');
 	    return;
-	  } else if (other_keyword == "NoNeedToChoose") {
-	    if ($("#keyword").val() == "") {
-	      (0, _helper.miniMessageAlert)("搜尋錯誤", "你的關鍵字沒輸入!");
+	  } else if (other_keyword == 'NoNeedToChoose') {
+	    if ($('#keyword').val() == '') {
+	      (0, _helper.miniMessageAlert)('搜尋錯誤', '你的關鍵字沒輸入!');
 	      return;
 	    }
 	  }
 	  searchByKeyword(keyword, other_keyword, topic, function () {
-	    $("#loading").removeClass("active");
-	    $("#search_result_page").show();
+	    $('#loading').removeClass('active');
+	    $('#search_result_page').show();
 	  });
-	  $("#search_page_change > a").removeClass("active");
-	  $("#search_page_change > a:nth-child(2)").addClass("active");
+	  $('#search_page_change > a').removeClass('active');
+	  $('#search_page_change > a:nth-child(2)').addClass('active');
 	}
 	
-	$(".course_type.browse").popup({
-	  popup: $(".ui.course_type.popup"),
-	  position: "bottom left",
-	  on: "click"
+	$('.course_type.browse').popup({
+	  popup: $('.ui.course_type.popup'),
+	  position: 'bottom left',
+	  on: 'click'
 	});
-	$(".ui.course_type.popup").on("click", ".item", function () {
+	$('.ui.course_type.popup').on('click', '.item', function () {
 	  dependOnType($(this).text());
-	  $("#keyword").val("");
-	  $("#topic_name").text($(this).text());
-	  $(".ui.course_type.popup").popup("hide all");
-	  $(".other_entry_dropdown").dropdown("show");
+	  $('#keyword').val('');
+	  $('#topic_name').text($(this).text());
+	  $('.ui.course_type.popup').popup('hide all');
+	  $('.other_entry_dropdown').dropdown('show');
 	});
-	$("#submit").on("click", function () {
-	  chrome.storage.local.get("cart", function (items) {
-	    var get_course_id = $(".course_info.scrolling.content").attr("id");
+	$('#submit').on('click', function () {
+	  chrome.storage.local.get('cart', function (items) {
+	    var get_course_id = $('.course_info.scrolling.content').attr('id');
 	    var temp = {};
-	    var time_array = $("#time").text().split(",");
-	    var order = "-1";
+	    var time_array = $('#time').text().split(',');
+	    var order = '-1';
 	
-	    if ($("#GE_type").text() != "" || $("#no").text().includes("PE")) {
+	    if ($('#GE_type').text() != '' || $('#no').text().includes('PE')) {
 	      order = 0;
 	    }
 	
 	    var data = {
-	      course_no: $("#no").text(),
-	      course_name: $("#course_name").text(),
+	      course_no: $('#no').text(),
+	      course_name: $('#course_name').text(),
 	      time: time_array,
 	      order: order
 	    };
 	
 	    if (items.cart != undefined) {
 	      if (items.cart.hasOwnProperty(get_course_id)) {
-	        (0, _helper.miniMessageAlert)("無法加入", "清單中已經有此課程!");
+	        (0, _helper.miniMessageAlert)('無法加入', '清單中已經有此課程!');
 	        return;
 	      }
 	
 	      Object.assign(temp, items.cart);
 	      temp[get_course_id] = data;
 	
-	      chrome.storage.local.remove("cart", function () {
+	      chrome.storage.local.remove('cart', function () {
 	        chrome.storage.local.set({ cart: temp }, function () {
-	          chrome.storage.local.get("cart", function (items) {
+	          chrome.storage.local.get('cart', function (items) {
 	            // console.log(items);
 	            (0, _cart.getCart)();
 	          });
@@ -12270,58 +12269,58 @@
 	    } else {
 	      temp[get_course_id] = data;
 	      chrome.storage.local.set({ cart: temp }, function () {
-	        chrome.storage.local.get("cart", function (items) {
+	        chrome.storage.local.get('cart', function (items) {
 	          // console.log(items);
 	          (0, _cart.getCart)();
 	        });
 	      });
 	    }
-	    (0, _helper.miniMessageAlert)("成功送出至清單", "注意，要到課表頁面按送出", "校務資訊系統才會真正選到課");
+	    (0, _helper.miniMessageAlert)('成功送出至清單', '注意，要到課表頁面按送出', '校務資訊系統才會真正選到課');
 	  });
 	});
-	$("#delete").on("click", function () {
-	  chrome.storage.local.get("cart", function (items) {
-	    var get_course_id = $(".course_info.scrolling.content").attr("id");
+	$('#delete').on('click', function () {
+	  chrome.storage.local.get('cart', function (items) {
+	    var get_course_id = $('.course_info.scrolling.content').attr('id');
 	    var temp = {};
 	    Object.assign(temp, items.cart);
 	    (0, _conflict.removeTimeOfCourse)(temp[get_course_id].time);
 	    delete temp[get_course_id];
 	
-	    chrome.storage.local.remove("cart", function () {
+	    chrome.storage.local.remove('cart', function () {
 	      chrome.storage.local.set({ cart: temp }, function () {
-	        chrome.storage.local.get("cart", function (items) {
+	        chrome.storage.local.get('cart', function (items) {
 	          // console.log(items);
 	          (0, _cart.getCart)();
 	        });
 	      });
 	    });
-	    (0, _helper.miniMessageAlert)("成功刪除此課程", "已將這門課從清單中移除");
+	    (0, _helper.miniMessageAlert)('成功刪除此課程', '已將這門課從清單中移除');
 	  });
 	});
-	$("#search_result_body").on("click", "tr", function () {
-	  if (!$(this).hasClass("empty_row")) {
-	    var course_from_click = $("td:nth-child(1)", this).text();
-	    var course_id = $(this).attr("id");
+	$('#search_result_body').on('click', 'tr', function () {
+	  if (!$(this).hasClass('empty_row')) {
+	    var course_from_click = $('td:nth-child(1)', this).text();
+	    var course_id = $(this).attr('id');
 	    (0, _api.getCourseInfo)(course_from_click, course_id, function () {
-	      $(".course_action").hide();
-	      $("#submit").show();
-	      $("#back").show();
-	      $("#loading").removeClass("active");
+	      $('.course_action').hide();
+	      $('#submit').show();
+	      $('#back').show();
+	      $('#loading').removeClass('active');
 	    }, false);
 	  }
 	});
-	$("#keyword").keypress(function (e) {
+	$('#keyword').keypress(function (e) {
 	  if (e.which == 13) {
 	    clickToSearch();
 	  }
 	});
-	$("#clicktosearch").on("click", function () {
+	$('#clicktosearch').on('click', function () {
 	  clickToSearch();
 	});
-	$("#search_page_change").on("click", ".page.item", function () {
-	  $(this).addClass("active").siblings(".item").removeClass("active");
+	$('#search_page_change').on('click', '.page.item', function () {
+	  $(this).addClass('active').siblings('.item').removeClass('active');
 	  var start = (parseInt($(this).text()) - 1) * _popup.search_result_num;
-	  $("#search_result_body  > tr").show().filter(function (index) {
+	  $('#search_result_body  > tr').show().filter(function (index) {
 	    return index < start || index >= start + _popup.search_result_num;
 	  }).hide();
 	});
@@ -12335,7 +12334,7 @@
 /* 337 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -12379,7 +12378,7 @@
 	function storeSliceTime(target_time) {
 	  var slice_time = subtractArray(target_time);
 	  old_time = target_time;
-	  chrome.storage.local.get("time", function (items) {
+	  chrome.storage.local.get('time', function (items) {
 	    var temp = {};
 	    if (items.time != undefined) {
 	      Object.assign(temp, items.time);
@@ -12407,9 +12406,9 @@
 	        }
 	      }
 	
-	      chrome.storage.local.remove("time", function () {
+	      chrome.storage.local.remove('time', function () {
 	        chrome.storage.local.set({ time: temp }, function () {
-	          chrome.storage.local.get("time", function (items) {
+	          chrome.storage.local.get('time', function (items) {
 	            console.log(items);
 	          });
 	        });
@@ -12464,7 +12463,7 @@
 	      }
 	
 	      chrome.storage.local.set({ time: temp }, function () {
-	        chrome.storage.local.get("time", function (items) {
+	        chrome.storage.local.get('time', function (items) {
 	          // console.log(items);
 	        });
 	      });
@@ -12473,8 +12472,8 @@
 	}
 	
 	function checkConflict(time_array, callback) {
-	  chrome.storage.local.get("time", function (items) {
-	    if (time_array == "empty") callback();
+	  chrome.storage.local.get('time', function (items) {
+	    if (time_array == 'empty') callback();
 	    var conflict = false;
 	    if (items.time != undefined) {
 	      var _iteratorNormalCompletion5 = true;
@@ -12485,7 +12484,7 @@
 	        for (var _iterator5 = time_array[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
 	          var each = _step5.value;
 	
-	          if (items.time[each] != 0 && each != "無") conflict = true;
+	          if (items.time[each] != 0 && each != '無') conflict = true;
 	        }
 	      } catch (err) {
 	        _didIteratorError5 = true;
@@ -12503,10 +12502,10 @@
 	      }
 	
 	      if (conflict) {
-	        var negative = "class=\"error\"";
+	        var negative = 'class="error"';
 	        callback(negative);
 	      } else {
-	        var none = "";
+	        var none = '';
 	        callback(none);
 	      }
 	    }
@@ -12514,7 +12513,7 @@
 	}
 	
 	function removeTimeOfCourse(time_array) {
-	  chrome.storage.local.get("time", function (items) {
+	  chrome.storage.local.get('time', function (items) {
 	    var temp = {};
 	    Object.assign(temp, items.time);
 	    var _iteratorNormalCompletion6 = true;
@@ -12541,9 +12540,9 @@
 	      }
 	    }
 	
-	    chrome.storage.local.remove("time", function () {
+	    chrome.storage.local.remove('time', function () {
 	      chrome.storage.local.set({ time: temp }, function () {
-	        chrome.storage.local.get("time", function (items) {
+	        chrome.storage.local.get('time', function (items) {
 	          // console.log(items);
 	        });
 	      });
@@ -12553,7 +12552,7 @@
 	
 	// TODO: 改成存 Variable，這樣也不用每次清
 	function clearAllTime() {
-	  chrome.storage.local.remove("time");
+	  chrome.storage.local.remove('time');
 	}
 	
 	exports.storeSliceTime = storeSliceTime;
@@ -12565,7 +12564,7 @@
 /* 338 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -12581,14 +12580,14 @@
 	var _select = __webpack_require__(339);
 	
 	function getCart() {
-	  chrome.storage.local.get("cart", function (items) {
+	  chrome.storage.local.get('cart', function (items) {
 	    var parse_table = $.parseHTML(_helper.course_table);
-	    $(parse_table).attr("id", "cart");
+	    $(parse_table).attr('id', 'cart');
 	
 	    var target_time = [];
 	    var count = 0;
-	    $("#course_order_list").empty();
-	    $("#course_order_list").attr("course_num", count);
+	    $('#course_order_list').empty();
+	    $('#course_order_list').attr('course_num', count);
 	    for (var key in items.cart) {
 	      if (items.cart.hasOwnProperty(key)) {
 	        count = course_order_list(key, items.cart[key], count);
@@ -12596,10 +12595,10 @@
 	        var name = items.cart[key].course_name.match(patt)[0];
 	        name = name.match(/\S+/)[0];
 	        var course_no = items.cart[key].course_no;
-	        var content = "<a href=\"#do_not_jump\" id=\"" + key + "\" course_no=\"" + course_no + "\">" + name + "</a>";
+	        var content = '<a href="#do_not_jump" id="' + key + '" course_no="' + course_no + '">' + name + '</a>';
 	
-	        if (items.cart[key].time == "無") {
-	          $(parse_table).find(".none").append(content);
+	        if (items.cart[key].time == '無') {
+	          $(parse_table).find('.none').append(content);
 	        } else {
 	          var slice_time = [];
 	          var _iteratorNormalCompletion = true;
@@ -12636,7 +12635,7 @@
 	            for (var _iterator2 = slice_time[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	              var _each_time = _step2.value;
 	
-	              $(parse_table).find("." + _each_time).append(content);
+	              $(parse_table).find('.' + _each_time).append(content);
 	            }
 	          } catch (err) {
 	            _didIteratorError2 = true;
@@ -12655,28 +12654,28 @@
 	        }
 	      }
 	    }
-	    if ($("#course_order_list").attr("course_num") == 1) $("#course_order_list > div > .number").text("1");
+	    if ($('#course_order_list').attr('course_num') == 1) $('#course_order_list > div > .number').text('1');
 	    (0, _conflict.storeSliceTime)(target_time);
-	    $("#cart").replaceWith(parse_table);
-	    $("#cart > tr").on("click", "td", function () {
-	      $("#multiple_class_list").empty();
+	    $('#cart').replaceWith(parse_table);
+	    $('#cart > tr').on('click', 'td', function () {
+	      $('#multiple_class_list').empty();
 	      if ($(this).children().length > 1) {
-	        $("a", this).each(function () {
-	          var id = $(this).attr("id");
-	          var course_no = $(this).attr("course_no");
+	        $('a', this).each(function () {
+	          var id = $(this).attr('id');
+	          var course_no = $(this).attr('course_no');
 	          var text = $(this).text();
-	          var content = "<div id=\"" + id + "\" course_no=\"" + course_no + "\" class=\"item\">\n            <div class=\"content\">\n              <div class=\"description\">" + text + "</div>\n            </div>\n          </div>";
-	          $("#multiple_class_list").append(content);
+	          var content = '<div id="' + id + '" course_no="' + course_no + '" class="item">\n            <div class="content">\n              <div class="description">' + text + '</div>\n            </div>\n          </div>';
+	          $('#multiple_class_list').append(content);
 	        });
-	        $("#multiple_class").modal("show");
+	        $('#multiple_class').modal('show');
 	      } else {
-	        var _course_no = $("a", this).attr("course_no");
-	        var id = $("a", this).attr("id");
+	        var _course_no = $('a', this).attr('course_no');
+	        var id = $('a', this).attr('id');
 	        (0, _api.getCourseInfo)(_course_no, id, function () {
-	          $(".course_action").hide();
-	          $("#delete").show();
-	          $("#back").show();
-	          $("#loading").removeClass("active");
+	          $('.course_action').hide();
+	          $('#delete').show();
+	          $('#back').show();
+	          $('#loading').removeClass('active');
 	        }, false);
 	      }
 	    });
@@ -12688,58 +12687,58 @@
 	  if (item.order > -1) {
 	    var course_no = item.course_no;
 	    var name = item.course_name.match(patt);
-	    var content = "<div course_no=\"" + course_no + "\" class=\"item\">\n      <div id=\"" + id + "\" class=\"number right floated content\">0</div>\n      <div class=\"content\">\n        <div class=\"description\">" + name + "</div>\n      </div>\n    </div>";
-	    $("#course_order_list").append(content);
+	    var content = '<div course_no="' + course_no + '" class="item">\n      <div id="' + id + '" class="number right floated content">0</div>\n      <div class="content">\n        <div class="description">' + name + '</div>\n      </div>\n    </div>';
+	    $('#course_order_list').append(content);
 	    count++;
-	    $("#course_order_list").attr("course_num", count);
+	    $('#course_order_list').attr('course_num', count);
 	  }
 	  return count;
 	}
 	
-	$("#change_school_table").on("click", ".item", function () {
-	  if (!$(this).hasClass("dropdown")) {
-	    var t = $(".ui.compact.table");
+	$('#change_school_table').on('click', '.item', function () {
+	  if (!$(this).hasClass('dropdown')) {
+	    var t = $('.ui.compact.table');
 	    t.show();
 	
-	    if ($(this).hasClass("tab1")) {
-	      t.not(".tab1").hide();
-	      $(".cart_part").hide();
-	      $(".phase_part").show();
-	    } else if ($(this).hasClass("tab2")) {
-	      t.not(".tab2").hide();
-	      $(".cart_part").show();
-	      $(".phase_part").hide();
+	    if ($(this).hasClass('tab1')) {
+	      t.not('.tab1').hide();
+	      $('.cart_part').hide();
+	      $('.phase_part').show();
+	    } else if ($(this).hasClass('tab2')) {
+	      t.not('.tab2').hide();
+	      $('.cart_part').show();
+	      $('.phase_part').hide();
 	    }
 	  }
 	});
-	$("#multiple_class_list").on("click", ".item", function () {
-	  var course_no = $(this).attr("course_no");
-	  var id = $(this).attr("id");
+	$('#multiple_class_list').on('click', '.item', function () {
+	  var course_no = $(this).attr('course_no');
+	  var id = $(this).attr('id');
 	  (0, _api.getCourseInfo)(course_no, id, function () {
-	    $(".course_action").hide();
-	    $("#delete").show();
-	    $("#back").show();
+	    $('.course_action').hide();
+	    $('#delete').show();
+	    $('#back').show();
 	  }, true);
 	});
-	$("#multiple_class_bySingle").on("click", ".item", function () {
-	  var course_no = $(this).attr("course_no");
+	$('#multiple_class_bySingle').on('click', '.item', function () {
+	  var course_no = $(this).attr('course_no');
 	  (0, _api.searchByNo_store_getCourseInfo)(course_no);
 	});
-	$("#cart_submit").on("click", function () {
+	$('#cart_submit').on('click', function () {
 	  // alert("此為內部測試版本，選完課請到「預排系統」查看 !");
-	  var childNum = $("#course_order_list").attr("course_num");
+	  var childNum = $('#course_order_list').attr('course_num');
 	  if (childNum > 0) {
-	    var list = document.getElementById("course_order_list");
+	    var list = document.getElementById('course_order_list');
 	    Sortable.create(list, {
 	      onUpdate: function onUpdate() {
-	        $("#course_order_list > div > .number").each(function () {
+	        $('#course_order_list > div > .number').each(function () {
 	          $(this).text($(this).parent().index() + 1);
 	        });
 	      }
 	    });
-	    $("#course_order").modal("show");
+	    $('#course_order').modal('show');
 	  } else {
-	    $("#send_to_nthu_loading").addClass("active");
+	    $('#send_to_nthu_loading').addClass('active');
 	    (0, _select.submitToNTHU)();
 	  }
 	});
@@ -12750,7 +12749,7 @@
 /* 339 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -12771,11 +12770,11 @@
 	            return showCourseModal();
 	
 	          case 4:
-	            $("#send_to_nthu_loading").removeClass("active");
+	            $('#send_to_nthu_loading').removeClass('active');
 	            (0, _api.getResultCourse)(current_phase);
 	
 	          case 6:
-	          case "end":
+	          case 'end':
 	            return _context.stop();
 	        }
 	      }
@@ -12806,58 +12805,58 @@
 	function serialize(obj) {
 	  var str = [];
 	  for (var p in obj) {
-	    str.push(p + "=" + obj[p]);
-	  }return str.join("&");
+	    str.push(p + '=' + obj[p]);
+	  }return str.join('&');
 	}
 	
 	function getCourseFormInfo(course_no, callback) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt)[0];
-	  if (target == "PE") {
+	  if (target == 'PE') {
 	    var patt2 = /[0-9]+/g;
 	    var pe_type = course_no.match(patt2)[1].substring(0, 1);
-	    if (pe_type == "1" || pe_type == "3") target += pe_type;
+	    if (pe_type == '1' || pe_type == '3') target += pe_type;
 	  }
 	
-	  var url = "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php";
+	  var url = 'https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713004.php';
 	  var form = {
 	    ACIXSTORE: _popup.acix,
 	    toChk: 1,
 	    new_dept: target
 	  };
 	  fetch(url, {
-	    method: "POST",
+	    method: 'POST',
 	    headers: new Headers({
-	      "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+	      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
 	    }),
-	    credentials: "include",
-	    redirect: "follow",
+	    credentials: 'include',
+	    redirect: 'follow',
 	    body: serialize(form)
 	  }).then(function (res) {
 	    return res.arrayBuffer();
 	  }).then(function (data) {
-	    var temp = document.createElement("div");
-	    var decode_data = new TextDecoder("big5").decode(data);
+	    var temp = document.createElement('div');
+	    var decode_data = new TextDecoder('big5').decode(data);
 	    temp.innerHTML = decode_data;
 	    // console.log.apply(console, $(temp));
 	
-	    if ($(temp).text().indexOf("session is interrupted!") >= 0) {
-	      (0, _helper.miniMessageAlert)("系統錯誤", "請登入或重新登入校務資訊系統");
+	    if ($(temp).text().indexOf('session is interrupted!') >= 0) {
+	      (0, _helper.miniMessageAlert)('系統錯誤', '請登入或重新登入校務資訊系統');
 	    } else {
-	      var found = $("#T1 > tbody > tr", temp).filter(function () {
-	        return $("td:nth-child(2) > div", this).text() == course_no;
+	      var found = $('#T1 > tbody > tr', temp).filter(function () {
+	        return $('td:nth-child(2) > div', this).text() == course_no;
 	      });
 	
 	      var input = void 0,
 	          _form = void 0;
-	      if ($("td:nth-child(1) > div > input.btn2", found).length > 0) input = $("td:nth-child(1) > div > input.btn2", found);else input = $("td:nth-child(1) > div > input", found);
+	      if ($('td:nth-child(1) > div > input.btn2', found).length > 0) input = $('td:nth-child(1) > div > input.btn2', found);else input = $('td:nth-child(1) > div > input', found);
 	
 	      if ($(input).length != 0) {
 	        // 正式選課
-	        var input_array = $(input).attr("onclick").split(";");
+	        var input_array = $(input).attr('onclick').split(';');
 	        var check = input_array[1].split("'");
 	        _form = {
-	          aspr: "",
+	          aspr: '',
 	          ckey: check[1],
 	          code: check[3],
 	          div: check[5],
@@ -12873,18 +12872,18 @@
 	      } else {
 	        // 預排系統
 	        _form = {
-	          aspr: "",
+	          aspr: '',
 	          ckey: course_no,
-	          code: "",
-	          div: "",
-	          real: "",
-	          cred: "",
-	          ctime: "",
-	          num: "",
-	          glimit: "",
-	          type: "",
-	          pre: "",
-	          range: ""
+	          code: '',
+	          div: '',
+	          real: '',
+	          cred: '',
+	          ctime: '',
+	          num: '',
+	          glimit: '',
+	          type: '',
+	          pre: '',
+	          range: ''
 	        };
 	      }
 	      callback(_form);
@@ -12895,22 +12894,22 @@
 	function selectEachCourse(course_no_order, callback) {
 	  var course_no = course_no_order.course_no;
 	  var aspr = course_no_order.order;
-	  if (aspr == "-1") aspr = "";
+	  if (aspr == '-1') aspr = '';
 	
 	  getCourseFormInfo(course_no, function (r_form) {
 	    // 預排系統
 	    // let url = `https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.6/7.6.1/JH761005.php`;
 	    // let needReload = false;
 	    // 正式選課
-	    var url = "https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php";
+	    var url = 'https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php';
 	    var needReload = true;
 	
 	    var form = {
 	      ACIXSTORE: _popup.acix,
-	      toChk: "",
-	      new_dept: "",
-	      new_class: "",
-	      chks: "",
+	      toChk: '',
+	      new_dept: '',
+	      new_class: '',
+	      chks: '',
 	      aspr: aspr,
 	      ckey: r_form.ckey,
 	      code: r_form.code,
@@ -12923,35 +12922,35 @@
 	      type: r_form.type,
 	      pre: r_form.pre,
 	      range: r_form.range,
-	      chkbtn: "add"
+	      chkbtn: 'add'
 	    };
 	
 	    fetch(url, {
-	      method: "POST",
+	      method: 'POST',
 	      headers: new Headers({
-	        "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
+	        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
 	      }),
-	      credentials: "include",
-	      redirect: "follow",
+	      credentials: 'include',
+	      redirect: 'follow',
 	      body: serialize(form)
 	    }).then(function (res) {
 	      return res.arrayBuffer();
 	    }).then(function (data) {
-	      var temp = document.createElement("div");
-	      var decode_data = new TextDecoder("big5").decode(data);
-	      decode_data = decode_data.replace("<img src=\"templates/pic1.gif\" width=\"351\" height=\"30\">", "");
+	      var temp = document.createElement('div');
+	      var decode_data = new TextDecoder('big5').decode(data);
+	      decode_data = decode_data.replace('<img src="templates/pic1.gif" width="351" height="30">', '');
 	      temp.innerHTML = decode_data;
 	      // console.log.apply(console, $(temp));
 	
-	      var alert = "無任何警告訊息";
-	      if ($(temp).text().indexOf("session is interrupted!") >= 0 || $(temp).text().indexOf("Time longer than permitted!") >= 0) {
-	        (0, _helper.miniMessageAlert)("系統錯誤", "請登入或重新登入校務資訊系統");
-	        $("#send_to_nthu_loading").removeClass("active");
-	      } else if ($(temp).text().indexOf("alert") >= 0) {
+	      var alert = '無任何警告訊息';
+	      if ($(temp).text().indexOf('session is interrupted!') >= 0 || $(temp).text().indexOf('Time longer than permitted!') >= 0) {
+	        (0, _helper.miniMessageAlert)('系統錯誤', '請登入或重新登入校務資訊系統');
+	        $('#send_to_nthu_loading').removeClass('active');
+	      } else if ($(temp).text().indexOf('alert') >= 0) {
 	        alert = $("script:contains('alert')", temp).first().text();
 	
 	        var message = alert.split("'")[1];
-	        var success_in_random = "加選此科目僅列入亂數處理!";
+	        var success_in_random = '加選此科目僅列入亂數處理!';
 	        if (message.indexOf(success_in_random) >= 0) {
 	          var isSuccess = true;
 	          callback(isSuccess, message, needReload);
@@ -12961,13 +12960,13 @@
 	        }
 	      } else {
 	        var _isSuccess2 = true;
-	        callback(_isSuccess2, "無任何警告訊息");
+	        callback(_isSuccess2, '無任何警告訊息');
 	      }
 	      console.log(course_no);
 	      console.log.apply(console, $(temp));
 	      console.log(form);
 	      console.log(alert);
-	      console.log("\n");
+	      console.log('\n');
 	    });
 	  });
 	}
@@ -12976,7 +12975,7 @@
 	  if (count > course_num) return;
 	  var course_no_order = course_list[count - 1];
 	  var course_no = course_no_order.course_no;
-	  $("#nthu_loading_text").html("\u6B63 \u5728 \u9078 \u8AB2 \u4E2D<br/><br/>" + course_no);
+	  $('#nthu_loading_text').html('\u6B63 \u5728 \u9078 \u8AB2 \u4E2D<br/><br/>' + course_no);
 	  selectEachCourse(course_no_order, function (isSuccess, message, needReload) {
 	    if (isSuccess == true) correct_list.push({ course_no: course_no, message: message });else wrong_list.push({ course_no: course_no, message: message });
 	
@@ -13013,7 +13012,7 @@
 	
 	var removeSuccessSelectCourse = function removeSuccessSelectCourse() {
 	  return new Promise(function (resolve) {
-	    chrome.storage.local.get("cart", function (items) {
+	    chrome.storage.local.get('cart', function (items) {
 	      var temp = {};
 	      Object.assign(temp, items.cart);
 	      var _iteratorNormalCompletion = true;
@@ -13043,9 +13042,9 @@
 	        }
 	      }
 	
-	      chrome.storage.local.remove("cart", function () {
+	      chrome.storage.local.remove('cart', function () {
 	        chrome.storage.local.set({ cart: temp }, function () {
-	          chrome.storage.local.get("cart", function (items) {
+	          chrome.storage.local.get('cart', function (items) {
 	            // console.log(items);
 	            (0, _cart.getCart)();
 	            resolve();
@@ -13058,10 +13057,10 @@
 	
 	var showCourseModal = function showCourseModal() {
 	  return new Promise(function (resolve) {
-	    $("#select_course_status").empty();
+	    $('#select_course_status').empty();
 	    var patt = /[^A-Za-z\\]+/;
 	    if (correct_list.length != 0) {
-	      $("#select_course_status").append("<div class=\"item\">\u6210\u529F\uFF1A</div>");
+	      $('#select_course_status').append('<div class="item">\u6210\u529F\uFF1A</div>');
 	      var _iteratorNormalCompletion2 = true;
 	      var _didIteratorError2 = false;
 	      var _iteratorError2 = undefined;
@@ -13072,8 +13071,8 @@
 	
 	          var course_no = each.course_no;
 	          var message = each.message.match(patt);
-	          var content = "<div class=\"item\">" + course_no + " ( " + message + " )</div>";
-	          $("#select_course_status").append(content);
+	          var content = '<div class="item">' + course_no + ' ( ' + message + ' )</div>';
+	          $('#select_course_status').append(content);
 	        }
 	      } catch (err) {
 	        _didIteratorError2 = true;
@@ -13091,7 +13090,7 @@
 	      }
 	    }
 	    if (wrong_list.length != 0) {
-	      $("#select_course_status").append("<div class=\"item\">\u5931\u6557\uFF1A</div>");
+	      $('#select_course_status').append('<div class="item">\u5931\u6557\uFF1A</div>');
 	      var _iteratorNormalCompletion3 = true;
 	      var _didIteratorError3 = false;
 	      var _iteratorError3 = undefined;
@@ -13102,8 +13101,8 @@
 	
 	          var _course_no = _each.course_no;
 	          var _message = _each.message.match(patt);
-	          var _content = "<div class=\"item\">" + _course_no + " ( " + _message + " )</div>";
-	          $("#select_course_status").append(_content);
+	          var _content = '<div class="item">' + _course_no + ' ( ' + _message + ' )</div>';
+	          $('#select_course_status').append(_content);
 	        }
 	      } catch (err) {
 	        _didIteratorError3 = true;
@@ -13120,15 +13119,15 @@
 	        }
 	      }
 	    }
-	    $("#select_state").modal("show");
+	    $('#select_state').modal('show');
 	    resolve();
 	  });
 	};
 	
 	function submitToNTHU() {
-	  chrome.storage.local.get("cart", function (items) {
+	  chrome.storage.local.get('cart', function (items) {
 	    if (items.cart == undefined) {
-	      $("#send_to_nthu_loading").removeClass("active");
+	      $('#send_to_nthu_loading').removeClass('active');
 	      return;
 	    }
 	    if (Object.keys(items.cart).length != 0) {
@@ -13142,13 +13141,13 @@
 	        }
 	      });
 	    } else {
-	      $("#send_to_nthu_loading").removeClass("active");
+	      $('#send_to_nthu_loading').removeClass('active');
 	    }
 	  });
 	}
 	
 	function storeOrderToStorage(course_id_group, callback) {
-	  chrome.storage.local.get("cart", function (items) {
+	  chrome.storage.local.get('cart', function (items) {
 	    var temp = {};
 	    Object.assign(temp, items.cart);
 	    var _iteratorNormalCompletion4 = true;
@@ -13178,9 +13177,9 @@
 	      }
 	    }
 	
-	    chrome.storage.local.remove("cart", function () {
+	    chrome.storage.local.remove('cart', function () {
 	      chrome.storage.local.set({ cart: temp }, function () {
-	        chrome.storage.local.get("cart", function (items) {
+	        chrome.storage.local.get('cart', function (items) {
 	          // console.log(items);
 	          callback();
 	        });
@@ -13189,17 +13188,17 @@
 	  });
 	}
 	
-	$("#send_to_nthu").on("click", function () {
+	$('#send_to_nthu').on('click', function () {
 	  chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
-	    var select_url = "www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php";
-	    if (tabs[0].url.includes(select_url) == false) (0, _helper.miniMessageAlert)("系統錯誤", "你必須先進入校務資訊系統中的", "選課頁面，才能使用此功能");else {
-	      var isSelect = $("#course_order_list > div > .number").first().text();
+	    var select_url = 'www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php';
+	    if (tabs[0].url.includes(select_url) == false) (0, _helper.miniMessageAlert)('系統錯誤', '你必須先進入校務資訊系統中的', '選課頁面，才能使用此功能');else {
+	      var isSelect = $('#course_order_list > div > .number').first().text();
 	      if (isSelect == 0) return;
-	      $("#course_order").modal("hide");
-	      $("#send_to_nthu_loading").addClass("active");
+	      $('#course_order').modal('hide');
+	      $('#send_to_nthu_loading').addClass('active');
 	      var course_id_group = [];
-	      $("#course_order_list > div > .number").each(function () {
-	        var course_id = $(this).attr("id");
+	      $('#course_order_list > div > .number').each(function () {
+	        var course_id = $(this).attr('id');
 	        var order = $(this).text();
 	        course_id_group.push({ course_id: course_id, order: order });
 	      });
@@ -62668,209 +62667,194 @@
 /* 615 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getCurrentStateOfNTHU = undefined;
+	exports.getSimilarities_forRecommend = exports.getCurrentStateOfNTHU = exports.getSimilarities = exports.calculateUserGrade = undefined;
 	
 	var _search = __webpack_require__(336);
 	
-	// var iconv = require("iconv-lite");
+	var _popup = __webpack_require__(328);
+	
+	var iconv = __webpack_require__(594);
 	var request = __webpack_require__(340);
 	
-	// import { acix } from "./popup";
 	
-	// function calculateUserGrade(stu_no, userGrade) {
-	//   var all_pr = {};
-	//   for (let course_no in userGrade) {
-	//     let grade = userGrade[course_no];
-	//     let translateMap = {
-	//       "A+": 0,
-	//       A: 1,
-	//       "A-": 2,
-	//       "B+": 3,
-	//       B: 4,
-	//       "B-": 5,
-	//       "C+": 6,
-	//       C: 7,
-	//       "C-": 8,
-	//       D: 9,
-	//       E: 10,
-	//       X: 11,
-	//       NotYet: 12,
-	//       All: 13
-	//     };
-	//     getGradeDistribution(course_no, function(distribution) {
-	//       var user_grade_people = 0;
-	//       for (let i = 0; i <= translateMap[grade]; i++)
-	//         user_grade_people += distribution[i];
-	//       let pr = 1 - user_grade_people / 100;
-	//       all_pr[course_no] = pr;
+	function calculateUserGrade(stu_no, userGrade) {
+	  var all_pr = {};
 	
-	//       chrome.storage.local.get("pr", function(items) {
-	//         var temp = {};
-	//         var data = {};
-	//         for (var each in all_pr) data[each] = all_pr[each];
+	  var _loop = function _loop(course_no) {
+	    var grade = userGrade[course_no];
+	    var translateMap = {
+	      'A+': 0,
+	      A: 1,
+	      'A-': 2,
+	      'B+': 3,
+	      B: 4,
+	      'B-': 5,
+	      'C+': 6,
+	      C: 7,
+	      'C-': 8,
+	      D: 9,
+	      E: 10,
+	      X: 11,
+	      NotYet: 12,
+	      All: 13
+	    };
+	    getGradeDistribution(course_no, function (distribution) {
+	      var user_grade_people = 0;
+	      for (var i = 0; i <= translateMap[grade]; i++) {
+	        user_grade_people += distribution[i];
+	      }var pr = 1 - user_grade_people / 100;
+	      all_pr[course_no] = pr;
 	
-	//         if (items.pr != undefined) {
-	//           Object.assign(temp, items.all_pr);
-	//           for (var each_data in data) {
-	//             temp[each_data] = data[each_data];
-	//           }
-	//           chrome.storage.local.remove("pr", function() {
-	//             chrome.storage.local.set({ pr: temp }, function() {
-	//               chrome.storage.local.get("pr", function(items) {
-	//                 // console.log(items);
-	//               });
-	//             });
-	//           });
-	//         } else {
-	//           for (var each_data in data) temp[each_data] = data[each_data];
-	//           chrome.storage.local.set({ pr: temp }, function() {
-	//             chrome.storage.local.get("pr", function(items) {
-	//               // console.log(items);
-	//             });
-	//           });
-	//         }
-	//       });
-	//     });
-	//   }
-	// }
+	      chrome.storage.local.get('pr', function (items) {
+	        var temp = {};
+	        var data = {};
+	        for (var each in all_pr) {
+	          data[each] = all_pr[each];
+	        }if (items.pr != undefined) {
+	          Object.assign(temp, items.all_pr);
+	          for (var each_data in data) {
+	            temp[each_data] = data[each_data];
+	          }
+	          chrome.storage.local.remove('pr', function () {
+	            chrome.storage.local.set({ pr: temp }, function () {
+	              chrome.storage.local.get('pr', function (items) {
+	                // console.log(items);
+	              });
+	            });
+	          });
+	        } else {
+	          for (var each_data in data) {
+	            temp[each_data] = data[each_data];
+	          }chrome.storage.local.set({ pr: temp }, function () {
+	            chrome.storage.local.get('pr', function (items) {
+	              // console.log(items);
+	            });
+	          });
+	        }
+	      });
+	    });
+	  };
 	
-	// function getGradeDistribution(course_no, callback) {
-	//   request(
-	//     {
-	//       url:
-	//         "https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/8/8.3/8.3.3/JH83302.php?ACIXSTORE=" +
-	//         acix +
-	//         "&c_key=" +
-	//         course_no +
-	//         "&from=prg8R63",
-	//       encoding: null
-	//     },
-	//     function(err, response, body) {
-	//       if (!err && response.statusCode == 200) {
-	//         var str = iconv.decode(new Buffer(body), "big5");
-	//         var replace =
-	//           `<img border="0" src="JH833022_img.php?ACIXSTORE=` + acix + `">`;
-	//         str = str.replace(replace, "");
-	//         var temp = document.createElement("div");
-	//         temp.innerHTML = str;
-	//         // console.log.apply(console, $(temp));
+	  for (var course_no in userGrade) {
+	    _loop(course_no);
+	  }
+	}
 	
-	//         var gradeDistributionOfCourse = $(
-	//           "form > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td",
-	//           temp
-	//         );
+	function getGradeDistribution(course_no, callback) {
+	  request({
+	    url: 'https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/8/8.3/8.3.3/JH83302.php?ACIXSTORE=' + _popup.acix + '&c_key=' + course_no + '&from=prg8R63',
+	    encoding: null
+	  }, function (err, response, body) {
+	    if (!err && response.statusCode == 200) {
+	      var str = iconv.decode(new Buffer(body), 'big5');
+	      var replace = '<img border="0" src="JH833022_img.php?ACIXSTORE=' + _popup.acix + '">';
+	      str = str.replace(replace, '');
+	      var temp = document.createElement('div');
+	      temp.innerHTML = str;
+	      // console.log.apply(console, $(temp));
 	
-	//         var gradeDistribution = [];
-	//         $(gradeDistributionOfCourse).each(function(index) {
-	//           if (index > 0) {
-	//             var grade = $(this).text();
-	//             var words = grade.split("%");
-	//             var num = "0";
-	//             var patt = /\d+/;
-	//             if (words.length != 1) num = words[0];
-	//             gradeDistribution.push(parseInt(num));
-	//           }
-	//         });
-	//         // var distribution = [];
-	//         // for (var [key, value] of gradeDistributionMap) {
-	//         //   if (typeof value == "number") distribution.push(value.toString());
-	//         //   else distribution.push(value[0]);
-	//         // }
-	//         callback(gradeDistribution);
-	//       }
-	//     }
-	//   );
-	// }
+	      var gradeDistributionOfCourse = $('form > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td', temp);
 	
-	// function collectionOfCourse() {
-	//   var obj = {
-	//     values: []
-	//   };
-	//   const local_course = [
-	//     {
-	//       value: "課程編號1",
-	//       text: "選項1",
-	//       name: "選項詳情1"
-	//     },
-	//     {
-	//       value: "課程編號2",
-	//       text: "選項2",
-	//       name: "選項詳情2"
-	//     },
-	//     {
-	//       value: "課程編號3",
-	//       text: "選項3",
-	//       name: "選項詳情3"
-	//     }
-	//   ];
-	//   for (var v in local_course) {
-	//     obj.values[v] = {
-	//       value: local_course[v].value,
-	//       text: local_course[v].text,
-	//       name: local_course[v].name
-	//     };
-	//   }
-	//   $(".ui.dropdown.search_list_1").dropdown("refresh");
-	//   $(".ui.dropdown.search_list_1").dropdown("setup menu", obj);
-	// }
+	      var gradeDistribution = [];
+	      $(gradeDistributionOfCourse).each(function (index) {
+	        if (index > 0) {
+	          var grade = $(this).text();
+	          var words = grade.split('%');
+	          var num = '0';
+	          var patt = /\d+/;
+	          if (words.length != 1) num = words[0];
+	          gradeDistribution.push(parseInt(num));
+	        }
+	      });
+	      // var distribution = [];
+	      // for (var [key, value] of gradeDistributionMap) {
+	      //   if (typeof value == "number") distribution.push(value.toString());
+	      //   else distribution.push(value[0]);
+	      // }
+	      callback(gradeDistribution);
+	    }
+	  });
+	}
 	
-	// function getSimilarities(course_id, callback) {
-	//   chrome.storage.local.get("course", function(items) {
-	//     var info = items.course[course_id];
-	//     if (info.相似課程.length == 0) {
-	//       request(
-	//         {
-	//           url: baseURL + "getSimilarities?course_id=" + course_id
-	//         },
-	//         function(err, response, body) {
-	//           if (!err && response.statusCode == 200) {
-	//             var info = JSON.parse(body);
-	//             var temp = {};
-	//             Object.assign(temp, items.course);
-	//             temp[course_id].相似課程 = info;
-	//             chrome.storage.local.set({ course: temp }, function() {
-	//               chrome.storage.local.get("course", function(items) {
-	//                 // console.log(items);
-	//               });
-	//             });
-	//             callback(info);
-	//           }
-	//         }
-	//       );
-	//     } else callback(info.相似課程);
-	//   });
-	// }
+	function collectionOfCourse() {
+	  var obj = {
+	    values: []
+	  };
+	  var local_course = [{
+	    value: '課程編號1',
+	    text: '選項1',
+	    name: '選項詳情1'
+	  }, {
+	    value: '課程編號2',
+	    text: '選項2',
+	    name: '選項詳情2'
+	  }, {
+	    value: '課程編號3',
+	    text: '選項3',
+	    name: '選項詳情3'
+	  }];
+	  for (var v in local_course) {
+	    obj.values[v] = {
+	      value: local_course[v].value,
+	      text: local_course[v].text,
+	      name: local_course[v].name
+	    };
+	  }
+	  $('.ui.dropdown.search_list_1').dropdown('refresh');
+	  $('.ui.dropdown.search_list_1').dropdown('setup menu', obj);
+	}
 	
-	// function getSimilarities_forRecommend(course_id, callback) {
-	//   request(
-	//     {
-	//       url: baseURL + "getSimilarities?course_id=" + course_id
-	//     },
-	//     function(err, response, body) {
-	//       if (!err && response.statusCode == 200) {
-	//         var info = JSON.parse(body);
-	//         callback(info);
-	//       }
-	//     }
-	//   );
-	// }
+	function getSimilarities(course_id, callback) {
+	  chrome.storage.local.get('course', function (items) {
+	    var info = items.course[course_id];
+	    if (info.相似課程.length == 0) {
+	      request({
+	        url: _search.baseURL + 'getSimilarities?course_id=' + course_id
+	      }, function (err, response, body) {
+	        if (!err && response.statusCode == 200) {
+	          var info = JSON.parse(body);
+	          var temp = {};
+	          Object.assign(temp, items.course);
+	          temp[course_id].相似課程 = info;
+	          chrome.storage.local.set({ course: temp }, function () {
+	            chrome.storage.local.get('course', function (items) {
+	              // console.log(items);
+	            });
+	          });
+	          callback(info);
+	        }
+	      });
+	    } else callback(info.相似課程);
+	  });
+	}
+	
+	function getSimilarities_forRecommend(course_id, callback) {
+	  request({
+	    url: _search.baseURL + 'getSimilarities?course_id=' + course_id
+	  }, function (err, response, body) {
+	    if (!err && response.statusCode == 200) {
+	      var info = JSON.parse(body);
+	      callback(info);
+	    }
+	  });
+	}
 	
 	function currentPhase(phase) {
-	  $("#change_phase").find(".item").filter(function (index) {
+	  $('#change_phase').find('.item').filter(function (index) {
 	    return index > phase;
-	  }).addClass("disabled");
+	  }).addClass('disabled');
 	
 	  //  選課紀錄
 	  //  000  第 1 次選課
 	  //  100  第 1 次選課 log 記錄
 	  //  100P 第 1 次選課亂數結果
 	
-	  /// 000  第 2 次選課
+	  // / 000  第 2 次選課
 	  //  101  第 2 次選課 log 記錄
 	  //  101P 第 2 次選課結束(已亂數處理)
 	
@@ -62886,44 +62870,44 @@
 	  var default_text = void 0;
 	  switch (phase) {
 	    case 1:
-	      tran_phase = "100";
-	      default_text = "第 1 次選課 log 記錄";
+	      tran_phase = '100';
+	      default_text = '第 1 次選課 log 記錄';
 	      break;
 	    case 2:
-	      tran_phase = "100P";
-	      default_text = "第 1 次選課結束(已亂數處理)";
+	      tran_phase = '100P';
+	      default_text = '第 1 次選課結束(已亂數處理)';
 	      break;
 	    case 4:
-	      tran_phase = "101";
-	      default_text = "第 2 次選課 log 記錄";
+	      tran_phase = '101';
+	      default_text = '第 2 次選課 log 記錄';
 	      break;
 	    case 5:
-	      tran_phase = "101P";
-	      default_text = "第 2 次選課結束(已亂數處理)";
+	      tran_phase = '101P';
+	      default_text = '第 2 次選課結束(已亂數處理)';
 	      break;
 	    case 7:
-	      tran_phase = "200";
-	      default_text = "第 3 次選課 log 記錄";
+	      tran_phase = '200';
+	      default_text = '第 3 次選課 log 記錄';
 	      break;
 	    case 8:
-	      tran_phase = "200P";
-	      default_text = "第 3 次選課結束(已亂數處理)";
+	      tran_phase = '200P';
+	      default_text = '第 3 次選課結束(已亂數處理)';
 	      break;
 	    case 9:
-	      tran_phase = "200S";
-	      default_text = "加退選開始前(含擋修、衝堂)";
+	      tran_phase = '200S';
+	      default_text = '加退選開始前(含擋修、衝堂)';
 	    case 10:
-	      tran_phase = "300";
-	      default_text = "加退選 log 記錄";
+	      tran_phase = '300';
+	      default_text = '加退選 log 記錄';
 	      break;
 	    case 11:
-	      tran_phase = "300P";
-	      default_text = "加退選結束(已處理)";
+	      tran_phase = '300P';
+	      default_text = '加退選結束(已處理)';
 	    case 12:
-	      tran_phase = "400";
-	      default_text = "停修 log 記錄";
+	      tran_phase = '400';
+	      default_text = '停修 log 記錄';
 	  }
-	  $("#change_phase_text").text(default_text);
+	  $('#change_phase_text').text(default_text);
 	  return tran_phase;
 	}
 	
@@ -62934,14 +62918,14 @@
 	    var month = datetime.getMonth() + 1;
 	    var day = datetime.getDate();
 	    request({
-	      url: _search.baseURL + "getCurrentStateOfNTHU?year=" + year + "&month=" + month + "&day=" + day
+	      url: _search.baseURL + 'getCurrentStateOfNTHU?year=' + year + '&month=' + month + '&day=' + day
 	    }, function (err, response, body) {
 	      if (!err && response.statusCode == 200) {
 	        var info = JSON.parse(body);
 	        var phase = parseInt(info.currentPhase);
 	        var tran_phase = currentPhase(phase);
 	        var countDown = parseInt(info.countDown);
-	        $("#count_down").text(countDown + " days");
+	        $('#count_down').text(countDown + ' days');
 	
 	        //  加退選之後日期都沒考慮
 	        //  1  第 1 次選課 log 記錄
@@ -62955,38 +62939,42 @@
 	        //  11 加退選結束(已處理)
 	        //  12 停修 log 記錄
 	        var count_down_text = void 0;
-	        if (info.currentPhase != "too_early") {
+	        if (info.currentPhase != 'too_early') {
 	          switch (phase) {
 	            case 1:
-	              count_down_text = "離第一次選課結束";
+	              count_down_text = '離第一次選課結束';
 	              break;
 	            case 2:
-	              count_down_text = "離第二次選課開始";
+	              count_down_text = '離第二次選課開始';
 	              break;
 	            case 4:
-	              count_down_text = "離第二次選課結束";
+	              count_down_text = '離第二次選課結束';
 	              break;
 	            case 5:
-	              count_down_text = "離第三次選課開始";
+	              count_down_text = '離第三次選課開始';
 	              break;
 	            case 7:
-	              count_down_text = "離第三次選課結束";
+	              count_down_text = '離第三次選課結束';
 	              break;
 	            default:
-	              count_down_text = "加退選";
-	              $("#count_down").text("0 days");
+	              count_down_text = '加退選';
+	              $('#count_down').text('0 days');
 	              break;
 	          }
-	        } else count_down_text = "離第一次選課開始";
+	        } else count_down_text = '離第一次選課開始';
 	
-	        $("#count_down_text").text(count_down_text);
+	        $('#count_down_text').text(count_down_text);
 	        resolve(tran_phase);
 	      }
 	    });
 	  });
 	};
 	
+	exports.calculateUserGrade = calculateUserGrade;
+	exports.getSimilarities = getSimilarities;
 	exports.getCurrentStateOfNTHU = getCurrentStateOfNTHU;
+	exports.getSimilarities_forRecommend = getSimilarities_forRecommend;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer))
 
 /***/ })
 /******/ ]);

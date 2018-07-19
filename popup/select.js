@@ -16,6 +16,7 @@ function serialize(obj) {
 
 function getCourseFormInfo(course_no, callback) {
   let patt = /[A-Za-z]+/;
+  console.log('hello')
   let target = course_no.match(patt)[0];
   if (target == 'PE') {
     let patt2 = /[0-9]+/g;
