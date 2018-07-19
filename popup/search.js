@@ -11,8 +11,8 @@ import { removeTimeOfCourse } from './conflict';
 import { getCourseInfo } from './api';
 
 var request = require('request');
-const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
-// const baseURL = `http://192.168.99.100/api/`;
+// const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
+const baseURL = `http://192.168.99.100/api/`;
 // const baseURL = `localhost:80/api/`;
 
 function renderSearchResult(hits, callback) {
