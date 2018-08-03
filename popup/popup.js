@@ -1,17 +1,17 @@
 window._crypto = null;
 import { getUrlVars } from './helper';
-import { renderUserName, getResultCourse } from './api';
+import { renderUserName, getResultCourse, getGrade } from './api';
 import { getCart } from './cart';
 import { getCurrentStateOfNTHU } from './server';
 import { clearAllTime } from './conflict';
-// import {
-//   getRecommendPage,
-//   toStorage,
-//   before_hits_group,
-//   compare_group,
-//   num_of_old_course,
-//   num_of_each_similar
-// } from "./recommend";
+import {
+  getRecommendPage,
+  toStorage,
+  before_hits_group,
+  compare_group,
+  num_of_old_course,
+  num_of_each_similar,
+} from './recommend';
 
 const year = '107';
 const semester = '10';
@@ -52,7 +52,7 @@ async function initial_everything() {
     getResultCourse(phase);
   } else $('#change_phase').addClass('disabled');
   getCart();
-  // getGrade(stu_no);
+  getGrade(stu_no);
 }
 
 $(document).ready(() => {
@@ -94,10 +94,6 @@ $('.ui.modal').modal({
 });
 $('.ui.secondary.menu').on('click', '.item', function() {
   if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
-    if ($(this).hasClass('recommendPage')) {
-      alert('此為內部測試版本，「推薦課程」尚未完成 !');
-      return;
-    }
     $(this)
       .addClass('active')
       .siblings('.item')
@@ -113,30 +109,29 @@ $('.ui.secondary.menu').on('click', '.item', function() {
       t.not('.choosePage').hide();
       $('#change_school_table').show();
     } else if ($(this).hasClass('recommendPage')) {
-      // t.not(".recommendPage").hide();
-      // before_hits_group.length = 0;
-      // compare_group.length = 0;
-      // let content_group = [];
-      // getRecommendPage(function() {
-      //   if (
-      //     before_hits_group.length ==
-      //     num_of_old_course * num_of_each_similar
-      //   ) {
-      //     toStorage(function(content, count, compare_value) {
-      //       content_group.push({ content, compare_value });
-      //       if (count == num_of_old_course * num_of_each_similar - 1) {
-      //         content_group.sort(function(a, b) {
-      //           return b.compare_value - a.compare_value;
-      //         });
-      //         for (let each in content_group) {
-      //           let data = content_group[each];
-      //           $("#recommend_list").append(data.content);
-      //         }
-      //         $("#recommend_loading").removeClass("active");
-      //       }
-      //     });
-      //   }
-      // });
+      t.not('.recommendPage').hide();
+      before_hits_group.length = 0;
+      compare_group.length = 0;
+      let content_group = [];
+      getRecommendPage(() => {
+        if (
+          before_hits_group.length ==
+          num_of_old_course * num_of_each_similar
+        ) {
+          toStorage((content, count, compare_value) => {
+            content_group.push({ content, compare_value });
+            if (count == num_of_old_course * num_of_each_similar - 1) {
+              content_group.sort(function(a, b) {
+                return b.compare_value - a.compare_value;
+              });
+              for (let data of content_group) {
+                $('#recommend_list').append(data.content);
+              }
+              $('#recommend_loading').removeClass('active');
+            }
+          });
+        }
+      });
     }
   }
 });

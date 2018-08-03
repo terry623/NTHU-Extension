@@ -2,4 +2,4 @@
 
 The icon is designed by Freepik
 
-此為極難維護的專案，開發者我對此感到非常抱歉。
+此為極難維護的專案，請原諒垃圾一般的我。

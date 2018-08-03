@@ -4,7 +4,7 @@ import { baseURL } from './search';
 import { acix } from './popup';
 
 function calculateUserGrade(stu_no, userGrade) {
-  var all_pr = {};
+  let all_pr = {};
   for (let course_no in userGrade) {
     let grade = userGrade[course_no];
     let translateMap = {
@@ -23,34 +23,34 @@ function calculateUserGrade(stu_no, userGrade) {
       NotYet: 12,
       All: 13,
     };
-    getGradeDistribution(course_no, function(distribution) {
-      var user_grade_people = 0;
+    getGradeDistribution(course_no, distribution => {
+      let user_grade_people = 0;
       for (let i = 0; i <= translateMap[grade]; i++)
         user_grade_people += distribution[i];
       let pr = 1 - user_grade_people / 100;
       all_pr[course_no] = pr;
 
-      chrome.storage.local.get('pr', function(items) {
-        var temp = {};
-        var data = {};
-        for (var each in all_pr) data[each] = all_pr[each];
+      chrome.storage.local.get('pr', items => {
+        let temp = {};
+        let data = {};
+        for (let each in all_pr) data[each] = all_pr[each];
 
         if (items.pr != undefined) {
           Object.assign(temp, items.all_pr);
-          for (var each_data in data) {
+          for (let each_data in data) {
             temp[each_data] = data[each_data];
           }
-          chrome.storage.local.remove('pr', function() {
-            chrome.storage.local.set({ pr: temp }, function() {
-              chrome.storage.local.get('pr', function(items) {
+          chrome.storage.local.remove('pr', () => {
+            chrome.storage.local.set({ pr: temp }, () => {
+              chrome.storage.local.get('pr', items => {
                 // console.log(items);
               });
             });
           });
         } else {
-          for (var each_data in data) temp[each_data] = data[each_data];
-          chrome.storage.local.set({ pr: temp }, function() {
-            chrome.storage.local.get('pr', function(items) {
+          for (let each_data in data) temp[each_data] = data[each_data];
+          chrome.storage.local.set({ pr: temp }, () => {
+            chrome.storage.local.get('pr', items => {
               // console.log(items);
             });
           });
@@ -71,37 +71,32 @@ function getGradeDistribution(course_no, callback) {
         '&from=prg8R63',
       encoding: null,
     },
-    function(err, response, body) {
+    (err, response, body) => {
       if (!err && response.statusCode == 200) {
-        var str = iconv.decode(new Buffer(body), 'big5');
-        var replace =
+        let str = iconv.decode(new Buffer(body), 'big5');
+        let replace =
           `<img border="0" src="JH833022_img.php?ACIXSTORE=` + acix + `">`;
         str = str.replace(replace, '');
-        var temp = document.createElement('div');
+        let temp = document.createElement('div');
         temp.innerHTML = str;
         // console.log.apply(console, $(temp));
 
-        var gradeDistributionOfCourse = $(
+        let gradeDistributionOfCourse = $(
           'form > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td',
           temp
         );
 
-        var gradeDistribution = [];
+        let gradeDistribution = [];
         $(gradeDistributionOfCourse).each(function(index) {
           if (index > 0) {
-            var grade = $(this).text();
-            var words = grade.split('%');
-            var num = '0';
-            var patt = /\d+/;
+            let grade = $(this).text();
+            let words = grade.split('%');
+            let num = '0';
+            let patt = /\d+/;
             if (words.length != 1) num = words[0];
             gradeDistribution.push(parseInt(num));
           }
         });
-        // var distribution = [];
-        // for (var [key, value] of gradeDistributionMap) {
-        //   if (typeof value == "number") distribution.push(value.toString());
-        //   else distribution.push(value[0]);
-        // }
         callback(gradeDistribution);
       }
     }
@@ -109,7 +104,7 @@ function getGradeDistribution(course_no, callback) {
 }
 
 function collectionOfCourse() {
-  var obj = {
+  let obj = {
     values: [],
   };
   const local_course = [
@@ -129,7 +124,7 @@ function collectionOfCourse() {
       name: '選項詳情3',
     },
   ];
-  for (var v in local_course) {
+  for (let v in local_course) {
     obj.values[v] = {
       value: local_course[v].value,
       text: local_course[v].text,
@@ -141,21 +136,21 @@ function collectionOfCourse() {
 }
 
 function getSimilarities(course_id, callback) {
-  chrome.storage.local.get('course', function(items) {
-    var info = items.course[course_id];
+  chrome.storage.local.get('course', items => {
+    let info = items.course[course_id];
     if (info.相似課程.length == 0) {
       request(
         {
           url: baseURL + 'getSimilarities?course_id=' + course_id,
         },
-        function(err, response, body) {
+        (err, response, body) => {
           if (!err && response.statusCode == 200) {
-            var info = JSON.parse(body);
-            var temp = {};
+            let info = JSON.parse(body);
+            let temp = {};
             Object.assign(temp, items.course);
             temp[course_id].相似課程 = info;
-            chrome.storage.local.set({ course: temp }, function() {
-              chrome.storage.local.get('course', function(items) {
+            chrome.storage.local.set({ course: temp }, () => {
+              chrome.storage.local.get('course', items => {
                 // console.log(items);
               });
             });
@@ -172,9 +167,9 @@ function getSimilarities_forRecommend(course_id, callback) {
     {
       url: baseURL + 'getSimilarities?course_id=' + course_id,
     },
-    function(err, response, body) {
+    (err, response, body) => {
       if (!err && response.statusCode == 200) {
-        var info = JSON.parse(body);
+        let info = JSON.parse(body);
         callback(info);
       }
     }
