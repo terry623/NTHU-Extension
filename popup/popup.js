@@ -68,13 +68,13 @@ $(document).ready(() => {
   );
 });
 
-// chrome.storage.local.clear(() => {
-//   console.log("Clear Local Data");
-//   let error = chrome.runtime.lastError;
-//   if (error) {
-//     console.error(error);
-//   }
-// });
+chrome.storage.local.clear(() => {
+  console.log('Clear Local Data');
+  let error = chrome.runtime.lastError;
+  if (error) {
+    console.error(error);
+  }
+});
 
 $('.ui.accordion').accordion();
 $('.ui.dropdown').dropdown();
@@ -113,29 +113,23 @@ $('.ui.secondary.menu').on('click', '.item', function() {
       before_hits_group.length = 0;
       compare_group.length = 0;
       let content_group = [];
-
       getRecommendPage(() => {
+        // FIXME: 這裡的限制條件有改過
         // if (
-        //   before_hits_group.length ==
+        //   before_hits_group.length <=
         //   num_of_old_course * num_of_each_similar
         // ) {
-
-        // }
-
-        // console.log('content_group');
-        // console.log(content_group);
         toStorage((content, count, compare_value) => {
           content_group.push({ content, compare_value });
+          // FIXME: 這裡的限制條件有改過
           if (count == before_hits_group.length - 1) {
-            content_group.sort((a, b) => {
-              return b.compare_value - a.compare_value;
-            });
-            for (let data of content_group) {
+            content_group.sort((a, b) => b.compare_value - a.compare_value);
+            for (let data of content_group)
               $('#recommend_list').append(data.content);
-            }
             $('#recommend_loading').removeClass('active');
           }
         });
+        // }
       });
     }
   }

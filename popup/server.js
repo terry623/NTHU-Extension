@@ -92,7 +92,6 @@ function getGradeDistribution(course_no, callback) {
             let grade = $(this).text();
             let words = grade.split('%');
             let num = '0';
-            let patt = /\d+/;
             if (words.length != 1) num = words[0];
             gradeDistribution.push(parseInt(num));
           }
@@ -101,38 +100,6 @@ function getGradeDistribution(course_no, callback) {
       }
     }
   );
-}
-
-function collectionOfCourse() {
-  let obj = {
-    values: [],
-  };
-  const local_course = [
-    {
-      value: '課程編號1',
-      text: '選項1',
-      name: '選項詳情1',
-    },
-    {
-      value: '課程編號2',
-      text: '選項2',
-      name: '選項詳情2',
-    },
-    {
-      value: '課程編號3',
-      text: '選項3',
-      name: '選項詳情3',
-    },
-  ];
-  for (let v in local_course) {
-    obj.values[v] = {
-      value: local_course[v].value,
-      text: local_course[v].text,
-      name: local_course[v].name,
-    };
-  }
-  $('.ui.dropdown.search_list_1').dropdown('refresh');
-  $('.ui.dropdown.search_list_1').dropdown('setup menu', obj);
 }
 
 function getSimilarities(course_id, callback) {
@@ -162,19 +129,20 @@ function getSimilarities(course_id, callback) {
   });
 }
 
-function getSimilarities_forRecommend(course_id, callback) {
-  request(
-    {
-      url: baseURL + 'getSimilarities?course_id=' + course_id,
-    },
-    (err, response, body) => {
-      if (!err && response.statusCode == 200) {
-        let info = JSON.parse(body);
-        callback(info);
+const getSimilarities_forRecommend = course_id =>
+  new Promise(resolve => {
+    request(
+      {
+        url: baseURL + 'getSimilarities?course_id=' + course_id,
+      },
+      (err, response, body) => {
+        if (!err && response.statusCode == 200) {
+          let info = JSON.parse(body);
+          resolve(info);
+        }
       }
-    }
-  );
-}
+    );
+  });
 
 function currentPhase(phase) {
   $('#change_phase')

@@ -254,25 +254,26 @@ const searchBySingleCourseNo = course_no =>
     );
   });
 
-function searchByID_Group(id_group, callback) {
-  request.post(
-    {
-      url: `${baseURL}searchByID_Group`,
-      form: {
-        id_0: id_group[0].other_id,
-        id_1: id_group[1].other_id,
-        id_2: id_group[2].other_id,
+const searchByID_Group = id_group =>
+  new Promise(resolve => {
+    request.post(
+      {
+        url: `${baseURL}searchByID_Group`,
+        form: {
+          id_0: id_group[0].other_id,
+          id_1: id_group[1].other_id,
+          id_2: id_group[2].other_id,
+        },
       },
-    },
-    (err, response, body) => {
-      if (!err && response.statusCode == 200) {
-        let resp = JSON.parse(body);
-        let hits = resp.hits.hits;
-        callback(hits);
+      (err, response, body) => {
+        if (!err && response.statusCode == 200) {
+          let resp = JSON.parse(body);
+          let hits = resp.hits.hits;
+          resolve(hits);
+        }
       }
-    }
-  );
-}
+    );
+  });
 
 function dependOnType(topic) {
   $('.other_entry').hide();

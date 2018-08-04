@@ -9041,13 +9041,13 @@
 	  });
 	});
 	
-	// chrome.storage.local.clear(() => {
-	//   console.log("Clear Local Data");
-	//   let error = chrome.runtime.lastError;
-	//   if (error) {
-	//     console.error(error);
-	//   }
-	// });
+	chrome.storage.local.clear(function () {
+	  console.log('Clear Local Data');
+	  var error = chrome.runtime.lastError;
+	  if (error) {
+	    console.error(error);
+	  }
+	});
 	
 	$('.ui.accordion').accordion();
 	$('.ui.dropdown').dropdown();
@@ -9081,19 +9081,15 @@
 	      _recommend.before_hits_group.length = 0;
 	      _recommend.compare_group.length = 0;
 	      var content_group = [];
-	
 	      (0, _recommend.getRecommendPage)(function () {
+	        // FIXME: 這裡的限制條件有改過
 	        // if (
-	        //   before_hits_group.length ==
+	        //   before_hits_group.length <=
 	        //   num_of_old_course * num_of_each_similar
 	        // ) {
-	
-	        // }
-	
-	        // console.log('content_group');
-	        // console.log(content_group);
 	        (0, _recommend.toStorage)(function (content, count, compare_value) {
 	          content_group.push({ content: content, compare_value: compare_value });
+	          // FIXME: 這裡的限制條件有改過
 	          if (count == _recommend.before_hits_group.length - 1) {
 	            content_group.sort(function (a, b) {
 	              return b.compare_value - a.compare_value;
@@ -9126,6 +9122,7 @@
 	            $('#recommend_loading').removeClass('active');
 	          }
 	        });
+	        // }
 	      });
 	    }
 	  }
@@ -11962,7 +11959,6 @@
 	          var _grade = $(this).text();
 	          var words = _grade.split('%');
 	          var num = '0';
-	          var patt = /\d+/;
 	          if (words.length != 1) num = words[0];
 	          gradeDistribution.push(parseInt(num));
 	        }
@@ -11970,34 +11966,6 @@
 	      callback(gradeDistribution);
 	    }
 	  });
-	}
-	
-	function collectionOfCourse() {
-	  var obj = {
-	    values: []
-	  };
-	  var local_course = [{
-	    value: '課程編號1',
-	    text: '選項1',
-	    name: '選項詳情1'
-	  }, {
-	    value: '課程編號2',
-	    text: '選項2',
-	    name: '選項詳情2'
-	  }, {
-	    value: '課程編號3',
-	    text: '選項3',
-	    name: '選項詳情3'
-	  }];
-	  for (var v in local_course) {
-	    obj.values[v] = {
-	      value: local_course[v].value,
-	      text: local_course[v].text,
-	      name: local_course[v].name
-	    };
-	  }
-	  $('.ui.dropdown.search_list_1').dropdown('refresh');
-	  $('.ui.dropdown.search_list_1').dropdown('setup menu', obj);
 	}
 	
 	function getSimilarities(course_id, callback) {
@@ -12024,16 +11992,18 @@
 	  });
 	}
 	
-	function getSimilarities_forRecommend(course_id, callback) {
-	  request({
-	    url: _search.baseURL + 'getSimilarities?course_id=' + course_id
-	  }, function (err, response, body) {
-	    if (!err && response.statusCode == 200) {
-	      var info = JSON.parse(body);
-	      callback(info);
-	    }
+	var getSimilarities_forRecommend = function getSimilarities_forRecommend(course_id) {
+	  return new Promise(function (resolve) {
+	    request({
+	      url: _search.baseURL + 'getSimilarities?course_id=' + course_id
+	    }, function (err, response, body) {
+	      if (!err && response.statusCode == 200) {
+	        var info = JSON.parse(body);
+	        resolve(info);
+	      }
+	    });
 	  });
-	}
+	};
 	
 	function currentPhase(phase) {
 	  $('#change_phase').find('.item').filter(function (index) {
@@ -12473,22 +12443,24 @@
 	  });
 	};
 	
-	function searchByID_Group(id_group, callback) {
-	  request.post({
-	    url: baseURL + 'searchByID_Group',
-	    form: {
-	      id_0: id_group[0].other_id,
-	      id_1: id_group[1].other_id,
-	      id_2: id_group[2].other_id
-	    }
-	  }, function (err, response, body) {
-	    if (!err && response.statusCode == 200) {
-	      var resp = JSON.parse(body);
-	      var hits = resp.hits.hits;
-	      callback(hits);
-	    }
+	var searchByID_Group = function searchByID_Group(id_group) {
+	  return new Promise(function (resolve) {
+	    request.post({
+	      url: baseURL + 'searchByID_Group',
+	      form: {
+	        id_0: id_group[0].other_id,
+	        id_1: id_group[1].other_id,
+	        id_2: id_group[2].other_id
+	      }
+	    }, function (err, response, body) {
+	      if (!err && response.statusCode == 200) {
+	        var resp = JSON.parse(body);
+	        var hits = resp.hits.hits;
+	        resolve(hits);
+	      }
+	    });
 	  });
-	}
+	};
 	
 	function dependOnType(topic) {
 	  $('.other_entry').hide();
@@ -62991,14 +62963,12 @@
 	
 	var toStorage = function () {
 	  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(callback) {
-	    var hits_group, each_row, row, _loop2, count;
+	    var hits_group, each_row, row, _loop, count;
 	
-	    return regeneratorRuntime.wrap(function _callee2$(_context3) {
+	    return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	      while (1) {
-	        switch (_context3.prev = _context3.next) {
+	        switch (_context2.prev = _context2.next) {
 	          case 0:
-	            // console.log('before_hits_group');
-	            // console.log(before_hits_group);
 	            hits_group = [];
 	
 	            for (each_row in before_hits_group) {
@@ -63006,16 +62976,12 @@
 	
 	              hits_group.push(row);
 	            }
-	            // console.log('after_hits_group');
-	            // console.log(hits_group);
-	            // console.log('compare_group');
-	            // console.log(compare_group);
 	
-	            _context3.next = 4;
+	            _context2.next = 4;
 	            return (0, _search.storeCourseInfo)(hits_group);
 	
 	          case 4:
-	            _loop2 = function _loop2(count) {
+	            _loop = function _loop(count) {
 	              var id = hits_group[count]._id;
 	              var source = hits_group[count]._source;
 	              var course_no = source.科號;
@@ -63029,13 +62995,14 @@
 	              });
 	            };
 	
+	            // FIXME: 這裡的限制條件有改過
 	            for (count = 0; count < hits_group.length; count++) {
-	              _loop2(count);
+	              _loop(count);
 	            }
 	
 	          case 6:
 	          case 'end':
-	            return _context3.stop();
+	            return _context2.stop();
 	        }
 	      }
 	    }, _callee2, this);
@@ -63056,7 +63023,9 @@
 	
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 	
+	// 要選排行榜中的前幾名
 	var num_of_old_course = 3;
+	// 這幾名中各要選幾個相似課程
 	var num_of_each_similar = 3;
 	var before_hits_group = [];
 	var compare_group = [];
@@ -63100,86 +63069,79 @@
 	  $('#recommend_list').empty();
 	  chrome.storage.local.get('pr', function () {
 	    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(items) {
-	      var sort_pr, _loop, course_number;
-	
-	      return regeneratorRuntime.wrap(function _callee$(_context2) {
+	      var sort_pr, course_number, pr_key, pr_value, new_course_no, hits, info, sort_pr_and_percent, id_group, each, other_id, compare_value, hits_group, i;
+	      return regeneratorRuntime.wrap(function _callee$(_context) {
 	        while (1) {
-	          switch (_context2.prev = _context2.next) {
+	          switch (_context.prev = _context.next) {
 	            case 0:
 	              if (!(items.pr != undefined)) {
-	                _context2.next = 9;
+	                _context.next = 25;
 	                break;
 	              }
 	
 	              sort_pr = sortObject(items.pr);
-	              _loop = /*#__PURE__*/regeneratorRuntime.mark(function _loop(course_number) {
-	                var pr_key, pr_value, new_course_no, hits;
-	                return regeneratorRuntime.wrap(function _loop$(_context) {
-	                  while (1) {
-	                    switch (_context.prev = _context.next) {
-	                      case 0:
-	                        pr_key = sort_pr[course_number].key;
-	                        pr_value = sort_pr[course_number].value;
-	                        new_course_no = (0, _helper.oldyear_to_newyear)(pr_key);
-	
-	                        // FIXME: searchBySingleCourseNo 是 Promise 了
-	
-	                        _context.next = 5;
-	                        return (0, _search.searchBySingleCourseNo)(new_course_no);
-	
-	                      case 5:
-	                        hits = _context.sent;
-	
-	                        if (hits.length > 0) {
-	                          (0, _server.getSimilarities_forRecommend)(hits[0]._id, function (info) {
-	                            var sort_pr_and_percent = sortComplexObject(info, pr_value);
-	                            var id_group = [];
-	                            for (var each = 0; each < num_of_each_similar; each++) {
-	                              var other_id = sort_pr_and_percent[each].key;
-	                              var compare_value = sort_pr_and_percent[each].value;
-	                              compare_group.push({
-	                                other_id: other_id,
-	                                compare_value: compare_value
-	                              });
-	                              id_group.push({
-	                                other_id: other_id,
-	                                compare_value: compare_value
-	                              });
-	                            }
-	                            // FIXME: 改 Promise !
-	                            (0, _search.searchByID_Group)(id_group, function (hits) {
-	                              for (var i = 0; i < num_of_each_similar; i++) {
-	                                before_hits_group.push(hits[i]);
-	                              }callback();
-	                            });
-	                          });
-	                        }
-	
-	                      case 7:
-	                      case 'end':
-	                        return _context.stop();
-	                    }
-	                  }
-	                }, _loop, _this);
-	              });
 	              course_number = 0;
 	
-	            case 4:
+	            case 3:
 	              if (!(course_number < num_of_old_course)) {
-	                _context2.next = 9;
+	                _context.next = 25;
 	                break;
 	              }
 	
-	              return _context2.delegateYield(_loop(course_number), 't0', 6);
-	
-	            case 6:
-	              course_number++;
-	              _context2.next = 4;
-	              break;
+	              pr_key = sort_pr[course_number].key;
+	              pr_value = sort_pr[course_number].value;
+	              new_course_no = (0, _helper.oldyear_to_newyear)(pr_key);
+	              _context.next = 9;
+	              return (0, _search.searchBySingleCourseNo)(new_course_no);
 	
 	            case 9:
+	              hits = _context.sent;
+	
+	              if (!(hits.length > 0)) {
+	                _context.next = 22;
+	                break;
+	              }
+	
+	              _context.next = 13;
+	              return (0, _server.getSimilarities_forRecommend)(hits[0]._id);
+	
+	            case 13:
+	              info = _context.sent;
+	              sort_pr_and_percent = sortComplexObject(info, pr_value);
+	              id_group = [];
+	
+	              for (each = 0; each < num_of_each_similar; each++) {
+	                other_id = sort_pr_and_percent[each].key;
+	                compare_value = sort_pr_and_percent[each].value;
+	
+	                compare_group.push({
+	                  other_id: other_id,
+	                  compare_value: compare_value
+	                });
+	                id_group.push({
+	                  other_id: other_id,
+	                  compare_value: compare_value
+	                });
+	              }
+	
+	              _context.next = 19;
+	              return (0, _search.searchByID_Group)(id_group);
+	
+	            case 19:
+	              hits_group = _context.sent;
+	
+	              for (i = 0; i < num_of_each_similar; i++) {
+	                before_hits_group.push(hits_group[i]);
+	              }callback();
+	
+	            case 22:
+	              course_number++;
+	              _context.next = 3;
+	              break;
+	
+	            case 25:
 	            case 'end':
-	              return _context2.stop();
+	              return _context.stop();
 	          }
 	        }
 	      }, _callee, _this);

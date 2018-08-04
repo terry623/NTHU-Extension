@@ -138,14 +138,9 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
             getSimilarities(id, info => {
               $('#similar').empty();
               for (let each of info) {
-                let similar_course =
-                  `<div class="title">
-                    <i class="dropdown icon"></i>` +
-                  each.other +
-                  `</div>
-                <div class="content">` +
-                  each.percent +
-                  `</div>`;
+                let similar_course = `<div class="title">
+                    <i class="dropdown icon"></i>${each.other}</div>
+                <div class="content">${each.percent}</div>`;
                 $('#similar').append(similar_course);
               }
             });
