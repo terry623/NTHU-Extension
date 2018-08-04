@@ -8955,31 +8955,25 @@
 	
 	var initial_everything = function () {
 	  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-	    var phase;
 	    return regeneratorRuntime.wrap(function _callee$(_context) {
 	      while (1) {
 	        switch (_context.prev = _context.next) {
 	          case 0:
-	            $('#home_loading').addClass('active');
-	            (0, _conflict.clearAllTime)();
-	            addListener();
-	            (0, _api.renderUserName)();
-	            _context.next = 6;
-	            return (0, _server.getCurrentStateOfNTHU)();
-	
-	          case 6:
-	            phase = _context.sent;
-	
-	            $('.content_item.homePage').show();
-	            $('#home_loading').removeClass('active');
-	            if (phase != undefined) {
-	              exports.current_phase = current_phase = phase;
-	              (0, _api.getResultCourse)(phase);
-	            } else $('#change_phase').addClass('disabled');
-	            (0, _cart.getCart)();
+	            // $('#home_loading').addClass('active');
+	            // clearAllTime();
+	            // addListener();
+	            // renderUserName();
+	            // let phase = await getCurrentStateOfNTHU();
+	            // $('.content_item.homePage').show();
+	            // $('#home_loading').removeClass('active');
+	            // if (phase != undefined) {
+	            //   current_phase = phase;
+	            //   getResultCourse(phase);
+	            // } else $('#change_phase').addClass('disabled');
+	            // getCart();
 	            (0, _api.getGrade)(stu_no);
 	
-	          case 12:
+	          case 1:
 	          case 'end':
 	            return _context.stop();
 	        }
@@ -9674,8 +9668,8 @@
 	            }
 	          }
 	        });
-	        console.log({ stu_no: stu_no });
 	        console.log(userGrade);
+	        (0, _server.saveUserGrade)(stu_no, userGrade);
 	        (0, _server.calculateUserGrade)(stu_no, userGrade);
 	      }
 	    }
@@ -11865,7 +11859,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.getSimilarities_forRecommend = exports.getCurrentStateOfNTHU = exports.getSimilarities = exports.calculateUserGrade = undefined;
+	exports.saveUserGrade = exports.getSimilarities_forRecommend = exports.getCurrentStateOfNTHU = exports.getSimilarities = exports.calculateUserGrade = undefined;
 	
 	var _search = __webpack_require__(337);
 	
@@ -12131,10 +12125,26 @@
 	  });
 	};
 	
+	// TODO: Server 端的 userGrade 還沒解析
+	function saveUserGrade(stu_no, userGrade) {
+	  request.post({
+	    url: _search.baseURL + 'saveUserGrade',
+	    form: {
+	      stu_no: stu_no,
+	      userGrade: userGrade
+	    }
+	  }, function (err, response, body) {
+	    if (!err && response.statusCode == 200) {
+	      var resp = JSON.parse(body);
+	      console.log(resp);
+	    }
+	  });
+	}
 	exports.calculateUserGrade = calculateUserGrade;
 	exports.getSimilarities = getSimilarities;
 	exports.getCurrentStateOfNTHU = getCurrentStateOfNTHU;
 	exports.getSimilarities_forRecommend = getSimilarities_forRecommend;
+	exports.saveUserGrade = saveUserGrade;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer))
 
 /***/ }),
@@ -12160,8 +12170,8 @@
 	
 	var request = __webpack_require__(341);
 	// const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
-	var baseURL = 'http://192.168.99.100/api/';
-	// const baseURL = `localhost:80/api/`;
+	// const baseURL = `http://192.168.99.100/api/`;
+	var baseURL = 'http://localhost/api/';
 	
 	function renderSearchResult(hits, callback) {
 	  var page_num_content = '';

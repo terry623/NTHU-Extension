@@ -40,18 +40,18 @@ function addListener() {
 }
 
 async function initial_everything() {
-  $('#home_loading').addClass('active');
-  clearAllTime();
-  addListener();
-  renderUserName();
-  let phase = await getCurrentStateOfNTHU();
-  $('.content_item.homePage').show();
-  $('#home_loading').removeClass('active');
-  if (phase != undefined) {
-    current_phase = phase;
-    getResultCourse(phase);
-  } else $('#change_phase').addClass('disabled');
-  getCart();
+  // $('#home_loading').addClass('active');
+  // clearAllTime();
+  // addListener();
+  // renderUserName();
+  // let phase = await getCurrentStateOfNTHU();
+  // $('.content_item.homePage').show();
+  // $('#home_loading').removeClass('active');
+  // if (phase != undefined) {
+  //   current_phase = phase;
+  //   getResultCourse(phase);
+  // } else $('#change_phase').addClass('disabled');
+  // getCart();
   getGrade(stu_no);
 }
 

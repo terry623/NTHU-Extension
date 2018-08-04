@@ -275,9 +275,28 @@ const getCurrentStateOfNTHU = () =>
     );
   });
 
+// TODO: Server 端的 userGrade 還沒解析
+function saveUserGrade(stu_no, userGrade) {
+  request.post(
+    {
+      url: `${baseURL}saveUserGrade`,
+      form: {
+        stu_no,
+        userGrade,
+      },
+    },
+    (err, response, body) => {
+      if (!err && response.statusCode == 200) {
+        let resp = JSON.parse(body);
+        console.log(resp);
+      }
+    }
+  );
+}
 export {
   calculateUserGrade,
   getSimilarities,
   getCurrentStateOfNTHU,
   getSimilarities_forRecommend,
+  saveUserGrade,
 };

@@ -12,8 +12,8 @@ import { getCourseInfo } from './api';
 
 var request = require('request');
 // const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
-const baseURL = `http://192.168.99.100/api/`;
-// const baseURL = `localhost:80/api/`;
+// const baseURL = `http://192.168.99.100/api/`;
+const baseURL = `http://localhost/api/`;
 
 function renderSearchResult(hits, callback) {
   let page_num_content = ``;
@@ -100,8 +100,8 @@ function searchOnlyKeyword(search_topic, keyword, callback) {
     {
       url: `${baseURL}searchOnlyKeyword`,
       form: {
-        search_topic: search_topic,
-        keyword: keyword,
+        search_topic,
+        keyword,
       },
     },
     (err, response, body) => {
@@ -140,8 +140,8 @@ function searchTime(search_topic, keyword, time_group, callback) {
     {
       url: `${baseURL}searchTime`,
       form: {
-        search_topic: search_topic,
-        keyword: keyword,
+        search_topic,
+        keyword,
         time_group: JSON.stringify(time_group),
       },
     },

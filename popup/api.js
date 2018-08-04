@@ -1,7 +1,7 @@
 var iconv = require('iconv-lite');
 var request = require('request');
 import { transform } from './pdf2html';
-import { calculateUserGrade, getSimilarities } from './server';
+import { calculateUserGrade, getSimilarities, saveUserGrade } from './server';
 import { searchBySingleCourseNo, storeCourseInfo } from './search';
 import {
   course_table,
@@ -415,8 +415,8 @@ function getGrade(stu_no) {
               }
             }
           });
-          console.log({ stu_no });
           console.log(userGrade);
+          saveUserGrade(stu_no, userGrade);
           calculateUserGrade(stu_no, userGrade);
         }
       }
