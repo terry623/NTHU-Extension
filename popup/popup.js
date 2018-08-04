@@ -113,24 +113,29 @@ $('.ui.secondary.menu').on('click', '.item', function() {
       before_hits_group.length = 0;
       compare_group.length = 0;
       let content_group = [];
+
       getRecommendPage(() => {
-        if (
-          before_hits_group.length ==
-          num_of_old_course * num_of_each_similar
-        ) {
-          toStorage((content, count, compare_value) => {
-            content_group.push({ content, compare_value });
-            if (count == num_of_old_course * num_of_each_similar - 1) {
-              content_group.sort(function(a, b) {
-                return b.compare_value - a.compare_value;
-              });
-              for (let data of content_group) {
-                $('#recommend_list').append(data.content);
-              }
-              $('#recommend_loading').removeClass('active');
+        // if (
+        //   before_hits_group.length ==
+        //   num_of_old_course * num_of_each_similar
+        // ) {
+
+        // }
+
+        // console.log('content_group');
+        // console.log(content_group);
+        toStorage((content, count, compare_value) => {
+          content_group.push({ content, compare_value });
+          if (count == before_hits_group.length - 1) {
+            content_group.sort((a, b) => {
+              return b.compare_value - a.compare_value;
+            });
+            for (let data of content_group) {
+              $('#recommend_list').append(data.content);
             }
-          });
-        }
+            $('#recommend_loading').removeClass('active');
+          }
+        });
       });
     }
   }

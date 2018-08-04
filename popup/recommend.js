@@ -30,11 +30,10 @@ function sortObject(obj) {
 function sortComplexObject(obj, pr_value) {
   let arr = [];
   for (let prop in obj) {
-    let sim = obj[prop].sim;
     if (obj.hasOwnProperty(prop)) {
       arr.push({
-        key: sim.other,
-        value: sim.percent * pr_value,
+        key: obj[prop].other,
+        value: obj[prop].percent * pr_value,
       });
     }
   }
@@ -47,7 +46,7 @@ function sortComplexObject(obj, pr_value) {
 function getRecommendPage(callback) {
   $('#recommend_loading').addClass('active');
   $('#recommend_list').empty();
-  chrome.storage.local.get('pr', items => {
+  chrome.storage.local.get('pr', async items => {
     if (items.pr != undefined) {
       let sort_pr = sortObject(items.pr);
       for (
@@ -60,39 +59,37 @@ function getRecommendPage(callback) {
         let new_course_no = oldyear_to_newyear(pr_key);
 
         // FIXME: searchBySingleCourseNo 是 Promise 了
-        searchBySingleCourseNo(new_course_no, hits => {
-          if (hits.length > 0) {
-            getSimilarities_forRecommend(hits[0]._id, info => {
-              console.log('getSimilarities_forRecommend');
-              console.log(info);
-              let sort_pr_and_percent = sortComplexObject(info, pr_value);
-              let id_group = [];
-              for (let each = 0; each < num_of_each_similar; each++) {
-                let other_id = sort_pr_and_percent[each].key;
-                let compare_value = sort_pr_and_percent[each].value;
-                compare_group.push({
-                  other_id,
-                  compare_value,
-                });
-                id_group.push({
-                  other_id,
-                  compare_value,
-                });
-              }
-              searchByID_Group(id_group, hits => {
-                for (let i = 0; i < num_of_each_similar; i++)
-                  before_hits_group.push(hits[i]);
-                callback();
+        const hits = await searchBySingleCourseNo(new_course_no);
+        if (hits.length > 0) {
+          getSimilarities_forRecommend(hits[0]._id, info => {
+            let sort_pr_and_percent = sortComplexObject(info, pr_value);
+            let id_group = [];
+            for (let each = 0; each < num_of_each_similar; each++) {
+              let other_id = sort_pr_and_percent[each].key;
+              let compare_value = sort_pr_and_percent[each].value;
+              compare_group.push({
+                other_id,
+                compare_value,
               });
+              id_group.push({
+                other_id,
+                compare_value,
+              });
+            }
+            // FIXME: 改 Promise !
+            searchByID_Group(id_group, hits => {
+              for (let i = 0; i < num_of_each_similar; i++)
+                before_hits_group.push(hits[i]);
+              callback();
             });
-          }
-        });
+          });
+        }
       }
     }
   });
 }
 
-function toStorage(callback) {
+async function toStorage(callback) {
   // console.log('before_hits_group');
   // console.log(before_hits_group);
   let hits_group = [];
@@ -104,50 +101,46 @@ function toStorage(callback) {
   // console.log(hits_group);
   // console.log('compare_group');
   // console.log(compare_group);
-  storeCourseInfo(hits_group, () => {
-    for (
-      let count = 0;
-      count < num_of_old_course * num_of_each_similar;
-      count++
-    ) {
-      let id = hits_group[count]._id;
-      let source = hits_group[count]._source;
-      let course_no = source.科號;
-      getCourseDescription(course_no, description => {
-        let match = compare_group.find(item => {
-          return item.other_id == id;
-        });
-        description = description.slice(0, 60).concat(' ．．．');
-        let content =
-          `<div id="` +
-          id +
-          `" course_no="` +
-          course_no +
-          `" compare_value="` +
-          match.compare_value +
-          `" class="item column">
-                  <div class="ui link fluid card" style="height:200px;">
-                      <div class="content">
-                          <div class="header">` +
-          source.課程中文名稱 +
-          `</div>
-                          <div class="meta">
-                              <span class="date">` +
-          source.科號 +
-          `</span>
-                          </div>
-                          <div class="description">
-                              ` +
-          description +
-          `
-                          </div>
-                      </div>
-                  </div>
-              </div>`;
-        callback(content, count, match.compare_value);
+
+  await storeCourseInfo(hits_group);
+  for (let count = 0; count < hits_group.length; count++) {
+    let id = hits_group[count]._id;
+    let source = hits_group[count]._source;
+    let course_no = source.科號;
+    getCourseDescription(course_no, description => {
+      let match = compare_group.find(item => {
+        return item.other_id == id;
       });
-    }
-  });
+      description = description.slice(0, 60).concat(' ．．．');
+      let content =
+        `<div id="` +
+        id +
+        `" course_no="` +
+        course_no +
+        `" compare_value="` +
+        match.compare_value +
+        `" class="item column">
+                <div class="ui link fluid card" style="height:200px;">
+                    <div class="content">
+                        <div class="header">` +
+        source.課程中文名稱 +
+        `</div>
+                        <div class="meta">
+                            <span class="date">` +
+        source.科號 +
+        `</span>
+                        </div>
+                        <div class="description">
+                            ` +
+        description +
+        `
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+      callback(content, count, match.compare_value);
+    });
+  }
 }
 
 $('#recommend_list').on('click', '.item', function() {

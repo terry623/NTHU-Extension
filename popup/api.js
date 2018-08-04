@@ -405,17 +405,17 @@ function getGrade(stu_no) {
           let userGrade = Object.create(null);
           $(allGradeOfStudent).each(function(index) {
             if (index > 2 && index < allGradeOfStudent.length - 1) {
-              let year = $('td:nth-child(1)', this).text();
-              let semester = $('td:nth-child(2)', this).text();
+              let receive_year = $('td:nth-child(1)', this).text();
+              let receive_semester = $('td:nth-child(2)', this).text();
               let getCourseNo = $('td:nth-child(3)', this).text();
               let getCourseGrade = $('td:nth-child(6)', this).text();
               if (
                 getCourseGrade.includes('Grade Not Submitted') == false &&
                 getCourseGrade.includes('二退') == false &&
-                semester == '20'
+                receive_semester == semester
               ) {
                 userGrade[
-                  year + semester + getCourseNo.trim()
+                  receive_year + receive_semester + getCourseNo.trim()
                 ] = getCourseGrade.trim();
               }
             }
