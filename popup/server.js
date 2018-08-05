@@ -275,20 +275,19 @@ const getCurrentStateOfNTHU = () =>
     );
   });
 
-// TODO: Server 端的 userGrade 還沒解析
 function saveUserGrade(stu_no, userGrade) {
   request.post(
     {
       url: `${baseURL}saveUserGrade`,
       form: {
         stu_no,
-        userGrade,
+        userGrade: JSON.stringify(userGrade),
       },
     },
     (err, response, body) => {
       if (!err && response.statusCode == 200) {
         let resp = JSON.parse(body);
-        console.log(resp);
+        console.log(resp.message);
       }
     }
   );

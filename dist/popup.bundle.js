@@ -12125,18 +12125,17 @@
 	  });
 	};
 	
-	// TODO: Server 端的 userGrade 還沒解析
 	function saveUserGrade(stu_no, userGrade) {
 	  request.post({
 	    url: _search.baseURL + 'saveUserGrade',
 	    form: {
 	      stu_no: stu_no,
-	      userGrade: userGrade
+	      userGrade: JSON.stringify(userGrade)
 	    }
 	  }, function (err, response, body) {
 	    if (!err && response.statusCode == 200) {
 	      var resp = JSON.parse(body);
-	      console.log(resp);
+	      console.log(resp.message);
 	    }
 	  });
 	}
@@ -12287,6 +12286,7 @@
 	  callback();
 	}
 	
+	// FIXME: keyword 都還沒有送 stu_no
 	function searchOnlyKeyword(search_topic, keyword, callback) {
 	  request.post({
 	    url: baseURL + 'searchOnlyKeyword',

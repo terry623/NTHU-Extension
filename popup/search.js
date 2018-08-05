@@ -95,6 +95,7 @@ function renderSearchResult(hits, callback) {
   callback();
 }
 
+// FIXME: keyword 都還沒有送 stu_no
 function searchOnlyKeyword(search_topic, keyword, callback) {
   request.post(
     {
