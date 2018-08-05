@@ -9,7 +9,7 @@ import { search_result_num, stu_no } from './popup';
 import { getCart } from './cart';
 import { removeTimeOfCourse } from './conflict';
 import { getCourseInfo } from './api';
-import { baseURL } from '.server';
+import { baseURL } from './server';
 
 var request = require('request');
 
