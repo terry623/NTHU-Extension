@@ -1,7 +1,9 @@
 var iconv = require('iconv-lite');
 var request = require('request');
-import { baseURL } from './search';
 import { acix } from './popup';
+
+const baseURL = `http://192.168.99.100/api/`;
+// const baseURL = `http://localhost/api/`;
 
 function calculateUserGrade(stu_no, userGrade) {
   let all_pr = {};
@@ -298,4 +300,5 @@ export {
   getCurrentStateOfNTHU,
   getSimilarities_forRecommend,
   saveUserGrade,
+  baseURL,
 };

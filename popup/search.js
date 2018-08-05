@@ -5,15 +5,13 @@ import {
   miniMessageAlert,
 } from './helper';
 import { checkConflict } from './conflict';
-import { search_result_num } from './popup';
+import { search_result_num, stu_no } from './popup';
 import { getCart } from './cart';
 import { removeTimeOfCourse } from './conflict';
 import { getCourseInfo } from './api';
+import { baseURL } from '.server';
 
 var request = require('request');
-// const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
-// const baseURL = `http://192.168.99.100/api/`;
-const baseURL = `http://localhost/api/`;
 
 function renderSearchResult(hits, callback) {
   let page_num_content = ``;
@@ -101,6 +99,7 @@ function searchOnlyKeyword(search_topic, keyword, callback) {
     {
       url: `${baseURL}searchOnlyKeyword`,
       form: {
+        stu_no,
         search_topic,
         keyword,
       },
@@ -120,6 +119,7 @@ function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
     {
       url: `${baseURL}searchDoubleKeyword`,
       form: {
+        stu_no,
         search_topic,
         keyword,
         other_keyword,
@@ -456,4 +456,4 @@ $('#search_page_change').on('click', '.page.item', function() {
     .hide();
 });
 
-export { searchBySingleCourseNo, storeCourseInfo, searchByID_Group, baseURL };
+export { searchBySingleCourseNo, storeCourseInfo, searchByID_Group };

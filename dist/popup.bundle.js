@@ -8955,25 +8955,31 @@
 	
 	var initial_everything = function () {
 	  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+	    var phase;
 	    return regeneratorRuntime.wrap(function _callee$(_context) {
 	      while (1) {
 	        switch (_context.prev = _context.next) {
 	          case 0:
-	            // $('#home_loading').addClass('active');
-	            // clearAllTime();
-	            // addListener();
-	            // renderUserName();
-	            // let phase = await getCurrentStateOfNTHU();
-	            // $('.content_item.homePage').show();
-	            // $('#home_loading').removeClass('active');
-	            // if (phase != undefined) {
-	            //   current_phase = phase;
-	            //   getResultCourse(phase);
-	            // } else $('#change_phase').addClass('disabled');
-	            // getCart();
+	            $('#home_loading').addClass('active');
+	            (0, _conflict.clearAllTime)();
+	            addListener();
+	            (0, _api.renderUserName)();
+	            _context.next = 6;
+	            return (0, _server.getCurrentStateOfNTHU)();
+	
+	          case 6:
+	            phase = _context.sent;
+	
+	            $('.content_item.homePage').show();
+	            $('#home_loading').removeClass('active');
+	            if (phase != undefined) {
+	              exports.current_phase = current_phase = phase;
+	              (0, _api.getResultCourse)(phase);
+	            } else $('#change_phase').addClass('disabled');
+	            (0, _cart.getCart)();
 	            (0, _api.getGrade)(stu_no);
 	
-	          case 1:
+	          case 12:
 	          case 'end':
 	            return _context.stop();
 	        }
@@ -11859,15 +11865,16 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.saveUserGrade = exports.getSimilarities_forRecommend = exports.getCurrentStateOfNTHU = exports.getSimilarities = exports.calculateUserGrade = undefined;
-	
-	var _search = __webpack_require__(337);
+	exports.baseURL = exports.saveUserGrade = exports.getSimilarities_forRecommend = exports.getCurrentStateOfNTHU = exports.getSimilarities = exports.calculateUserGrade = undefined;
 	
 	var _popup = __webpack_require__(328);
 	
 	var iconv = __webpack_require__(595);
 	var request = __webpack_require__(341);
 	
+	
+	var baseURL = 'http://192.168.99.100/api/';
+	// const baseURL = `http://localhost/api/`;
 	
 	function calculateUserGrade(stu_no, userGrade) {
 	  var all_pr = {};
@@ -11967,7 +11974,7 @@
 	    var info = items.course[course_id];
 	    if (info.相似課程.length == 0) {
 	      request({
-	        url: _search.baseURL + 'getSimilarities?course_id=' + course_id
+	        url: baseURL + 'getSimilarities?course_id=' + course_id
 	      }, function (err, response, body) {
 	        if (!err && response.statusCode == 200) {
 	          var _info = JSON.parse(body);
@@ -11989,7 +11996,7 @@
 	var getSimilarities_forRecommend = function getSimilarities_forRecommend(course_id) {
 	  return new Promise(function (resolve) {
 	    request({
-	      url: _search.baseURL + 'getSimilarities?course_id=' + course_id
+	      url: baseURL + 'getSimilarities?course_id=' + course_id
 	    }, function (err, response, body) {
 	      if (!err && response.statusCode == 200) {
 	        var info = JSON.parse(body);
@@ -12073,7 +12080,7 @@
 	    var month = datetime.getMonth() + 1;
 	    var day = datetime.getDate();
 	    request({
-	      url: _search.baseURL + 'getCurrentStateOfNTHU?year=' + year + '&month=' + month + '&day=' + day
+	      url: baseURL + 'getCurrentStateOfNTHU?year=' + year + '&month=' + month + '&day=' + day
 	    }, function (err, response, body) {
 	      if (!err && response.statusCode == 200) {
 	        var info = JSON.parse(body);
@@ -12127,7 +12134,7 @@
 	
 	function saveUserGrade(stu_no, userGrade) {
 	  request.post({
-	    url: _search.baseURL + 'saveUserGrade',
+	    url: baseURL + 'saveUserGrade',
 	    form: {
 	      stu_no: stu_no,
 	      userGrade: JSON.stringify(userGrade)
@@ -12144,6 +12151,7 @@
 	exports.getCurrentStateOfNTHU = getCurrentStateOfNTHU;
 	exports.getSimilarities_forRecommend = getSimilarities_forRecommend;
 	exports.saveUserGrade = saveUserGrade;
+	exports.baseURL = baseURL;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer))
 
 /***/ }),
@@ -12155,7 +12163,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.baseURL = exports.searchByID_Group = exports.storeCourseInfo = exports.searchBySingleCourseNo = undefined;
+	exports.searchByID_Group = exports.storeCourseInfo = exports.searchBySingleCourseNo = undefined;
 	
 	var _helper = __webpack_require__(329);
 	
@@ -12167,10 +12175,9 @@
 	
 	var _api = __webpack_require__(330);
 	
+	var _server = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \".server\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
 	var request = __webpack_require__(341);
-	// const baseURL = `http://nthucourse-env.vvj7ipe3ws.us-east-1.elasticbeanstalk.com/api/`;
-	// const baseURL = `http://192.168.99.100/api/`;
-	var baseURL = 'http://localhost/api/';
 	
 	function renderSearchResult(hits, callback) {
 	  var page_num_content = '';
@@ -12289,8 +12296,9 @@
 	// FIXME: keyword 都還沒有送 stu_no
 	function searchOnlyKeyword(search_topic, keyword, callback) {
 	  request.post({
-	    url: baseURL + 'searchOnlyKeyword',
+	    url: _server.baseURL + 'searchOnlyKeyword',
 	    form: {
+	      stu_no: _popup.stu_no,
 	      search_topic: search_topic,
 	      keyword: keyword
 	    }
@@ -12305,8 +12313,9 @@
 	
 	function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
 	  request.post({
-	    url: baseURL + 'searchDoubleKeyword',
+	    url: _server.baseURL + 'searchDoubleKeyword',
 	    form: {
+	      stu_no: _popup.stu_no,
 	      search_topic: search_topic,
 	      keyword: keyword,
 	      other_keyword: other_keyword
@@ -12323,7 +12332,7 @@
 	function searchTime(search_topic, keyword, time_group, callback) {
 	  console.log(time_group);
 	  request.post({
-	    url: baseURL + 'searchTime',
+	    url: _server.baseURL + 'searchTime',
 	    form: {
 	      search_topic: search_topic,
 	      keyword: keyword,
@@ -12439,7 +12448,7 @@
 	  return new Promise(function (resolve) {
 	    var new_course_no = (0, _helper.addSpace_course_no)(course_no);
 	    request.post({
-	      url: baseURL + 'searchBySingleCourseNo',
+	      url: _server.baseURL + 'searchBySingleCourseNo',
 	      form: {
 	        course_no: new_course_no
 	      }
@@ -12456,7 +12465,7 @@
 	var searchByID_Group = function searchByID_Group(id_group) {
 	  return new Promise(function (resolve) {
 	    request.post({
-	      url: baseURL + 'searchByID_Group',
+	      url: _server.baseURL + 'searchByID_Group',
 	      form: {
 	        id_0: id_group[0].other_id,
 	        id_1: id_group[1].other_id,
@@ -12625,7 +12634,6 @@
 	exports.searchBySingleCourseNo = searchBySingleCourseNo;
 	exports.storeCourseInfo = storeCourseInfo;
 	exports.searchByID_Group = searchByID_Group;
-	exports.baseURL = baseURL;
 
 /***/ }),
 /* 338 */
