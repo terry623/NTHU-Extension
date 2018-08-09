@@ -93,7 +93,6 @@ function renderSearchResult(hits, callback) {
   callback();
 }
 
-// FIXME: keyword 都還沒有送 stu_no
 function searchOnlyKeyword(search_topic, keyword, callback) {
   request.post(
     {
@@ -164,6 +163,7 @@ function searchByKeyword(keyword, other_keyword, topic, callback) {
 
   if (other_keyword == 'NoNeedToChoose') {
     console.log(`search_topic:${search_topic},keyword:${keyword}`);
+    // TODO: 課程名稱搜尋加中英文
     searchOnlyKeyword(search_topic, keyword, callback);
   } else {
     console.log(
@@ -278,12 +278,12 @@ const searchByID_Group = id_group =>
 
 function dependOnType(topic) {
   $('.other_entry').hide();
+  // TODO: 提醒可以用打字的搜尋
   $('.ui.dropdown.search_entry_item')
     .dropdown('clear')
     .dropdown({
       fullTextSearch: 'exact',
     });
-  $('.ui.dropdown.search_entry_item');
   if (topic == '上課時間') $('#time_select_entry').show();
   else if (topic == '通識對象') $('#ge_people_entry').show();
   else if (topic == '通識類別') $('#ge_type_select_entry').show();

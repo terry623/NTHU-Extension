@@ -73,7 +73,6 @@ function removeTimeOfCourse(time_array) {
   });
 }
 
-// TODO: 改成存 Variable，這樣也不用每次清
 function clearAllTime() {
   chrome.storage.local.remove('time');
 }

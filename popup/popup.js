@@ -94,6 +94,10 @@ $('.ui.modal').modal({
 });
 $('.ui.secondary.menu').on('click', '.item', function() {
   if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
+    if ($(this).hasClass('recommendPage')) {
+      alert('此為內部測試版本，「推薦課程」尚未完成 !');
+      return;
+    }
     $(this)
       .addClass('active')
       .siblings('.item')
