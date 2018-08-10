@@ -42,7 +42,6 @@ function renderUserName() {
   );
 }
 
-// FIXME: #size_limit 若有兩數字，例如 70/70，斜線後面便為新生保留人數。因此要把參數 fresh_num 拿掉。
 function getPopulation(course_no) {
   let patt = /[A-Za-z]+/;
   let target = course_no.match(patt);

@@ -278,7 +278,6 @@ const searchByID_Group = id_group =>
 
 function dependOnType(topic) {
   $('.other_entry').hide();
-  // TODO: 提醒可以用打字的搜尋
   $('.ui.dropdown.search_entry_item')
     .dropdown('clear')
     .dropdown({

@@ -9383,7 +9383,6 @@
 	  });
 	}
 	
-	// FIXME: #size_limit 若有兩數字，例如 70/70，斜線後面便為新生保留人數。因此要把參數 fresh_num 拿掉。
 	function getPopulation(course_no) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt);
@@ -61946,7 +61945,6 @@
 	
 	function dependOnType(topic) {
 	  $('.other_entry').hide();
-	  // TODO: 提醒可以用打字的搜尋
 	  $('.ui.dropdown.search_entry_item').dropdown('clear').dropdown({
 	    fullTextSearch: 'exact'
 	  });
