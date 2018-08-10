@@ -43,7 +43,7 @@ function renderUserName() {
 }
 
 // FIXME: #size_limit 若有兩數字，例如 70/70，斜線後面便為新生保留人數。因此要把參數 fresh_num 拿掉。
-function getPopulation(course_no, fresh_num) {
+function getPopulation(course_no) {
   let patt = /[A-Za-z]+/;
   let target = course_no.match(patt);
   $('.fetch_people').text('Loading');
@@ -88,17 +88,24 @@ function getPopulation(course_no, fresh_num) {
             return $('td:nth-child(1) > div', this).text() == course_no;
           });
 
+          let fresh_num = 0;
           if ($(found).length == 0) $('.fetch_people').text('None');
           else {
             if (target[0] == 'GE' || target[0] == 'GEC') {
-              $('#size_limit').text($('td:nth-child(6) > div', found).text());
+              let size_limit = $('td:nth-child(6) > div', found).text();
+              const size_limit_array = size_limit.split('/');
+              if (size_limit_array.length > 1) fresh_num = size_limit_array[1];
+              $('#size_limit').text(size_limit_array[0]);
               $('#current_number').text(
                 $('td:nth-child(7) > div', found).text()
               );
               $('#remain').text($('td:nth-child(8) > div', found).text());
               $('#be_random').text($('td:nth-child(9) > div', found).text());
             } else {
-              $('#size_limit').text($('td:nth-child(5) > div', found).text());
+              let size_limit = $('td:nth-child(5) > div', found).text();
+              const size_limit_array = size_limit.split('/');
+              if (size_limit_array.length > 1) fresh_num = size_limit_array[1];
+              $('#size_limit').text(size_limit_array[0]);
               $('#current_number').text(
                 $('td:nth-child(6) > div', found).text()
               );
@@ -164,7 +171,7 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
             sort_weekday(time);
             let classroom = info.教室;
             if (classroom.length == 0) classroom.push('無');
-            getPopulation(course_no, info.新生保留人數);
+            getPopulation(course_no);
             $('.course_info.scrolling.content').attr('id', id);
 
             let teacher = [];

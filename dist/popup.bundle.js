@@ -9358,7 +9358,7 @@
 	
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 	
-	var iconv = __webpack_require__(338);
+	var iconv = __webpack_require__(337);
 	var request = __webpack_require__(385);
 	
 	
@@ -9384,7 +9384,7 @@
 	}
 	
 	// FIXME: #size_limit 若有兩數字，例如 70/70，斜線後面便為新生保留人數。因此要把參數 fresh_num 拿掉。
-	function getPopulation(course_no, fresh_num) {
+	function getPopulation(course_no) {
 	  var patt = /[A-Za-z]+/;
 	  var target = course_no.match(patt);
 	  $('.fetch_people').text('Loading');
@@ -9416,14 +9416,21 @@
 	          return $('td:nth-child(1) > div', this).text() == course_no;
 	        });
 	
+	        var fresh_num = 0;
 	        if ($(found).length == 0) $('.fetch_people').text('None');else {
 	          if (target[0] == 'GE' || target[0] == 'GEC') {
-	            $('#size_limit').text($('td:nth-child(6) > div', found).text());
+	            var size_limit = $('td:nth-child(6) > div', found).text();
+	            var size_limit_array = size_limit.split('/');
+	            if (size_limit_array.length > 1) fresh_num = size_limit_array[1];
+	            $('#size_limit').text(size_limit_array[0]);
 	            $('#current_number').text($('td:nth-child(7) > div', found).text());
 	            $('#remain').text($('td:nth-child(8) > div', found).text());
 	            $('#be_random').text($('td:nth-child(9) > div', found).text());
 	          } else {
-	            $('#size_limit').text($('td:nth-child(5) > div', found).text());
+	            var _size_limit = $('td:nth-child(5) > div', found).text();
+	            var _size_limit_array = _size_limit.split('/');
+	            if (_size_limit_array.length > 1) fresh_num = _size_limit_array[1];
+	            $('#size_limit').text(_size_limit_array[0]);
 	            $('#current_number').text($('td:nth-child(6) > div', found).text());
 	            $('#remain').text($('td:nth-child(7) > div', found).text());
 	            $('#be_random').text($('td:nth-child(8) > div', found).text());
@@ -9490,7 +9497,7 @@
 	          (0, _helper.sort_weekday)(time);
 	          var classroom = info.教室;
 	          if (classroom.length == 0) classroom.push('無');
-	          getPopulation(course_no, info.新生保留人數);
+	          getPopulation(course_no);
 	          $('.course_info.scrolling.content').attr('id', id);
 	
 	          var teacher = [];
@@ -11873,7 +11880,7 @@
 	
 	var _popup = __webpack_require__(328);
 	
-	var iconv = __webpack_require__(338);
+	var iconv = __webpack_require__(337);
 	var request = __webpack_require__(385);
 	
 	
@@ -12160,6 +12167,166 @@
 
 /***/ }),
 /* 337 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
+	
+	// Some environments don't have global Buffer (e.g. React Native).
+	// Solution would be installing npm modules "buffer" and "stream" explicitly.
+	var Buffer = __webpack_require__(339).Buffer;
+	
+	var bomHandling = __webpack_require__(340),
+	    iconv = module.exports;
+	
+	// All codecs and aliases are kept here, keyed by encoding name/alias.
+	// They are lazy loaded in `iconv.getCodec` from `encodings/index.js`.
+	iconv.encodings = null;
+	
+	// Characters emitted in case of error.
+	iconv.defaultCharUnicode = '�';
+	iconv.defaultCharSingleByte = '?';
+	
+	// Public API.
+	iconv.encode = function encode(str, encoding, options) {
+	    str = "" + (str || ""); // Ensure string.
+	
+	    var encoder = iconv.getEncoder(encoding, options);
+	
+	    var res = encoder.write(str);
+	    var trail = encoder.end();
+	    
+	    return (trail && trail.length > 0) ? Buffer.concat([res, trail]) : res;
+	}
+	
+	iconv.decode = function decode(buf, encoding, options) {
+	    if (typeof buf === 'string') {
+	        if (!iconv.skipDecodeWarning) {
+	            console.error('Iconv-lite warning: decode()-ing strings is deprecated. Refer to https://github.com/ashtuchkin/iconv-lite/wiki/Use-Buffers-when-decoding');
+	            iconv.skipDecodeWarning = true;
+	        }
+	
+	        buf = Buffer.from("" + (buf || ""), "binary"); // Ensure buffer.
+	    }
+	
+	    var decoder = iconv.getDecoder(encoding, options);
+	
+	    var res = decoder.write(buf);
+	    var trail = decoder.end();
+	
+	    return trail ? (res + trail) : res;
+	}
+	
+	iconv.encodingExists = function encodingExists(enc) {
+	    try {
+	        iconv.getCodec(enc);
+	        return true;
+	    } catch (e) {
+	        return false;
+	    }
+	}
+	
+	// Legacy aliases to convert functions
+	iconv.toEncoding = iconv.encode;
+	iconv.fromEncoding = iconv.decode;
+	
+	// Search for a codec in iconv.encodings. Cache codec data in iconv._codecDataCache.
+	iconv._codecDataCache = {};
+	iconv.getCodec = function getCodec(encoding) {
+	    if (!iconv.encodings)
+	        iconv.encodings = __webpack_require__(341); // Lazy load all encoding definitions.
+	    
+	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
+	    var enc = iconv._canonicalizeEncoding(encoding);
+	
+	    // Traverse iconv.encodings to find actual codec.
+	    var codecOptions = {};
+	    while (true) {
+	        var codec = iconv._codecDataCache[enc];
+	        if (codec)
+	            return codec;
+	
+	        var codecDef = iconv.encodings[enc];
+	
+	        switch (typeof codecDef) {
+	            case "string": // Direct alias to other encoding.
+	                enc = codecDef;
+	                break;
+	
+	            case "object": // Alias with options. Can be layered.
+	                for (var key in codecDef)
+	                    codecOptions[key] = codecDef[key];
+	
+	                if (!codecOptions.encodingName)
+	                    codecOptions.encodingName = enc;
+	                
+	                enc = codecDef.type;
+	                break;
+	
+	            case "function": // Codec itself.
+	                if (!codecOptions.encodingName)
+	                    codecOptions.encodingName = enc;
+	
+	                // The codec function must load all tables and return object with .encoder and .decoder methods.
+	                // It'll be called only once (for each different options object).
+	                codec = new codecDef(codecOptions, iconv);
+	
+	                iconv._codecDataCache[codecOptions.encodingName] = codec; // Save it to be reused later.
+	                return codec;
+	
+	            default:
+	                throw new Error("Encoding not recognized: '" + encoding + "' (searched as: '"+enc+"')");
+	        }
+	    }
+	}
+	
+	iconv._canonicalizeEncoding = function(encoding) {
+	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
+	    return (''+encoding).toLowerCase().replace(/:\d{4}$|[^0-9a-z]/g, "");
+	}
+	
+	iconv.getEncoder = function getEncoder(encoding, options) {
+	    var codec = iconv.getCodec(encoding),
+	        encoder = new codec.encoder(options, codec);
+	
+	    if (codec.bomAware && options && options.addBOM)
+	        encoder = new bomHandling.PrependBOM(encoder, options);
+	
+	    return encoder;
+	}
+	
+	iconv.getDecoder = function getDecoder(encoding, options) {
+	    var codec = iconv.getCodec(encoding),
+	        decoder = new codec.decoder(options, codec);
+	
+	    if (codec.bomAware && !(options && options.stripBOM === false))
+	        decoder = new bomHandling.StripBOM(decoder, options);
+	
+	    return decoder;
+	}
+	
+	
+	// Load extensions in Node. All of them are omitted in Browserify build via 'browser' field in package.json.
+	var nodeVer = typeof process !== 'undefined' && process.versions && process.versions.node;
+	if (nodeVer) {
+	
+	    // Load streaming support in Node v0.10+
+	    var nodeVerArr = nodeVer.split(".").map(Number);
+	    if (nodeVerArr[0] > 0 || nodeVerArr[1] >= 10) {
+	        __webpack_require__(360)(iconv);
+	    }
+	
+	    // Load Node primitive extensions.
+	    __webpack_require__(384)(iconv);
+	}
+	
+	if (false) {
+	    console.error("iconv-lite warning: javascript files use encoding different from utf-8. See https://github.com/ashtuchkin/iconv-lite/wiki/Javascript-source-file-encodings for more info.");
+	}
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338)))
+
+/***/ }),
+/* 338 */
 /***/ (function(module, exports) {
 
 	// shim for using process in browser
@@ -12349,166 +12516,6 @@
 
 
 /***/ }),
-/* 338 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
-	
-	// Some environments don't have global Buffer (e.g. React Native).
-	// Solution would be installing npm modules "buffer" and "stream" explicitly.
-	var Buffer = __webpack_require__(339).Buffer;
-	
-	var bomHandling = __webpack_require__(340),
-	    iconv = module.exports;
-	
-	// All codecs and aliases are kept here, keyed by encoding name/alias.
-	// They are lazy loaded in `iconv.getCodec` from `encodings/index.js`.
-	iconv.encodings = null;
-	
-	// Characters emitted in case of error.
-	iconv.defaultCharUnicode = '�';
-	iconv.defaultCharSingleByte = '?';
-	
-	// Public API.
-	iconv.encode = function encode(str, encoding, options) {
-	    str = "" + (str || ""); // Ensure string.
-	
-	    var encoder = iconv.getEncoder(encoding, options);
-	
-	    var res = encoder.write(str);
-	    var trail = encoder.end();
-	    
-	    return (trail && trail.length > 0) ? Buffer.concat([res, trail]) : res;
-	}
-	
-	iconv.decode = function decode(buf, encoding, options) {
-	    if (typeof buf === 'string') {
-	        if (!iconv.skipDecodeWarning) {
-	            console.error('Iconv-lite warning: decode()-ing strings is deprecated. Refer to https://github.com/ashtuchkin/iconv-lite/wiki/Use-Buffers-when-decoding');
-	            iconv.skipDecodeWarning = true;
-	        }
-	
-	        buf = Buffer.from("" + (buf || ""), "binary"); // Ensure buffer.
-	    }
-	
-	    var decoder = iconv.getDecoder(encoding, options);
-	
-	    var res = decoder.write(buf);
-	    var trail = decoder.end();
-	
-	    return trail ? (res + trail) : res;
-	}
-	
-	iconv.encodingExists = function encodingExists(enc) {
-	    try {
-	        iconv.getCodec(enc);
-	        return true;
-	    } catch (e) {
-	        return false;
-	    }
-	}
-	
-	// Legacy aliases to convert functions
-	iconv.toEncoding = iconv.encode;
-	iconv.fromEncoding = iconv.decode;
-	
-	// Search for a codec in iconv.encodings. Cache codec data in iconv._codecDataCache.
-	iconv._codecDataCache = {};
-	iconv.getCodec = function getCodec(encoding) {
-	    if (!iconv.encodings)
-	        iconv.encodings = __webpack_require__(341); // Lazy load all encoding definitions.
-	    
-	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
-	    var enc = iconv._canonicalizeEncoding(encoding);
-	
-	    // Traverse iconv.encodings to find actual codec.
-	    var codecOptions = {};
-	    while (true) {
-	        var codec = iconv._codecDataCache[enc];
-	        if (codec)
-	            return codec;
-	
-	        var codecDef = iconv.encodings[enc];
-	
-	        switch (typeof codecDef) {
-	            case "string": // Direct alias to other encoding.
-	                enc = codecDef;
-	                break;
-	
-	            case "object": // Alias with options. Can be layered.
-	                for (var key in codecDef)
-	                    codecOptions[key] = codecDef[key];
-	
-	                if (!codecOptions.encodingName)
-	                    codecOptions.encodingName = enc;
-	                
-	                enc = codecDef.type;
-	                break;
-	
-	            case "function": // Codec itself.
-	                if (!codecOptions.encodingName)
-	                    codecOptions.encodingName = enc;
-	
-	                // The codec function must load all tables and return object with .encoder and .decoder methods.
-	                // It'll be called only once (for each different options object).
-	                codec = new codecDef(codecOptions, iconv);
-	
-	                iconv._codecDataCache[codecOptions.encodingName] = codec; // Save it to be reused later.
-	                return codec;
-	
-	            default:
-	                throw new Error("Encoding not recognized: '" + encoding + "' (searched as: '"+enc+"')");
-	        }
-	    }
-	}
-	
-	iconv._canonicalizeEncoding = function(encoding) {
-	    // Canonicalize encoding name: strip all non-alphanumeric chars and appended year.
-	    return (''+encoding).toLowerCase().replace(/:\d{4}$|[^0-9a-z]/g, "");
-	}
-	
-	iconv.getEncoder = function getEncoder(encoding, options) {
-	    var codec = iconv.getCodec(encoding),
-	        encoder = new codec.encoder(options, codec);
-	
-	    if (codec.bomAware && options && options.addBOM)
-	        encoder = new bomHandling.PrependBOM(encoder, options);
-	
-	    return encoder;
-	}
-	
-	iconv.getDecoder = function getDecoder(encoding, options) {
-	    var codec = iconv.getCodec(encoding),
-	        decoder = new codec.decoder(options, codec);
-	
-	    if (codec.bomAware && !(options && options.stripBOM === false))
-	        decoder = new bomHandling.StripBOM(decoder, options);
-	
-	    return decoder;
-	}
-	
-	
-	// Load extensions in Node. All of them are omitted in Browserify build via 'browser' field in package.json.
-	var nodeVer = typeof process !== 'undefined' && process.versions && process.versions.node;
-	if (nodeVer) {
-	
-	    // Load streaming support in Node v0.10+
-	    var nodeVerArr = nodeVer.split(".").map(Number);
-	    if (nodeVerArr[0] > 0 || nodeVerArr[1] >= 10) {
-	        __webpack_require__(360)(iconv);
-	    }
-	
-	    // Load Node primitive extensions.
-	    __webpack_require__(384)(iconv);
-	}
-	
-	if (false) {
-	    console.error("iconv-lite warning: javascript files use encoding different from utf-8. See https://github.com/ashtuchkin/iconv-lite/wiki/Javascript-source-file-encodings for more info.");
-	}
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337)))
-
-/***/ }),
 /* 339 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12590,7 +12597,7 @@
 	
 	module.exports = safer
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338)))
 
 /***/ }),
 /* 340 */
@@ -16853,7 +16860,7 @@
 	  }
 	  return -1;
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(338)))
 
 /***/ }),
 /* 366 */
@@ -16904,7 +16911,7 @@
 	}
 	
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338)))
 
 /***/ }),
 /* 367 */
@@ -18029,7 +18036,7 @@
 	  this.end();
 	  cb(err);
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337), __webpack_require__(375).setImmediate, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338), __webpack_require__(375).setImmediate, (function() { return this; }())))
 
 /***/ }),
 /* 375 */
@@ -18292,7 +18299,7 @@
 	    attachTo.clearImmediate = clearImmediate;
 	}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(338)))
 
 /***/ }),
 /* 377 */
@@ -23717,7 +23724,7 @@
 	  return Object.prototype.hasOwnProperty.call(obj, prop);
 	}
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(338)))
 
 /***/ }),
 /* 404 */
@@ -23807,7 +23814,7 @@
 	exports.version = version
 	exports.defer = defer
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(375).setImmediate, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(375).setImmediate, __webpack_require__(338)))
 
 /***/ }),
 /* 407 */
@@ -27584,7 +27591,7 @@
 	Request.prototype.toJSON = requestToJSON
 	module.exports = Request
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338)))
 
 /***/ }),
 /* 438 */
@@ -28009,7 +28016,7 @@
 		'via'
 	]
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer, (function() { return this; }()), __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer, (function() { return this; }()), __webpack_require__(338)))
 
 /***/ }),
 /* 440 */
@@ -28320,7 +28327,7 @@
 		}
 	}
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337), __webpack_require__(331).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338), __webpack_require__(331).Buffer, (function() { return this; }())))
 
 /***/ }),
 /* 442 */
@@ -29085,7 +29092,7 @@
 	util.inherits(InflateRaw, Zlib);
 	util.inherits(Unzip, Zlib);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer, __webpack_require__(338)))
 
 /***/ }),
 /* 447 */
@@ -29328,7 +29335,7 @@
 	
 	exports.Zlib = Zlib;
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337), __webpack_require__(331).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338), __webpack_require__(331).Buffer))
 
 /***/ }),
 /* 448 */
@@ -35999,7 +36006,7 @@
 	  return Object.prototype.hasOwnProperty.call(obj, prop);
 	}
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(338)))
 
 /***/ }),
 /* 461 */
@@ -36596,7 +36603,7 @@
 	  return new RequestSigner(request, credentials).sign()
 	}
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer, __webpack_require__(338)))
 
 /***/ }),
 /* 465 */
@@ -37272,7 +37279,7 @@
 	
 	module.exports = _setExports(process.env.NODE_NDEBUG);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(331).Buffer, __webpack_require__(338)))
 
 /***/ }),
 /* 469 */
@@ -50973,7 +50980,7 @@
 		return (ret);
 	}
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338)))
 
 /***/ }),
 /* 510 */
@@ -52252,7 +52259,7 @@
 	    }
 	;
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338)))
 
 /***/ }),
 /* 517 */
@@ -52643,7 +52650,7 @@
 	
 	module.exports = getProxyFromURI
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338)))
 
 /***/ }),
 /* 523 */
@@ -60973,7 +60980,7 @@
 	  }
 	}
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(375).setImmediate, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(375).setImmediate, __webpack_require__(338)))
 
 /***/ }),
 /* 608 */
@@ -61565,7 +61572,7 @@
 	}
 	exports.debug = debug // for test
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338)))
 
 /***/ }),
 /* 611 */
@@ -61608,7 +61615,7 @@
 	
 	//# sourceMappingURL=performance-now.js.map
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(337)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(338)))
 
 /***/ }),
 /* 612 */
