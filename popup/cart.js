@@ -131,7 +131,6 @@ $('#multiple_class_bySingle').on('click', '.item', function() {
   searchByNo_store_getCourseInfo(course_no);
 });
 $('#cart_submit').on('click', function() {
-  // alert("此為內部測試版本，選完課請到「預排系統」查看 !");
   let childNum = $('#course_order_list').attr('course_num');
   if (childNum > 0) {
     let list = document.getElementById('course_order_list');

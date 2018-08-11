@@ -9065,15 +9065,16 @@
 	$('.ui.modal').modal({
 	  inverted: true
 	});
+	// TODO: 加上新手教學
 	$('#introduce').on('click', '.actionLink', function () {
 	  if ($(this).hasClass('link1')) {
-	    alert('Link1!');
+	    alert('新手教學 ( 搜尋課程 )');
 	  } else if ($(this).hasClass('link2')) {
-	    alert('Link2!');
+	    alert('新手教學 ( 目前選課 )');
 	  } else if ($(this).hasClass('link3')) {
-	    alert('Link3!');
+	    alert('新手教學 ( 推薦課程 )');
 	  } else if ($(this).hasClass('link4')) {
-	    alert('Link4!');
+	    alert('寄 Email !');
 	  }
 	});
 	$('.ui.secondary.menu').on('click', '.item', function () {
@@ -62501,7 +62502,6 @@
 	  (0, _api.searchByNo_store_getCourseInfo)(course_no);
 	});
 	$('#cart_submit').on('click', function () {
-	  // alert("此為內部測試版本，選完課請到「預排系統」查看 !");
 	  var childNum = $('#course_order_list').attr('course_num');
 	  if (childNum > 0) {
 	    var list = document.getElementById('course_order_list');

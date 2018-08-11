@@ -92,15 +92,16 @@ $('#change_phase').dropdown({
 $('.ui.modal').modal({
   inverted: true,
 });
+// TODO: 加上新手教學
 $('#introduce').on('click', '.actionLink', function() {
   if ($(this).hasClass('link1')) {
-    alert('Link1!');
+    alert('新手教學 ( 搜尋課程 )');
   } else if ($(this).hasClass('link2')) {
-    alert('Link2!');
+    alert('新手教學 ( 目前選課 )');
   } else if ($(this).hasClass('link3')) {
-    alert('Link3!');
+    alert('新手教學 ( 推薦課程 )');
   } else if ($(this).hasClass('link4')) {
-    alert('Link4!');
+    alert('寄 Email !');
   }
 });
 $('.ui.secondary.menu').on('click', '.item', function() {
