@@ -162,7 +162,6 @@ function searchByKeyword(keyword, other_keyword, topic, callback) {
 
   if (other_keyword == 'NoNeedToChoose') {
     console.log(`search_topic:${search_topic},keyword:${keyword}`);
-    // TODO: 課程名稱搜尋加中英文
     searchOnlyKeyword(search_topic, keyword, callback);
   } else {
     console.log(

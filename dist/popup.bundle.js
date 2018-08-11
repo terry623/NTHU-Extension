@@ -9065,10 +9065,21 @@
 	$('.ui.modal').modal({
 	  inverted: true
 	});
+	$('#introduce').on('click', '.actionLink', function () {
+	  if ($(this).hasClass('link1')) {
+	    alert('Link1!');
+	  } else if ($(this).hasClass('link2')) {
+	    alert('Link2!');
+	  } else if ($(this).hasClass('link3')) {
+	    alert('Link3!');
+	  } else if ($(this).hasClass('link4')) {
+	    alert('Link4!');
+	  }
+	});
 	$('.ui.secondary.menu').on('click', '.item', function () {
 	  if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
 	    if ($(this).hasClass('recommendPage')) {
-	      alert('此為內部測試版本，「推薦課程」尚未完成 !');
+	      alert('「推薦課程」尚未推出 !');
 	      return;
 	    }
 	    $(this).addClass('active').siblings('.item').removeClass('active');
@@ -61815,7 +61826,6 @@
 	
 	  if (other_keyword == 'NoNeedToChoose') {
 	    console.log('search_topic:' + search_topic + ',keyword:' + keyword);
-	    // TODO: 課程名稱搜尋加中英文
 	    searchOnlyKeyword(search_topic, keyword, callback);
 	  } else {
 	    console.log('search_topic:' + search_topic + ',keyword:' + keyword + ',other_keyword:' + other_keyword);

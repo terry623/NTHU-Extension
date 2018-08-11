@@ -92,10 +92,21 @@ $('#change_phase').dropdown({
 $('.ui.modal').modal({
   inverted: true,
 });
+$('#introduce').on('click', '.actionLink', function() {
+  if ($(this).hasClass('link1')) {
+    alert('Link1!');
+  } else if ($(this).hasClass('link2')) {
+    alert('Link2!');
+  } else if ($(this).hasClass('link3')) {
+    alert('Link3!');
+  } else if ($(this).hasClass('link4')) {
+    alert('Link4!');
+  }
+});
 $('.ui.secondary.menu').on('click', '.item', function() {
   if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
     if ($(this).hasClass('recommendPage')) {
-      alert('此為內部測試版本，「推薦課程」尚未完成 !');
+      alert('「推薦課程」尚未推出 !');
       return;
     }
     $(this)
