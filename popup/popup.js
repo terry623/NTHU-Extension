@@ -101,7 +101,8 @@ $('#introduce').on('click', '.actionLink', function() {
   } else if ($(this).hasClass('link3')) {
     alert('新手教學 ( 推薦課程 )');
   } else if ($(this).hasClass('link4')) {
-    alert('寄 Email !');
+    // FIXME: 要 CC 給賴
+    window.open('mailto:terry92516@gmail.com');
   }
 });
 $('.ui.secondary.menu').on('click', '.item', function() {
