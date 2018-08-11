@@ -173,8 +173,8 @@ function courseAddSpace(course_no) {
 function translateTopic(topic) {
   let result;
   switch (topic) {
-    case '科號':
-      result = '科號';
+    case '開課代碼':
+      result = '開課代碼';
       break;
     case '課程名稱':
       result = '課程中文名稱';

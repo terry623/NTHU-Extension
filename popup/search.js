@@ -159,7 +159,6 @@ function searchByKeyword(keyword, other_keyword, topic, callback) {
   $('#search_result_body').empty();
   $('#loading').addClass('active');
   let search_topic = translateTopic(topic);
-  if (search_topic == '科號') keyword = addSpace_course_no(keyword);
 
   if (other_keyword == 'NoNeedToChoose') {
     console.log(`search_topic:${search_topic},keyword:${keyword}`);
@@ -283,7 +282,8 @@ function dependOnType(topic) {
     .dropdown({
       fullTextSearch: 'exact',
     });
-  if (topic == '上課時間') $('#time_select_entry').show();
+  if (topic == '開課代碼') $('#course_code_entry').show();
+  else if (topic == '上課時間') $('#time_select_entry').show();
   else if (topic == '通識對象') $('#ge_people_entry').show();
   else if (topic == '通識類別') $('#ge_type_select_entry').show();
   else if (topic == '系必選修') $('#dept_entry').show();
@@ -296,7 +296,9 @@ function clickToSearch() {
   let topic = $('#topic_name').text();
   let keyword = $('#keyword').val();
   let other_keyword = 'NoNeedToChoose';
-  if (topic == '上課時間') {
+  if (topic == '開課代碼') {
+    other_keyword = $('#course_code_text').val();
+  } else if (topic == '上課時間') {
     other_keyword = $('#time_select_text').val();
   } else if (topic == '通識對象') {
     other_keyword = $('#ge_people_text').val();

@@ -9171,8 +9171,8 @@
 	function translateTopic(topic) {
 	  var result = void 0;
 	  switch (topic) {
-	    case '科號':
-	      result = '科號';
+	    case '開課代碼':
+	      result = '開課代碼';
 	      break;
 	    case '課程名稱':
 	      result = '課程中文名稱';
@@ -61812,7 +61812,6 @@
 	  $('#search_result_body').empty();
 	  $('#loading').addClass('active');
 	  var search_topic = (0, _helper.translateTopic)(topic);
-	  if (search_topic == '科號') keyword = (0, _helper.addSpace_course_no)(keyword);
 	
 	  if (other_keyword == 'NoNeedToChoose') {
 	    console.log('search_topic:' + search_topic + ',keyword:' + keyword);
@@ -61948,14 +61947,16 @@
 	  $('.ui.dropdown.search_entry_item').dropdown('clear').dropdown({
 	    fullTextSearch: 'exact'
 	  });
-	  if (topic == '上課時間') $('#time_select_entry').show();else if (topic == '通識對象') $('#ge_people_entry').show();else if (topic == '通識類別') $('#ge_type_select_entry').show();else if (topic == '系必選修') $('#dept_entry').show();else if (topic == '學分學程') $('#program_entry').show();else if (topic == '第一二專長') $('#skill_entry').show();else $('#main_other_entry').show();
+	  if (topic == '開課代碼') $('#course_code_entry').show();else if (topic == '上課時間') $('#time_select_entry').show();else if (topic == '通識對象') $('#ge_people_entry').show();else if (topic == '通識類別') $('#ge_type_select_entry').show();else if (topic == '系必選修') $('#dept_entry').show();else if (topic == '學分學程') $('#program_entry').show();else if (topic == '第一二專長') $('#skill_entry').show();else $('#main_other_entry').show();
 	}
 	
 	function clickToSearch() {
 	  var topic = $('#topic_name').text();
 	  var keyword = $('#keyword').val();
 	  var other_keyword = 'NoNeedToChoose';
-	  if (topic == '上課時間') {
+	  if (topic == '開課代碼') {
+	    other_keyword = $('#course_code_text').val();
+	  } else if (topic == '上課時間') {
 	    other_keyword = $('#time_select_text').val();
 	  } else if (topic == '通識對象') {
 	    other_keyword = $('#ge_people_text').val();
