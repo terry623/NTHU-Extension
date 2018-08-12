@@ -2,7 +2,11 @@ var iconv = require('iconv-lite');
 var request = require('request');
 import { transform } from './pdf2html';
 import { calculateUserGrade, getSimilarities, saveUserGrade } from './server';
-import { searchBySingleCourseNo, storeCourseInfo } from './search';
+import {
+  searchBySingleCourseNo,
+  storeCourseInfo,
+  searchByID_Group,
+} from './search';
 import {
   course_table,
   removeLongCourseName,
@@ -10,6 +14,7 @@ import {
   miniMessageAlert,
 } from './helper';
 import { acix, stu_no, year, semester } from './popup';
+import { num_of_each_similar } from './recommend';
 
 function renderUserName() {
   request(
@@ -141,12 +146,24 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
           miniMessageAlert('系統錯誤', '請登入或重新登入校務資訊系統');
         } else {
           chrome.storage.local.get('course', items => {
-            getSimilarities(id, info => {
+            getSimilarities(id, async info => {
               $('#similar').empty();
-              for (let each of info) {
+              let id_group = [];
+              for (let i = 0; i < num_of_each_similar; i++) {
+                id_group.push(info[i].other);
+              }
+              const hits_group = await searchByID_Group(id_group);
+
+              // FIXME: 要排好版且過濾資料，參考 Render Course Info
+              for (let each of hits_group) {
+                const source = each._source;
                 let similar_course = `<div class="title">
-                    <i class="dropdown icon"></i>${each.other}</div>
-                <div class="content">${each.percent}</div>`;
+                <i class="dropdown icon"></i>${source.科號} ${
+                  source.課程中文名稱
+                }</div><div class="content">
+                教師: ${source.教師}<br/>
+                時間: ${source.時間}<br/>
+                地點: ${source.教室}</div>`;
                 $('#similar').append(similar_course);
               }
             });

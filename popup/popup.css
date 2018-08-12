@@ -20,7 +20,7 @@ a:focus {
 
 #clicktosearch {
   width: 120px;
-  margin-top: 0px !important;
+  margin-top: 3px !important;
 }
 
 #choose_type_icon {
@@ -47,7 +47,7 @@ a:focus {
 }
 
 #search_result_page {
-  margin-top: 70px;
+  margin-top: 88px;
 }
 
 .info.description {

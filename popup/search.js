@@ -253,15 +253,16 @@ const searchBySingleCourseNo = course_no =>
     );
   });
 
+// FIXME: 這裡原本是 id_group[0].other_id，之後推薦系統要注意這邊
 const searchByID_Group = id_group =>
   new Promise(resolve => {
     request.post(
       {
         url: `${baseURL}searchByID_Group`,
         form: {
-          id_0: id_group[0].other_id,
-          id_1: id_group[1].other_id,
-          id_2: id_group[2].other_id,
+          id_0: id_group[0],
+          id_1: id_group[1],
+          id_2: id_group[2],
         },
       },
       (err, response, body) => {

@@ -1,6 +1,5 @@
 window._crypto = null;
 import { initDrift } from './drift';
-// TODO: 切換到別頁，要把 drift 隱藏。切換回首頁，要讓右下角出現，而不是整個 Sidebar
 initDrift();
 import { getUrlVars } from './helper';
 import { renderUserName, getResultCourse, getGrade } from './api';
@@ -128,28 +127,28 @@ $('.ui.secondary.menu').on('click', '.item', function() {
       t.not('.choosePage').hide();
       $('#change_school_table').show();
     } else if ($(this).hasClass('recommendPage')) {
-      t.not('.recommendPage').hide();
-      before_hits_group.length = 0;
-      compare_group.length = 0;
-      let content_group = [];
-      getRecommendPage(() => {
-        // FIXME: 這裡的限制條件有改過
-        // if (
-        //   before_hits_group.length <=
-        //   num_of_old_course * num_of_each_similar
-        // ) {
-        toStorage((content, count, compare_value) => {
-          content_group.push({ content, compare_value });
-          // FIXME: 這裡的限制條件有改過
-          if (count == before_hits_group.length - 1) {
-            content_group.sort((a, b) => b.compare_value - a.compare_value);
-            for (let data of content_group)
-              $('#recommend_list').append(data.content);
-            $('#recommend_loading').removeClass('active');
-          }
-        });
-        // }
-      });
+      // t.not('.recommendPage').hide();
+      // before_hits_group.length = 0;
+      // compare_group.length = 0;
+      // let content_group = [];
+      // getRecommendPage(() => {
+      //   // FIXME: 這裡的限制條件有改過
+      //   // if (
+      //   //   before_hits_group.length <=
+      //   //   num_of_old_course * num_of_each_similar
+      //   // ) {
+      //   toStorage((content, count, compare_value) => {
+      //     content_group.push({ content, compare_value });
+      //     // FIXME: 這裡的限制條件有改過
+      //     if (count == before_hits_group.length - 1) {
+      //       content_group.sort((a, b) => b.compare_value - a.compare_value);
+      //       for (let data of content_group)
+      //         $('#recommend_list').append(data.content);
+      //       $('#recommend_loading').removeClass('active');
+      //     }
+      //   });
+      //   // }
+      // });
     }
   }
 });
