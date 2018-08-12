@@ -35,7 +35,7 @@ function renderUserName() {
             temp
           );
           let welcome = `你選到好課了嗎，${found.text()} ?`;
-          $('#user').prepend(welcome);
+          $('#user').text(welcome);
         }
       }
     }

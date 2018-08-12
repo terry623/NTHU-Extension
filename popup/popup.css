@@ -98,3 +98,7 @@ a:focus {
 #cart_submit {
   margin-right: 5px;
 }
+
+.not-active {
+  pointer-events: none;
+}

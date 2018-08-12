@@ -9065,19 +9065,9 @@
 	$('.ui.modal').modal({
 	  inverted: true
 	});
-	// TODO: 加上新手教學
-	$('#introduce').on('click', '.actionLink', function () {
-	  if ($(this).hasClass('link1')) {
-	    alert('新手教學 ( 搜尋課程 )');
-	  } else if ($(this).hasClass('link2')) {
-	    alert('新手教學 ( 目前選課 )');
-	  } else if ($(this).hasClass('link3')) {
-	    alert('新手教學 ( 推薦課程 )');
-	  } else if ($(this).hasClass('link4')) {
-	    // FIXME: 要 CC 給賴
-	    window.open('mailto:terry92516@gmail.com');
-	  }
-	});
+	// $('#introduce').on('hover', '.actionLink', function() {
+	//   $(this).css('cursor', 'pointer');
+	// });
 	$('.ui.secondary.menu').on('click', '.item', function () {
 	  if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
 	    if ($(this).hasClass('recommendPage')) {
@@ -9390,7 +9380,7 @@
 	      } else {
 	        var found = $('div > form > table:nth-child(2) > tbody > tr:nth-child(1) > td:nth-child(4)', temp);
 	        var welcome = '\u4F60\u9078\u5230\u597D\u8AB2\u4E86\u55CE\uFF0C' + found.text() + ' ?';
-	        $('#user').prepend(welcome);
+	        $('#user').text(welcome);
 	      }
 	    }
 	  });
