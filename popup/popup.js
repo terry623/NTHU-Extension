@@ -1,4 +1,7 @@
 window._crypto = null;
+import { initDrift } from './drift';
+// TODO: 切換到別頁，要把 drift 隱藏。切換回首頁，要讓右下角出現，而不是整個 Sidebar
+initDrift();
 import { getUrlVars } from './helper';
 import { renderUserName, getResultCourse, getGrade } from './api';
 import { getCart } from './cart';
@@ -110,8 +113,16 @@ $('.ui.secondary.menu').on('click', '.item', function() {
     t.show();
     $('#change_school_table').hide();
 
-    if ($(this).hasClass('homePage')) t.not('.homePage').hide();
-    else if ($(this).hasClass('searchPage')) t.not('.searchPage').hide();
+    drift.on('ready', function(api, payload) {
+      api.sidebar.close();
+    });
+
+    if ($(this).hasClass('homePage')) {
+      t.not('.homePage').hide();
+      drift.on('ready', function(api, payload) {
+        api.sidebar.open();
+      });
+    } else if ($(this).hasClass('searchPage')) t.not('.searchPage').hide();
     else if ($(this).hasClass('choosePage')) {
       t.not('.choosePage').hide();
       $('#change_school_table').show();

@@ -44,9 +44,13 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	__webpack_require__(2);
+	
+	var _drift = __webpack_require__(617);
+	
+	var drift = _interopRequireWildcard(_drift);
 	
 	var _popup = __webpack_require__(328);
 	
@@ -8992,6 +8996,8 @@
 	  };
 	}();
 	
+	var _drift = __webpack_require__(617);
+	
 	var _helper = __webpack_require__(329);
 	
 	var _api = __webpack_require__(330);
@@ -9007,6 +9013,9 @@
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 	
 	window._crypto = null;
+	
+	// TODO: 切換到別頁，要把 drift 隱藏。切換回首頁，要讓右下角出現，而不是整個 Sidebar
+	(0, _drift.initDrift)();
 	
 	
 	var year = '107';
@@ -9080,7 +9089,16 @@
 	    t.show();
 	    $('#change_school_table').hide();
 	
-	    if ($(this).hasClass('homePage')) t.not('.homePage').hide();else if ($(this).hasClass('searchPage')) t.not('.searchPage').hide();else if ($(this).hasClass('choosePage')) {
+	    drift.on('ready', function (api, payload) {
+	      api.sidebar.close();
+	    });
+	
+	    if ($(this).hasClass('homePage')) {
+	      t.not('.homePage').hide();
+	      drift.on('ready', function (api, payload) {
+	        api.sidebar.open();
+	      });
+	    } else if ($(this).hasClass('searchPage')) t.not('.searchPage').hide();else if ($(this).hasClass('choosePage')) {
 	      t.not('.choosePage').hide();
 	      $('#change_school_table').show();
 	    } else if ($(this).hasClass('recommendPage')) {
@@ -63198,6 +63216,47 @@
 	exports.compare_group = compare_group;
 	exports.num_of_old_course = num_of_old_course;
 	exports.num_of_each_similar = num_of_each_similar;
+
+/***/ }),
+/* 617 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	function initDrift() {
+	  !function () {
+	    var t = window.driftt = window.drift = window.driftt || [];
+	    if (!t.init) {
+	      if (t.invoked) return void (window.console && console.error && console.error('Drift snippet included twice.'));
+	      t.invoked = !0, t.methods = ['identify', 'config', 'track', 'reset', 'debug', 'show', 'ping', 'page', 'hide', 'off', 'on'], t.factory = function (e) {
+	        return function () {
+	          var n = Array.prototype.slice.call(arguments);
+	          return n.unshift(e), t.push(n), t;
+	        };
+	      }, t.methods.forEach(function (e) {
+	        t[e] = t.factory(e);
+	      }), t.load = function (t) {
+	        var e = 3e5,
+	            n = Math.ceil(new Date() / e) * e,
+	            o = document.createElement('script');
+	        o.type = 'text/javascript', o.async = !0, o.crossorigin = 'anonymous', o.src = 'https://js.driftt.com/include/' + n + '/' + t + '.js';
+	        var i = document.getElementsByTagName('script')[0];
+	        i.parentNode.insertBefore(o, i);
+	      };
+	    }
+	  }();
+	  drift.SNIPPET_VERSION = '0.3.1';
+	  drift.load('etd922wyz5fx');
+	
+	  drift.on('ready', function (api, payload) {
+	    api.sidebar.open();
+	  });
+	}
+	
+	exports.initDrift = initDrift;
 
 /***/ })
 /******/ ]);
