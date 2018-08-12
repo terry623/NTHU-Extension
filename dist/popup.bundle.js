@@ -9091,12 +9091,13 @@
 	
 	    drift.on('ready', function (api, payload) {
 	      api.sidebar.close();
+	      api.widget.hide();
 	    });
 	
 	    if ($(this).hasClass('homePage')) {
 	      t.not('.homePage').hide();
 	      drift.on('ready', function (api, payload) {
-	        api.sidebar.open();
+	        api.widget.show();
 	      });
 	    } else if ($(this).hasClass('searchPage')) t.not('.searchPage').hide();else if ($(this).hasClass('choosePage')) {
 	      t.not('.choosePage').hide();
