@@ -9090,13 +9090,13 @@
 	  });
 	});
 	
-	chrome.storage.local.clear(function () {
-	  console.log('Clear Local Data');
-	  var error = chrome.runtime.lastError;
-	  if (error) {
-	    console.error(error);
-	  }
-	});
+	// chrome.storage.local.clear(() => {
+	//   console.log('Clear Local Data');
+	//   let error = chrome.runtime.lastError;
+	//   if (error) {
+	//     console.error(error);
+	//   }
+	// });
 	
 	$('.ui.accordion').accordion();
 	$('.ui.dropdown').dropdown();
@@ -9500,7 +9500,7 @@
 	        chrome.storage.local.get('course', function (items) {
 	          (0, _server.getSimilarities)(id, function () {
 	            var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(info) {
-	              var id_group, i, hits_group, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, each, source, similar_course;
+	              var id_group, i, hits_group, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, each, source, _course_no, _time, _classroom, _teacher, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _each, similar_course;
 	
 	              return regeneratorRuntime.wrap(function _callee$(_context) {
 	                while (1) {
@@ -9517,59 +9517,125 @@
 	
 	                    case 5:
 	                      hits_group = _context.sent;
-	
-	
-	                      // FIXME: 要排好版且過濾資料，參考 Render Course Info
 	                      _iteratorNormalCompletion = true;
 	                      _didIteratorError = false;
 	                      _iteratorError = undefined;
 	                      _context.prev = 9;
-	                      for (_iterator = hits_group[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                        each = _step.value;
-	                        source = each._source;
-	                        similar_course = '<div class="title">\n                <i class="dropdown icon"></i>' + source.科號 + ' ' + source.課程中文名稱 + '</div><div class="content">\n                \u6559\u5E2B: ' + source.教師 + '<br/>\n                \u6642\u9593: ' + source.時間 + '<br/>\n                \u5730\u9EDE: ' + source.教室 + '</div>';
+	                      _iterator = hits_group[Symbol.iterator]();
 	
-	                        $('#similar').append(similar_course);
+	                    case 11:
+	                      if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+	                        _context.next = 47;
+	                        break;
 	                      }
-	                      _context.next = 17;
+	
+	                      each = _step.value;
+	                      source = each._source;
+	                      _course_no = source.科號;
+	                      _time = source.時間;
+	
+	                      if (_time.length == 0) _time.push('無');
+	                      (0, _helper.sort_weekday)(_time);
+	
+	                      _classroom = source.教室;
+	
+	                      if (_classroom.length == 0) _classroom.push('無');
+	
+	                      _teacher = [];
+	                      _iteratorNormalCompletion2 = true;
+	                      _didIteratorError2 = false;
+	                      _iteratorError2 = undefined;
+	                      _context.prev = 24;
+	
+	                      for (_iterator2 = source.教師[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                        _each = _step2.value;
+	                        _teacher.push(_each.split('\t')[0]);
+	                      }_context.next = 32;
 	                      break;
 	
-	                    case 13:
-	                      _context.prev = 13;
-	                      _context.t0 = _context['catch'](9);
-	                      _didIteratorError = true;
-	                      _iteratorError = _context.t0;
+	                    case 28:
+	                      _context.prev = 28;
+	                      _context.t0 = _context['catch'](24);
+	                      _didIteratorError2 = true;
+	                      _iteratorError2 = _context.t0;
 	
-	                    case 17:
-	                      _context.prev = 17;
-	                      _context.prev = 18;
+	                    case 32:
+	                      _context.prev = 32;
+	                      _context.prev = 33;
+	
+	                      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                        _iterator2.return();
+	                      }
+	
+	                    case 35:
+	                      _context.prev = 35;
+	
+	                      if (!_didIteratorError2) {
+	                        _context.next = 38;
+	                        break;
+	                      }
+	
+	                      throw _iteratorError2;
+	
+	                    case 38:
+	                      return _context.finish(35);
+	
+	                    case 39:
+	                      return _context.finish(32);
+	
+	                    case 40:
+	                      _teacher.splice(-1, 1);
+	                      if (_teacher.length == 0) _teacher.push('None');else _teacher = _teacher.join(' / ');
+	
+	                      similar_course = '<div class="title">\n                <i class="dropdown icon"></i>' + source.課程中文名稱 + '&nbsp;&nbsp;' + _course_no + '</div><div class="content">\n                <div class="similar_info">\u6559\u5E2B&nbsp;\uFF1A&nbsp;' + _teacher + '<div>\n                <div class="similar_info">\u6642\u9593&nbsp;\uFF1A&nbsp;' + _time + '<div>\n                <div class="similar_info">\u5730\u9EDE&nbsp;\uFF1A&nbsp;' + _classroom + '<div>\n                </div>';
+	
+	                      $('#similar').append(similar_course);
+	
+	                    case 44:
+	                      _iteratorNormalCompletion = true;
+	                      _context.next = 11;
+	                      break;
+	
+	                    case 47:
+	                      _context.next = 53;
+	                      break;
+	
+	                    case 49:
+	                      _context.prev = 49;
+	                      _context.t1 = _context['catch'](9);
+	                      _didIteratorError = true;
+	                      _iteratorError = _context.t1;
+	
+	                    case 53:
+	                      _context.prev = 53;
+	                      _context.prev = 54;
 	
 	                      if (!_iteratorNormalCompletion && _iterator.return) {
 	                        _iterator.return();
 	                      }
 	
-	                    case 20:
-	                      _context.prev = 20;
+	                    case 56:
+	                      _context.prev = 56;
 	
 	                      if (!_didIteratorError) {
-	                        _context.next = 23;
+	                        _context.next = 59;
 	                        break;
 	                      }
 	
 	                      throw _iteratorError;
 	
-	                    case 23:
-	                      return _context.finish(20);
+	                    case 59:
+	                      return _context.finish(56);
 	
-	                    case 24:
-	                      return _context.finish(17);
+	                    case 60:
+	                      return _context.finish(53);
 	
-	                    case 25:
+	                    case 61:
 	                    case 'end':
 	                      return _context.stop();
 	                  }
 	                }
-	              }, _callee, _this, [[9, 13, 17, 25], [18,, 20, 24]]);
+	              }, _callee, _this, [[9, 49, 53, 61], [24, 28, 32, 40], [33,, 35, 39], [54,, 56, 60]]);
 	            }));
 	
 	            return function (_x) {
@@ -9591,26 +9657,26 @@
 	          $('.course_info.scrolling.content').attr('id', id);
 	
 	          var teacher = [];
-	          var _iteratorNormalCompletion2 = true;
-	          var _didIteratorError2 = false;
-	          var _iteratorError2 = undefined;
+	          var _iteratorNormalCompletion3 = true;
+	          var _didIteratorError3 = false;
+	          var _iteratorError3 = undefined;
 	
 	          try {
-	            for (var _iterator2 = info.教師[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	              var each = _step2.value;
+	            for (var _iterator3 = info.教師[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	              var each = _step3.value;
 	              teacher.push(each.split('\t')[0]);
 	            }
 	          } catch (err) {
-	            _didIteratorError2 = true;
-	            _iteratorError2 = err;
+	            _didIteratorError3 = true;
+	            _iteratorError3 = err;
 	          } finally {
 	            try {
-	              if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                _iterator2.return();
+	              if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                _iterator3.return();
 	              }
 	            } finally {
-	              if (_didIteratorError2) {
-	                throw _iteratorError2;
+	              if (_didIteratorError3) {
+	                throw _iteratorError3;
 	              }
 	            }
 	          }

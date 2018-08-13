@@ -154,16 +154,31 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
               }
               const hits_group = await searchByID_Group(id_group);
 
-              // FIXME: 要排好版且過濾資料，參考 Render Course Info
               for (let each of hits_group) {
                 const source = each._source;
+                const course_no = source.科號;
+
+                let time = source.時間;
+                if (time.length == 0) time.push('無');
+                sort_weekday(time);
+
+                let classroom = source.教室;
+                if (classroom.length == 0) classroom.push('無');
+
+                let teacher = [];
+                for (let each of source.教師) teacher.push(each.split('\t')[0]);
+                teacher.splice(-1, 1);
+                if (teacher.length == 0) teacher.push('None');
+                else teacher = teacher.join(' / ');
+
                 let similar_course = `<div class="title">
-                <i class="dropdown icon"></i>${source.科號} ${
+                <i class="dropdown icon"></i>${
                   source.課程中文名稱
-                }</div><div class="content">
-                教師: ${source.教師}<br/>
-                時間: ${source.時間}<br/>
-                地點: ${source.教室}</div>`;
+                }&nbsp;&nbsp;${course_no}</div><div class="content">
+                <div class="similar_info">教師&nbsp;：&nbsp;${teacher}<div>
+                <div class="similar_info">時間&nbsp;：&nbsp;${time}<div>
+                <div class="similar_info">地點&nbsp;：&nbsp;${classroom}<div>
+                </div>`;
                 $('#similar').append(similar_course);
               }
             });

@@ -102,3 +102,7 @@ a:focus {
 .not-active {
   pointer-events: none;
 }
+
+.similar_info {
+  margin-top: 5px;
+}
