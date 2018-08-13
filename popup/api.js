@@ -149,8 +149,11 @@ function getCourseInfo(course_no, id, callback, from_multiple) {
             getSimilarities(id, async info => {
               $('#similar').empty();
               let id_group = [];
-              for (let i = 0; i < num_of_each_similar; i++) {
-                id_group.push(info[i].other);
+              for (let i = 0; i < num_of_each_similar; ) {
+                if (info[i].other != id) {
+                  id_group.push(info[i].other);
+                  i++;
+                }
               }
               const hits_group = await searchByID_Group(id_group);
 

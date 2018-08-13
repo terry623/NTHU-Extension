@@ -9509,8 +9509,11 @@
 	                      $('#similar').empty();
 	                      id_group = [];
 	
-	                      for (i = 0; i < _recommend.num_of_each_similar; i++) {
-	                        id_group.push(info[i].other);
+	                      for (i = 0; i < _recommend.num_of_each_similar;) {
+	                        if (info[i].other != id) {
+	                          id_group.push(info[i].other);
+	                          i++;
+	                        }
 	                      }
 	                      _context.next = 5;
 	                      return (0, _search.searchByID_Group)(id_group);
