@@ -5,7 +5,7 @@ import { acix } from './popup';
 const baseURL = `http://192.168.99.100:8080/api/`;
 // const baseURL = `https://nthu3-212713.appspot.com/api/`;
 
-function calculateUserGrade(stu_no, userGrade) {
+function calculateUserGrade(userGrade) {
   let all_pr = {};
   for (let course_no in userGrade) {
     let grade = userGrade[course_no];
@@ -277,12 +277,11 @@ const getCurrentStateOfNTHU = () =>
     );
   });
 
-function saveUserGrade(stu_no, userGrade) {
+function saveUserGrade(userGrade) {
   request.post(
     {
       url: `${baseURL}saveUserGrade`,
       form: {
-        stu_no,
         userGrade: JSON.stringify(userGrade),
       },
     },

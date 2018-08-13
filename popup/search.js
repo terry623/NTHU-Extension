@@ -5,7 +5,7 @@ import {
   miniMessageAlert,
 } from './helper';
 import { checkConflict } from './conflict';
-import { search_result_num, stu_no } from './popup';
+import { search_result_num } from './popup';
 import { getCart } from './cart';
 import { removeTimeOfCourse } from './conflict';
 import { getCourseInfo } from './api';
@@ -98,7 +98,6 @@ function searchOnlyKeyword(search_topic, keyword, callback) {
     {
       url: `${baseURL}searchOnlyKeyword`,
       form: {
-        stu_no,
         search_topic,
         keyword,
       },
@@ -118,7 +117,6 @@ function searchDoubleKeyword(search_topic, keyword, other_keyword, callback) {
     {
       url: `${baseURL}searchDoubleKeyword`,
       form: {
-        stu_no,
         search_topic,
         keyword,
         other_keyword,

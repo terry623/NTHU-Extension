@@ -9842,8 +9842,8 @@
 	          }
 	        });
 	        console.log(userGrade);
-	        (0, _server.saveUserGrade)(stu_no, userGrade);
-	        (0, _server.calculateUserGrade)(stu_no, userGrade);
+	        (0, _server.saveUserGrade)(userGrade);
+	        // calculateUserGrade(userGrade);
 	      }
 	    }
 	  });
@@ -12043,7 +12043,7 @@
 	var baseURL = 'http://192.168.99.100:8080/api/';
 	// const baseURL = `https://nthu3-212713.appspot.com/api/`;
 	
-	function calculateUserGrade(stu_no, userGrade) {
+	function calculateUserGrade(userGrade) {
 	  var all_pr = {};
 	
 	  var _loop = function _loop(course_no) {
@@ -12299,11 +12299,10 @@
 	  });
 	};
 	
-	function saveUserGrade(stu_no, userGrade) {
+	function saveUserGrade(userGrade) {
 	  request.post({
 	    url: baseURL + 'saveUserGrade',
 	    form: {
-	      stu_no: stu_no,
 	      userGrade: JSON.stringify(userGrade)
 	    }
 	  }, function (err, response, body) {
@@ -61916,7 +61915,6 @@
 	  request.post({
 	    url: _server.baseURL + 'searchOnlyKeyword',
 	    form: {
-	      stu_no: _popup.stu_no,
 	      search_topic: search_topic,
 	      keyword: keyword
 	    }
@@ -61933,7 +61931,6 @@
 	  request.post({
 	    url: _server.baseURL + 'searchDoubleKeyword',
 	    form: {
-	      stu_no: _popup.stu_no,
 	      search_topic: search_topic,
 	      keyword: keyword,
 	      other_keyword: other_keyword

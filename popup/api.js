@@ -454,8 +454,8 @@ function getGrade(stu_no) {
             }
           });
           console.log(userGrade);
-          saveUserGrade(stu_no, userGrade);
-          calculateUserGrade(stu_no, userGrade);
+          saveUserGrade(userGrade);
+          // calculateUserGrade(userGrade);
         }
       }
     }
