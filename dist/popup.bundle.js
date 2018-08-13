@@ -9090,13 +9090,13 @@
 	  });
 	});
 	
-	// chrome.storage.local.clear(() => {
-	//   console.log('Clear Local Data');
-	//   let error = chrome.runtime.lastError;
-	//   if (error) {
-	//     console.error(error);
-	//   }
-	// });
+	chrome.storage.local.clear(function () {
+	  console.log('Clear Local Data');
+	  var error = chrome.runtime.lastError;
+	  if (error) {
+	    console.error(error);
+	  }
+	});
 	
 	$('.ui.accordion').accordion();
 	$('.ui.dropdown').dropdown();
@@ -9509,12 +9509,10 @@
 	                      $('#similar').empty();
 	                      id_group = [];
 	
-	                      for (i = 0; i < _recommend.num_of_each_similar;) {
-	                        if (info[i].other != id) {
-	                          id_group.push(info[i].other);
-	                          i++;
-	                        }
+	                      for (i = 0; i < _recommend.num_of_each_similar; i++) {
+	                        id_group.push(info[i].other);
 	                      }
+	
 	                      _context.next = 5;
 	                      return (0, _search.searchByID_Group)(id_group);
 	
@@ -12150,6 +12148,11 @@
 	          var _info = JSON.parse(body);
 	          var temp = {};
 	          Object.assign(temp, items.course);
+	          for (var i = 0; i < _info.length; i++) {
+	            if (_info[i].other == Number(course_id)) {
+	              _info.splice(i, 1);
+	            }
+	          }
 	          temp[course_id].相似課程 = _info;
 	          chrome.storage.local.set({ course: temp }, function () {
 	            chrome.storage.local.get('course', function (items) {

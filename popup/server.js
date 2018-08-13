@@ -117,6 +117,11 @@ function getSimilarities(course_id, callback) {
             let info = JSON.parse(body);
             let temp = {};
             Object.assign(temp, items.course);
+            for (let i = 0; i < info.length; i++) {
+              if (info[i].other == Number(course_id)) {
+                info.splice(i, 1);
+              }
+            }
             temp[course_id].相似課程 = info;
             chrome.storage.local.set({ course: temp }, () => {
               chrome.storage.local.get('course', items => {
