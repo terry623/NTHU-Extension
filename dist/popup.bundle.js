@@ -9008,11 +9008,12 @@
 	            $('#home_loading').addClass('active');
 	            (0, _conflict.clearAllTime)();
 	            addListener();
+	            privacyAgree();
 	            (0, _api.renderUserName)();
-	            _context.next = 6;
+	            _context.next = 7;
 	            return (0, _server.getCurrentStateOfNTHU)();
 	
-	          case 6:
+	          case 7:
 	            phase = _context.sent;
 	
 	            $('.content_item.homePage').show();
@@ -9022,7 +9023,6 @@
 	              (0, _api.getResultCourse)(phase);
 	            } else $('#change_phase').addClass('disabled');
 	            (0, _cart.getCart)();
-	            (0, _api.getGrade)(stu_no);
 	
 	          case 12:
 	          case 'end':
@@ -9078,6 +9078,17 @@
 	  }, {
 	    urls: ['https://www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH7130041.php']
 	  }, ['requestHeaders', 'blocking']);
+	}
+	
+	function privacyAgree() {
+	  // chrome.storage.local.get('privacy', items => {
+	  //   console.log({ items });
+	  $('#privacy_alert').modal('show');
+	  $('#agree_privacy').on('click', function () {
+	    (0, _api.getGrade)();
+	    $('#privacy_alert').modal('hide');
+	  });
+	  // });
 	}
 	
 	$(document).ready(function () {
@@ -9242,7 +9253,6 @@
 	      result = '第一二專長';
 	      break;
 	    default:
-	      alert('Translate Topic Wrong !');
 	      break;
 	  }
 	  return result;
@@ -9325,6 +9335,11 @@
 	  $('#mini_alert').modal('show');
 	}
 	
+	// FIXME: 把「使用者同意隱私權」這件事存進 Storage
+	function privacyAgreeToStorage() {
+	  console.log('PrivacyAgreeToStorage not yet');
+	}
+	
 	exports.getUrlVars = getUrlVars;
 	exports.courseAddSpace = courseAddSpace;
 	exports.translateTopic = translateTopic;
@@ -9335,6 +9350,7 @@
 	exports.addSpace_course_no = addSpace_course_no;
 	exports.all_time = all_time;
 	exports.miniMessageAlert = miniMessageAlert;
+	exports.privacyAgreeToStorage = privacyAgreeToStorage;
 
 /***/ }),
 /* 331 */
@@ -9816,7 +9832,7 @@
 	  });
 	}
 	
-	function getGrade(stu_no) {
+	function getGrade() {
 	  request({
 	    url: 'https://www.ccxp.nthu.edu.tw/ccxp/INQUIRE/JH/8/R/6.3/JH8R63002.php?ACIXSTORE=' + _popup.acix,
 	    encoding: null
@@ -9844,6 +9860,7 @@
 	        });
 	        console.log(userGrade);
 	        (0, _server.saveUserGrade)(userGrade);
+	        (0, _helper.privacyAgreeToStorage)();
 	        // calculateUserGrade(userGrade);
 	      }
 	    }

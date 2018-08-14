@@ -41,10 +41,22 @@ function addListener() {
   );
 }
 
+function privacyAgree() {
+  // chrome.storage.local.get('privacy', items => {
+  //   console.log({ items });
+  $('#privacy_alert').modal('show');
+  $('#agree_privacy').on('click', function() {
+    getGrade();
+    $('#privacy_alert').modal('hide');
+  });
+  // });
+}
+
 async function initial_everything() {
   $('#home_loading').addClass('active');
   clearAllTime();
   addListener();
+  privacyAgree();
   renderUserName();
   let phase = await getCurrentStateOfNTHU();
   $('.content_item.homePage').show();
@@ -54,7 +66,6 @@ async function initial_everything() {
     getResultCourse(phase);
   } else $('#change_phase').addClass('disabled');
   getCart();
-  getGrade(stu_no);
 }
 
 $(document).ready(() => {
@@ -100,7 +111,7 @@ $('.ui.modal').modal({
 $('.ui.secondary.menu').on('click', '.item', function() {
   if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
     if ($(this).hasClass('recommendPage')) {
-      miniMessageAlert('推薦課程','開發階段，敬請期待 !');
+      miniMessageAlert('推薦課程', '開發階段，敬請期待 !');
       return;
     }
     $(this)

@@ -12,6 +12,7 @@ import {
   removeLongCourseName,
   sort_weekday,
   miniMessageAlert,
+  privacyAgreeToStorage,
 } from './helper';
 import { acix, stu_no, year, semester } from './popup';
 import { num_of_each_similar } from './recommend';
@@ -410,7 +411,7 @@ function getResultCourse(phaseNo, callback) {
   );
 }
 
-function getGrade(stu_no) {
+function getGrade() {
   request(
     {
       url:
@@ -455,6 +456,7 @@ function getGrade(stu_no) {
           });
           console.log(userGrade);
           saveUserGrade(userGrade);
+          privacyAgreeToStorage();
           // calculateUserGrade(userGrade);
         }
       }
