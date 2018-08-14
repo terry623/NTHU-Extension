@@ -9120,7 +9120,7 @@
 	$('.ui.secondary.menu').on('click', '.item', function () {
 	  if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
 	    if ($(this).hasClass('recommendPage')) {
-	      alert('「推薦課程」尚未推出 !');
+	      (0, _helper.miniMessageAlert)('推薦課程', '開發階段，敬請期待 !');
 	      return;
 	    }
 	    $(this).addClass('active').siblings('.item').removeClass('active');

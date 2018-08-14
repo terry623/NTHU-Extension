@@ -1,7 +1,7 @@
 window._crypto = null;
 import { initDrift } from './drift';
 initDrift();
-import { getUrlVars } from './helper';
+import { getUrlVars, miniMessageAlert } from './helper';
 import { renderUserName, getResultCourse, getGrade } from './api';
 import { getCart } from './cart';
 import { getCurrentStateOfNTHU } from './server';
@@ -100,7 +100,7 @@ $('.ui.modal').modal({
 $('.ui.secondary.menu').on('click', '.item', function() {
   if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
     if ($(this).hasClass('recommendPage')) {
-      alert('「推薦課程」尚未推出 !');
+      miniMessageAlert('推薦課程','開發階段，敬請期待 !');
       return;
     }
     $(this)
