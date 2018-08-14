@@ -347,13 +347,13 @@ $('#send_to_nthu').on('click', function() {
     tabs => {
       let select_url =
         'www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php';
-      if (tabs[0].url.includes(select_url) == false)
+      if (tabs[0].url.includes(select_url) == false) {
         miniMessageAlert(
           '系統錯誤',
           '你必須先進入校務資訊系統中的',
           '選課頁面，才能使用此功能'
         );
-      else {
+      } else {
         let isSelect = $('#course_order_list > div > .number')
           .first()
           .text();

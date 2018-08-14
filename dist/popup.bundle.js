@@ -62663,8 +62663,15 @@
 	    });
 	    $('#course_order').modal('show');
 	  } else {
-	    $('#send_to_nthu_loading').addClass('active');
-	    (0, _select.submitToNTHU)();
+	    chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
+	      var select_url = 'www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php';
+	      if (tabs[0].url.includes(select_url) == false) {
+	        (0, _helper.miniMessageAlert)('系統錯誤', '你必須先進入校務資訊系統中的', '選課頁面，才能使用此功能');
+	      } else {
+	        $('#send_to_nthu_loading').addClass('active');
+	        (0, _select.submitToNTHU)();
+	      }
+	    });
 	  }
 	});
 	
@@ -63116,7 +63123,9 @@
 	$('#send_to_nthu').on('click', function () {
 	  chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT }, function (tabs) {
 	    var select_url = 'www.ccxp.nthu.edu.tw/ccxp/COURSE/JH/7/7.1/7.1.3/JH713003.php';
-	    if (tabs[0].url.includes(select_url) == false) (0, _helper.miniMessageAlert)('系統錯誤', '你必須先進入校務資訊系統中的', '選課頁面，才能使用此功能');else {
+	    if (tabs[0].url.includes(select_url) == false) {
+	      (0, _helper.miniMessageAlert)('系統錯誤', '你必須先進入校務資訊系統中的', '選課頁面，才能使用此功能');
+	    } else {
 	      var isSelect = $('#course_order_list > div > .number').first().text();
 	      if (isSelect == 0) return;
 	      $('#course_order').modal('hide');
