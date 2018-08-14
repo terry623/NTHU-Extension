@@ -9090,13 +9090,13 @@
 	  });
 	});
 	
-	chrome.storage.local.clear(function () {
-	  console.log('Clear Local Data');
-	  var error = chrome.runtime.lastError;
-	  if (error) {
-	    console.error(error);
-	  }
-	});
+	// chrome.storage.local.clear(() => {
+	//   console.log('Clear Local Data');
+	//   let error = chrome.runtime.lastError;
+	//   if (error) {
+	//     console.error(error);
+	//   }
+	// });
 	
 	$('.ui.accordion').accordion();
 	$('.ui.dropdown').dropdown();
