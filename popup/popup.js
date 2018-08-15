@@ -67,7 +67,7 @@ function privacyAgree() {
 }
 
 async function initial_everything() {
-  // clearCookieAndLocalData();
+  clearCookieAndLocalData();
   $('#home_loading').addClass('active');
   clearAllTime();
   addListener();
