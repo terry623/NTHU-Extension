@@ -1,3 +1,5 @@
+import { privacyAgree } from './popup.js';
+
 !(function() {
   var t = (window.driftt = window.drift = window.driftt || []);
   if (!t.init) {
@@ -47,5 +49,6 @@ drift.SNIPPET_VERSION = '0.3.1';
 drift.load('etd922wyz5fx');
 
 drift.on('ready', function(api, payload) {
-  api.sidebar.open();
+  if (Cookies.get('isAgree') == undefined) privacyAgree();
+  else api.sidebar.open();
 });

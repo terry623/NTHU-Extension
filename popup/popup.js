@@ -39,7 +39,7 @@ function addListener() {
 }
 
 function clearCookieAndLocalData() {
-  Cookies.remove('isPrivacyAgree');
+  Cookies.remove('isAgree');
   chrome.storage.local.clear(() => {
     console.log('Clear Cookie & Local Data !');
     let error = chrome.runtime.lastError;
@@ -50,24 +50,24 @@ function clearCookieAndLocalData() {
 }
 
 function privacyAgree() {
-  if (Cookies.get('isPrivacyAgree') == undefined) {
+  if (Cookies.get('isAgree') == undefined) {
     $('#privacy_alert')
       .modal('setting', 'closable', false)
       .modal('show');
     $('#agree_privacy').on('click', function() {
       getGrade();
       $('#privacy_alert').modal('hide');
-      Cookies.set('isPrivacyAgree', true);
+      Cookies.set('isAgree', true);
     });
     $('#disagree_privacy').on('click', function() {
-      Cookies.remove('isPrivacyAgree');
+      Cookies.remove('isAgree');
       window.close();
     });
   }
 }
 
 async function initial_everything() {
-  clearCookieAndLocalData();
+  // clearCookieAndLocalData();
   $('#home_loading').addClass('active');
   clearAllTime();
   addListener();
@@ -129,7 +129,6 @@ $('.ui.secondary.menu').on('click', '.item', function() {
     t.show();
     $('#change_school_table').hide();
 
-    // FIXME: Sidebar 還沒出來時就切到第二頁，右下角會跳出來又馬上消失
     drift.on('ready', function(api, payload) {
       api.sidebar.close();
       api.widget.hide();
@@ -142,11 +141,9 @@ $('.ui.secondary.menu').on('click', '.item', function() {
       });
     } else if ($(this).hasClass('searchPage')) {
       t.not('.searchPage').hide();
-      privacyAgree();
     } else if ($(this).hasClass('choosePage')) {
       t.not('.choosePage').hide();
       $('#change_school_table').show();
-      privacyAgree();
     } else if ($(this).hasClass('recommendPage')) {
       // t.not('.recommendPage').hide();
       // before_hits_group.length = 0;
@@ -174,4 +171,12 @@ $('.ui.secondary.menu').on('click', '.item', function() {
   }
 });
 
-export { acix, stu_no, year, semester, current_phase, search_result_num };
+export {
+  acix,
+  stu_no,
+  year,
+  semester,
+  current_phase,
+  search_result_num,
+  privacyAgree,
+};

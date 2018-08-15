@@ -8950,9 +8950,11 @@
 
 /***/ }),
 /* 328 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
+	
+	var _popup = __webpack_require__(329);
 	
 	!function () {
 	  var t = window.driftt = window.drift = window.driftt || [];
@@ -8979,7 +8981,7 @@
 	drift.load('etd922wyz5fx');
 	
 	drift.on('ready', function (api, payload) {
-	  api.sidebar.open();
+	  if (Cookies.get('isAgree') == undefined) (0, _popup.privacyAgree)();else api.sidebar.open();
 	});
 
 /***/ }),
@@ -8991,7 +8993,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.search_result_num = exports.current_phase = exports.semester = exports.year = exports.stu_no = exports.acix = undefined;
+	exports.privacyAgree = exports.search_result_num = exports.current_phase = exports.semester = exports.year = exports.stu_no = exports.acix = undefined;
 	
 	var initial_everything = function () {
 	  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
@@ -9000,15 +9002,15 @@
 	      while (1) {
 	        switch (_context.prev = _context.next) {
 	          case 0:
-	            clearCookieAndLocalData();
+	            // clearCookieAndLocalData();
 	            $('#home_loading').addClass('active');
 	            (0, _conflict.clearAllTime)();
 	            addListener();
 	            (0, _api.renderUserName)();
-	            _context.next = 7;
+	            _context.next = 6;
 	            return (0, _server.getCurrentStateOfNTHU)();
 	
-	          case 7:
+	          case 6:
 	            phase = _context.sent;
 	
 	            $('.content_item.homePage').show();
@@ -9019,7 +9021,7 @@
 	            } else $('#change_phase').addClass('disabled');
 	            (0, _cart.getCart)();
 	
-	          case 12:
+	          case 11:
 	          case 'end':
 	            return _context.stop();
 	        }
@@ -9069,7 +9071,7 @@
 	}
 	
 	function clearCookieAndLocalData() {
-	  Cookies.remove('isPrivacyAgree');
+	  Cookies.remove('isAgree');
 	  chrome.storage.local.clear(function () {
 	    console.log('Clear Cookie & Local Data !');
 	    var error = chrome.runtime.lastError;
@@ -9080,15 +9082,15 @@
 	}
 	
 	function privacyAgree() {
-	  if (Cookies.get('isPrivacyAgree') == undefined) {
+	  if (Cookies.get('isAgree') == undefined) {
 	    $('#privacy_alert').modal('setting', 'closable', false).modal('show');
 	    $('#agree_privacy').on('click', function () {
 	      (0, _api.getGrade)();
 	      $('#privacy_alert').modal('hide');
-	      Cookies.set('isPrivacyAgree', true);
+	      Cookies.set('isAgree', true);
 	    });
 	    $('#disagree_privacy').on('click', function () {
-	      Cookies.remove('isPrivacyAgree');
+	      Cookies.remove('isAgree');
 	      window.close();
 	    });
 	  }
@@ -9135,7 +9137,6 @@
 	    t.show();
 	    $('#change_school_table').hide();
 	
-	    // FIXME: Sidebar 還沒出來時就切到第二頁，右下角會跳出來又馬上消失
 	    drift.on('ready', function (api, payload) {
 	      api.sidebar.close();
 	      api.widget.hide();
@@ -9148,11 +9149,9 @@
 	      });
 	    } else if ($(this).hasClass('searchPage')) {
 	      t.not('.searchPage').hide();
-	      privacyAgree();
 	    } else if ($(this).hasClass('choosePage')) {
 	      t.not('.choosePage').hide();
 	      $('#change_school_table').show();
-	      privacyAgree();
 	    } else if ($(this).hasClass('recommendPage')) {
 	      // t.not('.recommendPage').hide();
 	      // before_hits_group.length = 0;
@@ -9186,6 +9185,7 @@
 	exports.semester = semester;
 	exports.current_phase = current_phase;
 	exports.search_result_num = search_result_num;
+	exports.privacyAgree = privacyAgree;
 
 /***/ }),
 /* 330 */
