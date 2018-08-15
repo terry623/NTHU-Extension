@@ -368,11 +368,6 @@ function miniMessageAlert(header, content_1, content_2) {
   $('#mini_alert').modal('show');
 }
 
-// FIXME: 把「使用者同意隱私權」這件事存進 Storage
-function privacyAgreeToStorage() {
-  console.log('PrivacyAgreeToStorage not yet');
-}
-
 export {
   getUrlVars,
   courseAddSpace,
@@ -384,5 +379,4 @@ export {
   addSpace_course_no,
   all_time,
   miniMessageAlert,
-  privacyAgreeToStorage,
 };

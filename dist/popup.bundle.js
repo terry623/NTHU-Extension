@@ -93,6 +93,8 @@
 	var helper = _interopRequireWildcard(_helper);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	window._crypto = null;
 
 /***/ }),
 /* 1 */,
@@ -8952,40 +8954,33 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	function initDrift() {
-	  !function () {
-	    var t = window.driftt = window.drift = window.driftt || [];
-	    if (!t.init) {
-	      if (t.invoked) return void (window.console && console.error && console.error('Drift snippet included twice.'));
-	      t.invoked = !0, t.methods = ['identify', 'config', 'track', 'reset', 'debug', 'show', 'ping', 'page', 'hide', 'off', 'on'], t.factory = function (e) {
-	        return function () {
-	          var n = Array.prototype.slice.call(arguments);
-	          return n.unshift(e), t.push(n), t;
-	        };
-	      }, t.methods.forEach(function (e) {
-	        t[e] = t.factory(e);
-	      }), t.load = function (t) {
-	        var e = 3e5,
-	            n = Math.ceil(new Date() / e) * e,
-	            o = document.createElement('script');
-	        o.type = 'text/javascript', o.async = !0, o.crossorigin = 'anonymous', o.src = 'https://js.driftt.com/include/' + n + '/' + t + '.js';
-	        var i = document.getElementsByTagName('script')[0];
-	        i.parentNode.insertBefore(o, i);
+	!function () {
+	  var t = window.driftt = window.drift = window.driftt || [];
+	  if (!t.init) {
+	    if (t.invoked) return void (window.console && console.error && console.error('Drift snippet included twice.'));
+	    t.invoked = !0, t.methods = ['identify', 'config', 'track', 'reset', 'debug', 'show', 'ping', 'page', 'hide', 'off', 'on'], t.factory = function (e) {
+	      return function () {
+	        var n = Array.prototype.slice.call(arguments);
+	        return n.unshift(e), t.push(n), t;
 	      };
-	    }
-	  }();
-	  drift.SNIPPET_VERSION = '0.3.1';
-	  drift.load('etd922wyz5fx');
+	    }, t.methods.forEach(function (e) {
+	      t[e] = t.factory(e);
+	    }), t.load = function (t) {
+	      var e = 3e5,
+	          n = Math.ceil(new Date() / e) * e,
+	          o = document.createElement('script');
+	      o.type = 'text/javascript', o.async = !0, o.crossorigin = 'anonymous', o.src = 'https://js.driftt.com/include/' + n + '/' + t + '.js';
+	      var i = document.getElementsByTagName('script')[0];
+	      i.parentNode.insertBefore(o, i);
+	    };
+	  }
+	}();
+	drift.SNIPPET_VERSION = '0.3.1';
+	drift.load('etd922wyz5fx');
 	
-	  drift.on('ready', function (api, payload) {
-	    api.sidebar.open();
-	  });
-	}
-	
-	exports.initDrift = initDrift;
+	drift.on('ready', function (api, payload) {
+	  api.sidebar.open();
+	});
 
 /***/ }),
 /* 329 */
@@ -9005,10 +9000,10 @@
 	      while (1) {
 	        switch (_context.prev = _context.next) {
 	          case 0:
+	            clearCookieAndLocalData();
 	            $('#home_loading').addClass('active');
 	            (0, _conflict.clearAllTime)();
 	            addListener();
-	            privacyAgree();
 	            (0, _api.renderUserName)();
 	            _context.next = 7;
 	            return (0, _server.getCurrentStateOfNTHU)();
@@ -9037,8 +9032,6 @@
 	  };
 	}();
 	
-	var _drift = __webpack_require__(328);
-	
 	var _helper = __webpack_require__(330);
 	
 	var _api = __webpack_require__(331);
@@ -9052,11 +9045,6 @@
 	var _recommend = __webpack_require__(617);
 	
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-	
-	window._crypto = null;
-	
-	(0, _drift.initDrift)();
-	
 	
 	var year = '107';
 	var semester = '10';
@@ -9080,15 +9068,30 @@
 	  }, ['requestHeaders', 'blocking']);
 	}
 	
-	function privacyAgree() {
-	  // chrome.storage.local.get('privacy', items => {
-	  //   console.log({ items });
-	  $('#privacy_alert').modal('show');
-	  $('#agree_privacy').on('click', function () {
-	    (0, _api.getGrade)();
-	    $('#privacy_alert').modal('hide');
+	function clearCookieAndLocalData() {
+	  Cookies.remove('isPrivacyAgree');
+	  chrome.storage.local.clear(function () {
+	    console.log('Clear Cookie & Local Data !');
+	    var error = chrome.runtime.lastError;
+	    if (error) {
+	      console.error(error);
+	    }
 	  });
-	  // });
+	}
+	
+	function privacyAgree() {
+	  if (Cookies.get('isPrivacyAgree') == undefined) {
+	    $('#privacy_alert').modal('setting', 'closable', false).modal('show');
+	    $('#agree_privacy').on('click', function () {
+	      (0, _api.getGrade)();
+	      $('#privacy_alert').modal('hide');
+	      Cookies.set('isPrivacyAgree', true);
+	    });
+	    $('#disagree_privacy').on('click', function () {
+	      Cookies.remove('isPrivacyAgree');
+	      window.close();
+	    });
+	  }
 	}
 	
 	$(document).ready(function () {
@@ -9100,14 +9103,6 @@
 	    initial_everything();
 	  });
 	});
-	
-	// chrome.storage.local.clear(() => {
-	//   console.log('Clear Local Data');
-	//   let error = chrome.runtime.lastError;
-	//   if (error) {
-	//     console.error(error);
-	//   }
-	// });
 	
 	$('.ui.accordion').accordion();
 	$('.ui.dropdown').dropdown();
@@ -9140,6 +9135,7 @@
 	    t.show();
 	    $('#change_school_table').hide();
 	
+	    // FIXME: Sidebar 還沒出來時就切到第二頁，右下角會跳出來又馬上消失
 	    drift.on('ready', function (api, payload) {
 	      api.sidebar.close();
 	      api.widget.hide();
@@ -9150,9 +9146,13 @@
 	      drift.on('ready', function (api, payload) {
 	        api.widget.show();
 	      });
-	    } else if ($(this).hasClass('searchPage')) t.not('.searchPage').hide();else if ($(this).hasClass('choosePage')) {
+	    } else if ($(this).hasClass('searchPage')) {
+	      t.not('.searchPage').hide();
+	      privacyAgree();
+	    } else if ($(this).hasClass('choosePage')) {
 	      t.not('.choosePage').hide();
 	      $('#change_school_table').show();
+	      privacyAgree();
 	    } else if ($(this).hasClass('recommendPage')) {
 	      // t.not('.recommendPage').hide();
 	      // before_hits_group.length = 0;
@@ -9335,11 +9335,6 @@
 	  $('#mini_alert').modal('show');
 	}
 	
-	// FIXME: 把「使用者同意隱私權」這件事存進 Storage
-	function privacyAgreeToStorage() {
-	  console.log('PrivacyAgreeToStorage not yet');
-	}
-	
 	exports.getUrlVars = getUrlVars;
 	exports.courseAddSpace = courseAddSpace;
 	exports.translateTopic = translateTopic;
@@ -9350,7 +9345,6 @@
 	exports.addSpace_course_no = addSpace_course_no;
 	exports.all_time = all_time;
 	exports.miniMessageAlert = miniMessageAlert;
-	exports.privacyAgreeToStorage = privacyAgreeToStorage;
 
 /***/ }),
 /* 331 */
@@ -9860,7 +9854,6 @@
 	        });
 	        console.log(userGrade);
 	        (0, _server.saveUserGrade)(userGrade);
-	        (0, _helper.privacyAgreeToStorage)();
 	        // calculateUserGrade(userGrade);
 	      }
 	    }
@@ -61991,10 +61984,10 @@
 	  var search_topic = (0, _helper.translateTopic)(topic);
 	
 	  if (other_keyword == 'NoNeedToChoose') {
-	    console.log('search_topic:' + search_topic + ',keyword:' + keyword);
+	    console.log('search_topic:' + search_topic + ', keyword:' + keyword);
 	    searchOnlyKeyword(search_topic, keyword, callback);
 	  } else {
-	    console.log('search_topic:' + search_topic + ',keyword:' + keyword + ',other_keyword:' + other_keyword);
+	    console.log('search_topic:' + search_topic + ', keyword:' + keyword + ', other_keyword:' + other_keyword);
 	    if (search_topic == '時間') searchTime(search_topic, keyword, other_keyword, callback);else searchDoubleKeyword(search_topic, keyword, other_keyword, callback);
 	  }
 	}
@@ -62353,7 +62346,7 @@
 	      chrome.storage.local.remove('time', function () {
 	        chrome.storage.local.set({ time: temp }, function () {
 	          chrome.storage.local.get('time', function (items) {
-	            console.log(items);
+	            // console.log(items);
 	          });
 	        });
 	      });

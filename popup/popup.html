@@ -11,6 +11,7 @@
     <script src="../semantic/dist/semantic.min.js"></script>
     <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.6.1/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 </head>
 
 <body>
@@ -38,11 +39,13 @@
             產品使用聲明
         </div>
         <div id="privacy_alert_content" class="content">
-            可能有 bug，使用結束建議還是要到校務資訊系統查看<br/> 我們將取得你的歷年成績
-            <br/> ( 不包含姓名、學號、系級等個人資訊 )<br/>
+            <p>使用結束時建議還是要到校務系統查看</p>
+            <p>我們將取得你的歷年成績</p>
+            <p>搜尋的關鍵字等</p>
+            <p>( 不包含姓名、學號、系級等個人資訊 )</p>
         </div>
         <div class="actions">
-            <div class="small ui basic cancel button">關閉</div>
+            <div id="disagree_privacy" class="small ui basic cancel button">不同意</div>
             <div id="agree_privacy" class="small ui teal button">同意</div>
         </div>
     </div>

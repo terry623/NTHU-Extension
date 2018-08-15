@@ -1,6 +1,3 @@
-window._crypto = null;
-import { initDrift } from './drift';
-initDrift();
 import { getUrlVars, miniMessageAlert } from './helper';
 import { renderUserName, getResultCourse, getGrade } from './api';
 import { getCart } from './cart';
@@ -41,22 +38,39 @@ function addListener() {
   );
 }
 
-function privacyAgree() {
-  // chrome.storage.local.get('privacy', items => {
-  //   console.log({ items });
-  $('#privacy_alert').modal('show');
-  $('#agree_privacy').on('click', function() {
-    getGrade();
-    $('#privacy_alert').modal('hide');
+function clearCookieAndLocalData() {
+  Cookies.remove('isPrivacyAgree');
+  chrome.storage.local.clear(() => {
+    console.log('Clear Cookie & Local Data !');
+    let error = chrome.runtime.lastError;
+    if (error) {
+      console.error(error);
+    }
   });
-  // });
+}
+
+function privacyAgree() {
+  if (Cookies.get('isPrivacyAgree') == undefined) {
+    $('#privacy_alert')
+      .modal('setting', 'closable', false)
+      .modal('show');
+    $('#agree_privacy').on('click', function() {
+      getGrade();
+      $('#privacy_alert').modal('hide');
+      Cookies.set('isPrivacyAgree', true);
+    });
+    $('#disagree_privacy').on('click', function() {
+      Cookies.remove('isPrivacyAgree');
+      window.close();
+    });
+  }
 }
 
 async function initial_everything() {
+  clearCookieAndLocalData();
   $('#home_loading').addClass('active');
   clearAllTime();
   addListener();
-  privacyAgree();
   renderUserName();
   let phase = await getCurrentStateOfNTHU();
   $('.content_item.homePage').show();
@@ -80,14 +94,6 @@ $(document).ready(() => {
     }
   );
 });
-
-// chrome.storage.local.clear(() => {
-//   console.log('Clear Local Data');
-//   let error = chrome.runtime.lastError;
-//   if (error) {
-//     console.error(error);
-//   }
-// });
 
 $('.ui.accordion').accordion();
 $('.ui.dropdown').dropdown();
@@ -123,6 +129,7 @@ $('.ui.secondary.menu').on('click', '.item', function() {
     t.show();
     $('#change_school_table').hide();
 
+    // FIXME: Sidebar 還沒出來時就切到第二頁，右下角會跳出來又馬上消失
     drift.on('ready', function(api, payload) {
       api.sidebar.close();
       api.widget.hide();
@@ -133,10 +140,13 @@ $('.ui.secondary.menu').on('click', '.item', function() {
       drift.on('ready', function(api, payload) {
         api.widget.show();
       });
-    } else if ($(this).hasClass('searchPage')) t.not('.searchPage').hide();
-    else if ($(this).hasClass('choosePage')) {
+    } else if ($(this).hasClass('searchPage')) {
+      t.not('.searchPage').hide();
+      privacyAgree();
+    } else if ($(this).hasClass('choosePage')) {
       t.not('.choosePage').hide();
       $('#change_school_table').show();
+      privacyAgree();
     } else if ($(this).hasClass('recommendPage')) {
       // t.not('.recommendPage').hide();
       // before_hits_group.length = 0;

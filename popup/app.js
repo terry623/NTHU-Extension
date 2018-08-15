@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+window._crypto = null;
 import * as drift from './drift';
 import * as popup from './popup';
 import * as select from './select';

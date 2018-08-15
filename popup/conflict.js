@@ -22,7 +22,7 @@ function storeSliceTime(target_time) {
       chrome.storage.local.remove('time', () => {
         chrome.storage.local.set({ time: temp }, () => {
           chrome.storage.local.get('time', items => {
-            console.log(items);
+            // console.log(items);
           });
         });
       });

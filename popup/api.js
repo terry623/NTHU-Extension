@@ -12,7 +12,6 @@ import {
   removeLongCourseName,
   sort_weekday,
   miniMessageAlert,
-  privacyAgreeToStorage,
 } from './helper';
 import { acix, stu_no, year, semester } from './popup';
 import { num_of_each_similar } from './recommend';
@@ -456,7 +455,6 @@ function getGrade() {
           });
           console.log(userGrade);
           saveUserGrade(userGrade);
-          privacyAgreeToStorage();
           // calculateUserGrade(userGrade);
         }
       }
