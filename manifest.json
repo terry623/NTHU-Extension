@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "NTHU Helper",
   "description": "讓我們一起用愛找到想要的課",
-  "version": "1.0",
+  "version": "0.95",
   "page_action": {
     "default_title": "開始選課",
     "default_icon": "static/icon.png",

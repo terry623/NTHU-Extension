@@ -444,8 +444,8 @@ function getGrade() {
               let getCourseGrade = $('td:nth-child(6)', this).text();
               if (
                 getCourseGrade.includes('Grade Not Submitted') == false &&
-                getCourseGrade.includes('二退') == false &&
-                receive_semester == semester
+                getCourseGrade.includes('二退') == false
+                // && receive_semester == semester
               ) {
                 userGrade[
                   receive_year + receive_semester + getCourseNo.trim()

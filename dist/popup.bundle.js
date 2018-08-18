@@ -9847,9 +9847,11 @@
 	            var receive_semester = $('td:nth-child(2)', this).text();
 	            var getCourseNo = $('td:nth-child(3)', this).text();
 	            var getCourseGrade = $('td:nth-child(6)', this).text();
-	            if (getCourseGrade.includes('Grade Not Submitted') == false && getCourseGrade.includes('二退') == false && receive_semester == _popup.semester) {
-	              userGrade[receive_year + receive_semester + getCourseNo.trim()] = getCourseGrade.trim();
-	            }
+	            if (getCourseGrade.includes('Grade Not Submitted') == false && getCourseGrade.includes('二退') == false
+	            // && receive_semester == semester
+	            ) {
+	                userGrade[receive_year + receive_semester + getCourseNo.trim()] = getCourseGrade.trim();
+	              }
 	          }
 	        });
 	        console.log(userGrade);
