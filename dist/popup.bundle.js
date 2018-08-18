@@ -9002,15 +9002,15 @@
 	      while (1) {
 	        switch (_context.prev = _context.next) {
 	          case 0:
-	            clearCookieAndLocalData();
+	            // clearCookieAndLocalData();
 	            $('#home_loading').addClass('active');
 	            (0, _conflict.clearAllTime)();
 	            addListener();
 	            (0, _api.renderUserName)();
-	            _context.next = 7;
+	            _context.next = 6;
 	            return (0, _server.getCurrentStateOfNTHU)();
 	
-	          case 7:
+	          case 6:
 	            phase = _context.sent;
 	
 	            $('.content_item.homePage').show();
@@ -9021,7 +9021,7 @@
 	            } else $('#change_phase').addClass('disabled');
 	            (0, _cart.getCart)();
 	
-	          case 12:
+	          case 11:
 	          case 'end':
 	            return _context.stop();
 	        }
@@ -9128,7 +9128,7 @@
 	$('.ui.secondary.menu').on('click', '.item', function () {
 	  if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
 	    if ($(this).hasClass('recommendPage')) {
-	      (0, _helper.miniMessageAlert)('推薦課程', '開發階段，敬請期待 !');
+	      (0, _helper.miniMessageAlert)('推薦課程', '尚在開發階段，敬請期待 !');
 	      return;
 	    }
 	    $(this).addClass('active').siblings('.item').removeClass('active');
@@ -61828,7 +61828,7 @@
 	  $('#search_page_change').append(change_page);
 	  storeCourseInfo(hits);
 	
-	  if (hits.length == 0) (0, _helper.miniMessageAlert)('查無資料', '試試看別的關鍵字吧!');else {
+	  if (hits.length == 0) (0, _helper.miniMessageAlert)('查無資料', '試試看別的關鍵字!');else {
 	    var copy_hits = [];
 	    Object.assign(copy_hits, hits);
 	    var all_should_row = Math.ceil(copy_hits.length / 10.0) * 10;

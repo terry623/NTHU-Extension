@@ -30,7 +30,7 @@ function renderSearchResult(hits, callback) {
   $('#search_page_change').append(change_page);
   storeCourseInfo(hits);
 
-  if (hits.length == 0) miniMessageAlert('查無資料', '試試看別的關鍵字吧!');
+  if (hits.length == 0) miniMessageAlert('查無資料', '試試看別的關鍵字!');
   else {
     let copy_hits = [];
     Object.assign(copy_hits, hits);

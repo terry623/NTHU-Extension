@@ -67,7 +67,7 @@ function privacyAgree() {
 }
 
 async function initial_everything() {
-  clearCookieAndLocalData();
+  // clearCookieAndLocalData();
   $('#home_loading').addClass('active');
   clearAllTime();
   addListener();
@@ -117,7 +117,7 @@ $('.ui.modal').modal({
 $('.ui.secondary.menu').on('click', '.item', function() {
   if (!$(this).hasClass('dropdown') && !$(this).is('.notActive')) {
     if ($(this).hasClass('recommendPage')) {
-      miniMessageAlert('推薦課程', '開發階段，敬請期待 !');
+      miniMessageAlert('推薦課程', '尚在開發階段，敬請期待 !');
       return;
     }
     $(this)
