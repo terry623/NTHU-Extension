@@ -2,8 +2,8 @@ var iconv = require('iconv-lite');
 var request = require('request');
 import { acix } from './popup';
 
-const baseURL = `http://192.168.99.100:8080/api/`;
-// const baseURL = `https://nthu3-212713.appspot.com/api/`;
+// const baseURL = `http://192.168.99.100:8080/api/`;
+const baseURL = `https://nthu3-212713.appspot.com/api/`;
 
 function calculateUserGrade(userGrade) {
   let all_pr = {};
