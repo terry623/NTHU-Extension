@@ -71,7 +71,7 @@ async function initial_everything() {
   $('#home_loading').addClass('active');
   clearAllTime();
   addListener();
-  renderUserName();
+  // renderUserName();
   let phase = await getCurrentStateOfNTHU();
   $('.content_item.homePage').show();
   $('#home_loading').removeClass('active');

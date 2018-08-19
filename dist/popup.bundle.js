@@ -9006,11 +9006,11 @@
 	            $('#home_loading').addClass('active');
 	            (0, _conflict.clearAllTime)();
 	            addListener();
-	            (0, _api.renderUserName)();
-	            _context.next = 6;
+	            // renderUserName();
+	            _context.next = 5;
 	            return (0, _server.getCurrentStateOfNTHU)();
 	
-	          case 6:
+	          case 5:
 	            phase = _context.sent;
 	
 	            $('.content_item.homePage').show();
@@ -9021,7 +9021,7 @@
 	            } else $('#change_phase').addClass('disabled');
 	            (0, _cart.getCart)();
 	
-	          case 11:
+	          case 10:
 	          case 'end':
 	            return _context.stop();
 	        }
