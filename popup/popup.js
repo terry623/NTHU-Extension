@@ -57,7 +57,7 @@ function privacyAgree() {
     $('#privacy_alert').modal('hide');
     chrome.storage.local.set({ isAgree: true }, () => {
       chrome.storage.local.get('isAgree', items => {
-        console.log(items);
+        // console.log(items);
       });
     });
   });

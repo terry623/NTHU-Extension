@@ -8981,8 +8981,12 @@
 	drift.load('etd922wyz5fx');
 	
 	drift.on('ready', function (api, payload) {
+	  api.sidebar.open();
 	  chrome.storage.local.get('isAgree', function (items) {
-	    if (items.isAgree == undefined) (0, _popup.privacyAgree)();else api.sidebar.open();
+	    if (items.isAgree == undefined) {
+	      api.sidebar.close();
+	      (0, _popup.privacyAgree)();
+	    }
 	  });
 	});
 
@@ -9089,7 +9093,7 @@
 	    $('#privacy_alert').modal('hide');
 	    chrome.storage.local.set({ isAgree: true }, function () {
 	      chrome.storage.local.get('isAgree', function (items) {
-	        console.log(items);
+	        // console.log(items);
 	      });
 	    });
 	  });
