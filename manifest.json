@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "NTHU Helper",
+  "name": "清大選課管家",
   "description": "讓我們一起用愛找到想要的課",
-  "version": "0.97",
+  "version": "0.98",
   "page_action": {
     "default_title": "開始選課",
     "default_icon": "static/icon.png",
