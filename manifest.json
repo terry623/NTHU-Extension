@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "NTHU Helper",
   "description": "讓我們一起用愛找到想要的課",
-  "version": "0.95",
+  "version": "0.97",
   "page_action": {
     "default_title": "開始選課",
     "default_icon": "static/icon.png",
@@ -24,5 +24,5 @@
     "scripts": ["dist/event.bundle.js"],
     "persistent": true
   },
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com/ https://js.driftt.com/include/ https://code.jquery.com/jquery-3.3.1.min.js https://mozilla.github.io/pdf.js/build/pdf.js https://mozilla.github.io/pdf.js/build/pdf.worker.js https://cdn.jsdelivr.net/npm/sortablejs@1.6.1/Sortable.min.js https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com/ https://js.driftt.com/include/ https://code.jquery.com/jquery-3.3.1.min.js https://mozilla.github.io/pdf.js/build/pdf.js https://mozilla.github.io/pdf.js/build/pdf.worker.js https://cdn.jsdelivr.net/npm/sortablejs@1.6.1/Sortable.min.js; object-src 'self'"
 }

@@ -49,6 +49,8 @@ drift.SNIPPET_VERSION = '0.3.1';
 drift.load('etd922wyz5fx');
 
 drift.on('ready', function(api, payload) {
-  if (Cookies.get('isAgree') == undefined) privacyAgree();
-  else api.sidebar.open();
+  chrome.storage.local.get('isAgree', items => {
+    if (items.isAgree == undefined) privacyAgree();
+    else api.sidebar.open();
+  });
 });

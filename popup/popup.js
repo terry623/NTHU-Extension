@@ -38,10 +38,9 @@ function addListener() {
   );
 }
 
-function clearCookieAndLocalData() {
-  Cookies.remove('isAgree');
+function clearLocalData() {
   chrome.storage.local.clear(() => {
-    console.log('Clear Cookie & Local Data !');
+    console.log('Clear Local Data !');
     let error = chrome.runtime.lastError;
     if (error) {
       console.error(error);
@@ -50,24 +49,25 @@ function clearCookieAndLocalData() {
 }
 
 function privacyAgree() {
-  if (Cookies.get('isAgree') == undefined) {
-    $('#privacy_alert')
-      .modal('setting', 'closable', false)
-      .modal('show');
-    $('#agree_privacy').on('click', function() {
-      getGrade();
-      $('#privacy_alert').modal('hide');
-      Cookies.set('isAgree', true);
+  $('#privacy_alert')
+    .modal('setting', 'closable', false)
+    .modal('show');
+  $('#agree_privacy').on('click', function() {
+    getGrade();
+    $('#privacy_alert').modal('hide');
+    chrome.storage.local.set({ isAgree: true }, () => {
+      chrome.storage.local.get('isAgree', items => {
+        console.log(items);
+      });
     });
-    $('#disagree_privacy').on('click', function() {
-      Cookies.remove('isAgree');
-      window.close();
-    });
-  }
+  });
+  $('#disagree_privacy').on('click', function() {
+    window.close();
+  });
 }
 
 async function initial_everything() {
-  // clearCookieAndLocalData();
+  // clearLocalData();
   $('#home_loading').addClass('active');
   clearAllTime();
   addListener();

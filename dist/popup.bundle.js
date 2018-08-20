@@ -8981,7 +8981,9 @@
 	drift.load('etd922wyz5fx');
 	
 	drift.on('ready', function (api, payload) {
-	  if (Cookies.get('isAgree') == undefined) (0, _popup.privacyAgree)();else api.sidebar.open();
+	  chrome.storage.local.get('isAgree', function (items) {
+	    if (items.isAgree == undefined) (0, _popup.privacyAgree)();else api.sidebar.open();
+	  });
 	});
 
 /***/ }),
@@ -9002,7 +9004,7 @@
 	      while (1) {
 	        switch (_context.prev = _context.next) {
 	          case 0:
-	            // clearCookieAndLocalData();
+	            // clearLocalData();
 	            $('#home_loading').addClass('active');
 	            (0, _conflict.clearAllTime)();
 	            addListener();
@@ -9070,10 +9072,9 @@
 	  }, ['requestHeaders', 'blocking']);
 	}
 	
-	function clearCookieAndLocalData() {
-	  Cookies.remove('isAgree');
+	function clearLocalData() {
 	  chrome.storage.local.clear(function () {
-	    console.log('Clear Cookie & Local Data !');
+	    console.log('Clear Local Data !');
 	    var error = chrome.runtime.lastError;
 	    if (error) {
 	      console.error(error);
@@ -9082,18 +9083,19 @@
 	}
 	
 	function privacyAgree() {
-	  if (Cookies.get('isAgree') == undefined) {
-	    $('#privacy_alert').modal('setting', 'closable', false).modal('show');
-	    $('#agree_privacy').on('click', function () {
-	      (0, _api.getGrade)();
-	      $('#privacy_alert').modal('hide');
-	      Cookies.set('isAgree', true);
+	  $('#privacy_alert').modal('setting', 'closable', false).modal('show');
+	  $('#agree_privacy').on('click', function () {
+	    (0, _api.getGrade)();
+	    $('#privacy_alert').modal('hide');
+	    chrome.storage.local.set({ isAgree: true }, function () {
+	      chrome.storage.local.get('isAgree', function (items) {
+	        console.log(items);
+	      });
 	    });
-	    $('#disagree_privacy').on('click', function () {
-	      Cookies.remove('isAgree');
-	      window.close();
-	    });
-	  }
+	  });
+	  $('#disagree_privacy').on('click', function () {
+	    window.close();
+	  });
 	}
 	
 	$(document).ready(function () {
