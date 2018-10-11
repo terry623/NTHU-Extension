@@ -12059,8 +12059,8 @@
 	var request = __webpack_require__(386);
 	
 	
-	// const baseURL = `http://192.168.99.100:8080/api/`;
-	var baseURL = 'https://nthu3-212713.appspot.com/api/';
+	var baseURL = 'http://192.168.99.100:8080/api/';
+	// const baseURL = `https://nthu3-212713.appspot.com/api/`;
 	
 	function calculateUserGrade(userGrade) {
 	  var all_pr = {};
